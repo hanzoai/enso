@@ -52,6 +52,8 @@
         content/browser/zen-styles/zen-welcome.css              (content/zen-styles/zen-welcome.css)
         content/browser/zen-styles/zen-media-controls.css       (content/zen-styles/zen-media-controls.css)
 
+        content/browser/zen-styles/windows/zen-settings.css     (content/zen-styles/windows/zen-settings.css)
+
         content/browser/zen-styles/zen-panels/bookmarks.css     (content/zen-styles/zen-panels/bookmarks.css)
         content/browser/zen-styles/zen-panels/extensions.css    (content/zen-styles/zen-panels/extensions.css)
         content/browser/zen-styles/zen-panels/print.css         (content/zen-styles/zen-panels/print.css)

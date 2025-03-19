@@ -4,11 +4,40 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
-<!DOCTYPE window>
+<html xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      id="zenSettingsWindow"
+      style="min-width: 35em; max-width: 35em; min-height: 40em;">
+  <head>
+    <linkset>
+      <html:link
+        rel="stylesheet"
+        href="chrome://browser/content/zen-styles/zen-theme.css"
+      />
+      <html:link
+        rel="stylesheet"
+        href="chrome://browser/content/zen-styles/windows/zen-settings.css"
+      />
 
-<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        xmlns:html="http://www.w3.org/1999/xhtml"
-        id="zenSettingsWindow"
-        style="min-width: 40em;">
+      <html:link rel="localization" href="browser/preferences/preferences.ftl" />
+      <html:link rel="localization" href="browser/preferences/zen-preferences.ftl" />
+    </linkset>
 
-</window>
+    <script src="chrome://browser/content/zenThemeModifier.js"></script>
+  </head>
+
+  <html:body xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <vbox id="main-content">
+      <vbox class="section">
+        <html:h2 data-l10n-id="pane-general-title"/>
+        <div class="section-content">
+        </div>
+      </vbox>
+      <vbox class="section">
+        <html:h2 data-l10n-id="pane-general-title"/>
+        <div class="section-content">
+        </div>
+      </vbox>
+    </vbox>
+  </html:body>
+</html>

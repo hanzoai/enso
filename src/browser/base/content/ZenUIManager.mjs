@@ -268,11 +268,11 @@ var gZenUIManager = {
 
   openSettingsWindow() {
     window.openDialog(
-      "chrome://browser/content/zen-components/windows/zen-settings.xhtml",
-      "",
-      "centerscreen,chrome,modal,titlebar",
+      'chrome://browser/content/zen-components/windows/zen-settings.xhtml',
+      '_blank',
+      'centerscreen,chrome,dialog=no,resizable=no,titlebar'
     );
-  }
+  },
 };
 
 var gZenVerticalTabsManager = {
