@@ -81,3 +81,6 @@
         # JS Vendor
         content/browser/zen-vendor/tsparticles.confetti.bundle.min.js (content/zen-vendor/tsparticles.confetti.bundle.min.js)
         content/browser/zen-vendor/motion.min.mjs                      (content/zen-vendor/motion.min.mjs)
+
+        # Windows
+        content/browser/zen-components/windows/zen-settings.xhtml (zen-components/windows/zen-settings.xhtml)

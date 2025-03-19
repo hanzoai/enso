@@ -265,6 +265,14 @@ var gZenUIManager = {
   get panelUIPosition() {
     return gZenVerticalTabsManager._hasSetSingleToolbar ? 'bottomleft topleft' : 'bottomright topright';
   },
+
+  openSettingsWindow() {
+    window.openDialog(
+      "chrome://browser/content/zen-components/windows/zen-settings.xhtml",
+      "",
+      "centerscreen,chrome,modal,titlebar",
+    );
+  }
 };
 
 var gZenVerticalTabsManager = {
