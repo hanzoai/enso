@@ -31,7 +31,7 @@ body {
   overflow-y: auto;
 
   gap: 2rem;
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .section {
@@ -42,7 +42,8 @@ body {
   .section-content {
     width: 100%;
     background: var(--zen-toolbar-element-bg);
-    border-radius: var(--zen-native-content-radius);
+    border-radius: 6px;
     padding: 1em;
+    font-size: 1.1em;
   }
 }
