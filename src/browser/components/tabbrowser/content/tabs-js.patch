@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index 0fbdbf3aefc467880e6b0bae2615cb145735cb0f..bf956639f7d17d6d652f3b2d6cb174904b5b5da9 100644
+index 0fbdbf3aefc467880e6b0bae2615cb145735cb0f..99a84a1cae6c18f3a80b7490dfc61712b38f6909 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -93,7 +93,7 @@
@@ -439,15 +439,6 @@ index 0fbdbf3aefc467880e6b0bae2615cb145735cb0f..bf956639f7d17d6d652f3b2d6cb17490
        }
  
        dragData.translatePos = translate;
-@@ -2379,7 +2425,7 @@
-       let getTabShift = (item, dropElementIndex) => {
-         if (
-           item.elementIndex < draggedTab.elementIndex &&
--          item.elementIndex >= dropElementIndex
-+          item.elementIndex + !!item.closest("tab-group")?.hasAttribute("split-view-group") >= dropElementIndex
-         ) {
-           return this.#rtlMode ? -shiftSize : shiftSize;
-         }
 @@ -2485,6 +2531,9 @@
              break;
            }
@@ -469,6 +460,15 @@ index 0fbdbf3aefc467880e6b0bae2615cb145735cb0f..bf956639f7d17d6d652f3b2d6cb17490
        let newDropElementIndex = dropElement
          ? dropElement.elementIndex
          : oldDropElementIndex;
+@@ -2515,7 +2568,7 @@
+       let shouldCreateGroupOnDrop;
+       let dropBefore;
+       if (dropElement) {
+-        let dropElementForOverlap = isTabGroupLabel(dropElement)
++        let dropElementForOverlap = isTabGroupLabel(dropElement) && !dropElement.closest("tab-group")?.hasAttribute("split-view-group")
+           ? dropElement.parentElement
+           : dropElement;
+ 
 @@ -2566,12 +2619,12 @@
          }
        }
