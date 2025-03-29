@@ -61,7 +61,7 @@ def update_l10n_last_commit_hash():
   L10N_REPO = "https://github.com/mozilla-l10n/firefox-l10n"
   try:
     os.system(f"git clone {L10N_REPO} l10n-temp --depth 1")
-    if not os.path.exists("firefox-cache"):
+    if not os.path.exists("build/firefox-cache"):
       os.mkdir("build/firefox-cache")
     os.system("cat l10n-temp/.git/refs/heads/main > build/firefox-cache/l10n-last-commit-hash")
     # Remove new line character
