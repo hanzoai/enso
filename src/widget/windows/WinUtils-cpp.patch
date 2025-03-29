@@ -1,0 +1,12 @@
+diff --git a/widget/windows/WinUtils.cpp b/widget/windows/WinUtils.cpp
+index 598c96cbb5cd06a986a5793ebe9c5438d419d4a9..de1317749e6a6dd7df644818970d7706a51e6c14 100644
+--- a/widget/windows/WinUtils.cpp
++++ b/widget/windows/WinUtils.cpp
+@@ -2007,6 +2007,7 @@ bool WinUtils::GetTimezoneName(wchar_t* aBuffer) {
+ static constexpr nsLiteralCString kMicaPrefs[] = {
+     "widget.windows.mica"_ns,
+     "widget.windows.mica.popups"_ns,
++    "zen.widget.windows.acrylic"_ns,
+ };
+ 
+ static BOOL CALLBACK UpdateMicaInHwnd(HWND aHwnd, LPARAM aLParam) {

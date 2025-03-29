@@ -1,6 +1,6 @@
 height: var(--zen-toolbar-height);
 
-@media (-moz-bool-pref: 'zen.view.hide-window-controls') {
+@media -moz-pref('zen.view.hide-window-controls') {
   & {
     transition:
       height 0.15s ease,
@@ -24,7 +24,7 @@ height: var(--zen-toolbar-height);
     }
   }
 
-  @media (-moz-bool-pref: 'zen.view.experimental-no-window-controls') {
+  @media -moz-pref('zen.view.experimental-no-window-controls') {
     &:has(#PersonalToolbar[collapsed='true']) {
       max-height: 0 !important;
       overflow: hidden;

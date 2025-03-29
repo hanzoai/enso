@@ -163,7 +163,7 @@
   @media (-moz-windows-mica) or (-moz-platform: macos) {
     background: transparent;
     --zen-themed-toolbar-bg-transparent: transparent;
-    @media (-moz-bool-pref: 'zen.widget.windows.acrylic') {
+    @media -moz-pref('zen.widget.windows.acrylic') {
       --zen-themed-toolbar-bg-transparent: color-mix(in srgb, var(--zen-themed-toolbar-bg) 35%, transparent 65%);
     }
   }

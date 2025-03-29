@@ -19,7 +19,7 @@
     }
   }
 
-  @media (-moz-bool-pref: 'zen.view.experimental-rounded-view') {
+  @media -moz-pref('zen.view.experimental-rounded-view') {
     #tabbrowser-tabpanels {
       mix-blend-mode: multiply;
       -moz-osx-font-smoothing: grayscale;

@@ -1,8 +1,8 @@
 diff --git a/browser/base/content/browser.js b/browser/base/content/browser.js
-index 019b168c1aeae7e1c97a3ae58c99a48a27f54134..22dcf304591290d7a1b60f01998b6cf4782c0cdc 100644
+index b89846a1103827b7e65c0b6c9197e80761e3f5c0..cc7205765244738743db92bfcafc1f288919ae0d 100644
 --- a/browser/base/content/browser.js
 +++ b/browser/base/content/browser.js
-@@ -32,6 +32,7 @@ ChromeUtils.defineESModuleGetters(this, {
+@@ -33,6 +33,7 @@ ChromeUtils.defineESModuleGetters(this, {
    ContextualIdentityService:
      "resource://gre/modules/ContextualIdentityService.sys.mjs",
    CustomizableUI: "resource:///modules/CustomizableUI.sys.mjs",
@@ -10,7 +10,7 @@ index 019b168c1aeae7e1c97a3ae58c99a48a27f54134..22dcf304591290d7a1b60f01998b6cf4
    DevToolsSocketStatus:
      "resource://devtools/shared/security/DevToolsSocketStatus.sys.mjs",
    DownloadUtils: "resource://gre/modules/DownloadUtils.sys.mjs",
-@@ -3440,6 +3441,11 @@ var XULBrowserWindow = {
+@@ -2698,6 +2699,11 @@ var XULBrowserWindow = {
      AboutReaderParent.updateReaderButton(gBrowser.selectedBrowser);
      TranslationsParent.onLocationChange(gBrowser.selectedBrowser);
  
@@ -22,27 +22,7 @@ index 019b168c1aeae7e1c97a3ae58c99a48a27f54134..22dcf304591290d7a1b60f01998b6cf4
      PictureInPicture.updateUrlbarToggle(gBrowser.selectedBrowser);
  
      if (!gMultiProcessBrowser) {
-@@ -4435,7 +4441,7 @@ nsBrowserAccess.prototype = {
-     // Passing a null-URI to only create the content window,
-     // and pass true for aSkipLoad to prevent loading of
-     // about:blank
--    return this.getContentWindowOrOpenURIInFrame(
-+    let res = this.getContentWindowOrOpenURIInFrame(
-       null,
-       aParams,
-       aWhere,
-@@ -4443,6 +4449,10 @@ nsBrowserAccess.prototype = {
-       aName,
-       true
-     );
-+    if (typeof window.gZenGlanceManager !== "undefined" && window.toolbar.visible) {
-+      window.gZenGlanceManager.onTabOpen(res, aURI);
-+    }
-+    return res;
-   },
- 
-   openURIInFrame: function browser_openURIInFrame(
-@@ -6351,7 +6361,7 @@ function switchToTabHavingURI(
+@@ -5194,7 +5200,7 @@ function switchToTabHavingURI(
        ignoreQueryString || replaceQueryString,
        ignoreFragmentWhenComparing
      );
@@ -51,7 +31,7 @@ index 019b168c1aeae7e1c97a3ae58c99a48a27f54134..22dcf304591290d7a1b60f01998b6cf4
      for (let i = 0; i < browsers.length; i++) {
        let browser = browsers[i];
        let browserCompare = cleanURL(
-@@ -6392,7 +6402,7 @@ function switchToTabHavingURI(
+@@ -5235,7 +5241,7 @@ function switchToTabHavingURI(
          }
  
          if (!doAdopt) {

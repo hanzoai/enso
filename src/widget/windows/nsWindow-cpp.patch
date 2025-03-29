@@ -1,5 +1,5 @@
 diff --git a/widget/windows/nsWindow.cpp b/widget/windows/nsWindow.cpp
-index 209fa7536df662e24bc6739b7ac9f911fba70ff0..321bb19cf7996a4632110e0099585d7e4ca4ca8a 100644
+index d2863d5fd9ce5cedc88253a07cb061a660d42e61..28e63f8bb0b6c8d3b5655b285ea1040ea426616d 100644
 --- a/widget/windows/nsWindow.cpp
 +++ b/widget/windows/nsWindow.cpp
 @@ -165,6 +165,7 @@
@@ -10,12 +10,12 @@ index 209fa7536df662e24bc6739b7ac9f911fba70ff0..321bb19cf7996a4632110e0099585d7e
  #include "nsNativeAppSupportWin.h"
  
  #include "nsIGfxInfo.h"
-@@ -2535,7 +2536,7 @@ void nsWindow::SetMicaBackdrop(bool aEnabled) {
- 
-   // Enable Mica Alt Material if available.
-   const DWM_SYSTEMBACKDROP_TYPE type =
--      aEnabled ? DWMSBT_TABBEDWINDOW : DWMSBT_AUTO;
-+      aEnabled ? (StaticPrefs::zen_widget_windows_acrylic_AtStartup() ? DWMSBT_TRANSIENTWINDOW : DWMSBT_TABBEDWINDOW) : DWMSBT_AUTO;
-   DwmSetWindowAttribute(mWnd, DWMWA_SYSTEMBACKDROP_TYPE, &type, sizeof type);
- }
- 
+@@ -2546,7 +2547,7 @@ void nsWindow::UpdateMicaBackdrop(bool aForce) {
+     if (!useBackdrop) {
+       return DWMSBT_AUTO;
+     }
+-    return IsPopup() ? DWMSBT_TRANSIENTWINDOW : DWMSBT_TABBEDWINDOW;
++    return IsPopup() ? DWMSBT_TRANSIENTWINDOW : (StaticPrefs::zen_widget_windows_acrylic_AtStartup() ? DWMSBT_TRANSIENTWINDOW : DWMSBT_TABBEDWINDOW);
+   }();
+   ::DwmSetWindowAttribute(mWnd, DWMWA_SYSTEMBACKDROP_TYPE, &backdrop,
+                           sizeof backdrop);

@@ -1,19 +1,20 @@
 diff --git a/browser/components/BrowserGlue.sys.mjs b/browser/components/BrowserGlue.sys.mjs
-index b888a753a7f23a9800fe04da51a4e6b898314ff2..a6a01cf035253b05ea7b20b434cf2002ff115d96 100644
+index b8b6d30f0b3c968a8615ca601e06e50261d0dae6..5c2b718b902aed2ef8d7a4b622ba882ee937c655 100644
 --- a/browser/components/BrowserGlue.sys.mjs
 +++ b/browser/components/BrowserGlue.sys.mjs
-@@ -121,6 +121,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
+@@ -106,6 +106,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
    WindowsGPOParser: "resource://gre/modules/policies/WindowsGPOParser.sys.mjs",
    clearTimeout: "resource://gre/modules/Timer.sys.mjs",
    setTimeout: "resource://gre/modules/Timer.sys.mjs",
 +  gZenUIMigration: "chrome://browser/content/zen-components/ZenUIMigration.mjs",
  });
  
- if (AppConstants.MOZ_UPDATER) {
-@@ -1951,6 +1952,7 @@ BrowserGlue.prototype = {
+ XPCOMUtils.defineLazyServiceGetters(lazy, {
+@@ -1896,7 +1897,7 @@ BrowserGlue.prototype = {
+     lazy.TabCrashHandler.init();
  
-     lazy.UrlbarPrefs.updateFirefoxSuggestScenario();
- 
+     lazy.ProcessHangMonitor.init();
+-
 +    lazy.gZenUIMigration.init(this._isNewProfile, aWindow);
      // A channel for "remote troubleshooting" code...
      let channel = new lazy.WebChannel(

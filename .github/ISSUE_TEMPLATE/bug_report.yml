@@ -22,7 +22,7 @@ body:
         - label: I have searched existing issues and avoided creating duplicates.
         - label: I am not filing an enhancement request.
         - label: I have checked that this issue cannot be reproduced on Mozilla Firefox.
-        - label: I have checked that this issue cannot be reproduced once I removed all my Mods and Custom CSS.
+        - label: I have checked that this issue can be reproduced once I removed all my Mods and Custom CSS.
     validations:
       required: true
   - type: textarea

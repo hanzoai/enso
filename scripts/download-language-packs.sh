@@ -7,7 +7,7 @@ git config --global fetch.prune true
 
 cd $CURRENT_DIR
 
-LAST_FIREFOX_L10N_COMMIT=$(cat ./firefox-cache/l10n-last-commit-hash)
+LAST_FIREFOX_L10N_COMMIT=$(cat ./build/firefox-cache/l10n-last-commit-hash)
 
 cd ./l10n
 rm -rf firefox-l10n
