@@ -206,6 +206,14 @@
       });
     }
 
+    _clearContainerStyles(container) {
+      const inset = container.style.inset;
+      window.requestAnimationFrame(() => {
+        container.removeAttribute('style');
+        container.style.inset = inset;
+      });
+    }
+
     closeGlance({ noAnimation = false, onTabClose = false, setNewID = null, isDifferent = false, hasFocused = false } = {}) {
       if (this._animating || !this.#currentBrowser || this.animatingOpen || this._duringOpening) {
         return;
@@ -228,7 +236,7 @@
 
       this.browserWrapper.removeAttribute('has-finished-animation');
       if (noAnimation) {
-        this.#currentParentTab.linkedBrowser.closest('.browserSidebarContainer').removeAttribute('style');
+        this._clearContainerStyles(this.#currentParentTab.linkedBrowser.closest('.browserSidebarContainer'));
         this.quickCloseGlance({ closeCurrentTab: false });
         return;
       }
@@ -270,7 +278,7 @@
           }
         )
         .then(() => {
-          this.#currentParentTab.linkedBrowser.closest('.browserSidebarContainer').removeAttribute('style');
+          this._clearContainerStyles(this.#currentParentTab.linkedBrowser.closest('.browserSidebarContainer'));
         });
       this.browserWrapper.style.opacity = 1;
       gZenUIManager.motion
@@ -510,7 +518,7 @@
       ZenWorkspaces.updateTabsContainers();
       this.browserWrapper.removeAttribute('animate-full');
       this.overlay.classList.remove('zen-glance-overlay');
-      this.browserWrapper.removeAttribute('style');
+      this._clearContainerStyles(this.browserWrapper);
       this.animatingFullOpen = false;
       this.closeGlance({ noAnimation: true });
       this.#glances.delete(this.#currentGlanceID);
@@ -522,7 +530,7 @@
         index: this.getTabPosition(this.#currentTab),
       });
 
-      this.browserWrapper.removeAttribute('style');
+      this._clearContainerStyles(this.browserWrapper);
       this.browserWrapper.removeAttribute('has-finished-animation');
       this.browserWrapper.setAttribute('animate-full', true);
       this.#currentTab.removeAttribute('zen-glance-tab');

@@ -44,7 +44,14 @@
 }
 
 #tabbrowser-tabpanels[zen-split-view='true'] .browserSidebarContainer.deck-selected {
-  outline: 1px solid var(--zen-primary-color) !important;
+  &:not(.zen-glance-overlay) {
+    outline: 1px solid var(--zen-primary-color) !important;
+  }
+
+  &.zen-glance-overlay {
+    flex: 1;
+    margin-top: calc(var(--zen-element-separation) / 2);
+  }
 }
 
 #tabbrowser-tabbox:has(#tabbrowser-tabpanels[zen-split-view='true']) {
