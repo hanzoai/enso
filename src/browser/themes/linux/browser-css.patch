@@ -1,5 +1,5 @@
 diff --git a/browser/themes/linux/browser.css b/browser/themes/linux/browser.css
-index dc95772553ef7130c27c1122178ff99028b601f2..81f7dbb40c35168376ca84eebfa9fba8d314cb90 100644
+index 5c9891e5ed4b865ed4ecc98d794a239b0f96a8f9..e13bf7277edeb49ebbb12cf9359ac6193bb47ebd 100644
 --- a/browser/themes/linux/browser.css
 +++ b/browser/themes/linux/browser.css
 @@ -42,21 +42,25 @@
@@ -17,7 +17,7 @@ index dc95772553ef7130c27c1122178ff99028b601f2..81f7dbb40c35168376ca84eebfa9fba8
      }
  
      /* stylelint-disable-next-line media-query-no-invalid */
-     @media (-moz-bool-pref: "widget.gtk.rounded-bottom-corners.enabled") {
+     @media -moz-pref("widget.gtk.rounded-bottom-corners.enabled") {
 -      #navigator-toolbox {
 +      #zen-main-app-wrapper {
          /* The body clip below covers this. */

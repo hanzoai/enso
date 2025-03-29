@@ -56,7 +56,7 @@
 #tabbrowser-tabpanels:has(> [zen-split='true']),
 #zen-splitview-overlay {
   :root:not([zen-compact-mode='true']):not([customizing]) & {
-    @media (-moz-bool-pref: 'zen.view.compact.hide-toolbar') {
+    @media -moz-pref('zen.view.compact.hide-toolbar') {
       & {
         margin-top: calc(var(--zen-split-column-gap) * -1);
       }

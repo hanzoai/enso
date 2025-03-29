@@ -181,7 +181,7 @@ groupbox h2 {
   }
 }
 
-@media (-moz-bool-pref: 'zen.view.use-single-toolbar') {
+@media -moz-pref('zen.view.use-single-toolbar') {
   #zen-compact-mode-styles-form {
     display: none;
   }

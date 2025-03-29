@@ -52,7 +52,7 @@
     transition: background-color var(--inactive-window-transition);
   }
 
-  @media (-moz-bool-pref: 'zen.theme.gradient') {
+  @media -moz-pref('zen.theme.gradient') {
     &[animating='true']::after {
       background: var(--zen-main-browser-background-old);
       backdrop-filter: blur(5px);
@@ -61,7 +61,7 @@
     }
   }
 
-  @media (not (-moz-windows-mica)) and (-moz-bool-pref: 'zen.view.grey-out-inactive-windows') {
+  @media (not (-moz-windows-mica)) and -moz-pref('zen.view.grey-out-inactive-windows') {
     transition: color var(--inactive-window-transition);
     :root:not([zen-welcome-stage]) &:-moz-window-inactive {
       color: var(--toolbox-textcolor-inactive);
@@ -173,7 +173,7 @@
     }
   }
 
-  @media (-moz-bool-pref: 'zen.widget.mac.mono-window-controls') {
+  @media -moz-pref('zen.widget.mac.mono-window-controls') {
     .titlebar-buttonbox-container {
       /* Draw 3 dots as background to represent the window controls,
         all with the same cololr as the titlebar */

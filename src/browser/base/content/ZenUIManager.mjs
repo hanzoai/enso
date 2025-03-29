@@ -65,7 +65,11 @@ var gZenUIManager = {
     tabs.style.removeProperty('flex');
     tabs.style.maxHeight = height + 'px';
     gZenVerticalTabsManager.actualWindowButtons.removeAttribute('zen-has-hover');
-    gURLBar.updateLayoutBreakout();
+    try {
+      gURLBar.zenUpdateLayoutBreakout();
+    } catch (error) {
+      console.error('Error updating layout breakout:', error);
+    }
   },
 
   get tabsWrapper() {
@@ -642,7 +646,11 @@ var gZenVerticalTabsManager = {
       if (!isSingleToolbar) {
         document.getElementById('urlbar').style.setProperty('--urlbar-height', '32px');
       } else {
-        gURLBar.updateLayoutBreakout();
+        try {
+          gURLBar.zenUpdateLayoutBreakout();
+        } catch (e) {
+          console.error(e);
+        }
       }
 
       // Always move the splitter next to the sidebar

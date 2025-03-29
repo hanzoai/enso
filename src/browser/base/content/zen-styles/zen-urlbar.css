@@ -464,7 +464,7 @@ button.popup-notification-dropmarker {
   }
 }
 
-@media not (-moz-bool-pref: 'zen.urlbar.show-protections-icon') {
+@media not -moz-pref('zen.urlbar.show-protections-icon') {
   #tracking-protection-icon-container {
     display: none !important;
   }

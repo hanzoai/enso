@@ -30,20 +30,22 @@
 </linkset>
 
 # Scripts used all over the browser
-<script src="chrome://browser/content/zen-components/ZenFolders.mjs" />
-<script src="chrome://browser/content/zen-components/ZenThemesCommon.mjs" />
-<script src="chrome://browser/content/zen-components/ZenThemesImporter.mjs" />
-<script src="chrome://browser/content/zen-components/ZenCompactMode.mjs" />
-<script src="chrome://browser/content/ZenUIManager.mjs" />
-<script src="chrome://browser/content/zen-components/ZenSidebarManager.mjs"/>
-<script src="chrome://browser/content/zen-components/ZenTabUnloader.mjs" />
-<script src="chrome://browser/content/zen-components/ZenPinnedTabsStorage.mjs" />
-<script src="chrome://browser/content/zen-components/ZenWorkspacesStorage.mjs" />
-<script src="chrome://browser/content/zen-components/ZenPinnedTabManager.mjs" />
-<script src="chrome://browser/content/zen-components/ZenGradientGenerator.mjs" />
-<script src="chrome://browser/content/zen-components/ZenViewSplitter.mjs"/>
-<script src="chrome://browser/content/zen-components/ZenGlanceManager.mjs" />
-<script src="chrome://browser/content/zen-components/ZenMediaController.mjs" />
+<script>
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenFolders.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenThemesCommon.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenThemesImporter.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenCompactMode.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/ZenUIManager.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenSidebarManager.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenTabUnloader.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenPinnedTabsStorage.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenWorkspacesStorage.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenPinnedTabManager.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenGradientGenerator.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenViewSplitter.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenGlanceManager.mjs", this);
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenMediaController.mjs", this);
 
-# Unimportant scripts
-<script src="chrome://browser/content/zen-components/ZenRices.mjs" />
+// Unimportant scripts
+Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenRices.mjs", this);
+</script>

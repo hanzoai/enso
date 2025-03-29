@@ -1,22 +1,13 @@
 diff --git a/browser/components/customizableui/ToolbarContextMenu.sys.mjs b/browser/components/customizableui/ToolbarContextMenu.sys.mjs
-index 9879487f9ed9ddf825f5fb5c1467ddbd7fbe7a32..9e2565fafe0f5f9afa6065c9f4f522fec745db2a 100644
+index af22f766a052372a68faca139161cccbf0d768f0..ceff0576321f880c71ce301e537f4d03ccca8a73 100644
 --- a/browser/components/customizableui/ToolbarContextMenu.sys.mjs
 +++ b/browser/components/customizableui/ToolbarContextMenu.sys.mjs
-@@ -237,17 +237,6 @@ export var ToolbarContextMenu = {
-     // autohide item's checked state to mirror the autohide pref.
-     showFullScreenViewContextMenuItems(popup);
- 
--    let toggleVerticalTabsItem = document.getElementById(
--      "toolbar-context-toggle-vertical-tabs"
--    );
--    document.l10n.setAttributes(
--      toggleVerticalTabsItem,
--      gBrowser.tabContainer?.verticalMode
--        ? "toolbar-context-turn-off-vertical-tabs"
--        : "toolbar-context-turn-on-vertical-tabs"
--    );
--    document.getElementById("toolbar-context-customize-sidebar").hidden =
--      !gBrowser.tabContainer?.verticalMode;
- 
-     // View -> Toolbars menu doesn't have the moveToPanel or removeFromToolbar items.
-     if (!moveToPanel || !removeFromToolbar) {
+@@ -241,7 +241,7 @@ export var ToolbarContextMenu = {
+     let sidebarRevampEnabled = Services.prefs.getBoolPref("sidebar.revamp");
+     let showSidebarActions =
+       ["tabbrowser-tabs", "sidebar-button"].includes(toolbarItem?.id) ||
+-      toolbarItem?.localName == "toolbarspring";
++      toolbarItem?.localName == "toolbarspring" && false;
+     let toggleVerticalTabsItem = document.getElementById(
+       "toolbar-context-toggle-vertical-tabs"
+     );

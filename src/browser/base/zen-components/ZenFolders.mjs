@@ -9,6 +9,8 @@
       document.addEventListener('TabUngrouped', this.#onTabUngrouped.bind(this));
       document.addEventListener('TabGroupRemoved', this.#onTabGroupRemoved.bind(this));
       document.addEventListener('TabGroupCreate', this.#onTabGroupCreate.bind(this));
+      document.addEventListener('TabPinned', this.#onTabPinned.bind(this));
+      document.addEventListener('TabUnpinned', this.#onTabUnpinned.bind(this));
     }
 
     #onTabGrouped(event) {
@@ -48,6 +50,22 @@
     }
 
     #onTabGroupRemoved(event) {}
+
+    #onTabPinned(event) {
+      const tab = event.target;
+      const group = tab.group;
+      if (group && group.hasAttribute('split-view-group')) {
+        group.pinned = true;
+      }
+    }
+
+    #onTabUnpinned(event) {
+      const tab = event.target;
+      const group = tab.group;
+      if (group && group.hasAttribute('split-view-group')) {
+        group.pinned = false;
+      }
+    }
 
     expandGroupTabs(group) {
       for (const tab of group.tabs.reverse()) {

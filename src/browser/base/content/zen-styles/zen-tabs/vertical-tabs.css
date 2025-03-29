@@ -19,7 +19,7 @@
     height: var(--zen-toolbar-height);
   }
 
-  @media (-moz-platform: macos) and (not (-moz-bool-pref: 'zen.view.mac.show-three-dot-menu')) {
+  @media (-moz-platform: macos) and (not -moz-pref('zen.view.mac.show-three-dot-menu')) {
     &:not([customizing]) #PanelUI-button:not([open]):not([panelopen]) {
       position: absolute;
       opacity: 0;
@@ -38,7 +38,7 @@
   }
 }
 
-@media (-moz-bool-pref: 'zen.tabs.vertical') {
+@media -moz-pref('zen.tabs.vertical') {
   :root:not([zen-window-buttons-reversed='true']) {
     & .titlebar-buttonbox-container {
       margin-left: auto;
@@ -294,7 +294,7 @@
       }
     }
 
-    @media (-moz-bool-pref: 'zen.tabs.dim-pending') {
+    @media -moz-pref('zen.tabs.dim-pending') {
       &[pending='true'] .tab-icon-image {
         opacity: 0.5;
       }
@@ -734,7 +734,7 @@
         }
       }
     }
-    @media (-moz-bool-pref: 'zen.view.sidebar-collapsed.hide-mute-button') {
+    @media -moz-pref('zen.view.sidebar-collapsed.hide-mute-button') {
       & .tab-icon-overlay:is([soundplaying], [muted]):not([selected]) {
         display: none !important;
         :is(
@@ -992,7 +992,7 @@
   opacity: 0.5;
 }
 
-@media (-moz-bool-pref: 'zen.tabs.show-newtab-vertical') {
+@media -moz-pref('zen.tabs.show-newtab-vertical') {
   #tabs-newtab-button {
     display: flex !important;
     transition: scale 0.1s ease;
@@ -1018,11 +1018,11 @@
       --zen-colors-border: var(--zen-colors-tertiary);
     }
 
-    @media (-moz-bool-pref: 'zen.view.show-newtab-button-top') {
+    @media -moz-pref('zen.view.show-newtab-button-top') {
       order: -1;
     }
 
-    @media (-moz-bool-pref: 'zen.view.show-newtab-button-border-top') and (not (-moz-bool-pref: 'zen.view.show-newtab-button-top')) {
+    @media -moz-pref('zen.view.show-newtab-button-border-top') and (not -moz-pref('zen.view.show-newtab-button-top')) {
     #tabbrowser-arrowscrollbox:has(tab:not([hidden])) & {
       margin-top: 15px;
       position: relative;
@@ -1101,7 +1101,7 @@
     background: var(--tab-selected-bgcolor);
   }
 
-  @media (-moz-bool-pref: 'zen.theme.essentials-favicon-bg') {
+  @media -moz-pref('zen.theme.essentials-favicon-bg') {
     &[visuallyselected] > .tab-stack > .tab-background {
       &::after {
         content: "";

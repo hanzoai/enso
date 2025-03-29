@@ -61,7 +61,9 @@ tab-group[split-view-group] {
 
     & .tab-content {
       min-width: 0;
-      justify-content: unset !important;
+      :root[zen-sidebar-expanded='true'] & {
+        justify-content: unset !important;
+      }
     }
   }
 
@@ -120,8 +122,7 @@ tab-group[split-view-group] .tabbrowser-tab {
 }
 
 tab-group[split-view-group] .tab-group-label-container {
-  display: none;
-  width: 100%;
+  visibility: collapse;
 }
 
 tab-group[split-view-group] .tab-close-button {

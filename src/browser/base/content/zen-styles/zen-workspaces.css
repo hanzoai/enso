@@ -483,7 +483,7 @@
   }
 }
 
-@media not (-moz-bool-pref: 'zen.workspaces.show-workspace-indicator') {
+@media not -moz-pref('zen.workspaces.show-workspace-indicator') {
   #zen-current-workspace-indicator-container {
     display: none !important;
   }

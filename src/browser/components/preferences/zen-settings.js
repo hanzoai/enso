@@ -950,11 +950,6 @@ Preferences.addAll([
     default: true,
   },
   {
-    id: 'zen.splitView.change-on-hover',
-    type: 'bool',
-    default: true,
-  },
-  {
     id: 'zen.tab-unloader.timeout-minutes',
     type: 'int',
     default: 10,
