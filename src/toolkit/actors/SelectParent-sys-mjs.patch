@@ -1,5 +1,5 @@
 diff --git a/toolkit/actors/SelectParent.sys.mjs b/toolkit/actors/SelectParent.sys.mjs
-index fa8ce002f0cd64395d04bcd1f93f6f8a89417a62..c7d2865e8e78015e253f0ef1a82f1ec57a4fe255 100644
+index 3e1d4b73b3d84a550222827230917c10ce9b8448..1d2ada14a8ca2ee45a2abdc118068a708816365c 100644
 --- a/toolkit/actors/SelectParent.sys.mjs
 +++ b/toolkit/actors/SelectParent.sys.mjs
 @@ -103,7 +103,7 @@ export var SelectParentHelper = {

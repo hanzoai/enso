@@ -1,5 +1,7 @@
 diff --git a/browser/installer/windows/nsis/uninstaller.nsi b/browser/installer/windows/nsis/uninstaller.nsi
-index 559c8b46ee06bc42c91da49b5d9e397fe8ff6126..62094a5d98712a41a607ba01ca2adfa1e4f51ccd 100644
+old mode 100755
+new mode 100644
+index 559c8b46ee06bc42c91da49b5d9e397fe8ff6126..62094a5d98712a41a607ba01ca2adfa1e4f51ccd
 --- a/browser/installer/windows/nsis/uninstaller.nsi
 +++ b/browser/installer/windows/nsis/uninstaller.nsi
 @@ -507,6 +507,7 @@ Section "Uninstall"

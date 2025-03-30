@@ -1,8 +1,8 @@
 diff --git a/browser/base/content/aboutDialog.js b/browser/base/content/aboutDialog.js
-index 8c5c7768e0e716c196063b4c986dea2631185972..d31f57a176fffc9725b1c31b165fb5cdc55e186e 100644
+index f6e1391baf12abb91c85a95107bb3923118746c0..76c7b75a4e29056110f1631a50047c4ddd8b1f4a 100644
 --- a/browser/base/content/aboutDialog.js
 +++ b/browser/base/content/aboutDialog.js
-@@ -51,7 +51,7 @@ function init() {
+@@ -52,7 +52,7 @@ function init() {
    ]);
    let versionIdKey = "base";
    let versionAttributes = {
@@ -11,7 +11,7 @@ index 8c5c7768e0e716c196063b4c986dea2631185972..d31f57a176fffc9725b1c31b165fb5cd
    };
  
    let arch = Services.sysinfo.get("arch");
-@@ -63,7 +63,7 @@ function init() {
+@@ -64,7 +64,7 @@ function init() {
    }
  
    let version = Services.appinfo.version;

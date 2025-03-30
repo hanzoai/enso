@@ -1,5 +1,5 @@
 diff --git a/toolkit/content/aboutAbout.html b/toolkit/content/aboutAbout.html
-index ab955bc27bf8a0bf1f28d12d92be80991e743d17..5e23f51f458344d9704ad390c8e1aa98745c7012 100644
+index 74702381dd1bed2d4bb47c464ae0ca309c10e45b..f1e6b34bbf29d787bd62d625707dead024cf6011 100644
 --- a/toolkit/content/aboutAbout.html
 +++ b/toolkit/content/aboutAbout.html
 @@ -24,6 +24,7 @@

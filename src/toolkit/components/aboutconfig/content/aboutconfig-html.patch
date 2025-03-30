@@ -1,5 +1,5 @@
 diff --git a/toolkit/components/aboutconfig/content/aboutconfig.html b/toolkit/components/aboutconfig/content/aboutconfig.html
-index 8962cdd86d802f536dbef9cad8928d3e7a4eebf6..b99119d95cd575abead5d3d3f720244f5fe45b3b 100644
+index 853fd8f82bd10854c7fb17a73fd10eab0a9eef52..6f5e6606ebfa95a600037b995e5c743dd5aacba5 100644
 --- a/toolkit/components/aboutconfig/content/aboutconfig.html
 +++ b/toolkit/components/aboutconfig/content/aboutconfig.html
 @@ -34,6 +34,7 @@

@@ -1,5 +1,5 @@
 diff --git a/browser/components/preferences/dialogs/syncChooseWhatToSync.js b/browser/components/preferences/dialogs/syncChooseWhatToSync.js
-index 2cc965b4e1b20e1ae422bfb5c90a237dcd31fcf6..cfed9dfa67c7c34cd812885a72d66dd37ba414fc 100644
+index a38c2a235971f2fe470f9bee92fc9c1a6d9b8b15..564be3dabe01621a621ca586421cdb77e0220f8b 100644
 --- a/browser/components/preferences/dialogs/syncChooseWhatToSync.js
 +++ b/browser/components/preferences/dialogs/syncChooseWhatToSync.js
 @@ -13,6 +13,7 @@ Preferences.addAll([

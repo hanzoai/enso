@@ -1,5 +1,7 @@
 diff --git a/browser/installer/windows/nsis/shared.nsh b/browser/installer/windows/nsis/shared.nsh
-index b7f8e1453089ab5f1945e1a65f038e17b5273571..5297f5ed70fe3446e55be37df486fb4ad791a446 100644
+old mode 100755
+new mode 100644
+index bc8f5775785e08a0cc1c8a6ad1f0e19e980c607d..bf11d30d10fb38855f6a0e8d5346be271042769e
 --- a/browser/installer/windows/nsis/shared.nsh
 +++ b/browser/installer/windows/nsis/shared.nsh
 @@ -513,6 +513,7 @@ ${RemoveDefaultBrowserAgentShortcut}
@@ -26,7 +28,7 @@ index b7f8e1453089ab5f1945e1a65f038e17b5273571..5297f5ed70fe3446e55be37df486fb4a
      ${WriteApplicationsSupportedType} ${RegKey} ".xht"
      ${WriteApplicationsSupportedType} ${RegKey} ".xhtml"
      ${WriteApplicationsSupportedType} ${RegKey} ".xml"
-@@ -1728,6 +1731,8 @@ Function SetAsDefaultAppUserHKCU
+@@ -1727,6 +1730,8 @@ Function SetAsDefaultAppUserHKCU
      Pop $0
      AppAssocReg::SetAppAsDefault "$R9" ".avif" "file"
      Pop $0
@@ -35,7 +37,7 @@ index b7f8e1453089ab5f1945e1a65f038e17b5273571..5297f5ed70fe3446e55be37df486fb4a
      AppAssocReg::SetAppAsDefault "$R9" ".xht" "file"
      Pop $0
      AppAssocReg::SetAppAsDefault "$R9" ".xhtml" "file"
-@@ -1857,7 +1862,7 @@ FunctionEnd
+@@ -1856,7 +1861,7 @@ FunctionEnd
    ; uninstalled.
  
    ; Do all of that twice, once for the local machine and once for the current user

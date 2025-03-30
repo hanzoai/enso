@@ -1,5 +1,5 @@
 diff --git a/browser/components/preferences/preferences.js b/browser/components/preferences/preferences.js
-index 78b70a99b00198402c357ead363dec7e534be456..90e10509fdff67144f5cbcf42c743e617df604e0 100644
+index 6386773b287ca6d06a0abe928850c5bb465828ed..b3459a2abcac5f21a5b24189ec1dc88e24626687 100644
 --- a/browser/components/preferences/preferences.js
 +++ b/browser/components/preferences/preferences.js
 @@ -118,6 +118,7 @@ ChromeUtils.defineLazyGetter(this, "gSubDialog", function () {
