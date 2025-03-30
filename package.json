@@ -40,7 +40,7 @@
   },
   "homepage": "https://github.com/zen-browser/desktop#readme",
   "dependencies": {
-    "@zen-browser/surfer": "^1.10.6"
+    "@zen-browser/surfer": "^1.11.0"
   },
   "devDependencies": {
     "husky": "^9.1.7",
