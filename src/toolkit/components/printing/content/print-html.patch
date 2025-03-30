@@ -1,5 +1,5 @@
 diff --git a/toolkit/components/printing/content/print.html b/toolkit/components/printing/content/print.html
-index 62d214608c24191fea013db23e96b4ae2a4042e6..59b146a594f0f882435f2d29795a65020db01f48 100644
+index 72ccab596c2f090d188f1d27278f68373e5b06be..541271c71a3df749826b7f5adbd55e76450bba8f 100644
 --- a/toolkit/components/printing/content/print.html
 +++ b/toolkit/components/printing/content/print.html
 @@ -21,6 +21,7 @@

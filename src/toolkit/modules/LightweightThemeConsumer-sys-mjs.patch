@@ -1,8 +1,8 @@
 diff --git a/toolkit/modules/LightweightThemeConsumer.sys.mjs b/toolkit/modules/LightweightThemeConsumer.sys.mjs
-index 0d3993370b4ecbdfaf87cfd3145617343c29dc39..8587f7286476ca0dcce1bb02ef02ce0dae9c4df7 100644
+index d8c79cbae4de3ebfc5dc62f3597c7be4965a5429..ba1a44a0be5b5837467cfc84074d4869aee6aa62 100644
 --- a/toolkit/modules/LightweightThemeConsumer.sys.mjs
 +++ b/toolkit/modules/LightweightThemeConsumer.sys.mjs
-@@ -32,7 +32,7 @@ const toolkitVariableMap = [
+@@ -31,7 +31,7 @@ const toolkitVariableMap = [
        lwtProperty: "accentcolor",
        processColor(rgbaChannels) {
          if (!rgbaChannels || rgbaChannels.a == 0) {
@@ -11,7 +11,7 @@ index 0d3993370b4ecbdfaf87cfd3145617343c29dc39..8587f7286476ca0dcce1bb02ef02ce0d
          }
          // Remove the alpha channel
          const { r, g, b } = rgbaChannels;
-@@ -334,6 +334,7 @@ LightweightThemeConsumer.prototype = {
+@@ -339,6 +339,7 @@ LightweightThemeConsumer.prototype = {
        theme.additionalBackgrounds
      );
      let _processedColors = _setProperties(root, hasTheme, theme);
@@ -19,7 +19,7 @@ index 0d3993370b4ecbdfaf87cfd3145617343c29dc39..8587f7286476ca0dcce1bb02ef02ce0d
  
      if (hasTheme) {
        if (updateGlobalThemeData) {
-@@ -425,6 +426,14 @@ LightweightThemeConsumer.prototype = {
+@@ -431,6 +432,14 @@ LightweightThemeConsumer.prototype = {
        this._lastExperimentData.stylesheet = stylesheet;
      }
    },

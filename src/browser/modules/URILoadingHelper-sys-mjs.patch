@@ -1,8 +1,8 @@
 diff --git a/browser/modules/URILoadingHelper.sys.mjs b/browser/modules/URILoadingHelper.sys.mjs
-index 313e895980c502d79f64f5a6ab838f6a96c83835..8a1a853567aeae2c368005d3757815799457212a 100644
+index c4428df9e1c43ba7a1dfefa2d55316023325d2db..191bc513862d5247e338c683b11ae891ab914479 100644
 --- a/browser/modules/URILoadingHelper.sys.mjs
 +++ b/browser/modules/URILoadingHelper.sys.mjs
-@@ -512,7 +512,7 @@ export const URILoadingHelper = {
+@@ -510,7 +510,7 @@ export const URILoadingHelper = {
        // page. If a load request bounces off for the currently selected tab,
        // we'll open a new tab instead.
        let tab = w.gBrowser.getTabForBrowser(targetBrowser);

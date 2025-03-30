@@ -1,5 +1,5 @@
 diff --git a/image/DecoderFactory.cpp b/image/DecoderFactory.cpp
-index f36f03c7f2..d2cdd79f70 100644
+index f36f03c7f2622f0fc54c04f5278ee83cbf03e9e8..d2cdd79f70056af8dc1304d3a2f5307986aeda49 100644
 --- a/image/DecoderFactory.cpp
 +++ b/image/DecoderFactory.cpp
 @@ -244,7 +244,12 @@ nsresult DecoderFactory::CreateAnimationDecoder(

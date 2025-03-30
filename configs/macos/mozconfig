@@ -4,7 +4,6 @@ ac_add_options --disable-dmd
 ac_add_options --enable-eme=widevine
 
 export MOZ_MACBUNDLE_ID=${appId}
-export MOZ_MACBUNDLE_NAME="Zen Browser.app"
 
 # override LTO settings
 # TODO: Dont use LTO for now, it's causing a lot of issues
