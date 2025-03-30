@@ -32,7 +32,8 @@ fi
 
 if test "$ZEN_RELEASE"; then
 
-  ac_add_options --enable-clang-plugin
+  # TODO: Make this successful in builds
+  # ac_add_options --enable-clang-plugin
   ac_add_options --enable-bootstrap=-sccache
 
   ac_add_options --enable-release
