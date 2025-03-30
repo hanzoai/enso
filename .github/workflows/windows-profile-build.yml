@@ -94,11 +94,6 @@ jobs:
           echo 'LLVM_PROFDATA=/c/Users/runneradmin/.mozbuild/clang/bin/llvm-profdata.exe JARLOG_FILE=en-US.log ./mach python build/pgo/profileserver.py --binary /c/artifact/zen/zen.exe' '' >> mozilla-build-run.sh
           C:\mozilla-build\start-shell.bat $workspace_dir_current\mozilla-build-run.sh
 
-      - name: Debug session
-        if: ${{ failure() }}
-        uses: WarpBuilds/action-debugger@v1.3
-        timeout-minutes: 15
-
       - name: Move profile data
         if: ${{ matrix.arch == 'x86_64' }}
         run: |

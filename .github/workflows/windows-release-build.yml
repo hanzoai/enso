@@ -249,11 +249,6 @@ jobs:
           ls ./dist
           ls .
 
-      - name: Debug session
-        if: ${{ failure() }}
-        uses: WarpBuilds/action-debugger@v1.3
-        timeout-minutes: 15
-
       - name: Move package for PGO upload
         if: ${{ inputs.generate-gpo && matrix.arch == 'x86_64' }}
         run: |

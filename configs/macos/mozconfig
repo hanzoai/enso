@@ -30,6 +30,8 @@ if test "$SURFER_COMPAT" = "x86_64"; then
     export CXXFLAGS="-O3 -march=nehalem"
     export LDFLAGS="-Wl,-O3 -march=nehalem"
     export RUSTFLAGS="-Ctarget-cpu=nehalem"
+
+    ac_add_options --disable-clang-plugin
 else
     ac_add_options --target=aarch64-apple-darwin
 

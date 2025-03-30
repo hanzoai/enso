@@ -20,7 +20,7 @@ if test "$SURFER_COMPAT" = "x86_64"; then
     fi
 
     # Optimization flags for SURFER_COMPAT
-    ac_add_options --enable-optimize="-O3 -w -ftree-vectorize -Qvec -mfpmath=sse -mprfchw -msse3 -mcx16 -msahf"
+    ac_add_options --enable-optimize="-O3 -w -ftree-vectorize -mfpmath=sse -mprfchw -msse3 -mcx16 -msahf"
 
     export LDFLAGS="$LDFLAGS -Wl,-O3"
     export RUSTFLAGS="$RUSTFLAGS -Clink-args=--icf=safe"
