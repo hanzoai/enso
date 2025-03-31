@@ -113,7 +113,7 @@
       }
       const currentTimestamp = Date.now();
       const excludedUrls = this.excludedUrls;
-      const tabs = gBrowser.tabs;
+      const tabs = ZenWorkspaces.allStoredTabs;
       for (let i = 0; i < tabs.length; i++) {
         const tab = tabs[i];
         if (this.unloader.canUnloadTab(tab, currentTimestamp, excludedUrls)) {
@@ -195,10 +195,6 @@
     updateTabActivity(tab) {
       const currentTimestamp = Date.now();
       tab.lastActivity = currentTimestamp;
-    }
-
-    get tabs() {
-      return gBrowser.tabs;
     }
 
     insertIntoContextMenu() {
