@@ -1,18 +1,14 @@
 diff --git a/servo/components/style/gecko/media_features.rs b/servo/components/style/gecko/media_features.rs
-index 2baf0df323c83107a9a38e76bda3a273892b121e..f14fc90e048534f7345be102783e0669fa03ae75 100644
+index 2baf0df323c83107a9a38e76bda3a273892b121e..8d03eeb78638c7c1bfc2cfff59571c76af11a607 100644
 --- a/servo/components/style/gecko/media_features.rs
 +++ b/servo/components/style/gecko/media_features.rs
-@@ -9,10 +9,13 @@ use crate::gecko_bindings::structs;
- use crate::media_queries::{Device, MediaType};
- use crate::queries::feature::{AllowsRanges, Evaluator, FeatureFlags, QueryFeatureDescription};
- use crate::queries::values::Orientation;
-+use crate::queries::condition::MozPrefFeatureValue;
- use crate::values::computed::{CSSPixelLength, Context, Ratio, Resolution};
+@@ -13,6 +13,9 @@ use crate::values::computed::{CSSPixelLength, Context, Ratio, Resolution};
  use crate::values::specified::color::ForcedColors;
-+use crate::values::AtomString;
  use app_units::Au;
  use euclid::default::Size2D;
++use crate::queries::condition::MozPrefFeatureValue;
 +use selectors::kleene_value::KleeneValue;
++use crate::values::AtomString;
  
  fn device_size(device: &Device) -> Size2D<Au> {
      let mut width = 0;
