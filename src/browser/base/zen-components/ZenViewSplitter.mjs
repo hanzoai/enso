@@ -1779,7 +1779,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
   }
 
   onAfterWorkspaceSessionRestore() {
-    if (gBrowser.selectedTab.group?.hasAttribute("split-view-group") && !gBrowser.selectedTab.pinned) {
+    if (gBrowser.selectedTab.group?.hasAttribute('split-view-group') && !gBrowser.selectedTab.pinned) {
       // Activate all browsers in the split view
       this.currentView = -1;
       this.onLocationChange(gBrowser.selectedTab.linkedBrowser);
