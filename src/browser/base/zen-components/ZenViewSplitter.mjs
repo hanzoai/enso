@@ -982,6 +982,9 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
           }
         }
       }
+      if (this._sessionRestoring) {
+        return;
+      }
       this.activateSplitView(group, true);
       return;
     }
@@ -1776,7 +1779,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
   }
 
   onAfterWorkspaceSessionRestore() {
-    if (this.currentView >= 0 && !gBrowser.selectedTab.pinned) {
+    if (gBrowser.selectedTab.group?.hasAttribute("split-view-group") && !gBrowser.selectedTab.pinned) {
       // Activate all browsers in the split view
       this.currentView = -1;
       this.onLocationChange(gBrowser.selectedTab.linkedBrowser);

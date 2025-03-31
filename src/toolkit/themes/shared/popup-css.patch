@@ -1,5 +1,5 @@
 diff --git a/toolkit/themes/shared/popup.css b/toolkit/themes/shared/popup.css
-index ed0caa97db5726a7d1bc1cd0aa7af3fdf99690dc..730fd3a9dd90343c97ecb8a3d7891242256de0da 100644
+index ed0caa97db5726a7d1bc1cd0aa7af3fdf99690dc..4827373b138dd59dd4adc5289adef95ef2410090 100644
 --- a/toolkit/themes/shared/popup.css
 +++ b/toolkit/themes/shared/popup.css
 @@ -21,8 +21,8 @@ panel {
@@ -22,6 +22,19 @@ index ed0caa97db5726a7d1bc1cd0aa7af3fdf99690dc..730fd3a9dd90343c97ecb8a3d7891242
  
      @media (prefers-contrast) {
        --panel-border-color: color-mix(in srgb, currentColor 60%, transparent);
+@@ -54,9 +52,9 @@ panel {
+     -moz-default-appearance: menupopup;
+     /* The blur behind doesn't blur all that much, add a semi-transparent
+      * background to improve contrast */
+-    --panel-background: light-dark(rgba(255, 255, 255, .5), rgba(0, 0, 0, .5));
+-    --panel-border-color: transparent;
+-    --panel-shadow-margin: 0px;
++    --panel-background: light-dark(rgba(255, 255, 255, .5), rgba(0, 0, 0, .5)) !important;
++    --panel-border-color: transparent !important;
++    --panel-shadow-margin: 0px !important;
+   }
+ 
+   @media (-moz-platform: macos) {
 @@ -208,7 +206,6 @@ panel:where([type="arrow"]) {
      }
  

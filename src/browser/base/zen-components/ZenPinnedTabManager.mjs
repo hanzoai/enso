@@ -781,7 +781,11 @@
                   newIndex++;
                 }
               }
-              gBrowser.moveTabTo(draggedTab, newIndex);
+              // If it's the last tab, move it to the end
+              if (tabsTarget === gBrowser.tabs.at(-1)) {
+                newIndex++;
+              }
+              gBrowser.moveTabTo(draggedTab, newIndex, { forceStandaloneTab: true });
             }
           }
         }
