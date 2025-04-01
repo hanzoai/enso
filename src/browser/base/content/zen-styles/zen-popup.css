@@ -32,21 +32,7 @@
   --uc-permission-item-margin-block: 4px;
   --uc-permission-item-padding-inline: 16px;
 
-  --uc-contextmenu-border-radius: 8px;
-  --uc-contextmenu-padding: calc(4px - var(--uc-contextmenu-menuitem-border-width)) 0;
-  --uc-contextmenu-menuitem-border-radius: calc(4px + var(--uc-contextmenu-menuitem-border-width));
-  --uc-contextmenu-menuitem-padding-block: 6px;
-  --uc-contextmenu-menuitem-padding-inline: 10px;
-  --uc-contextmenu-menuitem-border-width: 2px;
-  --uc-contextmenu-menuicon-margin-inline: 12px;
-  --uc-contextmenu-menuitem-margin-inline: calc(4px - var(--uc-contextmenu-menuitem-border-width));
-  --uc-contextmenu-menuitem-margin-block: 0px;
-  --uc-contextmenu-menuitem-margin: var(--uc-contextmenu-menuitem-margin-block) var(--uc-contextmenu-menuitem-margin-inline);
-  --uc-contextmenu-separator-vertical: calc(4px - var(--uc-contextmenu-menuitem-border-width));
-  --uc-contextmenu-separator-horizontal: 0;
-
   --panel-separator-color: var(--zen-colors-border);
-
   --zen-panel-separator-width: 1px;
 }
 

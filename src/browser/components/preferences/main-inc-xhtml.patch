@@ -1,8 +1,24 @@
 diff --git a/browser/components/preferences/main.inc.xhtml b/browser/components/preferences/main.inc.xhtml
-index 4c2637db10b7ad5d253d9588be3610c1ec5ad330..b8445b808cf9dcb54d380ae78172db4bf8250cd4 100644
+index cdcf50ec1bc4a54c69f5baf4a6d40ab0c63a8121..87603323c2b0b9ea0c847a8a06e293a16c1252b8 100644
 --- a/browser/components/preferences/main.inc.xhtml
 +++ b/browser/components/preferences/main.inc.xhtml
-@@ -369,6 +369,7 @@
+@@ -183,6 +183,7 @@
+ </groupbox>
+ 
+ <!-- Browser layout -->
++#if 0
+ <groupbox data-category="paneGeneral"
+           data-subcategory="layout"
+           hidden="true">
+@@ -198,6 +199,7 @@
+             preference="sidebar.revamp"/>
+   <description class="indent" data-l10n-id="browser-layout-show-sidebar-desc"></description>
+ </groupbox>
++#endif
+ 
+ <hbox id="languageAndAppearanceCategory"
+       class="subcategory"
+@@ -411,6 +413,7 @@
                languages-customize-add.label,
              " />
    </hbox>

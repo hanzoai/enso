@@ -513,7 +513,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (typeof this._shouldHaveWorkspaces === 'undefined') {
       let docElement = document.documentElement;
       this._shouldHaveWorkspaces = !(
-        docElement.hasAttribute('privatebrowsingmode') ||
+        PrivateBrowsingUtils.isWindowPrivate(window) ||
         docElement.getAttribute('chromehidden').includes('toolbar') ||
         docElement.getAttribute('chromehidden').includes('menubar')
       );

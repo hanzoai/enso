@@ -58,7 +58,6 @@
 
     closeWatermark() {
       document.documentElement.removeAttribute('zen-before-loaded');
-      window.dispatchEvent(new window.Event('resize')); // To recalculate the layout
       if (Services.prefs.getBoolPref('zen.watermark.enabled', false)) {
         gZenUIManager.motion
           .animate(
@@ -77,6 +76,9 @@
             }
           });
       }
+      window.requestAnimationFrame(() => {
+        window.dispatchEvent(new window.Event('resize')); // To recalculate the layout
+      });
     },
 
     _changeSidebarLocation() {
