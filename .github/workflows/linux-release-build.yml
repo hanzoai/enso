@@ -15,6 +15,11 @@ on:
         type: string
         required: true
         default: ''
+      use-sccache:
+        description: 'Use sccache'
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   build-linux:
@@ -27,9 +32,9 @@ jobs:
       matrix:
         arch: [x86_64, aarch64]
     env:
-      SCCACHE_GHA_ENABLED: 'true'
+      SCCACHE_GHA_ENABLED: ${ inputs.use-sccache }
       CARGO_TERM_COLOR: always
-      RUSTC_WRAPPER: 'sccache'
+      RUSTC_WRAPPER: ${ inputs.use-sccache && 'sccache' || '' }
       CARGO_INCREMENTAL: 0
     name: Build Linux - ${{ matrix.arch }}
 
@@ -56,6 +61,7 @@ jobs:
 
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@main
+        if: ${{ inputs.use-sccache }}
         with:
           disable_annotations: true
 

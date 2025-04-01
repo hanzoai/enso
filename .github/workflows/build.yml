@@ -38,6 +38,11 @@ on:
         required: true
         default: 'release'
         type: 'string'
+      use-sccache:
+        description: 'Use sccache'
+        required: true
+        type: 'boolean'
+        default: false
 
 jobs:
   debug-inputs:
@@ -282,6 +287,7 @@ jobs:
       contents: write
     secrets: inherit
     with:
+      use-sccache: ${{ inputs.use-sccache }}
       build-version: ${{ needs.build-data.outputs.version }}
       generate-gpo: true
       profile-data-path-archive: zen-windows-profile-data-and-jarlog.zip
@@ -312,6 +318,7 @@ jobs:
       generate-gpo: false
       release-branch: ${{ inputs.update_branch }}
       MOZ_BUILD_DATE: ${{needs.buildid.outputs.buildids}}
+      use-sccache: ${{ inputs.use-sccache }}
 
   linux:
     name: Linux build
@@ -324,6 +331,7 @@ jobs:
       build-version: ${{ needs.build-data.outputs.version }}
       release-branch: ${{ inputs.update_branch }}
       MOZ_BUILD_DATE: ${{needs.buildid.outputs.buildids}}
+      use-sccache: ${{ inputs.use-sccache }}
 
   mac:
     name: macOS build
@@ -336,6 +344,7 @@ jobs:
       build-version: ${{ needs.build-data.outputs.version }}
       release-branch: ${{ inputs.update_branch }}
       MOZ_BUILD_DATE: ${{needs.buildid.outputs.buildids}}
+      use-sccache: ${{ inputs.use-sccache }}
 
   mac-uni:
     name: macOS build (Universal)
