@@ -261,7 +261,7 @@
   transform: translateX(-50%);
   & .separator,
   & #PanelUI-zen-gradient-generator-color-toggle-algo {
-    background: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+    background: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.5));
   }
 
   & button {

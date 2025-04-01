@@ -1,5 +1,5 @@
 diff --git a/toolkit/themes/shared/popup.css b/toolkit/themes/shared/popup.css
-index ed0caa97db5726a7d1bc1cd0aa7af3fdf99690dc..4827373b138dd59dd4adc5289adef95ef2410090 100644
+index ed0caa97db5726a7d1bc1cd0aa7af3fdf99690dc..58b640a81aae4f662a5e01abadc03af614cc107d 100644
 --- a/toolkit/themes/shared/popup.css
 +++ b/toolkit/themes/shared/popup.css
 @@ -21,8 +21,8 @@ panel {
@@ -22,7 +22,7 @@ index ed0caa97db5726a7d1bc1cd0aa7af3fdf99690dc..4827373b138dd59dd4adc5289adef95e
  
      @media (prefers-contrast) {
        --panel-border-color: color-mix(in srgb, currentColor 60%, transparent);
-@@ -54,9 +52,9 @@ panel {
+@@ -54,19 +52,20 @@ panel {
      -moz-default-appearance: menupopup;
      /* The blur behind doesn't blur all that much, add a semi-transparent
       * background to improve contrast */
@@ -35,7 +35,20 @@ index ed0caa97db5726a7d1bc1cd0aa7af3fdf99690dc..4827373b138dd59dd4adc5289adef95e
    }
  
    @media (-moz-platform: macos) {
-@@ -208,7 +206,6 @@ panel:where([type="arrow"]) {
+-    appearance: auto;
++    appearance: auto !important;
+     -moz-default-appearance: menupopup;
+     /* We set the default background here, rather than on ::part(content),
+      * because otherwise it'd interfere with the native look. Non-native-looking
+      * popups should get their background via --panel-background */
+     background-color: Menu;
+-    --panel-background: none;
++    --panel-shadow-margin: 0px !important;
++    --panel-background: transparent !important;
+     --panel-border-color: transparent;
+     /* This should be kept in sync with GetMenuMaskImage() */
+     --panel-border-radius: 6px;
+@@ -208,7 +207,6 @@ panel:where([type="arrow"]) {
      }
  
      &[animating] {
