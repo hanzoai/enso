@@ -1411,15 +1411,18 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   moveTabToWorkspace(tab, workspaceID) {
-    if (tab.getAttribute('zen-workspace-id') === workspaceID) {
-      return;
-    }
-    tab.setAttribute('zen-workspace-id', workspaceID);
-    if (tab.hasAttribute('zen-essential')) {
-      return;
-    }
     const parent = tab.pinned ? '#vertical-pinned-tabs-container ' : '#tabbrowser-arrowscrollbox ';
     const container = document.querySelector(parent + `.zen-workspace-tabs-section[zen-workspace-id="${workspaceID}"]`);
+
+    if (container.contains(tab)) {
+      return false;
+    }
+
+    tab.setAttribute('zen-workspace-id', workspaceID);
+    if (tab.hasAttribute('zen-essential')) {
+      return false;
+    }
+
     if (container) {
       container.insertBefore(tab, container.lastChild);
     }
@@ -1428,6 +1431,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (glanceTab) {
       glanceTab.setAttribute('zen-workspace-id', workspaceID);
     }
+
+    return true;
   }
 
   _prepareNewWorkspace(window) {
@@ -1974,7 +1979,16 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   async onTabBrowserInserted(event) {
     let tab = event.originalTarget;
     const isEssential = tab.getAttribute('zen-essential') === 'true';
-    if (tab.getAttribute('zen-workspace-id') || !this.workspaceEnabled || isEssential) {
+    const workspaceID = tab.getAttribute('zen-workspace-id');
+
+    if (!this.workspaceEnabled || isEssential) {
+      return;
+    }
+
+    if (workspaceID) {
+      if (tab.hasAttribute('change-workspace') && this.moveTabToWorkspace(tab, workspaceID))
+        this._lastSelectedWorkspaceTabs[workspaceID] = tab;
+
       return;
     }
 
