@@ -33,6 +33,14 @@
       display: none !important;
     }
 
+    &:not([zen-window-buttons-reversed='true']) #zen-appcontent-navbar-container #nav-bar {
+      margin-left: var(--zen-element-separation) !important;
+    }
+
+    &[zen-window-buttons-reversed='true'] #zen-appcontent-navbar-container #nav-bar {
+      margin-right: var(--zen-element-separation) !important;
+    }
+
     #navigator-toolbox {
       --zen-toolbox-max-width: 64px !important;
       --zen-compact-float: var(--zen-element-separation);
@@ -75,8 +83,10 @@
         * we need to adjust the top-padding of the toolbox to account for the
         * extra toolbar height. */
     @media not -moz-pref('zen.view.compact.hide-toolbar') {
-      &:not([zen-single-toolbar='true']) #navigator-toolbox:not([animate='true']) {
-        margin-top: var(--zen-toolbar-height) !important;
+      &:not([zen-single-toolbar='true']) {
+        #navigator-toolbox:not([animate='true']) {
+          margin-top: var(--zen-toolbar-height) !important;
+        }
       }
     }
 
