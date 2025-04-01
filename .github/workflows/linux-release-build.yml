@@ -32,9 +32,9 @@ jobs:
       matrix:
         arch: [x86_64, aarch64]
     env:
-      SCCACHE_GHA_ENABLED: ${ inputs.use-sccache && 'true' || 'false' }
+      SCCACHE_GHA_ENABLED: ${{ inputs.use-sccache && 'true' || 'false' }}
       CARGO_TERM_COLOR: always
-      RUSTC_WRAPPER: ${ inputs.use-sccache && 'sccache' || '' }
+      RUSTC_WRAPPER: ${{ inputs.use-sccache && 'sccache' || '' }}
       CARGO_INCREMENTAL: 0
     name: Build Linux - ${{ matrix.arch }}
 
