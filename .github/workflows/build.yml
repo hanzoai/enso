@@ -21,6 +21,11 @@ on:
         options:
           - 'release'
           - 'twilight'
+      use-sccache:
+        description: 'Use sccache'
+        required: true
+        type: 'boolean'
+        default: false
   workflow_call:
     inputs:
       create_release:
@@ -53,6 +58,7 @@ jobs:
         run: |
           echo "create_release: ${{ inputs.create_release }}"
           echo "update_version: ${{ inputs.update_version }}"
+          echo "use sccache: ${{ inputs.use-sccache }}"
           echo "update_branch: ${{ inputs.update_branch }}"
           echo "GITHUB_REPOSITORY: ${{ github.repository }}"
           echo "GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}"
