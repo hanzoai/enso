@@ -1986,9 +1986,11 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
 
     if (workspaceID) {
-      if (tab.hasAttribute('change-workspace') && this.moveTabToWorkspace(tab, workspaceID))
+      if (tab.hasAttribute('change-workspace') && this.moveTabToWorkspace(tab, workspaceID)) {
         this._lastSelectedWorkspaceTabs[workspaceID] = tab;
-
+        tab.removeAttribute('change-workspace');
+        await this.changeWorkspace({ uuid: workspaceID }, { onInit: true });
+      }
       return;
     }
 
@@ -2251,13 +2253,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       if (matchingWorkspaces.length === 1) {
         const workspace = matchingWorkspaces[0];
         if (workspace.uuid !== this.getActiveWorkspaceFromCache().uuid) {
-          window.addEventListener(
-            'TabSelected',
-            (event) => {
-              this.changeWorkspace(workspace, { alwaysChange: true });
-            },
-            { once: true }
-          );
           return [userContextId, true, workspace.uuid];
         }
       }
