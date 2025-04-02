@@ -1,5 +1,5 @@
 diff --git a/modules/libpref/init/StaticPrefList.yaml b/modules/libpref/init/StaticPrefList.yaml
-index 85974462e5ce2b7dbf85bd5c79f09b3db5c25915..428a245cdf58d959256aa3c975687f31aed16b05 100644
+index 85974462e5ce2b7dbf85bd5c79f09b3db5c25915..f914f5c0f29be4149be15265bb6571ae92fb23cc 100644
 --- a/modules/libpref/init/StaticPrefList.yaml
 +++ b/modules/libpref/init/StaticPrefList.yaml
 @@ -18462,13 +18462,13 @@
@@ -18,30 +18,11 @@ index 85974462e5ce2b7dbf85bd5c79f09b3db5c25915..428a245cdf58d959256aa3c975687f31
    mirror: always
  
  # Whether we expand the client area into the taskbar hidden edge on maximized
-@@ -18594,6 +18594,26 @@
+@@ -18594,6 +18594,7 @@
    mirror: always
  #endif
  
-+# Dummy pref to always generate StaticPrefs_zen.h in every OS
-+- name: zen.browser.is-cool
-+  type: bool
-+  value: true
-+  mirror: never
-+
-+#ifdef XP_MACOSX
-+- name: zen.widget.macos.window-material
-+  type: uint32_t
-+  value: 1
-+  mirror: always
-+#endif
-+
-+#ifdef XP_WIN
-+- name: zen.widget.windows.acrylic
-+  type: bool
-+  value: true
-+  mirror: once
-+#endif
-+
++#include zen-static-prefs.inc
  #---------------------------------------------------------------------------
  # Prefs starting with "zoom."
  #---------------------------------------------------------------------------
