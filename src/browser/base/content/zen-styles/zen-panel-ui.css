@@ -17,3 +17,16 @@ panel[type='arrow'][animate='open'] {
 panel[type='arrow'][animate]:not([animate='open']) {
   animation: zen-jello-out-animation 0.3s ease-in-out;
 }
+
+menupopup,
+panel {
+  @media (-moz-windows-mica-popups) {
+    appearance: auto !important;
+    -moz-default-appearance: menupopup;
+    /* The blur behind doesn't blur all that much, add a semi-transparent
+     * background to improve contrast */
+    --panel-background: light-dark(rgba(255, 255, 255, .5), rgba(0, 0, 0, .5)) !important;
+    --panel-border-color: transparent !important;
+    --panel-shadow-margin: 0px !important;
+  }
+}

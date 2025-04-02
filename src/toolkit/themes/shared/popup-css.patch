@@ -1,5 +1,5 @@
 diff --git a/toolkit/themes/shared/popup.css b/toolkit/themes/shared/popup.css
-index ed0caa97db5726a7d1bc1cd0aa7af3fdf99690dc..e7847601bb9bedd01228ef5e6464b18eca587263 100644
+index ed0caa97db5726a7d1bc1cd0aa7af3fdf99690dc..ebb312830670564175cc98f11af1b29b80711ceb 100644
 --- a/toolkit/themes/shared/popup.css
 +++ b/toolkit/themes/shared/popup.css
 @@ -21,8 +21,8 @@ panel {
@@ -22,22 +22,7 @@ index ed0caa97db5726a7d1bc1cd0aa7af3fdf99690dc..e7847601bb9bedd01228ef5e6464b18e
  
      @media (prefers-contrast) {
        --panel-border-color: color-mix(in srgb, currentColor 60%, transparent);
-@@ -50,23 +48,26 @@ panel {
-   }
- 
-   @media (-moz-windows-mica-popups) {
-+    &:is(menupopup) {
-     appearance: auto;
-     -moz-default-appearance: menupopup;
-     /* The blur behind doesn't blur all that much, add a semi-transparent
-      * background to improve contrast */
--    --panel-background: light-dark(rgba(255, 255, 255, .5), rgba(0, 0, 0, .5));
--    --panel-border-color: transparent;
--    --panel-shadow-margin: 0px;
-+    --panel-background: light-dark(rgba(255, 255, 255, .5), rgba(0, 0, 0, .5)) !important;
-+    --panel-border-color: transparent !important;
-+    --panel-shadow-margin: 0px !important;
-+    }
+@@ -60,13 +58,14 @@ panel {
    }
  
    @media (-moz-platform: macos) {
@@ -54,7 +39,7 @@ index ed0caa97db5726a7d1bc1cd0aa7af3fdf99690dc..e7847601bb9bedd01228ef5e6464b18e
      --panel-border-color: transparent;
      /* This should be kept in sync with GetMenuMaskImage() */
      --panel-border-radius: 6px;
-@@ -208,7 +209,6 @@ panel:where([type="arrow"]) {
+@@ -208,7 +207,6 @@ panel:where([type="arrow"]) {
      }
  
      &[animating] {
