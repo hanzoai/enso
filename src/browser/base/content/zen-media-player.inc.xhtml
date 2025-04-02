@@ -13,38 +13,29 @@
           </vbox>
           <hbox id="zen-media-buttons-hbox">
             <toolbarbutton id="zen-media-pip-button"
-              class="toolbarbutton-1"
-              oncommand="gZenMediaController.onMediaPip();" />
+              class="toolbarbutton-1" />
             <toolbarbutton id="zen-media-close-button"
-              class="toolbarbutton-1"
-              oncommand="gZenMediaController.onControllerClose();" />
+              class="toolbarbutton-1" />
           </hbox>
         </hbox>
         <hbox id="zen-media-progress-hbox"  class="show-on-hover">
           <label id="zen-media-current-time">0:00</label>
           <html:input type="range" id="zen-media-progress-bar"
-            value="0" min="0" max="100" step="0.1"
-            oninput="gZenMediaController.onMediaSeekDrag(event);"
-            onchange="gZenMediaController.onMediaSeekComplete(event);"/>
+            value="0" min="0" max="100" step="0.1"/>
           <label id="zen-media-duration">0:00</label>
         </hbox>
       </vbox>
       <hbox id="zen-media-controls-hbox">
         <toolbarbutton id="zen-media-focus-button"
-          class="toolbarbutton-1"
-          oncommand="gZenMediaController.onMediaFocus();" />
+          class="toolbarbutton-1" />
         <toolbarbutton id="zen-media-previoustrack-button"
-          class="toolbarbutton-1"
-          oncommand="gZenMediaController.onMediaPlayPrev();" />
+          class="toolbarbutton-1" />
         <toolbarbutton id="zen-media-playpause-button"
-          class="toolbarbutton-1"
-          oncommand="gZenMediaController.onMediaToggle();" />
+          class="toolbarbutton-1" />
         <toolbarbutton id="zen-media-nexttrack-button"
-          class="toolbarbutton-1"
-          oncommand="gZenMediaController.onMediaPlayNext();" />
+          class="toolbarbutton-1" />
         <toolbarbutton id="zen-media-mute-button"
-          class="toolbarbutton-1"
-          oncommand="gZenMediaController.onMediaMute();" />
+          class="toolbarbutton-1" />
       </hbox>
     </vbox>
   </toolbaritem>

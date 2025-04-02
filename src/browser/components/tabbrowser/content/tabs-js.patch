@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index 0fbdbf3aefc467880e6b0bae2615cb145735cb0f..99a84a1cae6c18f3a80b7490dfc61712b38f6909 100644
+index 0fbdbf3aefc467880e6b0bae2615cb145735cb0f..0d3919b288afefb05e3ec54ddfa90f001dd4c3b1 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -93,7 +93,7 @@
@@ -413,6 +413,15 @@ index 0fbdbf3aefc467880e6b0bae2615cb145735cb0f..99a84a1cae6c18f3a80b7490dfc61712
  
        if (this.#rtlMode) {
          tabs.reverse();
+@@ -2314,7 +2350,7 @@
+       let size = this.verticalMode ? "height" : "width";
+       let translateAxis = this.verticalMode ? "translateY" : "translateX";
+       let scrollDirection = this.verticalMode ? "scrollTop" : "scrollLeft";
+-      let { width: tabWidth, height: tabHeight } = bounds(draggedTab);
++      let { width: tabWidth, height: tabHeight } = bounds(draggedTab.group?.hasAttribute("split-view-group") ? draggedTab.group : draggedTab);
+       let translateX = event.screenX - dragData.screenX;
+       let translateY = event.screenY - dragData.screenY;
+ 
 @@ -2328,6 +2364,12 @@
        let lastTab = tabs.at(-1);
        let lastMovingTab = movingTabs.at(-1);

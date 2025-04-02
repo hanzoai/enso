@@ -39,6 +39,41 @@ class ZenMediaController {
     this.onDeactivated = this._onDeactivated.bind(this);
     this.onPipModeChange = this._onPictureInPictureModeChange.bind(this);
 
+    this.#initEventListeners();
+  }
+
+  #initEventListeners() {
+    this.mediaControlBar.addEventListener('command', (event) => {
+      const button = event.target.closest('toolbarbutton');
+      if (!button) return;
+      switch (button.id) {
+        case 'zen-media-pip-button':
+          this.onMediaPip();
+          break;
+        case 'zen-media-close-button':
+          this.onControllerClose();
+          break;
+        case 'zen-media-focus-button':
+          this.onMediaFocus();
+          break;
+        case 'zen-media-mute-button':
+          this.onMediaMute();
+          break;
+        case 'zen-media-previoustrack-button':
+          this.onMediaPlayPrev();
+          break;
+        case 'zen-media-nexttrack-button':
+          this.onMediaPlayNext();
+          break;
+        case 'zen-media-playpause-button':
+          this.onMediaToggle();
+          break;
+      }
+    });
+
+    this.mediaProgressBar.addEventListener('input', this.onMediaSeekDrag.bind(this));
+    this.mediaProgressBar.addEventListener('change', this.onMediaSeekComplete.bind(this));
+
     window.addEventListener('TabSelect', (event) => {
       const linkedBrowser = event.target.linkedBrowser;
       this.switchController();
