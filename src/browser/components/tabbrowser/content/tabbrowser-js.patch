@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 5f406ea5d09273c9b70b84eee24c6267f88692f8..65c22c405fd1b9497df9ade0ff0b343c459be4eb 100644
+index 5f406ea5d09273c9b70b84eee24c6267f88692f8..70cde185cb560a325f894c0ce79f1344b86e2a7c 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -424,11 +424,67 @@
@@ -553,6 +553,17 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..65c22c405fd1b9497df9ade0ff0b343c
        if (!this._windowIsClosing) {
          if (wasPinned) {
            this.tabContainer._positionPinnedTabs();
+@@ -5064,8 +5228,8 @@
+       return closedCount;
+     }
+ 
+-    async explicitUnloadTabs(tabs) {
+-      let unloadBlocked = await this.runBeforeUnloadForTabs(tabs);
++    async explicitUnloadTabs(tabs, skipPermitUnload = false) {
++      let unloadBlocked = skipPermitUnload ? false : await this.runBeforeUnloadForTabs(tabs);
+       if (unloadBlocked) {
+         return;
+       }
 @@ -5159,7 +5323,7 @@
          !excludeTabs.has(aTab.owner) &&
          Services.prefs.getBoolPref("browser.tabs.selectOwnerOnClose")
