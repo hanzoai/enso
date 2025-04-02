@@ -217,8 +217,8 @@
       document.getElementById('context_closeDuplicateTabs').parentNode.appendChild(element);
     }
 
-    unload(tab) {
-      gBrowser.explicitUnloadTabs([tab], true);
+    unload(tab, skipPermitUnload = false) {
+      gBrowser.explicitUnloadTabs([tab], skipPermitUnload);
       tab.removeAttribute('linkedpanel');
     }
 
@@ -230,7 +230,7 @@
     explicitUnloadTabs(tabs, extraArgs = {}) {
       for (let i = 0; i < tabs.length; i++) {
         if (this.canUnloadTab(tabs[i], Date.now(), this.intervalUnloader.excludedUrls, true, extraArgs)) {
-          this.unload(tabs[i]);
+          this.unload(tabs[i], true);
         }
       }
     }
