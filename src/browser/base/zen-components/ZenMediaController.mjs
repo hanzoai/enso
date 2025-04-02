@@ -148,7 +148,7 @@ class ZenMediaController {
   }
 
   showMediaControls() {
-    if (this._currentMediaController.isBeingUsedInPIPModeOrFullscreen) return this.hideMediaControls();
+    if (this._currentMediaController?.isBeingUsedInPIPModeOrFullscreen) return this.hideMediaControls();
     if (!this.mediaControlBar.hasAttribute('hidden')) return;
 
     this.updatePipButton();
