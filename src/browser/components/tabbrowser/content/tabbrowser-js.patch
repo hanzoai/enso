@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b7764b1a16e 100644
+index 5f406ea5d09273c9b70b84eee24c6267f88692f8..70cde185cb560a325f894c0ce79f1344b86e2a7c 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -424,11 +424,67 @@
@@ -553,24 +553,18 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
        if (!this._windowIsClosing) {
          if (wasPinned) {
            this.tabContainer._positionPinnedTabs();
-@@ -5064,10 +5228,12 @@
+@@ -5064,8 +5228,8 @@
        return closedCount;
      }
  
 -    async explicitUnloadTabs(tabs) {
 -      let unloadBlocked = await this.runBeforeUnloadForTabs(tabs);
--      if (unloadBlocked) {
--        return;
-+    async explicitUnloadTabs(tabs, skipPermitUnload) {
-+      if (!skipPermitUnload) {
-+        let unloadBlocked = await this.runBeforeUnloadForTabs(tabs);
-+        if (unloadBlocked) {
-+          return;
-+        }
++    async explicitUnloadTabs(tabs, skipPermitUnload = false) {
++      let unloadBlocked = skipPermitUnload ? false : await this.runBeforeUnloadForTabs(tabs);
+       if (unloadBlocked) {
+         return;
        }
-       let unloadSelectedTab = false;
-       let allTabsUnloaded = false;
-@@ -5159,7 +5325,7 @@
+@@ -5159,7 +5323,7 @@
          !excludeTabs.has(aTab.owner) &&
          Services.prefs.getBoolPref("browser.tabs.selectOwnerOnClose")
        ) {
@@ -579,7 +573,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
        }
  
        // Try to find a remaining tab that comes after the given tab
-@@ -5181,7 +5347,7 @@
+@@ -5181,7 +5345,7 @@
        }
  
        if (tab) {
@@ -588,7 +582,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
        }
  
        // If no qualifying visible tab was found, see if there is a tab in
-@@ -5599,10 +5765,10 @@
+@@ -5599,10 +5763,10 @@
        SessionStore.deleteCustomTabValue(aTab, "hiddenBy");
      }
  
@@ -601,7 +595,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
          aTab.selected ||
          aTab.closing ||
          // Tabs that are sharing the screen, microphone or camera cannot be hidden.
-@@ -5838,7 +6004,7 @@
+@@ -5838,7 +6002,7 @@
      moveTabTo(aTab, aIndex, { forceStandaloneTab = false } = {}) {
        // Don't allow mixing pinned and unpinned tabs.
        if (aTab.pinned) {
@@ -610,7 +604,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
        } else {
          aIndex = Math.max(aIndex, this.pinnedTabCount);
        }
-@@ -5848,10 +6014,17 @@
+@@ -5848,10 +6012,17 @@
  
        this.#handleTabMove(aTab, () => {
          let neighbor = this.tabs[aIndex];
@@ -630,7 +624,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
            neighbor.after(aTab);
          } else {
            this.tabContainer.insertBefore(aTab, neighbor);
-@@ -5901,13 +6074,22 @@
+@@ -5901,13 +6072,22 @@
         * Bug 1955388 - prevent pinned tabs from commingling with non-pinned tabs
         * when there are hidden tabs present
         */
@@ -654,7 +648,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
          if (tab.pinned && this.tabContainer.verticalMode) {
            return this.tabContainer.verticalPinnedTabsContainer;
          }
-@@ -5937,7 +6119,7 @@
+@@ -5937,7 +6117,7 @@
      }
  
      moveTabToGroup(aTab, aGroup) {
@@ -663,7 +657,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
          return;
        }
        if (aTab.group && aTab.group.id === aGroup.id) {
-@@ -5961,6 +6143,10 @@
+@@ -5961,6 +6141,10 @@
  
        moveActionCallback();
  
@@ -674,7 +668,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
        // Clear tabs cache after moving nodes because the order of tabs may have
        // changed.
        this.tabContainer._invalidateCachedTabs();
-@@ -6015,7 +6201,7 @@
+@@ -6015,7 +6199,7 @@
          createLazyBrowser,
        };
  
@@ -683,7 +677,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
        if (aIndex < numPinned || (aTab.pinned && aIndex == numPinned)) {
          params.pinned = true;
        }
-@@ -6765,7 +6951,7 @@
+@@ -6765,7 +6949,7 @@
              // preventDefault(). It will still raise the window if appropriate.
              break;
            }
@@ -692,7 +686,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
            window.focus();
            aEvent.preventDefault();
            break;
-@@ -7671,6 +7857,7 @@
+@@ -7671,6 +7855,7 @@
              aWebProgress.isTopLevel
            ) {
              this.mTab.setAttribute("busy", "true");
@@ -700,7 +694,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
              gBrowser._tabAttrModified(this.mTab, ["busy"]);
              this.mTab._notselectedsinceload = !this.mTab.selected;
            }
-@@ -8640,7 +8827,7 @@ var TabContextMenu = {
+@@ -8640,7 +8825,7 @@ var TabContextMenu = {
      );
      contextUnpinSelectedTabs.hidden =
        !this.contextTab.pinned || !this.multiselected;
@@ -709,7 +703,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
      // Move Tab items
      let contextMoveTabOptions = document.getElementById(
        "context_moveTabOptions"
-@@ -8674,7 +8861,7 @@ var TabContextMenu = {
+@@ -8674,7 +8859,7 @@ var TabContextMenu = {
      let isFirstTab =
        !this.contextTabs[0].group &&
        (this.contextTabs[0] == visibleTabs[0] ||
@@ -718,7 +712,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..d6a3622db3ad235786fceba40f965b77
      contextMoveTabToStart.disabled = isFirstTab && allSelectedTabsAdjacent;
  
      document.getElementById("context_openTabInWindow").disabled =
-@@ -8904,6 +9091,7 @@ var TabContextMenu = {
+@@ -8904,6 +9089,7 @@ var TabContextMenu = {
      if (this.contextTab.multiselected) {
        gBrowser.removeMultiSelectedTabs();
      } else {
