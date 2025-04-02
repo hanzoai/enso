@@ -148,7 +148,9 @@ class ZenMediaController {
   }
 
   showMediaControls() {
-    if (this._currentMediaController?.isBeingUsedInPIPModeOrFullscreen) return this.hideMediaControls();
+    if (!this._currentMediaController) return;
+
+    if (this._currentMediaController.isBeingUsedInPIPModeOrFullscreen) return this.hideMediaControls();
     if (!this.mediaControlBar.hasAttribute('hidden')) return;
 
     this.updatePipButton();
@@ -485,6 +487,8 @@ class ZenMediaController {
   }
 
   updatePipButton() {
+    if (!this._currentBrowser) return;
+
     const isPipEligible = this.pipEligibilityMap.get(this._currentBrowser.browserId);
     if (isPipEligible) this.mediaControlBar.setAttribute('can-pip', '');
     else this.mediaControlBar.removeAttribute('can-pip');
