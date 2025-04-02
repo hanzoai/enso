@@ -624,6 +624,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       this.dropZone.setAttribute('enabled', true);
     }
     const splitNode = this.getSplitNodeFromTab(tab);
+    if (!splitNode) return;
 
     const posToRoot = { ...splitNode.positionToRoot };
     const browserRect = browser.getBoundingClientRect();
@@ -1589,26 +1590,30 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
     }
 
     if (browserContainer) {
-      gZenUIManager.motion
-        .animate(
-          browserContainer,
-          {
-            scale: [0.97, 1],
-            opacity: [0, 1],
-          },
-          {
-            type: 'spring',
-            bounce: 0.4,
-            duration: 0.2,
-            delay: 0.1,
-          }
-        )
-        .then(() => {
-          this._maybeRemoveFakeBrowser(false);
-          this._finishAllAnimatingPromise = null;
-        });
+      this.animateBrowserDrop(browserContainer, () => {
+        this._maybeRemoveFakeBrowser(false);
+        this._finishAllAnimatingPromise = null;
+      });
     }
     return true;
+  }
+
+  animateBrowserDrop(browserContainer, callback = () => {}) {
+    gZenUIManager.motion
+      .animate(
+        browserContainer,
+        {
+          scale: [0.97, 1],
+          opacity: [0, 1],
+        },
+        {
+          type: 'spring',
+          bounce: 0.4,
+          duration: 0.2,
+          delay: 0.1,
+        }
+      )
+      .then(callback);
   }
 
   handleTabDrop(event, urls, replace, inBackground) {

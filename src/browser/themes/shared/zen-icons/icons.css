@@ -432,10 +432,8 @@
   list-style-image: url('bookmark.svg') !important;
 }
 
-#zen-split-views-button {
-  list-style-image: url('split.svg') !important;
-  fill: var(--toolbarbutton-icon-fill-attention);
-  fill-opacity: 1;
+#zen-glance-sidebar-split {
+  list-style-image: url('split.svg');
 }
 
 #sidebar-box[sidebarcommand='viewTabsSidebar'] > #sidebar-header > #sidebar-switcher-target > #sidebar-icon,

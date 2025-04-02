@@ -20,10 +20,30 @@
       );
 
       ChromeUtils.defineLazyGetter(this, 'sidebarButtons', () => document.getElementById('zen-glance-sidebar-container'));
-
       document.getElementById('tabbrowser-tabpanels').addEventListener('click', this.onOverlayClick.bind(this));
-
       Services.obs.addObserver(this, 'quit-application-requested');
+
+      this.#addSidebarButtonListeners();
+    }
+
+    #addSidebarButtonListeners() {
+      this.sidebarButtons.addEventListener('command', (event) => {
+        const button = event.target.closest('toolbarbutton');
+        if (!button) {
+          return;
+        }
+        switch (button.id) {
+          case 'zen-glance-sidebar-close':
+            this.closeGlance({ onTabClose: true });
+            break;
+          case 'zen-glance-sidebar-fullscreen':
+            this.fullyOpenGlance();
+            break;
+          case 'zen-glance-sidebar-split':
+            this.splitGlance();
+            break;
+        }
+      });
     }
 
     get #currentBrowser() {
@@ -524,7 +544,7 @@
       this.#glances.delete(this.#currentGlanceID);
     }
 
-    async fullyOpenGlance() {
+    async fullyOpenGlance({ forSplit = false } = {}) {
       this.animatingFullOpen = true;
       gBrowser._insertTabAtIndex(this.#currentTab, {
         index: this.getTabPosition(this.#currentTab),
@@ -540,7 +560,7 @@
       this.#currentParentTab.linkedBrowser.closest('.browserSidebarContainer').classList.remove('zen-glance-background');
       this.#currentParentTab._visuallySelected = false;
       this.hideSidebarButtons();
-      if (gReduceMotion) {
+      if (gReduceMotion || forSplit) {
         this.finishOpeningGlance();
         return;
       }
@@ -592,6 +612,20 @@
 
     getFocusedTab(aDir) {
       return aDir < 0 ? this.#currentParentTab : this.#currentTab;
+    }
+
+    async splitGlance() {
+      if (this.#currentGlanceID) {
+        const currentTab = this.#currentTab;
+        const currentParentTab = this.#currentParentTab;
+
+        await this.fullyOpenGlance({ forSplit: true });
+        gZenViewSplitter.splitTabs([currentTab, currentParentTab], 'vsep');
+        const browserContainer = currentTab.linkedBrowser?.closest('.browserSidebarContainer');
+        if (!gReduceMotion && browserContainer) {
+          gZenViewSplitter.animateBrowserDrop(browserContainer);
+        }
+      }
     }
   }
 
