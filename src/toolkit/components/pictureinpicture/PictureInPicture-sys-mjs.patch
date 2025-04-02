@@ -1,16 +1,8 @@
 diff --git a/toolkit/components/pictureinpicture/PictureInPicture.sys.mjs b/toolkit/components/pictureinpicture/PictureInPicture.sys.mjs
-index 5da0404b2672ba8cce7bcf808bf2373474776654..44b62bd752294c2af96dd5b5d08c90ddf3dc513f 100644
+index 5da0404b2672ba8cce7bcf808bf2373474776654..1405c53a927a64ecda8255d78d9aa5ddf8806685 100644
 --- a/toolkit/components/pictureinpicture/PictureInPicture.sys.mjs
 +++ b/toolkit/components/pictureinpicture/PictureInPicture.sys.mjs
-@@ -488,13 +488,13 @@ export var PictureInPicture = {
-       return;
-     }
- 
--    let gBrowser = browser.getTabBrowser();
--    let tab = gBrowser.getTabForBrowser(browser);
-+    let gBrowser = browser?.ownerGlobal?.gBrowser;
-+    let tab = browser?.ownerGlobal?.gZenBrowserManagerSidebar.getTabForBrowser(browser) ?? gBrowser.getTabForBrowser(browser);
- 
+@@ -494,7 +494,7 @@ export var PictureInPicture = {
      // focus the tab's window
      tab.ownerGlobal.focus();
  
@@ -27,12 +19,3 @@ index 5da0404b2672ba8cce7bcf808bf2373474776654..44b62bd752294c2af96dd5b5d08c90dd
      let browserHasPip = !!this.browserWeakMap.get(browser);
      if (browserHasPip) {
        this.setUrlbarPipIconActive(browser.ownerGlobal);
-@@ -877,7 +878,7 @@ export var PictureInPicture = {
-     win.setIsMutedState(videoData.isMuted);
- 
-     // set attribute which shows pip icon in tab
--    let tab = parentWin.gBrowser.getTabForBrowser(browser);
-+    let tab = parentWin.gBrowser.getTabForBrowser(browser) ?? parentWin.gZenBrowserManagerSidebar.getTabForBrowser(browser);;
-     tab.setAttribute("pictureinpicture", true);
- 
-     this.setUrlbarPipIconActive(parentWin);

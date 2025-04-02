@@ -82,10 +82,6 @@
   list-style-image: url('chrome://browser/skin/sidebars.svg') !important;
 }
 
-#zen-sidepanel-button {
-  list-style-image: url('sidebar.svg');
-}
-
 #downloads-button,
 #downloads-indicator-anchor,
 #appMenu-downloads-button,

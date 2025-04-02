@@ -52,7 +52,7 @@
       const menu = window.MozXULElement.parseXULToFragment(`
         <menuitem id="zenToolbarThemePicker"
                   data-lazy-l10n-id="zen-workspaces-change-gradient"
-                  oncommand="gZenThemePicker.openThemePicker(event);"/>
+                  command="cmd_zenOpenZenThemePicker"/>
       `);
       document.getElementById('toolbar-context-customize').before(menu);
     }

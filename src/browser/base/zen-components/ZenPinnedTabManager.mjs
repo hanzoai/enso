@@ -672,11 +672,11 @@
             <menuitem id="context_zen-replace-pinned-url-with-current"
                       data-lazy-l10n-id="tab-context-zen-replace-pinned-url-with-current"
                       hidden="true"
-                      oncommand="gZenPinnedTabManager.replacePinnedUrlWithCurrent();"/>
+                      command="cmd_zenReplacePinnedUrlWithCurrent"/>
             <menuitem id="context_zen-reset-pinned-tab"
                       data-lazy-l10n-id="tab-context-zen-reset-pinned-tab"
                       hidden="true"
-                      oncommand="gZenPinnedTabManager.resetPinnedTab();"/>
+                      command="cmd_zenPinnedTabResetNoTab"/>
         `);
       document.getElementById('tabContextMenu').appendChild(elements);
 
@@ -684,11 +684,11 @@
             <menuitem id="context_zen-add-essential"
                       data-lazy-l10n-id="tab-context-zen-add-essential"
                       hidden="true"
-                      oncommand="gZenPinnedTabManager.addToEssentials();"/>
+                      command="cmd_zenAddToEssentials"/>
             <menuitem id="context_zen-remove-essential"
                       data-lazy-l10n-id="tab-context-zen-remove-essential"
                       hidden="true"
-                      oncommand="gZenPinnedTabManager.removeEssentials();"/>
+                      command="cmd_zenRemoveFromEssentials"/>
         `);
 
       document.getElementById('context_pinTab')?.before(element);

@@ -920,16 +920,6 @@ var gZenCKSSettings = {
 
 Preferences.addAll([
   {
-    id: 'zen.sidebar.enabled',
-    type: 'bool',
-    default: true,
-  },
-  {
-    id: 'zen.sidebar.close-on-blur',
-    type: 'bool',
-    default: true,
-  },
-  {
     id: 'zen.view.compact.hide-toolbar',
     type: 'bool',
     default: false,

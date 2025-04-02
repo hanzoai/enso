@@ -2199,7 +2199,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     const menuPopup = document.createXULElement('menupopup');
     menuPopup.setAttribute('id', 'context-zen-change-workspace-tab-menu-popup');
-    menuPopup.setAttribute('oncommand', "ZenWorkspaces.changeTabWorkspace(event.target.getAttribute('zen-workspace-id'))");
+    menuPopup.setAttribute('command', 'cmd_zenChangeWorkspaceTab');
 
     menu.appendChild(menuPopup);
 

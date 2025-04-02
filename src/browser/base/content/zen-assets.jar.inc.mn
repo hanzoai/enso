@@ -2,6 +2,7 @@
 
         content/browser/zenThemeModifier.js                     (content/zenThemeModifier.js)
         content/browser/ZenStartup.mjs                          (content/ZenStartup.mjs)
+        content/browser/zen-sets.js                             (content/zen-sets.js)
         content/browser/ZenUIManager.mjs                        (content/ZenUIManager.mjs)
         content/browser/ZenCustomizableUI.sys.mjs               (content/ZenCustomizableUI.sys.mjs)
         content/browser/zen-components/ZenUIMigration.mjs       (zen-components/ZenUIMigration.mjs)
@@ -11,7 +12,6 @@
         content/browser/zen-components/ZenWorkspaces.mjs        (zen-components/ZenWorkspaces.mjs)
         content/browser/zen-components/ZenWorkspacesStorage.mjs (zen-components/ZenWorkspacesStorage.mjs)
         content/browser/zen-components/ZenWorkspacesSync.mjs    (zen-components/ZenWorkspacesSync.mjs)
-        content/browser/zen-components/ZenSidebarManager.mjs    (zen-components/ZenSidebarManager.mjs)
         content/browser/zen-components/ZenKeyboardShortcuts.mjs (zen-components/ZenKeyboardShortcuts.mjs)
         content/browser/zen-components/ZenThemesImporter.mjs    (zen-components/ZenThemesImporter.mjs)
         content/browser/zen-components/ZenTabUnloader.mjs       (zen-components/ZenTabUnloader.mjs)

@@ -184,13 +184,6 @@ pref('zen.pinned-tab-manager.close-shortcut-behavior', 'reset-unload-switch');
 // TODO: Check this out!
 pref("browser.profiles.enabled", false);
 
-// Zen webpanels (calling it sidebar due to legacy reasons)
-pref('zen.sidebar.data', "{\"data\":\n {\"p1\":{\n   \"url\":\"https://www.wikipedia.org/\"\n  },\n\"p2\":{\n   \"url\":\"https://m.twitter.com/\",\n\"ua\": true\n  },\n\"p3\": {\n   \"url\": \"https://www.youtube.com/\",\n\"ua\": true\n},\n\"p4\": {\n   \"url\": \"https://translate.google.com/\",\n\"ua\": true\n},\n\"p5\": {\n   \"url\": \"https://todoist.com/\",\n\"ua\": true\n}},\n\"index\":[\"p1\",\"p2\",\"p3\",\"p4\",\"p5\"]}");
-pref('zen.sidebar.enabled', true);
-pref('zen.sidebar.close-on-blur', true);
-pref('zen.sidebar.max-webpanels', 8);
-pref('zen.sidebar.use-google-favicons', true);
-
 // Zen Split View
 pref('zen.splitView.enable-tab-drop', true);
 pref('zen.splitView.min-resize-width', 7);

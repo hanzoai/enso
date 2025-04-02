@@ -202,15 +202,15 @@
         <menuseparator/>
         <menuitem id="context_zenUnloadTab"
                   data-lazy-l10n-id="tab-zen-unload"
-                  oncommand="gZenTabUnloader.unloadTab();"/>
+                  command="cmd_zenUnloadTab"/>
         <menu data-lazy-l10n-id="zen-tabs-unloader-tab-actions" id="context_zenTabActions">
           <menupopup>
             <menuitem id="context_zenPreventUnloadTab"
                       data-lazy-l10n-id="tab-zen-prevent-unload"
-                      oncommand="gZenTabUnloader.preventUnloadTab();"/>
+                      command="cmd_zenPreventUnloadTab"/>
             <menuitem id="context_zenIgnoreUnloadTab"
                       data-lazy-l10n-id="tab-zen-ignore-unload"
-                      oncommand="gZenTabUnloader.ignoreUnloadTab();"/>
+                      command="cmd_zenIgnoreUnloadTab"/>
           </menupopup>
         </menu>
       `);

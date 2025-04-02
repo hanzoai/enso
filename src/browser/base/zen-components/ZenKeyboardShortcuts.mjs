@@ -403,11 +403,7 @@ class KeyShortcut {
     }
     key.setAttribute('modifiers', this.#modifiers.toString());
     if (this.#action) {
-      if (this.#action?.startsWith('code:')) {
-        key.setAttribute('oncommand', this.#action.substring(5));
-      } else {
-        key.setAttribute('command', this.#action);
-      }
+      key.setAttribute('command', this.#action);
     }
     if (this.#disabled) {
       key.setAttribute('disabled', this.#disabled);
@@ -440,6 +436,11 @@ class KeyShortcut {
 
   getAction() {
     return this.#action;
+  }
+
+  // Only used for migration!
+  _setAction(action) {
+    this.#action = action;
   }
 
   getL10NID() {
@@ -603,7 +604,7 @@ class ZenKeyboardShortcutsLoader {
         '',
         ZEN_COMPACT_MODE_SHORTCUTS_GROUP,
         KeyShortcutModifiers.fromObject({ accel: true, alt: true }),
-        'code:gZenCompactModeManager.toggle()',
+        'cmd_zenCompactModeToggle',
         'zen-compact-mode-shortcut-toggle'
       )
     );
@@ -614,7 +615,7 @@ class ZenKeyboardShortcutsLoader {
         '',
         ZEN_COMPACT_MODE_SHORTCUTS_GROUP,
         KeyShortcutModifiers.fromObject({ accel: true, alt: true }),
-        'code:gZenCompactModeManager.toggleSidebar()',
+        'cmd_zenCompactModeShowSidebar',
         'zen-compact-mode-shortcut-show-sidebar'
       )
     );
@@ -625,12 +626,12 @@ class ZenKeyboardShortcutsLoader {
         '',
         ZEN_COMPACT_MODE_SHORTCUTS_GROUP,
         KeyShortcutModifiers.fromObject({ accel: true, alt: true }),
-        'code:gZenCompactModeManager.toggleToolbar()',
+        'cmd_zenCompactModeShowToolbar',
         'zen-compact-mode-shortcut-show-toolbar'
       )
     );
 
-    // Workspace's keyset
+    // Workspace shortcuts
     for (let i = 10; i > 0; i--) {
       newShortcutList.push(
         new KeyShortcut(
@@ -639,7 +640,7 @@ class ZenKeyboardShortcutsLoader {
           '',
           ZEN_WORKSPACE_SHORTCUTS_GROUP,
           KeyShortcutModifiers.fromObject({}),
-          `code:ZenWorkspaces.shortcutSwitchTo(${i - 1})`,
+          `cmd_zenWorkspaceSwitch${i}`,
           `zen-workspace-shortcut-switch-${i}`
         )
       );
@@ -651,7 +652,7 @@ class ZenKeyboardShortcutsLoader {
         '',
         ZEN_WORKSPACE_SHORTCUTS_GROUP,
         KeyShortcutModifiers.fromObject({ accel: true, alt: true }),
-        'code:ZenWorkspaces.changeWorkspaceShortcut()',
+        'cmd_zenWorkspaceForward',
         'zen-workspace-shortcut-forward'
       )
     );
@@ -662,21 +663,8 @@ class ZenKeyboardShortcutsLoader {
         '',
         ZEN_WORKSPACE_SHORTCUTS_GROUP,
         KeyShortcutModifiers.fromObject({ accel: true, alt: true }),
-        'code:ZenWorkspaces.changeWorkspaceShortcut(-1)',
+        'cmd_zenWorkspaceBackward',
         'zen-workspace-shortcut-backward'
-      )
-    );
-
-    // Other keyset
-    newShortcutList.push(
-      new KeyShortcut(
-        'zen-toggle-web-panel',
-        'P',
-        '',
-        ZEN_OTHER_SHORTCUTS_GROUP,
-        KeyShortcutModifiers.fromObject({ alt: true }),
-        'code:gZenBrowserManagerSidebar.toggle()',
-        'zen-web-panel-shortcut-toggle'
       )
     );
 
@@ -688,7 +676,7 @@ class ZenKeyboardShortcutsLoader {
         '',
         ZEN_SPLIT_VIEW_SHORTCUTS_GROUP,
         KeyShortcutModifiers.fromObject({ accel: true, alt: true }),
-        "code:gZenViewSplitter.toggleShortcut('grid')",
+        'cmd_zenSplitViewGrid',
         'zen-split-view-shortcut-grid'
       )
     );
@@ -699,7 +687,7 @@ class ZenKeyboardShortcutsLoader {
         '',
         ZEN_SPLIT_VIEW_SHORTCUTS_GROUP,
         KeyShortcutModifiers.fromObject({ accel: true, alt: true }),
-        "code:gZenViewSplitter.toggleShortcut('vsep')",
+        'cmd_zenSplitViewVertical',
         'zen-split-view-shortcut-vertical'
       )
     );
@@ -710,7 +698,7 @@ class ZenKeyboardShortcutsLoader {
         '',
         ZEN_SPLIT_VIEW_SHORTCUTS_GROUP,
         KeyShortcutModifiers.fromObject({ accel: true, alt: true }),
-        "code:gZenViewSplitter.toggleShortcut('hsep')",
+        'cmd_zenSplitViewHorizontal',
         'zen-split-view-shortcut-horizontal'
       )
     );
@@ -721,7 +709,7 @@ class ZenKeyboardShortcutsLoader {
         '',
         ZEN_SPLIT_VIEW_SHORTCUTS_GROUP,
         KeyShortcutModifiers.fromObject({ accel: true, alt: true }),
-        "code:gZenViewSplitter.toggleShortcut('unsplit')",
+        'cmd_zenSplitViewUnsplit',
         'zen-split-view-shortcut-unsplit'
       )
     );
@@ -756,7 +744,7 @@ class ZenKeyboardShortcutsLoader {
 }
 
 class ZenKeyboardShortcutsVersioner {
-  static LATEST_KBS_VERSION = 8;
+  static LATEST_KBS_VERSION = 9;
 
   constructor() {}
 
@@ -848,7 +836,7 @@ class ZenKeyboardShortcutsVersioner {
           '',
           ZEN_OTHER_SHORTCUTS_GROUP,
           KeyShortcutModifiers.fromObject({}),
-          'code:gZenPinnedTabManager.resetPinnedTab(gBrowser.selectedTab)',
+          'cmd_zenPinnedTabReset',
           'zen-pinned-tab-shortcut-reset'
         )
       );
@@ -885,7 +873,7 @@ class ZenKeyboardShortcutsVersioner {
           '',
           ZEN_OTHER_SHORTCUTS_GROUP,
           KeyShortcutModifiers.fromObject({ alt: true }),
-          'code:gZenVerticalTabsManager.toggleExpand()',
+          'cmd_zenToggleSidebar',
           'zen-sidebar-shortcut-toggle'
         )
       );
@@ -900,7 +888,7 @@ class ZenKeyboardShortcutsVersioner {
           '',
           ZEN_OTHER_SHORTCUTS_GROUP,
           KeyShortcutModifiers.fromObject({ accel: true, shift: true }),
-          'code:gZenCommonActions.copyCurrentURLToClipboard()',
+          'cmd_zenCopyCurrentURL',
           'zen-text-action-copy-url-shortcut'
         )
       );
@@ -932,10 +920,49 @@ class ZenKeyboardShortcutsVersioner {
           '',
           ZEN_OTHER_SHORTCUTS_GROUP,
           KeyShortcutModifiers.fromObject({ accel: true, shift: true, alt: true }),
-          'code:gZenCommonActions.copyCurrentURLAsMarkdownToClipboard()',
+          'cmd_zenCopyCurrentURLMarkdown',
           'zen-text-action-copy-url-markdown-shortcut'
         )
       );
+    }
+    if (version < 9) {
+      // Migrate from version 8 to 9
+      // Due to security concerns, replace "code:" actions with corresponding <command> IDs
+      // we also remove 'zen-toggle-web-panel' since it's not used anymore
+      data = data.filter((shortcut) => shortcut.getID() != 'zen-toggle-web-panel');
+      for (let shortcut of data) {
+        if (shortcut.getAction()?.startsWith('code:')) {
+          const id = shortcut.getID();
+
+          // Map old shortcut IDs to new <command> IDs
+          const commandMap = {
+            'zen-compact-mode-toggle': 'cmd_zenCompactModeToggle',
+            'zen-compact-mode-show-sidebar': 'cmd_zenCompactModeShowSidebar',
+            'zen-compact-mode-show-toolbar': 'cmd_zenCompactModeShowToolbar',
+            'zen-workspace-forward': 'cmd_zenWorkspaceForward',
+            'zen-workspace-backward': 'cmd_zenWorkspaceBackward',
+            'zen-split-view-grid': 'cmd_zenSplitViewGrid',
+            'zen-split-view-vertical': 'cmd_zenSplitViewVertical',
+            'zen-split-view-horizontal': 'cmd_zenSplitViewHorizontal',
+            'zen-split-view-unsplit': 'cmd_zenSplitViewUnsplit',
+            'zen-copy-url': 'cmd_zenCopyCurrentURL',
+            'zen-copy-url-markdown': 'cmd_zenCopyCurrentURLMarkdown',
+            'zen-pinned-tab-reset-shortcut': 'cmd_zenPinnedTabReset',
+            'zen-toggle-sidebar': 'cmd_zenToggleSidebar',
+          };
+
+          // Dynamically handle workspace switch shortcuts (zen-workspace-switch-1 to 10)
+          if (id?.startsWith('zen-workspace-switch-')) {
+            const num = id.replace('zen-workspace-switch-', '');
+            commandMap[id] = `cmd_zenWorkspaceSwitch${num}`;
+          }
+
+          // Replace action if a corresponding command exists
+          if (commandMap[id]) {
+            shortcut._setAction(commandMap[id]);
+          }
+        }
+      }
     }
     return data;
   }
@@ -944,6 +971,7 @@ class ZenKeyboardShortcutsVersioner {
 var gZenKeyboardShortcutsManager = {
   loader: new ZenKeyboardShortcutsLoader(),
   _hasToLoadDevtools: false,
+  _inlineCommands: [],
 
   beforeInit() {
     if (!this.inBrowserView) {

@@ -63,7 +63,6 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
   currentView = -1;
   _data = [];
   _tabBrowserPanel = null;
-  __modifierElement = null;
   __hasSetMenuListener = false;
   overlay = null;
   _splitNodeToSplitters = new Map();
@@ -89,7 +88,6 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
     window.addEventListener('TabClose', this.handleTabClose.bind(this));
     window.addEventListener('TabSelect', this.onTabSelect.bind(this));
     this.initializeContextMenu();
-    this.insertPageActionButton();
     this.insertIntoContextMenu();
 
     // Add drag over listener to the browser view
@@ -105,7 +103,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
     const menuitem = document.createXULElement('menuitem');
     menuitem.setAttribute('id', 'context-zenSplitLink');
     menuitem.setAttribute('hidden', 'true');
-    menuitem.setAttribute('oncommand', 'gZenViewSplitter.splitLinkInNewTab();');
+    menuitem.setAttribute('command', 'cmd_zenSplitViewLinkInNewTab');
     menuitem.setAttribute('data-l10n-id', 'zen-split-link');
     sibling.insertAdjacentElement('beforebegin', menuitem);
   }
@@ -836,23 +834,6 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
   }
 
   /**
-   * Insert Page Action button
-   */
-  insertPageActionButton() {
-    const element = window.MozXULElement.parseXULToFragment(`
-      <hbox id="zen-split-views-box"
-          hidden="true"
-          role="button"
-          class="urlbar-page-action"
-          onclick="gZenViewSplitter.openSplitViewPanel(event);">
-        <image id="zen-split-views-button"
-              class="urlbar-icon"/>
-      </hbox>
-    `);
-    document.getElementById('star-button-box').after(element);
-  }
-
-  /**
    * Gets the tab browser panel.
    *
    * @returns {Element} The tab browser panel.
@@ -1401,42 +1382,6 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
   }
 
   /**
-   * Gets the modifier element.
-   *
-   * @returns {Element} The modifier element.
-   */
-  get modifierElement() {
-    if (!this.__modifierElement) {
-      const wrapper = document.getElementById('template-zen-split-view-modifier');
-      const panel = wrapper.content.firstElementChild;
-      wrapper.replaceWith(wrapper.content);
-      this.__modifierElement = panel;
-    }
-    return this.__modifierElement;
-  }
-
-  /**
-   * Opens the split view panel.
-   *
-   * @param {Event} event - The event that triggered the panel opening.
-   */
-  async openSplitViewPanel(event) {
-    const panel = this.modifierElement;
-    const target = event.target.parentNode;
-    this.updatePanelUI(panel);
-
-    if (!this.__hasSetMenuListener) {
-      this.setupPanelListeners(panel);
-      this.__hasSetMenuListener = true;
-    }
-
-    window.PanelMultiView.openPopup(panel, target, {
-      position: 'bottomright topright',
-      triggerEvent: event,
-    }).catch(console.error);
-  }
-
-  /**
    * Updates the UI of the panel.
    *
    * @param {Element} panel - The panel element.
@@ -1449,34 +1394,6 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
         selector.classList.add('active');
       }
     }
-  }
-
-  /**
-   * @description sets up the listeners for the panel.
-   * @param {Element} panel - The panel element
-   */
-  setupPanelListeners(panel) {
-    for (const gridType of ['hsep', 'vsep', 'grid', 'unsplit']) {
-      const selector = panel.querySelector(`.zen-split-view-modifier-preview.${gridType}`);
-      selector.addEventListener('click', () => this.handlePanelSelection(gridType, panel));
-    }
-  }
-
-  /**
-   * @description handles the panel selection.
-   * @param {string} gridType - The grid type
-   * @param {Element} panel - The panel element
-   */
-  handlePanelSelection(gridType, panel) {
-    if (gridType === 'unsplit') {
-      this.unsplitCurrentView();
-    } else {
-      const group = this._data[this.currentView];
-      group.gridType = gridType;
-      group.layoutTree = this.calculateLayoutTree(group.tabs, gridType);
-      this.activateSplitView(group, true);
-    }
-    panel.hidePopup();
   }
 
   /**

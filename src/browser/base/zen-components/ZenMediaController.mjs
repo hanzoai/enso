@@ -442,9 +442,7 @@ class ZenMediaController {
 
   onMediaFocus() {
     if (!this._currentBrowser) return;
-    const sidebarId = this._currentBrowser.getAttribute('zen-sidebar-id');
-    if (sidebarId) gZenBrowserManagerSidebar.open(sidebarId);
-    else this._currentMediaController?.focus();
+    this._currentMediaController?.focus();
   }
 
   onMediaMute() {

@@ -334,7 +334,7 @@ var gZenVerticalTabsManager = {
                 type="checkbox"
                 ${Services.prefs.getBoolPref(kConfigKey) ? 'checked="true"' : ''}
                 data-lazy-l10n-id="zen-toolbar-context-tabs-right"
-                oncommand="gZenVerticalTabsManager.toggleTabsOnRight();"
+                command="cmd_zenToggleTabsOnRight"
         />
     `);
     document.getElementById('viewToolbarsMenuSeparator').before(fragment);
