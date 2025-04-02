@@ -26,3 +26,5 @@ src/browser/base/content/zen-styles/zen-tabs/vertical-tabs.css
 src/browser/base/content/zen-styles/zen-compact-mode.css
 src/browser/base/zen-components/ZenEmojies.mjs
 build/codesign/codesign.bash
+
+*.inc
