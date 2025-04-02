@@ -228,13 +228,18 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
         }
       }
       // Add a min width to all the browser elements to prevent them from resizing
-      for (const browser of gBrowser.browsers) {
-        const width = browser.getBoundingClientRect().width;
-        browser.style.minWidth = `${width}px`;
-      }
       const panelsWidth = gBrowser.tabbox.getBoundingClientRect().width;
       const halfWidth = panelsWidth / 2;
       const side = event.clientX > halfWidth ? 'right' : 'left';
+      for (const browser of gBrowser.browsers) {
+        const width = browser.getBoundingClientRect().width;
+        // Only apply it to the left side because if we add it to the right side,
+        // we wont be able to move the element to the left.
+        // FIXME: This is a workaround, we should find a better way to do this
+        if (side === 'left') {
+          browser.style.minWidth = `${width}px`;
+        }
+      }
       this.fakeBrowser = document.createXULElement('vbox');
       window.addEventListener('dragend', this.onBrowserDragEndToSplit, { once: true });
       const padding = Services.prefs.getIntPref('zen.theme.content-element-separation', 0);

@@ -1414,7 +1414,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     const parent = tab.pinned ? '#vertical-pinned-tabs-container ' : '#tabbrowser-arrowscrollbox ';
     const container = document.querySelector(parent + `.zen-workspace-tabs-section[zen-workspace-id="${workspaceID}"]`);
 
-    if (container.contains(tab)) {
+    if (container?.contains(tab)) {
       return false;
     }
 
