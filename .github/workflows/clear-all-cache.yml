@@ -1,10 +1,11 @@
-name: cleanup all caches
+name: Cleanup cache
 on:
   workflow_dispatch:
 
 jobs:
   cleanup:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Cleanup
         run: |
