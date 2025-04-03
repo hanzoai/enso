@@ -707,7 +707,7 @@ jobs:
             --linux-archive zen.linux-x86_64.tar.xz \
             --linux-aarch64-archive zen.linux-aarch64.tar.xz \
             --output app.zen_browser.zen.yml \
-            --template-root ./zen-browser/flatpak
+            --template-root ./zen-browser/build/flatpak
 
       - name: Commit changes
         run: |
