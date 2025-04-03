@@ -497,6 +497,10 @@
         if (url1.startsWith('about:')) {
           return true;
         }
+        // https://github.com/zen-browser/desktop/issues/7173: Only glance up links that are http(s) or file
+        if (!url1.startsWith('http') && !url1.startsWith('https') && !url1.startsWith('file')) {
+          return false;
+        }
         return Services.io.newURI(url1).host !== url2.host;
       } catch (e) {
         return true;
