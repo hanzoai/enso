@@ -1733,6 +1733,10 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     const tabWorkspaceId = tab.getAttribute('zen-workspace-id');
     const tabContextId = tab.getAttribute('usercontextid');
 
+    if (tab.hasAttribute('zen-glance-tab')) {
+      return true; // Always show glance tabs
+    }
+
     // Handle essential tabs
     if (isEssential) {
       if (!this.containerSpecificEssentials) {
