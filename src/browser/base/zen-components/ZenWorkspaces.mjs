@@ -2007,8 +2007,12 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       return;
     }
 
-    const parent = browser.ownerGlobal;
-    const tab = gBrowser.getTabForBrowser(browser);
+    let tab = gBrowser.getTabForBrowser(browser);
+    if (tab.hasAttribute('zen-glance-tab')) {
+      // Extract from parent node so we are not selecting the wrong (current) tab
+      tab = tab.parentNode.closest('.tabbrowser-tab');
+      console.assert(tab, 'Tab not found for zen-glance-tab');
+    }
     const workspaceID = tab.getAttribute('zen-workspace-id');
     const isEssential = tab.getAttribute('zen-essential') === 'true';
 
@@ -2017,20 +2021,19 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
 
     if (!isEssential) {
-      const activeWorkspace = await parent.ZenWorkspaces.getActiveWorkspace();
+      const activeWorkspace = await this.getActiveWorkspace();
       if (!activeWorkspace) {
         return;
       }
 
       // Only update last selected tab for non-essential tabs in their workspace
-      if (!isEssential && workspaceID === activeWorkspace.uuid) {
+      if (workspaceID === activeWorkspace.uuid) {
         this._lastSelectedWorkspaceTabs[workspaceID] = tab;
       }
 
       // Switch workspace if needed
-      if (workspaceID && workspaceID !== activeWorkspace.uuid && parent.ZenWorkspaces._hasInitializedTabsStrip) {
-        const workspaces = await parent.ZenWorkspaces._workspaces();
-        await parent.ZenWorkspaces.changeWorkspace({ uuid: workspaceID });
+      if (workspaceID && workspaceID !== activeWorkspace.uuid && this._hasInitializedTabsStrip) {
+        await this.changeWorkspace({ uuid: workspaceID });
       }
     }
   }
