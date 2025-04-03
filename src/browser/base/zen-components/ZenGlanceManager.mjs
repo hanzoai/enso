@@ -36,7 +36,7 @@
           case 'zen-glance-sidebar-close':
             this.closeGlance({ onTabClose: true });
             break;
-          case 'zen-glance-sidebar-fullscreen':
+          case 'zen-glance-sidebar-open':
             this.fullyOpenGlance();
             break;
           case 'zen-glance-sidebar-split':
@@ -620,7 +620,7 @@
         const currentParentTab = this.#currentParentTab;
 
         await this.fullyOpenGlance({ forSplit: true });
-        gZenViewSplitter.splitTabs([currentTab, currentParentTab], 'vsep');
+        gZenViewSplitter.splitTabs([currentTab, currentParentTab], 'vsep', 1);
         const browserContainer = currentTab.linkedBrowser?.closest('.browserSidebarContainer');
         if (!gReduceMotion && browserContainer) {
           gZenViewSplitter.animateBrowserDrop(browserContainer);

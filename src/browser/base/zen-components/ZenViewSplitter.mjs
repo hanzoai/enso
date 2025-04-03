@@ -963,8 +963,9 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
         // Add any tabs that are not already in the group
         for (let i = 0; i < tabs.length; i++) {
           const tab = tabs[i];
-          if (!group.tabs.includes(tab) && tab.pinned === !!group.pinned) {
+          if (!group.tabs.includes(tab)) {
             gBrowser.moveTabToGroup(tab, this._getSplitViewGroup(tabs));
+            group.tabs.push(tab);
             this.addTabToSplit(tab, group.layoutTree);
           }
         }
