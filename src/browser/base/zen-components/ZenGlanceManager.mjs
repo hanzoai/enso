@@ -234,14 +234,23 @@
       });
     }
 
-    closeGlance({ noAnimation = false, onTabClose = false, setNewID = null, isDifferent = false, hasFocused = false } = {}) {
+    closeGlance({
+      noAnimation = false,
+      onTabClose = false,
+      setNewID = null,
+      isDifferent = false,
+      hasFocused = false,
+      skipPermitUnload = false,
+    } = {}) {
       if (this._animating || !this.#currentBrowser || this.animatingOpen || this._duringOpening) {
         return;
       }
 
-      let { permitUnload } = this.#currentBrowser.permitUnload();
-      if (!permitUnload) {
-        return;
+      if (!skipPermitUnload) {
+        let { permitUnload } = this.#currentBrowser.permitUnload();
+        if (!permitUnload) {
+          return;
+        }
       }
 
       if (onTabClose && hasFocused && !this.#confirmationTimeout) {
@@ -545,7 +554,7 @@
       this.overlay.classList.remove('zen-glance-overlay');
       this._clearContainerStyles(this.browserWrapper);
       this.animatingFullOpen = false;
-      this.closeGlance({ noAnimation: true });
+      this.closeGlance({ noAnimation: true, skipPermitUnload: true });
       this.#glances.delete(this.#currentGlanceID);
     }
 
