@@ -53,7 +53,7 @@ document.addEventListener(
             gZenThemePicker.openThemePicker(event);
             break;
           case 'cmd_zenChangeWorkspaceTab':
-            ZenWorkspaces.changeTabWorkspace(event.target.getAttribute('zen-workspace-id'));
+            ZenWorkspaces.changeTabWorkspace(event.sourceEvent.target.getAttribute('zen-workspace-id'));
             break;
           case 'cmd_zenToggleTabsOnRight':
             gZenVerticalTabsManager.toggleTabsOnRight();
