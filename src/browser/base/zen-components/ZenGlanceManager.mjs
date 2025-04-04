@@ -234,7 +234,14 @@
       });
     }
 
-    closeGlance({ noAnimation = false, onTabClose = false, setNewID = null, isDifferent = false, hasFocused = false, skipPermitUnload = false } = {}) {
+    closeGlance({
+      noAnimation = false,
+      onTabClose = false,
+      setNewID = null,
+      isDifferent = false,
+      hasFocused = false,
+      skipPermitUnload = false,
+    } = {}) {
       if (this._animating || !this.#currentBrowser || this.animatingOpen || this._duringOpening) {
         return;
       }
@@ -634,7 +641,7 @@
         }
       }
     }
-}
+  }
 
   window.gZenGlanceManager = new ZenGlanceManager();
 
