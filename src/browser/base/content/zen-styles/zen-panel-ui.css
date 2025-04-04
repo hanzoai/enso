@@ -33,7 +33,7 @@ panel[type='arrow'][animate]:not([animate='open']) {
 }
 
 menupopup,
-panel {
+panel[type='arrow'] {
   @media (-moz-windows-mica-popups) {
     appearance: auto !important;
     -moz-default-appearance: menupopup;
@@ -46,5 +46,19 @@ panel {
     &::part(content) {
       animation: none !important;
     }
+  }
+
+  @media (-moz-platform: macos) {
+    appearance: auto !important;
+    -moz-default-appearance: menupopup;
+    /* We set the default background here, rather than on ::part(content),
+     * because otherwise it'd interfere with the native look. Non-native-looking
+     * popups should get their background via --panel-background */
+    background-color: Menu;
+    --panel-shadow-margin: 0px !important;
+    --panel-background: transparent !important;
+    --panel-border-color: transparent;
+    /* This should be kept in sync with GetMenuMaskImage() */
+    --panel-border-radius: 6px;
   }
 }
