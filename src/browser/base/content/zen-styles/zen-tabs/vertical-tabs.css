@@ -965,7 +965,7 @@
       padding-inline-start: var(--toolbarbutton-outer-padding);
     }
 
-    :root[zen-right-side='true'] & {
+    :root[zen-right-side='true']:not([zen-window-buttons-reversed='true']) {
       padding-inline-end: var(--zen-toolbox-padding);
     }
 
