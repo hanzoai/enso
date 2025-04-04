@@ -1,0 +1,22 @@
+diff --git a/layout/style/nsStyleStruct.cpp b/layout/style/nsStyleStruct.cpp
+index f89bade8099183baa55b38ccc3c77c7ba9f1a290..8ada58a7965e7f2c9375d8b9bf64a5c78d80bf3f 100644
+--- a/layout/style/nsStyleStruct.cpp
++++ b/layout/style/nsStyleStruct.cpp
+@@ -3204,6 +3204,9 @@ nsStyleUIReset::nsStyleUIReset()
+       mWindowShadow(StyleWindowShadow::Auto),
+       mWindowOpacity(1.0),
+       mMozWindowInputRegionMargin(StyleLength::Zero()),
++      mWindowTransformOrigin{LengthPercentage::FromPercentage(0.5),
++                                   LengthPercentage::FromPercentage(0.5),
++                                   {0.}},
+       mTransitions(
+           nsStyleAutoArray<StyleTransition>::WITH_SINGLE_INITIAL_ELEMENT),
+       mTransitionTimingFunctionCount(1),
+@@ -3247,6 +3250,7 @@ nsStyleUIReset::nsStyleUIReset(const nsStyleUIReset& aSource)
+       mWindowOpacity(aSource.mWindowOpacity),
+       mMozWindowInputRegionMargin(aSource.mMozWindowInputRegionMargin),
+       mMozWindowTransform(aSource.mMozWindowTransform),
++      mWindowTransformOrigin(aSource.mWindowTransformOrigin),
+       mTransitions(aSource.mTransitions.Clone()),
+       mTransitionTimingFunctionCount(aSource.mTransitionTimingFunctionCount),
+       mTransitionDurationCount(aSource.mTransitionDurationCount),

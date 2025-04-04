@@ -551,6 +551,8 @@
 
     async fullyOpenGlance({ forSplit = false } = {}) {
       this.animatingFullOpen = true;
+      this.#currentTab.removeAttribute('zen-glance-tab');
+
       gBrowser._insertTabAtIndex(this.#currentTab, {
         index: this.getTabPosition(this.#currentTab),
       });
@@ -558,7 +560,6 @@
       this._clearContainerStyles(this.browserWrapper);
       this.browserWrapper.removeAttribute('has-finished-animation');
       this.browserWrapper.setAttribute('animate-full', true);
-      this.#currentTab.removeAttribute('zen-glance-tab');
       this.#currentTab.removeAttribute('glance-id');
       this.#currentParentTab.removeAttribute('glance-id');
       gBrowser.selectedTab = this.#currentTab;
