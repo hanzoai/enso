@@ -1898,6 +1898,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       const menuItem = document.createXULElement('menuitem');
       menuItem.setAttribute('label', workspace.name);
       menuItem.setAttribute('zen-workspace-id', workspace.uuid);
+      menuItem.setAttribute('command', 'cmd_zenChangeWorkspaceTab');
 
       if (workspace.uuid === activeWorkspace.uuid) {
         menuItem.setAttribute('disabled', 'true');
@@ -2208,7 +2209,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     const menuPopup = document.createXULElement('menupopup');
     menuPopup.setAttribute('id', 'context-zen-change-workspace-tab-menu-popup');
-    menuPopup.setAttribute('command', 'cmd_zenChangeWorkspaceTab');
 
     menu.appendChild(menuPopup);
 
