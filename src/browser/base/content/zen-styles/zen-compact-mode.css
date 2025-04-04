@@ -39,6 +39,7 @@
 
     &[zen-window-buttons-reversed='true'] #zen-appcontent-navbar-container #nav-bar {
       margin-right: var(--zen-element-separation) !important;
+      margin-left: calc(var(--zen-element-separation) - 3px) !important;
     }
 
     #navigator-toolbox {
