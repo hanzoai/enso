@@ -229,7 +229,7 @@
 
     explicitUnloadTabs(tabs, extraArgs = {}) {
       for (let i = 0; i < tabs.length; i++) {
-        if (this.canUnloadTab(tabs[i], Date.now(), this.intervalUnloader.excludedUrls, true, extraArgs)) {
+        if (this.canUnloadTab(tabs[i], Date.now(), this.intervalUnloader?.excludedUrls || [], true, extraArgs)) {
           this.unload(tabs[i], true);
         }
       }
