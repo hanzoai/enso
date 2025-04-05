@@ -657,10 +657,10 @@ var gZenVerticalTabsManager = {
       this.navigatorToolbox.after(document.getElementById('zen-sidebar-splitter'));
       window.dispatchEvent(new Event('resize'));
       gZenCompactModeManager.getAndApplySidebarWidth();
+      gZenUIManager.updateTabsToolbar();
     } catch (e) {
       console.error(e);
     }
-    gZenUIManager.updateTabsToolbar();
     this._isUpdating = false;
   },
 

@@ -191,3 +191,42 @@
 :root[zen-window-buttons-reversed='true'][zen-right-side='true'] .titlebar-buttonbox-container {
   margin-inline-start: calc(var(--zen-element-separation) - 3px);
 }
+
+.zen-split-view-splitter[orient='vertical'],
+#zen-sidebar-splitter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--zen-element-separation);
+  background: transparent;
+  border: none;
+  cursor: ew-resize;
+  z-index: 3;
+
+  &:is(.zen-split-view-splitter[orient='vertical']) {
+    /* Bit of a hacky solution, but it works */
+    width: var(--zen-split-row-gap);
+    margin-left: calc(var(--zen-element-separation) * -1 - 1px);
+    height: unset;
+    cursor: ew-resize;
+  }
+
+  &::before {
+    height: 50px;
+    width: 2px;
+    background: var(--button-primary-bgcolor);
+    border-radius: 2px;
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+    pointer-events: none;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+}

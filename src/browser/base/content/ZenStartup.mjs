@@ -83,8 +83,6 @@
 
     _changeSidebarLocation() {
       const kElementsToAppend = ['sidebar-splitter', 'sidebar-box'];
-      const appWrapepr = document.getElementById('zen-sidebar-box-container');
-      appWrapepr.setAttribute('hidden', 'true');
 
       const browser = document.getElementById('browser');
       const toolbox = document.getElementById('navigator-toolbox');

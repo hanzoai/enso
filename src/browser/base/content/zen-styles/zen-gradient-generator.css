@@ -133,7 +133,7 @@
     padding: 5px;
     position: relative;
 
-    & .zen-theme-picker-dot-custom {
+    & .zen-theme-picker-dot.custom {
       background: var(--zen-theme-picker-dot-color);
       border: 1px solid var(--zen-colors-border);
       border-radius: 5px;

@@ -228,10 +228,8 @@
 
     _clearContainerStyles(container) {
       const inset = container.style.inset;
-      window.requestAnimationFrame(() => {
-        container.removeAttribute('style');
-        container.style.inset = inset;
-      });
+      container.removeAttribute('style');
+      container.style.inset = inset;
     }
 
     closeGlance({
@@ -560,12 +558,13 @@
 
     async fullyOpenGlance({ forSplit = false } = {}) {
       this.animatingFullOpen = true;
-      this.#currentTab.removeAttribute('zen-glance-tab');
+      this.#currentTab.setAttribute('zen-dont-split-glance', true);
 
       gBrowser._insertTabAtIndex(this.#currentTab, {
         index: this.getTabPosition(this.#currentTab),
       });
 
+      this.#currentTab.removeAttribute('zen-glance-tab');
       this._clearContainerStyles(this.browserWrapper);
       this.browserWrapper.removeAttribute('has-finished-animation');
       this.browserWrapper.setAttribute('animate-full', true);

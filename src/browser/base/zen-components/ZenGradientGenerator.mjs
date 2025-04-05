@@ -366,13 +366,13 @@
     addColorToCustomList(color) {
       const listItems = window.MozXULElement.parseXULToFragment(`
         <hbox class="zen-theme-picker-custom-list-item">
-          <html:div class="zen-theme-picker-dot-custom"></html:div>
+          <html:div class="zen-theme-picker-dot custom"></html:div>
           <label class="zen-theme-picker-custom-list-item-label"></label>
           <toolbarbutton class="zen-theme-picker-custom-list-item-remove toolbarbutton-1" oncommand="gZenThemePicker.removeCustomColor(event);"></toolbarbutton>
         </hbox>
       `);
       listItems.querySelector('.zen-theme-picker-custom-list-item').setAttribute('data-color', color);
-      listItems.querySelector('.zen-theme-picker-dot-custom').style.setProperty('--zen-theme-picker-dot-color', color);
+      listItems.querySelector('.zen-theme-picker-dot').style.setProperty('--zen-theme-picker-dot-color', color);
       listItems.querySelector('.zen-theme-picker-custom-list-item-label').textContent = color;
 
       this.customColorList.appendChild(listItems);
