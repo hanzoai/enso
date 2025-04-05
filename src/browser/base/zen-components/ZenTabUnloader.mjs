@@ -125,6 +125,7 @@
 
   class ZenTabUnloader extends ZenDOMOperatedFeature {
     static ACTIVITY_MODIFIERS = ['muted', 'soundplaying', 'label', 'attention'];
+    static DEFAULT_EXCLUDED_URLS = ZEN_TAB_UNLOADER_DEFAULT_EXCLUDED_URLS.map((url) => new RegExp(url));
 
     constructor() {
       super();
@@ -227,9 +228,17 @@
       this.explicitUnloadTabs(tabs);
     }
 
+    getExcludedUrls() {
+      if (!this.intervalUnloader) {
+        return ZenTabUnloader.DEFAULT_EXCLUDED_URLS;
+      }
+
+      return this.intervalUnloader.excludedUrls;
+    }
+
     explicitUnloadTabs(tabs, extraArgs = {}) {
       for (let i = 0; i < tabs.length; i++) {
-        if (this.canUnloadTab(tabs[i], Date.now(), this.intervalUnloader?.excludedUrls || [], true, extraArgs)) {
+        if (this.canUnloadTab(tabs[i], Date.now(), this.getExcludedUrls(), true, extraArgs)) {
           this.unload(tabs[i], true);
         }
       }
