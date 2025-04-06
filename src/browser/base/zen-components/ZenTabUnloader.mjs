@@ -91,6 +91,7 @@
 
     #excludedUrls = [];
     #compiledExcludedUrls = [];
+    #lastCheckedUrlTimestamp = 0;
 
     constructor() {
       super();
@@ -197,12 +198,18 @@
       if (a == null || b == null) return false;
       if (a.length !== b.length) return false;
 
+      const currentTimestamp = Date.now();
+      if (currentTimestamp - this.#lastCheckedUrlTimestamp < 5 * 1000) {
+        return true;
+      }
+
+      this.#lastCheckedUrlTimestamp = currentTimestamp;
       // If you don't care about the order of the elements inside
       // the array, you should sort both arrays here.
       // Please note that calling sort on an array will modify that array.
       // you might want to clone your array first.
 
-      for (var i = 0; i < a.length; ++i) {
+      for (const i = 0; i < a.length; ++i) {
         if (a[i] !== b[i]) return false;
       }
       return true;
