@@ -1,5 +1,5 @@
 diff --git a/toolkit/components/pictureinpicture/PictureInPicture.sys.mjs b/toolkit/components/pictureinpicture/PictureInPicture.sys.mjs
-index 5da0404b2672ba8cce7bcf808bf2373474776654..1405c53a927a64ecda8255d78d9aa5ddf8806685 100644
+index 5da0404b2672ba8cce7bcf808bf2373474776654..3b93217b38f25f54d7ef44d151e314bc1c5e5ce3 100644
 --- a/toolkit/components/pictureinpicture/PictureInPicture.sys.mjs
 +++ b/toolkit/components/pictureinpicture/PictureInPicture.sys.mjs
 @@ -494,7 +494,7 @@ export var PictureInPicture = {
@@ -11,11 +11,3 @@ index 5da0404b2672ba8cce7bcf808bf2373474776654..1405c53a927a64ecda8255d78d9aa5dd
      await this.closeSinglePipWindow({ reason: "Unpip", actorRef: pipActor });
    },
  
-@@ -623,6 +623,7 @@ export var PictureInPicture = {
-       pipToggle.hidden = true;
-     }
- 
-+    win.gZenMediaController.updatePipEligibility(browser, !pipToggle.hidden);
-     let browserHasPip = !!this.browserWeakMap.get(browser);
-     if (browserHasPip) {
-       this.setUrlbarPipIconActive(browser.ownerGlobal);
