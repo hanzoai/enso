@@ -63,48 +63,12 @@
     static INTERVAL = 1000 * 60; // 1 minute
 
     interval = null;
+    /** @type {ZenTabUnloader} */
     unloader = null;
-
-    #excludedUrls = [];
-    #compiledExcludedUrls = [];
 
     constructor(unloader) {
       this.unloader = unloader;
       this.interval = setInterval(this.intervalListener.bind(this), ZenTabsIntervalUnloader.INTERVAL);
-      this.#excludedUrls = this.lazyExcludeUrls;
-    }
-
-    get lazyExcludeUrls() {
-      return [
-        ...ZEN_TAB_UNLOADER_DEFAULT_EXCLUDED_URLS,
-        ...lazy.zenTabUnloaderExcludedUrls.split(',').map((url) => url.trim()),
-      ];
-    }
-
-    arraysEqual(a, b) {
-      if (a === b) return true;
-      if (a == null || b == null) return false;
-      if (a.length !== b.length) return false;
-
-      // If you don't care about the order of the elements inside
-      // the array, you should sort both arrays here.
-      // Please note that calling sort on an array will modify that array.
-      // you might want to clone your array first.
-
-      for (var i = 0; i < a.length; ++i) {
-        if (a[i] !== b[i]) return false;
-      }
-      return true;
-    }
-
-    get excludedUrls() {
-      // Check if excludedrls is the same as the pref value
-      const excludedUrls = this.lazyExcludeUrls;
-      if (!this.arraysEqual(this.#excludedUrls, excludedUrls) || !this.#compiledExcludedUrls.length) {
-        this.#excludedUrls = excludedUrls;
-        this.#compiledExcludedUrls = excludedUrls.map((url) => new RegExp(url));
-      }
-      return this.#compiledExcludedUrls;
     }
 
     intervalListener() {
@@ -112,11 +76,10 @@
         return;
       }
       const currentTimestamp = Date.now();
-      const excludedUrls = this.excludedUrls;
       const tabs = ZenWorkspaces.allStoredTabs;
       for (let i = 0; i < tabs.length; i++) {
         const tab = tabs[i];
-        if (this.unloader.canUnloadTab(tab, currentTimestamp, excludedUrls)) {
+        if (this.unloader.canUnloadTab(tab, currentTimestamp)) {
           this.unloader.unload(tab);
         }
       }
@@ -126,8 +89,14 @@
   class ZenTabUnloader extends ZenDOMOperatedFeature {
     static ACTIVITY_MODIFIERS = ['muted', 'soundplaying', 'label', 'attention'];
 
+    #excludedUrls = [];
+    #compiledExcludedUrls = [];
+    #lastCheckedUrlTimestamp = 0;
+
     constructor() {
       super();
+
+      this.#excludedUrls = this.lazyExcludeUrls;
       if (!lazy.zenTabUnloaderEnabled) {
         return;
       }
@@ -217,6 +186,45 @@
       document.getElementById('context_closeDuplicateTabs').parentNode.appendChild(element);
     }
 
+    get lazyExcludeUrls() {
+      return [
+        ...ZEN_TAB_UNLOADER_DEFAULT_EXCLUDED_URLS,
+        ...lazy.zenTabUnloaderExcludedUrls.split(',').map((url) => url.trim()),
+      ];
+    }
+
+    arraysEqual(a, b) {
+      if (a === b) return true;
+      if (a == null || b == null) return false;
+      if (a.length !== b.length) return false;
+
+      const currentTimestamp = Date.now();
+      if (currentTimestamp - this.#lastCheckedUrlTimestamp < 5 * 1000) {
+        return true;
+      }
+
+      this.#lastCheckedUrlTimestamp = currentTimestamp;
+      // If you don't care about the order of the elements inside
+      // the array, you should sort both arrays here.
+      // Please note that calling sort on an array will modify that array.
+      // you might want to clone your array first.
+
+      for (const i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i]) return false;
+      }
+      return true;
+    }
+
+    get excludedUrls() {
+      // Check if excludedrls is the same as the pref value
+      const excludedUrls = this.lazyExcludeUrls;
+      if (!this.arraysEqual(this.#excludedUrls, excludedUrls) || !this.#compiledExcludedUrls.length) {
+        this.#excludedUrls = excludedUrls;
+        this.#compiledExcludedUrls = excludedUrls.map((url) => new RegExp(url));
+      }
+      return this.#compiledExcludedUrls;
+    }
+
     unload(tab, skipPermitUnload = false) {
       gBrowser.explicitUnloadTabs([tab], skipPermitUnload);
       tab.removeAttribute('linkedpanel');
@@ -229,7 +237,7 @@
 
     explicitUnloadTabs(tabs, extraArgs = {}) {
       for (let i = 0; i < tabs.length; i++) {
-        if (this.canUnloadTab(tabs[i], Date.now(), this.intervalUnloader.excludedUrls, true, extraArgs)) {
+        if (this.canUnloadTab(tabs[i], Date.now(), true, extraArgs)) {
           this.unload(tabs[i], true);
         }
       }
@@ -251,7 +259,7 @@
       }
     }
 
-    canUnloadTab(tab, currentTimestamp, excludedUrls, ignoreTimestamp = false, extraArgs = {}) {
+    canUnloadTab(tab, currentTimestamp, ignoreTimestamp = false, extraArgs = {}) {
       if (
         (tab.pinned && !ignoreTimestamp) ||
         tab.selected ||
@@ -266,7 +274,7 @@
         (tab.pictureinpicture && !ignoreTimestamp) ||
         (tab.soundPlaying && !ignoreTimestamp) ||
         (tab.zenIgnoreUnload && !ignoreTimestamp) ||
-        (excludedUrls.some((url) => url.test(tab.linkedBrowser?.currentURI.spec)) &&
+        (this.excludedUrls.some((url) => url.test(tab.linkedBrowser?.currentURI.spec)) &&
           tab.linkedBrowser?.currentURI.spec !== 'about:blank')
       ) {
         return false;
