@@ -167,6 +167,11 @@
     }
   }
 
+  @media (-moz-platform: linux) and -moz-pref('zen.widget.linux.transparency'){
+    background: transparent;
+    --zen-themed-toolbar-bg-transparent: transparent;
+  }
+
   --toolbar-field-background-color: var(--zen-colors-input-bg) !important;
   --arrowpanel-background: var(--zen-dialog-background) !important;
 
