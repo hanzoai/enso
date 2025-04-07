@@ -193,9 +193,6 @@ var gZenCompactModeManager = {
       const titlebar = this.sidebar.querySelector('#titlebar');
       if (canAnimate) {
         this.sidebar.setAttribute('animate', 'true');
-        titlebar.setAttribute('has-animated-padding', 'true');
-      } else {
-        titlebar.removeAttribute('has-animated-padding');
       }
       this.sidebar.style.removeProperty('margin-right');
       this.sidebar.style.removeProperty('margin-left');
