@@ -380,6 +380,11 @@ pref('widget.macos.titlebar-blend-mode.behind-window', true);
 pref('zen.widget.macos.window-material', 3);
 #endif
 
+// Enable transparent background for linux
+#ifdef MOZ_WIDGET_GTK
+pref('zen.widget.linux.transparency', true);
+#endif
+
 // Urlbar and autocomplete
 pref("browser.urlbar.maxRichResults", 6);
 pref("browser.urlbar.trimHttps", true);
