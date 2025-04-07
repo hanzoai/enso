@@ -167,7 +167,7 @@
     }
   }
 
-  @media (-moz-platform: linux) and -moz-pref('zen.widget.linux.transparency'){
+  @media (-moz-platform: linux) and -moz-pref('zen.widget.linux.transparency') {
     background: transparent;
     --zen-themed-toolbar-bg-transparent: transparent;
   }
