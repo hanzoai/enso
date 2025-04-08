@@ -382,7 +382,7 @@ pref('zen.widget.macos.window-material', 3);
 
 // Enable transparent background for linux
 #ifdef MOZ_WIDGET_GTK
-pref('zen.widget.linux.transparency', true);
+pref('zen.widget.linux.transparency', false);
 #endif
 
 // Urlbar and autocomplete
