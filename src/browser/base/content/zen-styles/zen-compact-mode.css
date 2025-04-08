@@ -338,7 +338,7 @@
         }
 
         & #urlbar {
-          opacity: 0;
+          opacity: 0 !important;
         }
 
         @media -moz-pref('zen.view.compact.color-toolbar') {
@@ -376,7 +376,7 @@
         }
 
         & #urlbar {
-          opacity: 1;
+          opacity: 1 !important;
         }
 
         & #urlbar[breakout-extend='true']:not([zen-floating-urlbar='true']) {
