@@ -43,6 +43,8 @@ panel[type='arrow'] {
     --panel-border-color: transparent !important;
     --panel-shadow-margin: 0px !important;
 
+    transition-duration: 0s !important;
+
     &::part(content) {
       animation: none !important;
     }
