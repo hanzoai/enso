@@ -188,8 +188,8 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       this.fakeBrowser ||
       !this._lastOpenedTab ||
       (this._lastOpenedTab &&
-        (this._lastOpenedTab.getAttribute('zen-workspace-id') !== draggedTab.getAttribute('zen-workspace-id') ||
-          this._lastOpenedTab.hasAttribute('zen-essential')))
+        this._lastOpenedTab.getAttribute('zen-workspace-id') !== draggedTab.getAttribute('zen-workspace-id') &&
+        !this._lastOpenedTab.hasAttribute('zen-essential'))
     ) {
       return;
     }
@@ -887,7 +887,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       return false;
     }
     for (const tab of window.gBrowser.selectedTabs) {
-      if (tab.splitView || tab.hasAttribute('zen-empty-tab') || tab.hasAttribute('zen-essential')) {
+      if (tab.splitView || tab.hasAttribute('zen-empty-tab')) {
         return false;
       }
     }
@@ -945,14 +945,14 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
    */
   splitTabs(tabs, gridType, initialIndex = 0) {
     // TODO: Add support for splitting essential tabs
-    tabs = tabs.filter((t) => !t.hidden && !t.hasAttribute('zen-empty-tab') && !t.hasAttribute('zen-essential'));
+    tabs = tabs.filter((t) => !t.hidden && !t.hasAttribute('zen-empty-tab'));
     if (tabs.length < 2 || tabs.length > this.MAX_TABS) {
       return;
     }
-    this._moveTabsToContainer(tabs, tabs[initialIndex]);
 
     const existingSplitTab = tabs.find((tab) => tab.splitView);
     if (existingSplitTab) {
+      this._moveTabsToContainer(tabs, tabs[initialIndex]);
       const groupIndex = this._data.findIndex((group) => group.tabs.includes(existingSplitTab));
       const group = this._data[groupIndex];
       const gridTypeChange = gridType && group.gridType !== gridType;
@@ -978,6 +978,24 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       this.activateSplitView(group, true);
       return;
     }
+
+    // We are here if none of the tabs have been previously split
+    // If there's ANY pinned tab on the list, we clone the pinned tab
+    // state to all the tabs
+    const allArePinned = tabs.every((tab) => tab.pinned);
+    const allAreEssential = tabs.every((tab) => tab.hasAttribute('zen-essential'));
+    const thereIsOnePinned = tabs.some((tab) => tab.pinned);
+    const thereIsOneEssential = tabs.some((tab) => tab.hasAttribute('zen-essential'));
+
+    if ((thereIsOneEssential && !allAreEssential) || (thereIsOnePinned && !allArePinned)) {
+      for (let i = 0; i < tabs.length; i++) {
+        const tab = tabs[i];
+        if (tab.pinned) {
+          tabs[i] = gBrowser.duplicateTab(tab, true);
+        }
+      }
+    }
+
     gridType ??= 'grid';
 
     const splitData = {
