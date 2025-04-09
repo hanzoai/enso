@@ -30,10 +30,11 @@
 
         this._initSidebarScrolling();
 
-        gZenCompactModeManager.init();
+        gZenCompactModeManager.preInit();
         ZenWorkspaces.init();
         gZenVerticalTabsManager.init();
         gZenUIManager.init();
+        gZenCompactModeManager.init();
 
         this._checkForWelcomePage();
 

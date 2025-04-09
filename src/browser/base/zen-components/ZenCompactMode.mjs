@@ -28,14 +28,22 @@ var gZenCompactModeManager = {
   _evenListeners: [],
   _removeHoverFrames: {},
 
+  preInit() {
+    // Remove it before initializing so we can properly calculate the width
+    // of the sidebar at startup and avoid overflowing items not being hidden
+    const isCompactMode = lazyCompactMode.mainAppWrapper.getAttribute('zen-compact-mode') === 'true';
+    lazyCompactMode.mainAppWrapper.removeAttribute('zen-compact-mode');
+    this._wasInCompactMode = isCompactMode;
+
+    this.addMouseActions();
+    this.addContextMenu();
+  },
+
   init() {
     Services.prefs.addObserver('zen.tabs.vertical.right-side', this._updateSidebarIsOnRight.bind(this));
 
     gZenUIManager.addPopupTrackingAttribute(this.sidebar);
     gZenUIManager.addPopupTrackingAttribute(document.getElementById('zen-appcontent-navbar-container'));
-
-    this.addMouseActions();
-    this.addContextMenu();
 
     // Clear hover states when window state changes (minimize, maximize, etc.)
     window.addEventListener('sizemodechange', () => this._clearAllHoverStates());
@@ -47,6 +55,9 @@ var gZenCompactModeManager = {
         buttons.removeAttribute('zen-has-hover');
       });
     }
+
+    this.preference = this._wasInCompactMode;
+    delete this._wasInCompactMode;
   },
 
   get preference() {
