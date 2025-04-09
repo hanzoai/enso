@@ -2307,16 +2307,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   // Session restore functions
   get allStoredTabs() {
-    if (!this._hasInitializedTabsStrip) {
-      const children = this.tabboxChildren;
-      children.pop(); // Remove the last child which is the new tab button
-      return [
-        ...document.querySelectorAll('#zen-essentials-container tab'),
-        ...document.querySelectorAll('#vertical-pinned-tabs-container tab'),
-        ...children,
-      ];
-    }
-
     if (this._allStoredTabs) {
       return this._allStoredTabs;
     }
@@ -2324,8 +2314,12 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     const tabs = [];
     // we need to go through each tab in each container
     const essentialsContainer = document.getElementById('zen-essentials-container');
-    const pinnedContainers = document.querySelectorAll('#vertical-pinned-tabs-container .zen-workspace-tabs-section');
-    const normalContainers = document.querySelectorAll('#tabbrowser-arrowscrollbox .zen-workspace-tabs-section');
+    let pinnedContainers = document.querySelectorAll('#vertical-pinned-tabs-container .zen-workspace-tabs-section');
+    let normalContainers = document.querySelectorAll('#tabbrowser-arrowscrollbox .zen-workspace-tabs-section');
+    if (!this._hasInitializedTabsStrip) {
+      pinnedContainers = [document.getElementById('vertical-pinned-tabs-container')];
+      normalContainers = [this.activeWorkspaceStrip];
+    }
     const containers = [essentialsContainer, ...pinnedContainers, ...normalContainers];
     for (const container of containers) {
       for (const tab of container.children) {
