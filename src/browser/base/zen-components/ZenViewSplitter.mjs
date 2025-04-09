@@ -242,7 +242,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       }
       this.fakeBrowser = document.createXULElement('vbox');
       window.addEventListener('dragend', this.onBrowserDragEndToSplit, { once: true });
-      const padding = Services.prefs.getIntPref('zen.theme.content-element-separation', 0);
+      const padding = ZenThemeModifier.elementSeparation;
       this.fakeBrowser.setAttribute('flex', '1');
       this.fakeBrowser.id = 'zen-split-view-fake-browser';
       if (oldTab.splitView) {
@@ -317,7 +317,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
     }
     const panelsWidth = panelsRect.width;
     const halfWidth = panelsWidth / 2;
-    const padding = Services.prefs.getIntPref('zen.theme.content-element-separation', 0);
+    const padding = ZenThemeModifier.elementSeparation;
     if (!this.fakeBrowser) {
       return;
     }
@@ -1525,7 +1525,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
 
     const dropSide = this.fakeBrowser?.getAttribute('side');
     const containerRect = this.fakeBrowser.getBoundingClientRect();
-    const padding = Services.prefs.getIntPref('zen.theme.content-element-separation', 0);
+    const padding = ZenThemeModifier.elementSeparation;
     const dropTarget = document.elementFromPoint(
       dropSide === 'left' ? containerRect.left + containerRect.width + padding + 5 : containerRect.left - padding - 5,
       event.clientY
