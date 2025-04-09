@@ -21,9 +21,11 @@
 
   @media -moz-pref('zen.view.experimental-rounded-view') {
     #tabbrowser-tabpanels {
-      mix-blend-mode: multiply;
-      -moz-osx-font-smoothing: grayscale;
-      isolation: isolate;
+      :root:not([zen-no-padding='true']) & {
+        mix-blend-mode: multiply;
+        -moz-osx-font-smoothing: grayscale;
+        isolation: isolate;
+      }
     }
   }
 }
