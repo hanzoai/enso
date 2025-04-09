@@ -9,5 +9,5 @@
 }
 
 :root[inDOMFullscreen='true'] #zen-appcontent-navbar-container {
-  display: none;
+  visibility: collapse;
 }

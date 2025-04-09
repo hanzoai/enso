@@ -365,10 +365,6 @@ button.popup-notification-dropmarker {
 }
 
 :root:not([zen-single-toolbar='true']) {
-  & #nav-bar {
-    margin-bottom: -1px;
-  }
-
   &[zen-right-side='true']:not([zen-window-buttons-reversed='true']) #nav-bar {
     margin-inline-start: var(--zen-element-separation);
   }
