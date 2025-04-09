@@ -190,7 +190,6 @@ var gZenCompactModeManager = {
         !this.sidebar.hasAttribute('zen-has-empty-tab') &&
         !this.sidebar.hasAttribute('zen-has-hover');
       // Do this so we can get the correct width ONCE compact mode styled have been applied
-      const titlebar = this.sidebar.querySelector('#titlebar');
       if (canAnimate) {
         this.sidebar.setAttribute('animate', 'true');
       }
@@ -206,7 +205,12 @@ var gZenCompactModeManager = {
           return;
         }
         if (canHideSidebar && isCompactMode) {
+          const elementSeparation = ZenThemeModifier.elementSeparation;
           sidebarWidth -= 0.5 * splitterWidth;
+          if (elementSeparation < splitterWidth) {
+            // Subtract from the splitter width to end up with the correct element separation
+            sidebarWidth += 1.5 * splitterWidth - elementSeparation;
+          }
           gZenUIManager.motion
             .animate(
               this.sidebar,
@@ -223,24 +227,14 @@ var gZenCompactModeManager = {
             )
             .then(() => {
               this.sidebar.style.transition = 'none';
-              this.sidebar.style.opacity = 0;
               this.getAndApplySidebarWidth();
               setTimeout(() => {
                 this.sidebar.removeAttribute('animate');
                 document.documentElement.removeAttribute('zen-compact-animating');
                 this.sidebar.style.removeProperty('margin-right');
                 this.sidebar.style.removeProperty('margin-left');
-                if (this.sidebarIsOnRight) {
-                  this.sidebar.style.right = `-100%`;
-                } else {
-                  this.sidebar.style.left = `-100%`;
-                }
 
                 setTimeout(() => {
-                  this.sidebar.style.left = '';
-                  this.sidebar.style.right = '';
-                  this.sidebar.style.removeProperty('opacity');
-                  this.sidebar.style.removeProperty('transform');
                   this.sidebar.style.removeProperty('transition');
                 }, 200);
 

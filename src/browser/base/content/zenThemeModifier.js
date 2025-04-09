@@ -11,6 +11,7 @@
  */
 
 const kZenThemePrefsList = ['zen.theme.accent-color', 'zen.theme.border-radius', 'zen.theme.content-element-separation'];
+const kZenMaxElementSeparation = 12;
 
 /**
  * ZenThemeModifier controls the application of theme data to the browser,
@@ -68,13 +69,17 @@ var ZenThemeModifier = {
   },
 
   updateElementSeparation() {
-    const separation = Services.prefs.getIntPref('zen.theme.content-element-separation');
+    let separation = this.elementSeparation;
     document.documentElement.style.setProperty('--zen-element-separation', separation + 'px');
     if (separation == 0) {
       document.documentElement.setAttribute('zen-no-padding', true);
     } else {
       document.documentElement.removeAttribute('zen-no-padding');
     }
+  },
+
+  get elementSeparation() {
+    return Math.min(Services.prefs.getIntPref('zen.theme.content-element-separation'), kZenMaxElementSeparation);
   },
 
   /**
