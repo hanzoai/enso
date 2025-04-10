@@ -544,7 +544,7 @@ var gZenVerticalTabsManager = {
         );
         elements = Array.from(elements).reverse();
         // Add separator if it doesn't exist
-        if (!buttonsTarget.contains(this._topButtonsSeparatorElement)) {
+        if (!this._hasSetSingleToolbar) {
           buttonsTarget.append(this._topButtonsSeparatorElement);
         }
         for (const button of elements) {

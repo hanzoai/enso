@@ -116,9 +116,8 @@
         outline-offset: -1px;
         min-width: var(--zen-toolbox-min-width);
 
-        /* times 4 because we have the inner padding and the outter padding to consider */
         :root[zen-sidebar-expanded='true'] & {
-          width: calc(var(--zen-sidebar-width) - var(--zen-toolbox-padding));
+          width: var(--zen-sidebar-width);
         }
 
         :root[zen-single-toolbar='true'] {

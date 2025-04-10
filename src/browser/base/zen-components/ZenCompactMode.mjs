@@ -220,10 +220,12 @@ var gZenCompactModeManager = {
         }
         if (canHideSidebar && isCompactMode) {
           const elementSeparation = ZenThemeModifier.elementSeparation;
-          sidebarWidth -= 0.5 * splitterWidth;
-          if (elementSeparation < splitterWidth) {
-            // Subtract from the splitter width to end up with the correct element separation
-            sidebarWidth += 1.5 * splitterWidth - elementSeparation;
+          if (document.documentElement.hasAttribute('zen-sidebar-expanded')) {
+            sidebarWidth -= 0.5 * splitterWidth;
+            if (elementSeparation < splitterWidth) {
+              // Subtract from the splitter width to end up with the correct element separation
+              sidebarWidth += 1.5 * splitterWidth - elementSeparation;
+            }
           }
           gZenUIManager.motion
             .animate(
@@ -242,7 +244,6 @@ var gZenCompactModeManager = {
             .then(() => {
               this.sidebar.style.transition = 'none';
               this.sidebar.style.opacity = 0;
-              this.getAndApplySidebarWidth();
               setTimeout(() => {
                 this.sidebar.removeAttribute('animate');
                 document.documentElement.removeAttribute('zen-compact-animating');
