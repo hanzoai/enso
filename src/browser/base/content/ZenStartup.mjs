@@ -33,7 +33,6 @@
         ZenWorkspaces.init();
         gZenVerticalTabsManager.init();
         gZenUIManager.init();
-        gZenCompactModeManager.init();
 
         this._checkForWelcomePage();
 
@@ -42,6 +41,7 @@
         console.error('ZenThemeModifier: Error initializing browser layout', e);
       }
       ZenWorkspaces.promiseInitialized.then(() => {
+        gZenCompactModeManager.init();
         this.closeWatermark();
       });
     },

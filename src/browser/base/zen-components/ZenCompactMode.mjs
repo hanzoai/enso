@@ -166,6 +166,7 @@ var gZenCompactModeManager = {
       await this.animateCompactMode();
       this._evenListeners.forEach((callback) => callback());
     }
+    gZenUIManager.updateTabsToolbar();
   },
 
   // NOTE: Dont actually use event, it's just so we make sure
