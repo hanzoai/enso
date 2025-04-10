@@ -238,12 +238,14 @@ var gZenCompactModeManager = {
             )
             .then(() => {
               this.sidebar.style.transition = 'none';
+              this.sidebar.style.opacity = 0;
               this.getAndApplySidebarWidth();
               setTimeout(() => {
                 this.sidebar.removeAttribute('animate');
                 document.documentElement.removeAttribute('zen-compact-animating');
                 this.sidebar.style.removeProperty('margin-right');
                 this.sidebar.style.removeProperty('margin-left');
+                this.sidebar.style.removeProperty('opacity');
 
                 setTimeout(() => {
                   this.sidebar.style.removeProperty('transition');
