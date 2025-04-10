@@ -508,3 +508,11 @@ var gZenCompactModeManager = {
     }
   },
 };
+
+document.addEventListener(
+  'MozBeforeInitialXULLayout',
+  () => {
+    gZenCompactModeManager.preInit();
+  },
+  { once: true }
+);
