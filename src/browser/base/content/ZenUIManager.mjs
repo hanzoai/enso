@@ -656,7 +656,9 @@ var gZenVerticalTabsManager = {
       // Always move the splitter next to the sidebar
       this.navigatorToolbox.after(document.getElementById('zen-sidebar-splitter'));
       window.dispatchEvent(new Event('resize'));
-      gZenCompactModeManager.getAndApplySidebarWidth();
+      if (!isCompactMode) {
+        gZenCompactModeManager.getAndApplySidebarWidth();
+      }
       gZenUIManager.updateTabsToolbar();
     } catch (e) {
       console.error(e);

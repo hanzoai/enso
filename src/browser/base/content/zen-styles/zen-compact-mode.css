@@ -117,7 +117,7 @@
         min-width: var(--zen-toolbox-min-width);
 
         :root[zen-sidebar-expanded='true'] & {
-          width: var(--zen-sidebar-width);
+          width: calc(var(--zen-sidebar-width) + var(--zen-toolbox-padding));
         }
 
         :root[zen-single-toolbar='true'] {
