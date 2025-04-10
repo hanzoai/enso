@@ -249,6 +249,10 @@ var gZenCompactModeManager = {
 
                 setTimeout(() => {
                   this.sidebar.style.removeProperty('transition');
+
+                  // Just in case:
+                  this.sidebar.style.removeProperty('margin-right');
+                  this.sidebar.style.removeProperty('margin-left');
                 }, 200);
 
                 resolve();
