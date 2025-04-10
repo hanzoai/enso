@@ -386,8 +386,8 @@
       await this._resetTabToStoredState(tab);
     }
 
-    async replacePinnedUrlWithCurrent() {
-      const tab = TabContextMenu.contextTab;
+    async replacePinnedUrlWithCurrent(tab = undefined) {
+      tab ??= TabContextMenu.contextTab;
       if (!tab || !tab.pinned || !tab.getAttribute('zen-pin-id')) {
         return;
       }
@@ -806,8 +806,11 @@
       if (!pin) {
         return;
       }
+      // Remove # and ? from the url
+      const pinUrl = pin.url.split('#')[0].split('?')[0];
+      const currentUrl = browser.currentURI.spec.split('#')[0].split('?')[0];
       // Add an indicator that the pin has been changed
-      if (pin.url === browser.currentURI.spec) {
+      if (pinUrl === currentUrl) {
         this.resetPinChangedUrl(tab);
         return;
       }
@@ -965,6 +968,20 @@
         indicator.style.setProperty('--indicator-height', rect.height - separation + 'px');
         indicator.style.left = left;
         indicator.style.removeProperty('top');
+      }
+    }
+
+    async onTabLabelChanged(tab) {
+      if (!this._pinsCache) {
+        return;
+      }
+      // If our current pin in the cache point to about:blank, we need to update the entry
+      const pin = this._pinsCache.find((pin) => pin.uuid === tab.getAttribute('zen-pin-id'));
+      if (!pin) {
+        return;
+      }
+      if (pin.url === 'about:blank') {
+        await this.replacePinnedUrlWithCurrent(tab);
       }
     }
   }

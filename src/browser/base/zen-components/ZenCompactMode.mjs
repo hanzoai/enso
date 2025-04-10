@@ -57,7 +57,6 @@ var gZenCompactModeManager = {
     }
 
     this.preference = this._wasInCompactMode;
-    delete this._wasInCompactMode;
   },
 
   get preference() {
@@ -195,11 +194,15 @@ var gZenCompactModeManager = {
       const isCompactMode = this.preference;
       const canHideSidebar =
         Services.prefs.getBoolPref('zen.view.compact.hide-tabbar') || gZenVerticalTabsManager._hasSetSingleToolbar;
-      const canAnimate =
+      let canAnimate =
         lazyCompactMode.COMPACT_MODE_CAN_ANIMATE_SIDEBAR &&
         !this.sidebar.hasAttribute('zen-user-show') &&
         !this.sidebar.hasAttribute('zen-has-empty-tab') &&
         !this.sidebar.hasAttribute('zen-has-hover');
+      if (typeof this._wasInCompactMode !== 'undefined') {
+        canAnimate = false;
+        delete this._wasInCompactMode;
+      }
       // Do this so we can get the correct width ONCE compact mode styled have been applied
       if (canAnimate) {
         this.sidebar.setAttribute('animate', 'true');
