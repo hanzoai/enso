@@ -61,8 +61,12 @@
         await delayedStartupPromise;
         await SessionStore.promiseAllWindowsRestored;
         setTimeout(() => {
-          gZenUIManager.updateTabsToolbar();
           gZenCompactModeManager.init();
+          setTimeout(() => {
+            // A bit of a hack to make sure the tabs toolbar is updated.
+            // Just in case we didn't get the right size.
+            gZenUIManager.updateTabsToolbar();
+          }, 100);
         }, 0);
         this.closeWatermark();
       });
