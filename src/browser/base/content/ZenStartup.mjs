@@ -40,8 +40,29 @@
       } catch (e) {
         console.error('ZenThemeModifier: Error initializing browser layout', e);
       }
-      ZenWorkspaces.promiseInitialized.then(() => {
-        gZenCompactModeManager.init();
+      if (gBrowserInit.delayedStartupFinished) {
+        this.delayedStartupFinished();
+      } else {
+        Services.obs.addObserver(this, 'browser-delayed-startup-finished');
+      }
+    },
+
+    observe(aSubject, aTopic) {
+      // This nsIObserver method allows us to defer initialization until after
+      // this window has finished painting and starting up.
+      if (aTopic == 'browser-delayed-startup-finished' && aSubject == window) {
+        Services.obs.removeObserver(this, 'browser-delayed-startup-finished');
+        this.delayedStartupFinished();
+      }
+    },
+
+    delayedStartupFinished() {
+      ZenWorkspaces.promiseInitialized.then(async () => {
+        await delayedStartupPromise;
+        await SessionStore.promiseAllWindowsRestored;
+        setTimeout(() => {
+          gZenCompactModeManager.init();
+        }, 0);
         this.closeWatermark();
       });
     },

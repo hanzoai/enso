@@ -983,11 +983,10 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
     // If there's ANY pinned tab on the list, we clone the pinned tab
     // state to all the tabs
     const allArePinned = tabs.every((tab) => tab.pinned);
-    const allAreEssential = tabs.every((tab) => tab.hasAttribute('zen-essential'));
     const thereIsOnePinned = tabs.some((tab) => tab.pinned);
     const thereIsOneEssential = tabs.some((tab) => tab.hasAttribute('zen-essential'));
 
-    if ((thereIsOneEssential && !allAreEssential) || (thereIsOnePinned && !allArePinned)) {
+    if (thereIsOneEssential || (thereIsOnePinned && !allArePinned)) {
       for (let i = 0; i < tabs.length; i++) {
         const tab = tabs[i];
         if (tab.pinned) {

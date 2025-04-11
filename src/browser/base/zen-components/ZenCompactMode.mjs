@@ -56,9 +56,6 @@ var gZenCompactModeManager = {
       });
     }
     this.preference = this._wasInCompactMode;
-    if (this._wasInCompactMode) {
-      document.documentElement.setAttribute('zen-compact-mode', true);
-    }
   },
 
   get preference() {
@@ -66,7 +63,6 @@ var gZenCompactModeManager = {
   },
 
   set preference(value) {
-    console.log((new Error()).stack);
     if (this.preference === value || document.documentElement.hasAttribute('zen-compact-animating')) {
       // We dont want the user to be able to spam the button
       return value;

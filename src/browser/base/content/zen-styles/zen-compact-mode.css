@@ -351,6 +351,7 @@
       }
 
       & #zen-appcontent-navbar-container[zen-has-hover],
+      & #zen-appcontent-navbar-container:hover,
       & #zen-appcontent-navbar-container:focus-within,
       & #zen-appcontent-navbar-container[zen-user-show],
       & #zen-appcontent-navbar-container[has-popup-menu],
