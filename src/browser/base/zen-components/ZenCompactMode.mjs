@@ -55,27 +55,18 @@ var gZenCompactModeManager = {
         buttons.removeAttribute('zen-has-hover');
       });
     }
-
     this.preference = this._wasInCompactMode;
+    if (this._wasInCompactMode) {
+      document.documentElement.setAttribute('zen-compact-mode', true);
+    }
   },
 
   get preference() {
-    if (!document.documentElement.hasAttribute('zen-compact-mode')) {
-      window.addEventListener(
-        'MozAfterPaint',
-        () => {
-          document.documentElement.setAttribute(
-            'zen-compact-mode',
-            lazyCompactMode.mainAppWrapper.getAttribute('zen-compact-mode')
-          );
-        },
-        { once: true }
-      );
-    }
     return lazyCompactMode.mainAppWrapper.getAttribute('zen-compact-mode') === 'true';
   },
 
   set preference(value) {
+    console.log((new Error()).stack);
     if (this.preference === value || document.documentElement.hasAttribute('zen-compact-animating')) {
       // We dont want the user to be able to spam the button
       return value;
