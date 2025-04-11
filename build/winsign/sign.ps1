@@ -6,7 +6,6 @@ param(
 $ErrorActionPreference = "Stop"
 
 echo "Preparing environment"
-git pull --recurse-submodules
 mkdir windsign-temp -ErrorAction SilentlyContinue
 
 # Download in parallel
