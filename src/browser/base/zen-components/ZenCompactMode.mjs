@@ -159,6 +159,10 @@ var gZenCompactModeManager = {
   // NOTE: Dont actually use event, it's just so we make sure
   // the caller is from the ResizeObserver
   getAndApplySidebarWidth(event = undefined) {
+    if (this._ignoreNextResize) {
+      this._ignoreNextResize = false;
+      return;
+    }
     let sidebarWidth = this.sidebar.getBoundingClientRect().width;
     if (sidebarWidth > 1) {
       gZenUIManager.restoreScrollbarState();
@@ -235,17 +239,14 @@ var gZenCompactModeManager = {
               setTimeout(() => {
                 this.sidebar.removeAttribute('animate');
                 document.documentElement.removeAttribute('zen-compact-animating');
+
+                this.getAndApplySidebarWidth({});
+                this._ignoreNextResize = true;
+
                 this.sidebar.style.removeProperty('margin-right');
                 this.sidebar.style.removeProperty('margin-left');
                 this.sidebar.style.removeProperty('opacity');
-
-                setTimeout(() => {
-                  this.sidebar.style.removeProperty('transition');
-
-                  // Just in case:
-                  this.sidebar.style.removeProperty('margin-right');
-                  this.sidebar.style.removeProperty('margin-left');
-                }, 200);
+                this.sidebar.style.removeProperty('transition');
 
                 resolve();
               }, 0);
