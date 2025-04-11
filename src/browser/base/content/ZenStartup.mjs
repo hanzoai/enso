@@ -61,6 +61,7 @@
         await delayedStartupPromise;
         await SessionStore.promiseAllWindowsRestored;
         setTimeout(() => {
+          gZenUIManager.updateTabsToolbar();
           gZenCompactModeManager.init();
         }, 0);
         this.closeWatermark();
