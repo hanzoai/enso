@@ -207,6 +207,10 @@ var gZenCompactModeManager = {
         if (!canAnimate) {
           this.sidebar.removeAttribute('animate');
           document.documentElement.removeAttribute('zen-compact-animating');
+
+          this.getAndApplySidebarWidth({});
+          this._ignoreNextResize = true;
+
           resolve();
           return;
         }
