@@ -282,7 +282,7 @@ jobs:
           set -x
           mkdir obj-${{ matrix.arch }}-pc-windows-msvc/
           cp -r --no-dereference engine/obj-${{ matrix.arch }}-pc-windows-msvc/* obj-${{ matrix.arch }}-pc-windows-msvc/ || true
-          
+
       - name: Upload dist object
         if: ${{ !inputs.generate-gpo && inputs.release-branch == 'stable' }}
         uses: actions/upload-artifact@v4
