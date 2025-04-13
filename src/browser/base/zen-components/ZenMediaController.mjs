@@ -118,7 +118,9 @@
       });
 
       const onTabDiscardedOrClosed = this.onTabDiscardedOrClosed.bind(this);
+
       window.addEventListener('TabClose', onTabDiscardedOrClosed);
+      window.addEventListener('TabBrowserDiscarded', onTabDiscardedOrClosed);
 
       window.addEventListener('DOMAudioPlaybackStarted', (event) => {
         setTimeout(() => {
@@ -138,24 +140,19 @@
       });
 
       window.addEventListener('DOMAudioPlaybackStopped', () => this.updateMuteState());
-      window.webrtcUI.on('peer-request-allowed', this._onMediaShareStart.bind(this));
     }
 
     onTabDiscardedOrClosed(event) {
       const { linkedBrowser } = event.target;
+      const isCurrentBrowser = linkedBrowser?.browserId === this._currentBrowser?.browserId;
 
-      if (linkedBrowser?.browserId === this._currentBrowser?.browserId) {
-        this.deinitMediaSharingControls(linkedBrowser);
+      if (isCurrentBrowser) {
+        this.isSharing = false;
         this.hideMediaControls();
       }
 
       if (linkedBrowser?.browsingContext.mediaController) {
-        this.deinitMediaController(
-          linkedBrowser.browsingContext.mediaController,
-          true,
-          linkedBrowser.browserId === this._currentBrowser?.browserId,
-          true
-        );
+        this.deinitMediaController(linkedBrowser.browsingContext.mediaController, true, isCurrentBrowser, true);
       }
     }
 
@@ -191,7 +188,7 @@
     }
 
     set isSharing(value) {
-      if (this._currentBrowser && !value) {
+      if (this._currentBrowser?.browsingContext && !value) {
         const webRTC = this._currentBrowser.browsingContext.currentWindowGlobal.getActor('WebRTC');
         webRTC.sendAsyncMessage('webrtc:UnmuteMicrophone');
         webRTC.sendAsyncMessage('webrtc:UnmuteCamera');
@@ -353,52 +350,35 @@
         this.mediaArtist.textContent = '';
 
         this.showMediaControls();
-        tab.addEventListener('TabAttrModified', this._onTabAttrModified.bind(this));
       }
     }
 
-    deinitMediaSharingControls(browser) {
-      const tab = window.gBrowser.getTabForBrowser(browser);
-      if (tab) tab.removeEventListener('TabAttrModified', this._onTabAttrModified.bind(this));
-
-      this.isSharing = false;
-      this._currentBrowser = null;
-    }
-
-    _onTabAttrModified(event) {
-      const { changed } = event.detail;
-      const { linkedBrowser } = event.target;
-
-      if (changed.includes('sharing') && !linkedBrowser.browsingContext.currentWindowGlobal.hasActivePeerConnections()) {
-        if (this._currentBrowser?.browserId === linkedBrowser.browserId) {
-          event.target.removeEventListener('TabAttrModified', this._onTabAttrModified.bind(this));
-          this.deinitMediaSharingControls(linkedBrowser);
-
-          this.hideMediaControls();
-          this.switchController(true);
-        }
-      }
-    }
-
-    _onMediaShareStart(event) {
-      const { innerWindowID } = event;
+    updateMediaSharing(data) {
+      const { windowId, showCameraIndicator, showMicrophoneIndicator } = data;
 
       for (const browser of window.gBrowser.browsers) {
-        if (browser.innerWindowID === innerWindowID) {
+        const isMatch = browser.innerWindowID === windowId;
+
+        if (!isMatch) continue;
+        if (showCameraIndicator || showMicrophoneIndicator) {
           const webRTC = browser.browsingContext.currentWindowGlobal.getActor('WebRTC');
           webRTC.sendAsyncMessage('webrtc:UnmuteMicrophone');
           webRTC.sendAsyncMessage('webrtc:UnmuteCamera');
 
-          if (this._currentBrowser) this.deinitMediaSharingControls(this._currentBrowser);
+          if (this._currentBrowser) this.isSharing = false;
           if (this._currentMediaController) {
             this._currentMediaController.pause();
             this.deinitMediaController(this._currentMediaController, true, true).then(() =>
               this.activateMediaDeviceControls(browser)
             );
           } else this.activateMediaDeviceControls(browser);
-
-          break;
+        } else if (this.isSharing && !(showCameraIndicator || showMicrophoneIndicator)) {
+          this.isSharing = false;
+          this._currentBrowser = null;
+          this.hideMediaControls();
         }
+
+        break;
       }
     }
 
@@ -625,7 +605,7 @@
       if (this._currentMediaController) {
         this._currentMediaController.pause();
         this.deinitMediaController(this._currentMediaController);
-      } else if (this.isSharing) this.deinitMediaSharingControls(this._currentBrowser);
+      } else if (this.isSharing) this.isSharing = false;
 
       this.hideMediaControls();
       this.switchController(true);
