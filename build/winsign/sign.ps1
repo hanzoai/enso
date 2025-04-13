@@ -31,7 +31,7 @@ Start-Job -Name "SurferInit" -ScriptBlock {
     param($PWD)
     cd $PWD
     surfer -- ci --brand release
-    npm run import
+    npm run import -- --verbose
 } -Verbose -ArgumentList $PWD -Debug
 
 gh run download $GithubRunId --name windows-x64-obj-arm64 -D windsign-temp\windows-x64-obj-arm64
