@@ -95,6 +95,9 @@ var gZenCompactModeManager = {
   },
 
   flashSidebarIfNecessary(aInstant = false) {
+    // This function is called after exiting DOM fullscreen mode,
+    // so we do a bit of a hack to re-calculate the URL height
+    gURLBar.zenUpdateLayoutBreakout();
     if (!aInstant && this.preference && lazyCompactMode.COMPACT_MODE_FLASH_ENABLED && !gZenGlanceManager._animating) {
       this.flashSidebar();
     }
