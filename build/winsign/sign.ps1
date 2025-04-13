@@ -45,7 +45,7 @@ mkdir engine\obj-x86_64-pc-windows-msvc\ -ErrorAction SilentlyContinue
 $files = Get-ChildItem windsign-temp\windows-x64-obj-x86_64\ -Recurse -Include *.exe
 $files += Get-ChildItem windsign-temp\windows-x64-obj-x86_64\ -Recurse -Include *.dll
 
-$files = Get-ChildItem windsign-temp\windows-x64-obj-arm64\ -Recurse -Include *.exe
+$files += Get-ChildItem windsign-temp\windows-x64-obj-arm64\ -Recurse -Include *.exe
 $files += Get-ChildItem windsign-temp\windows-x64-obj-arm64\ -Recurse -Include *.dll
 
 signtool.exe sign /n "$SignIdentity" /t http://time.certum.pl/ /fd sha256 /v $files

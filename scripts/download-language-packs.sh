@@ -4,6 +4,10 @@ if ! [ -z "$ZEN_L10N_CURR_DIR" ]; then
   cd $ZEN_L10N_CURR_DIR
 fi
 
+# remove "\r" from ./l10n/supported-languages
+# note: it's fine if it fails
+sed -i 's/\r$//' ./l10n/supported-languages
+
 CURRENT_DIR=$(pwd)
 
 git config --global init.defaultBranch main
@@ -48,9 +52,6 @@ update_language() {
 
   cd $CURRENT_DIR
 }
-
-# remove "\r" from ./l10n/supported-languages
-sed -i 's/\r$//' ./l10n/supported-languages
 
 export PATH=~/tools/git-cinnabar:$PATH
 for lang in $(cat ./l10n/supported-languages); do
