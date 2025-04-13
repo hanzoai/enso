@@ -25,6 +25,10 @@
     }
   }
 
+  #media-device-buttons {
+    gap: 2px;
+  }
+
   &[media-sharing] #zen-media-controls-hbox > toolbarbutton:not(:first-child) {
     display: none;
 

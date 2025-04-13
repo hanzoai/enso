@@ -1182,20 +1182,20 @@ menupopup > menuitem:is([type='checkbox']) .menu-iconic-left {
 }
 
 #zen-media-mute-mic-button {
-  list-style-image: url('microphone.fill.svg') !important;
+  list-style-image: url('microphone-fill.svg') !important;
 }
 
 #zen-media-controls-toolbar[mic-muted] #zen-media-mute-mic-button {
-  list-style-image: url('microphone-blocked.fill.svg') !important;
+  list-style-image: url('microphone-blocked-fill.svg') !important;
   fill: rgb(224, 41, 29);
 }
 
 #zen-media-mute-camera-button {
-  list-style-image: url('video.fill.svg') !important;
+  list-style-image: url('video-fill.svg') !important;
 }
 
 #zen-media-controls-toolbar[camera-muted] #zen-media-mute-camera-button {
-  list-style-image: url('video-blocked.fill.svg') !important;
+  list-style-image: url('video-blocked-fill.svg') !important;
   fill: rgb(224, 41, 29);
 }
 
