@@ -221,7 +221,7 @@
           }
         )
         .then(() => {
-          this.mediaControlBar.setAttribute('hidden', 'true')
+          this.mediaControlBar.setAttribute('hidden', 'true');
           this.mediaControlBar.removeAttribute('media-sharing');
           gZenUIManager.updateTabsToolbar();
           gZenUIManager.restoreScrollbarState();
