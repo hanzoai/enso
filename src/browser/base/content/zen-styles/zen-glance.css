@@ -84,8 +84,8 @@
 }
 
 :root[zen-no-padding='true'] .browserSidebarContainer.zen-glance-background {
-  --zen-native-inner-radius: 4px;
-  --zen-element-separation: 4px;
+  --zen-native-inner-radius: 6px;
+  --zen-element-separation: 6px;
 }
 
 .browserSidebarContainer.zen-glance-background,
