@@ -281,6 +281,11 @@ jobs:
         run: |
           set -x
           mkdir obj-${{ matrix.arch }}-pc-windows-msvc/
+
+          rm -rf engine/obj-${{ matrix.arch }}-pc-windows-msvc/_tests
+          rm -rf engine/obj-${{ matrix.arch }}-pc-windows-msvc/config/autoconf.mk
+          rm -rf engine/obj-${{ matrix.arch }}-pc-windows-msvc/config.statusd/substs/
+
           cp -r --no-dereference engine/obj-${{ matrix.arch }}-pc-windows-msvc/* obj-${{ matrix.arch }}-pc-windows-msvc/ || true
 
       - name: Upload dist object

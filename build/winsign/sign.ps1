@@ -27,16 +27,19 @@ Start-Job -Name "DownloadGitl10n" -ScriptBlock {
     echo "Fetched l10n and firefox's one"
 } -Verbose -ArgumentList $PWD -Debug
 
+Start-Job -Name "SurferInit" -ScriptBlock {
+    param($PWD)
+    cd $PWD
+    surfer -- ci --brand release
+    npm run import
+} -Verbose -ArgumentList $PWD -Debug
+
 gh run download $GithubRunId --name windows-x64-obj-arm64 -D windsign-temp\windows-x64-obj-arm64
 echo "Downloaded arm64 artifacts"
 gh run download $GithubRunId --name windows-x64-obj-x86_64 -D windsign-temp\windows-x64-obj-x86_64
 echo "Downloaded x86_64 artifacts"
 
-Wait-Job -Name "DownloadGitl10n"
-
 mkdir engine\obj-x86_64-pc-windows-msvc\ -ErrorAction SilentlyContinue
-
-surfer -- ci --brand release
 
 # Collect all .exe and .dll files into a list
 $files = Get-ChildItem windsign-temp\windows-x64-obj-x86_64\ -Recurse -Include *.exe
@@ -47,12 +50,23 @@ $files += Get-ChildItem windsign-temp\windows-x64-obj-arm64\ -Recurse -Include *
 
 signtool.exe sign /n "$SignIdentity" /t http://time.certum.pl/ /fd sha256 /v $files
 
+$env:ZEN_RELEASE="true"
+$env:SURFER_SIGNING_MODE="true"
+Wait-Job -Name "SurferInit"
+Wait-Job -Name "DownloadGitl10n"
+
 function SignAndPackage($name) {
     echo "Executing on $name"
     rmdir .\dist -Recurse -ErrorAction SilentlyContinue
     rmdir engine\obj-x86_64-pc-windows-msvc\ -Recurse -ErrorAction SilentlyContinue
     cp windsign-temp\windows-x64-obj-$name engine\obj-x86_64-pc-windows-msvc\ -Recurse
-    echo "Signing $name"
+
+    # Configure each time since we are cloning from a linux environment into
+    # a windows environment, and the build system is not smart enough to detect that
+    # we are on a different platform.
+    cd .\engine
+    .\mach configure
+    cd ..
 
     echo "Packaging $name"
     $env:MAR="..\\build\\winsign\\mar.exe"
