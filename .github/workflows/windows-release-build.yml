@@ -277,14 +277,14 @@ jobs:
           path: ./zen.win64-pgo-stage-1.zip
 
       - name: Remove unnecessary files from obj
-        if: ${{ !inputs.generate-gpo && inputs.release-branch == 'stable' }}
+        if: ${{ !inputs.generate-gpo }}
         run: |
           set -x
           mkdir obj-${{ matrix.arch }}-pc-windows-msvc/
           cp -r --no-dereference engine/obj-${{ matrix.arch }}-pc-windows-msvc/* obj-${{ matrix.arch }}-pc-windows-msvc/ || true
 
       - name: Upload dist object
-        if: ${{ !inputs.generate-gpo && inputs.release-branch == 'stable' }}
+        if: ${{ !inputs.generate-gpo }}
         uses: actions/upload-artifact@v4
         with:
           retention-days: 2
