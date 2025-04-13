@@ -221,7 +221,8 @@
           }
         )
         .then(() => {
-          this.mediaControlBar.setAttribute('hidden', 'true');
+          this.mediaControlBar.setAttribute('hidden', 'true')
+          this.mediaControlBar.removeAttribute('media-sharing');
           gZenUIManager.updateTabsToolbar();
           gZenUIManager.restoreScrollbarState();
         });
@@ -235,7 +236,6 @@
         if (this._currentMediaController.isBeingUsedInPIPModeOrFullscreen) return this.hideMediaControls();
 
         this.updatePipButton();
-        this.mediaControlBar.removeAttribute('media-sharing');
       }
 
       const mediaInfoElements = [this.mediaTitle, this.mediaArtist];
