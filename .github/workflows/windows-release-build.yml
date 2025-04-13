@@ -286,7 +286,7 @@ jobs:
           rm -rf engine/obj-${{ matrix.arch }}-pc-windows-msvc/config/autoconf.mk
           rm -rf engine/obj-${{ matrix.arch }}-pc-windows-msvc/config.statusd/substs/
           rm -rf engine/obj-${{ matrix.arch }}-pc-windows-msvc/dist/install
-          
+
           find engine/obj-${{ matrix.arch }}-pc-windows-msvc/dist -maxdepth 1 -type f -name "*.zip" -delete
 
           cp -r --no-dereference engine/obj-${{ matrix.arch }}-pc-windows-msvc/* obj-${{ matrix.arch }}-pc-windows-msvc/ || true
