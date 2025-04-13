@@ -58,25 +58,39 @@ Wait-Job -Name "DownloadGitl10n"
 function SignAndPackage($name) {
     echo "Executing on $name"
     rmdir .\dist -Recurse -ErrorAction SilentlyContinue
-    rmdir engine\obj-x86_64-pc-windows-msvc\ -Recurse -ErrorAction SilentlyContinue
-    cp windsign-temp\windows-x64-obj-$name engine\obj-x86_64-pc-windows-msvc\ -Recurse
+    rmdir engine\obj-$name-pc-windows-msvc\ -Recurse -ErrorAction SilentlyContinue
+    $objName=$name
+    # instead of arm, use aarch64
+    if ($name -eq "arm64") {
+        $objName="aarch64"
+    }
 
-    # Configure each time since we are cloning from a linux environment into
-    # a windows environment, and the build system is not smart enough to detect that
-    # we are on a different platform.
-    cd .\engine
-    .\mach configure
-    cd ..
+    echo "Removing old obj dir"
+    rmdir engine\obj-$objName-pc-windows-msvc\ -Recurse -ErrorAction SilentlyContinue
+    
+    echo "Creating new obj dir"
+    cp windsign-temp\windows-x64-obj-$name engine\obj-$objName-pc-windows-msvc\ -Recurse
 
-    echo "Packaging $name"
+    echo "Copying setup.exe into obj dir"
+    $env:ZEN_SETUP_EXE_PATH="$PWD\windsign-temp\windows-x64-obj-$name\browser\installer\windows\instgen\setup.exe"
+
     $env:MAR="..\\build\\winsign\\mar.exe"
     if ($name -eq "arm64") {
         $env:SURFER_COMPAT="aarch64"
     } else {
         $env:SURFER_COMPAT="x86_64"
     }
-
     echo "Compat Mode? $env:SURFER_COMPAT"
+
+    # Configure each time since we are cloning from a linux environment into
+    # a windows environment, and the build system is not smart enough to detect that
+    # we are on a different platform.
+    cd .\engine
+    echo "Configuring for $name"
+    .\mach configure
+    cd ..
+
+    echo "Packaging $name"
     npm run package -- --verbose
 
     # In the release script, we do the following:
@@ -112,6 +126,7 @@ function SignAndPackage($name) {
     # note: We need to sign it into a parent folder, called windows-x64-signed-$name
     rmdir .\windsign-temp\windows-binaries\windows-x64-signed-$name -Recurse -ErrorAction SilentlyContinue
     mv windsign-temp\windows-x64-signed-$name .\windsign-temp\windows-binaries -Force
+    rmdir engine\obj-$objName-pc-windows-msvc\ -Recurse -ErrorAction SilentlyContinue
 
     echo "Finished $name"
 }
