@@ -95,6 +95,8 @@
       this.mediaProgressBar.addEventListener('change', this.onMediaSeekComplete.bind(this));
 
       window.addEventListener('TabSelect', (event) => {
+        if (this.isSharing) return;
+
         const linkedBrowser = event.target.linkedBrowser;
         this.switchController();
 
@@ -279,7 +281,6 @@
     }
 
     setupMediaControlUI(metadata, positionState) {
-      if (this.isSharing) return;
       this.updatePipButton();
 
       if (!this.mediaControlBar.classList.contains('playing') && this._currentMediaController.isPlaying) {
@@ -324,7 +325,7 @@
         lastUpdated: Date.now(),
       });
 
-      if (!this._currentBrowser) {
+      if (!this._currentBrowser && !this.isSharing) {
         this.setupMediaController(mediaController, browser);
         this.setupMediaControlUI(metadata, positionState);
       }
