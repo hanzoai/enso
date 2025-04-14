@@ -91,7 +91,7 @@ function DownloadArtifacts($name) {
         echo "Unzipping artifact to $outputPath"
         Expand-Archive -Path $tempFile -DestinationPath $outputPath -Force
         echo "Unzipped artifact to $outputPath"
-    } -ArgumentList $tempFile, $outputPath -ErrorAction SilentlyContinue
+    } -ArgumentList $tempFile, $outputPath -Verbose -Debug
 }
 
 DownloadArtifacts arm64
