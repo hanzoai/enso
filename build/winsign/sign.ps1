@@ -86,13 +86,20 @@ function DownloadArtifacts($name) {
     echo "Downloading artifact to $tempFile"
     DownloadFile $artifactUrl $tempFile
     
-    echo "Unzipping artifact to $outputPath"
-    Expand-Archive -Path $tempFile -DestinationPath $outputPath -Force
-    echo "Unzipped artifact to $outputPath"
+    Start-Job -Name "UnzipArtifact$name" -ScriptBlock {
+        param($tempFile, $outputPath)
+        echo "Unzipping artifact to $outputPath"
+        Expand-Archive -Path $tempFile -DestinationPath $outputPath -Force
+        echo "Unzipped artifact to $outputPath"
+    } -ArgumentList $tempFile, $outputPath -ErrorAction SilentlyContinue
 }
 
 DownloadArtifacts arm64
 DownloadArtifacts x86_64
+
+# Wait for the jobs to finish
+Wait-Job -Name "UnzipArtifactarm64"
+Wait-Job -Name "UnzipArtifactx86_64"
 
 mkdir engine\obj-x86_64-pc-windows-msvc\ -ErrorAction SilentlyContinue
 
