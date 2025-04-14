@@ -34,26 +34,61 @@ Start-Job -Name "SurferInit" -ScriptBlock {
     npm run import -- --verbose
 } -Verbose -ArgumentList $PWD -Debug
 
+echo "Downloading artifacts info"
+$artifactsInfo=gh api repos/zen-browser/desktop/actions/runs/$GithubRunId/artifacts
+$token = gh auth token
+
+function New-TemporaryDirectory {
+    $tmp = [System.IO.Path]::GetTempPath() # Not $env:TEMP, see https://stackoverflow.com/a/946017
+    $name = (New-Guid).ToString("N")
+    New-Item -ItemType Directory -Path (Join-Path $tmp $name)
+}
+
+function DownloadFile($url, $targetFile) {
+   $uri = New-Object "System.Uri" "$url"
+   $request = [System.Net.HttpWebRequest]::Create($uri)
+   $request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+   $request.Headers.Add("Authorization", "Bearer $token")
+   $request.set_Timeout(15000) #15 second timeout
+   $response = $request.GetResponse()
+   $totalLength = [System.Math]::Floor($response.get_ContentLength()/1024)
+   $responseStream = $response.GetResponseStream()
+   $targetStream = New-Object -TypeName System.IO.FileStream -ArgumentList $targetFile, Create
+   $buffer = new-object byte[] 10KB
+   $count = $responseStream.Read($buffer,0,$buffer.length)
+   $downloadedBytes = $count
+
+    while ($count -gt 0) {
+        $targetStream.Write($buffer, 0, $count)
+        $count = $responseStream.Read($buffer,0,$buffer.length)
+        $downloadedBytes = $downloadedBytes + $count
+        Write-Progress -activity "Downloading file '$($url.split('/') | Select -Last 1)'" -status "Downloaded ($([System.Math]::Floor($downloadedBytes/1024))K of $($totalLength)K): " -PercentComplete ((([System.Math]::Floor($downloadedBytes/1024)) / $totalLength)  * 100)
+    }
+
+   Write-Progress -activity "Finished downloading file '$($url.split('/') | Select -Last 1)'"
+
+   $targetStream.Flush()
+   $targetStream.Close()
+   $targetStream.Dispose()
+   $responseStream.Dispose()
+}
+
 function DownloadArtifacts($name) {
     echo "Downloading artifacts for $name"
-    # Download the artifacts from the github run
-    while ($true) {
-        Write-Host "Attempting to download artifacts for $name..."
-        $process = Start-Process -FilePath "gh" -ArgumentList "run download $GithubRunId --name windows-x64-obj-$name -D windsign-temp\windows-x64-obj-$name" -PassThru -NoNewWindow
-        try {
-            $process | Wait-Process -ErrorAction Stop
-            if ($process.ExitCode -eq 0) {
-                Write-Host "Download completed successfully."
-                break
-            } else {
-                Write-Host "Download failed (Exit code: $($process.ExitCode)). Retrying..."
-            }
-        } catch {
-            Write-Host "Timeout occurred, restarting download..."
-            $process | Stop-Process -Force -ErrorAction SilentlyContinue
-        }
-        Start-Sleep -Seconds 2
-    }
+    $artifactUrl=$($artifactsInfo | jq -r --arg NAME "windows-x64-obj-$name" '.artifacts[] | select(.name == $NAME) | .archive_download_url')
+    echo "Artifact URL: $artifactUrl"
+
+    # download the artifact
+    $outputPath="$PWD\windsign-temp\windows-x64-obj-$name"
+    $tempDir = New-TemporaryDirectory
+    $tempFile = Join-Path $tempDir "artifact-$($name).zip"
+
+    echo "Downloading artifact to $tempFile"
+    DownloadFile $artifactUrl $tempFile
+    
+    echo "Unzipping artifact to $outputPath"
+    Expand-Archive -Path $tempFile -DestinationPath $outputPath -Force
+    echo "Unzipped artifact to $outputPath"
 }
 
 DownloadArtifacts arm64
