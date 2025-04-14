@@ -34,10 +34,30 @@ Start-Job -Name "SurferInit" -ScriptBlock {
     npm run import -- --verbose
 } -Verbose -ArgumentList $PWD -Debug
 
-gh run download $GithubRunId --name windows-x64-obj-arm64 -D windsign-temp\windows-x64-obj-arm64
-echo "Downloaded arm64 artifacts"
-gh run download $GithubRunId --name windows-x64-obj-x86_64 -D windsign-temp\windows-x64-obj-x86_64
-echo "Downloaded x86_64 artifacts"
+function DownloadArtifacts($name) {
+    echo "Downloading artifacts for $name"
+    # Download the artifacts from the github run
+    while ($true) {
+        Write-Host "Attempting to download artifacts for $name..."
+        $process = Start-Process -FilePath "gh" -ArgumentList "run download $GithubRunId --name windows-x64-obj-$name -D windsign-temp\windows-x64-obj-$name" -PassThru -NoNewWindow
+        try {
+            $process | Wait-Process -ErrorAction Stop
+            if ($process.ExitCode -eq 0) {
+                Write-Host "Download completed successfully."
+                break
+            } else {
+                Write-Host "Download failed (Exit code: $($process.ExitCode)). Retrying..."
+            }
+        } catch {
+            Write-Host "Timeout occurred, restarting download..."
+            $process | Stop-Process -Force -ErrorAction SilentlyContinue
+        }
+        Start-Sleep -Seconds 2
+    }
+}
+
+DownloadArtifacts arm64
+DownloadArtifacts x86_64
 
 mkdir engine\obj-x86_64-pc-windows-msvc\ -ErrorAction SilentlyContinue
 
