@@ -7,6 +7,9 @@ COMPONENT_ROOT=$(pwd)/src/zen
 EXTRA_COMPONENTS=(
   "scripts"
   "workflows"
+  "winsign"
+  "flatpak"
+  "configs"
 )
 
 echo "" > .formal-git/components
