@@ -1,0 +1,9 @@
+
+BROWSER_CHROME_MANIFESTS += [
+    "tests/browser.toml",
+]
+
+DIRS += [
+    "glance",
+    "mods"
+]

@@ -1,5 +1,5 @@
 diff --git a/browser/base/moz.build b/browser/base/moz.build
-index 636e0841786735a63ddea00e819c0b6f0b8a5d4d..6685d857180944d68bf4f049919f81361084c481 100644
+index 636e0841786735a63ddea00e819c0b6f0b8a5d4d..62e4531bd19caf098fd76c69b213fa32d62546a6 100644
 --- a/browser/base/moz.build
 +++ b/browser/base/moz.build
 @@ -87,3 +87,5 @@ if CONFIG["MOZ_WIDGET_TOOLKIT"] in ("windows", "gtk"):
@@ -7,4 +7,4 @@ index 636e0841786735a63ddea00e819c0b6f0b8a5d4d..6685d857180944d68bf4f049919f8136
  
  JAR_MANIFESTS += ["jar.mn"]
 +
-+DIRS += ["zen-components"]
++DIRS += ["../../zen"]
