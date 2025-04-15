@@ -4,7 +4,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 :root:not([inDOMFullscreen='true']):not([chromehidden~='location']):not([chromehidden~='toolbar']) {
-  & #tabbrowser-tabbox #tabbrowser-tabpanels .browserSidebarContainer {
+  & #tabbrowser-tabbox #tabbrowser-tabpanels .browserSidebarContainer,
+  #tabbrowser-tabpanels[dragging-split='true'] {
     width: -moz-available;
     position: relative;
     overflow: hidden;

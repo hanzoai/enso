@@ -230,6 +230,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       this._draggingTab = draggedTab;
       gBrowser.selectedTab = oldTab;
       this._hasAnimated = true;
+      this.tabBrowserPanel.setAttribute('dragging-split', 'true');
       for (const tab of gBrowser.tabs) {
         tab.style.removeProperty('transform');
         if (tab.group) {
@@ -1501,6 +1502,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
 
   _maybeRemoveFakeBrowser(select = true) {
     gBrowser.tabbox.removeAttribute('style');
+    this.tabBrowserPanel.removeAttribute('dragging-split');
     if (this.fakeBrowser) {
       delete this._hasAnimated;
       this.fakeBrowser.remove();
