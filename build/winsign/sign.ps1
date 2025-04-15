@@ -49,7 +49,6 @@ function DownloadFile($url, $targetFile) {
    $request = [System.Net.HttpWebRequest]::Create($uri)
    $request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
    $request.Headers.Add("Authorization", "Bearer $token")
-   $request.set_Timeout(15000) #15 second timeout
    $response = $request.GetResponse()
    $totalLength = [System.Math]::Floor($response.get_ContentLength()/1024)
    $responseStream = $response.GetResponseStream()
@@ -135,6 +134,12 @@ function SignAndPackage($name) {
 
     echo "Copying setup.exe into obj dir"
     $env:ZEN_SETUP_EXE_PATH="$PWD\windsign-temp\windows-x64-obj-$name\browser\installer\windows\instgen\setup.exe"
+    
+    if ($name -eq "arm64") {
+        $env:WIN32_REDIST_DIR="$PWD\win-cross\vs2022\VC\Redist\MSVC\14.38.33135\arm64\Microsoft.VC143.CRT"
+    } else {
+        $env:WIN32_REDIST_DIR="$PWD\win-cross\vs2022\VC\Redist\MSVC\14.38.33135\x64\Microsoft.VC143.CRT"
+    }
 
     $env:MAR="..\\build\\winsign\\mar.exe"
     if ($name -eq "arm64") {

@@ -17,7 +17,6 @@ if test "$ZEN_CROSS_COMPILING"; then
   else
     export WIN32_REDIST_DIR="$(echo ~)/win-cross/vs2022/VC/Redist/MSVC/14.38.33135/x64/Microsoft.VC143.CRT"
   fi
-
 fi
 
 #? https://bugzilla.mozilla.org/show_bug.cgi?id=1617793
