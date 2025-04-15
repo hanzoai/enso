@@ -1107,7 +1107,7 @@
       &::after {
         content: "";
         inset: -50%;
-        filter: blur(25px);
+        filter: blur(25px) brightness(1.8);
         position: absolute;
         background-size: initial;
         background-clip: padding-box;
@@ -1122,19 +1122,20 @@
       --zen-essential-bg-margin: 2px;
 
       &::before {
-        background: light-dark(rgba(255, 255, 255, 0.85), rgba(68, 64, 64, 0.85));
+        background: light-dark(rgba(255, 255, 255, 0.85), rgba(143, 143, 143, 0.65));
         margin: var(--zen-essential-bg-margin);
         border-radius: calc(var(--border-radius-medium) - var(--zen-essential-bg-margin));
         position: absolute;
         inset: 0;
         z-index: 0;
         content: "";
+        backdrop-filter: contrast(0.1);
         transition: background 0.1s ease-in-out;
       }
     }
 
     &[visuallyselected]:hover .tab-background::before {
-      background: light-dark(rgba(255, 255, 255, 0.80), rgba(68, 64, 64, 0.80));
+      background: light-dark(rgba(255, 255, 255, 0.80), rgba(121, 121, 121, 0.65));
     }
   }
 }
