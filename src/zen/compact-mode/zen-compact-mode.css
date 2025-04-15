@@ -6,7 +6,7 @@
 /* All overrides for compact mode go here */
 
 :root[zen-compact-mode='true']:not([customizing]):not([inDOMFullscreen='true']) {
-%include zen-tabs/vertical-tabs-topbuttons-fix.css
+%include ../tabs/zen-tabs/vertical-tabs-topbuttons-fix.css
   @media -moz-pref('zen.view.compact.hide-tabbar') or -moz-pref('zen.view.use-single-toolbar') {
     &:not([zen-compact-animating]) {
       & #zen-sidebar-splitter {

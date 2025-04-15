@@ -4,40 +4,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#zen-profile-button {
-  & stack {
-    padding: 0;
-  }
-
-  & .toolbarbutton-badge {
-    display: none !important;
-  }
-
-  & stack {
-    width: calc(2 * var(--toolbarbutton-inner-padding) + 16px) !important;
-    height: calc(2 * var(--toolbarbutton-inner-padding) + 16px) !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    & > image {
-      width: 0;
-    }
-  }
-
-  & #zen-profile-button-icon {
-    width: 20px;
-    height: 20px;
-    list-style-image: var(--avatar-image-url);
-    border-radius: 50%;
-    pointer-events: none;
-    list-style-image: var(--avatar-image-url);
-    -moz-context-properties: fill;
-    fill: currentColor;
-    border: 1px solid var(--zen-colors-border);
-  }
-}
-
 /* Bookmarks sidebar */
 #zen-tabbox-wrapper {
   & #sidebar-splitter {

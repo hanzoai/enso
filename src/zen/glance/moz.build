@@ -1,0 +1,5 @@
+
+FINAL_TARGET_FILES.actors += [
+    "actors/ZenGlanceChild.sys.mjs",
+    "actors/ZenGlanceParent.sys.mjs",
+]
