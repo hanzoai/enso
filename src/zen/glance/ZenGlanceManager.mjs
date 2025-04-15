@@ -665,7 +665,7 @@
           },
         },
         allFrames: true,
-        matches: ['https://*/*'],
+        matches: ['*://*/*'],
       });
     }
   }
