@@ -463,3 +463,7 @@ pref("image.mem.decode_bytes_at_a_time", 32768);
 pref("gfx.canvas.accelerated", true);
 pref("media.hardware-video-decoding.enabled", true);
 pref("layers.gpu-process.enabled", true);
+
+// Picture-in-picture
+pref("media.videocontrols.picture-in-picture.video-toggle.enabled", true);
+pref("media.videocontrols.picture-in-picture.enable-when-switching-tabs.enabled", true);
