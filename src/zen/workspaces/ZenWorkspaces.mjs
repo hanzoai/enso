@@ -649,7 +649,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (gZenVerticalTabsManager._canReplaceNewTab && showed) {
       BrowserCommands.openTab();
     }
-    gZenViewSplitter.onAfterWorkspaceSessionRestore();
+    window.dispatchEvent(new CustomEvent('AfterWorkspacesSessionRestore', { bubbles: true }));
   }
 
   handleInitialTab(tab, isEmpty) {

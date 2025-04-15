@@ -195,7 +195,15 @@
           pinsToCreate.delete(pinId);
 
           if (lazy.zenPinnedTabRestorePinnedTabsToPinnedUrl && init) {
-            this._resetTabToStoredState(tab);
+            tab.addEventListener(
+              'SSTabRestored',
+              () => {
+                this._resetTabToStoredState(event.target);
+              },
+              {
+                once: true,
+              }
+            );
           }
         } else {
           // This is a pinned tab that no longer has a corresponding pin
