@@ -1,1 +1,0 @@
-{type}({components}): {bugId} - {message}
