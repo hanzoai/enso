@@ -26,6 +26,10 @@ pref('browser.compactmode.show', true);
 
 #ifdef XP_WIN
 pref("browser.privateWindowSeparation.enabled", false);
+
+// Mica
+pref("widget.windows.mica", true);
+pref("widget.windows.mica.popups", true);
 #endif
 
 pref('browser.newtabpage.activity-stream.newtabWallpapers.enabled', true);

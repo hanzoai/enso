@@ -1,24 +1,8 @@
 diff --git a/modules/libpref/init/StaticPrefList.yaml b/modules/libpref/init/StaticPrefList.yaml
-index 85974462e5ce2b7dbf85bd5c79f09b3db5c25915..f914f5c0f29be4149be15265bb6571ae92fb23cc 100644
+index 2f0bb8a6e21bec5c89a4a25413bf8d1308210f52..450d8265c128861f3ad5973ec0417b9463ebffd0 100644
 --- a/modules/libpref/init/StaticPrefList.yaml
 +++ b/modules/libpref/init/StaticPrefList.yaml
-@@ -18462,13 +18462,13 @@
- # Whether we use the mica backdrop. Off by default for now.
- - name: widget.windows.mica
-   type: bool
--  value: false
-+  value: true
-   mirror: always
- 
- # Whether we use the mica backdrop for popups. Off by default for now.
- - name: widget.windows.mica.popups
-   type: RelaxedAtomicBool
--  value: false
-+  value: true
-   mirror: always
- 
- # Whether we expand the client area into the taskbar hidden edge on maximized
-@@ -18594,6 +18594,7 @@
+@@ -18598,6 +18598,7 @@
    mirror: always
  #endif
  
