@@ -1107,12 +1107,13 @@
       &::after {
         content: "";
         inset: -50%;
-        filter: blur(20px);
+        filter: blur(25px);
         position: absolute;
-        background-size: 100% 100%;
+        background-size: initial;
         background-clip: padding-box;
         background-image: var(--zen-tab-icon);
         z-index: -1;
+        background-position: center;
       }
 
       background: transparent;
