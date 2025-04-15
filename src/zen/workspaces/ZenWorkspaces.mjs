@@ -877,6 +877,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     await this._propagateWorkspaceData();
     await this._updateWorkspacesChangeContextMenu();
     this.onWindowResize();
+    for (let container of document.querySelectorAll(`.zen-workspace-tabs-section[zen-workspace-id="${windowID}"]`)) {
+      container.remove();
+    }
   }
 
   isWorkspaceActive(workspace) {
@@ -1399,7 +1402,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   _deleteAllTabsInWorkspace(workspaceID) {
     gBrowser.removeTabs(
-      Array.from(gBrowser.tabs).filter(
+      Array.from(this.allStoredTabs).filter(
         (tab) => tab.getAttribute('zen-workspace-id') === workspaceID && !tab.hasAttribute('zen-empty-tab')
       ),
       {

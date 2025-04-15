@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index 0fbdbf3aefc467880e6b0bae2615cb145735cb0f..18c8f0fc9f75a3a69c2696d7bd69faff0fd01488 100644
+index 0fbdbf3aefc467880e6b0bae2615cb145735cb0f..75a30478387494c06e5c8131f55ba5dc977c8415 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -93,7 +93,7 @@
@@ -115,7 +115,7 @@ index 0fbdbf3aefc467880e6b0bae2615cb145735cb0f..18c8f0fc9f75a3a69c2696d7bd69faff
 +          return;
 +        }
 +      } else if (dt.mozUserCancelled) {
-+        gZenViewSplitter._lastOpenedTab?._visuallySelected = false;
++        if (gZenViewSplitter._lastOpenedTab) gZenViewSplitter._lastOpenedTab._visuallySelected = false;
 +      }
 +
 +      this._finishMoveTogetherSelectedTabs(draggedTab);
