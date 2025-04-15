@@ -385,7 +385,7 @@
   min-height: fit-content;
   overflow-y: auto;
   height: 100%;
-  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, currentColor 26%, transparent) transparent;
 
   /* Only do this hack if we have workspaces enabled */
   :root[zen-workspace-id] & {
