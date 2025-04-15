@@ -1,7 +1,16 @@
 diff --git a/browser/components/tabbrowser/content/browser-ctrlTab.js b/browser/components/tabbrowser/content/browser-ctrlTab.js
-index e5d16e605b7edf11fc9f52b93e415087b76398f1..40b6e29d26c7f8d692a2a9a7d924b289ec7a3d03 100644
+index 6753641cb579032306453be3f5054d7bc7661e8c..e0eda8d77637334ca30ee1842057cb43b4af2c21 100644
 --- a/browser/components/tabbrowser/content/browser-ctrlTab.js
 +++ b/browser/components/tabbrowser/content/browser-ctrlTab.js
+@@ -252,7 +252,7 @@ var ctrlTab = {
+   },
+ 
+   get tabList() {
+-    return this._recentlyUsedTabs;
++    return this._recentlyUsedTabs.filter(tab => !tab.hasAttribute("pending"));
+   },
+ 
+   init: function ctrlTab_init() {
 @@ -459,7 +459,7 @@ var ctrlTab = {
      // If the tab is hidden, don't add it to the list unless it's selected
      // (Normally hidden tabs would be unhidden when selected, but that doesn't
