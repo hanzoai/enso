@@ -815,8 +815,8 @@
         return;
       }
       // Remove # and ? from the url
-      const pinUrl = pin.url.split('#')[0].split('?')[0];
-      const currentUrl = browser.currentURI.spec.split('#')[0].split('?')[0];
+      const pinUrl = pin.url.split('#')[0];
+      const currentUrl = browser.currentURI.spec.split('#')[0];
       // Add an indicator that the pin has been changed
       if (pinUrl === currentUrl) {
         this.resetPinChangedUrl(tab);
