@@ -319,6 +319,10 @@ pref("mousewheel.default.delta_multiplier_y", 200);
 pref("dom.ipc.processPriorityManager.backgroundUsesEcoQoS", false);
 #endif
 
+#ifdef UNIX_BUT_NOT_MAC
+pref("widget.gtk.rounded-bottom-corners.enabled", true);
+#endif
+
 pref('browser.newtabpage.activity-stream.system.showWeather', true);
 
 // Enable experimental settings page (Used for Zen Labs)

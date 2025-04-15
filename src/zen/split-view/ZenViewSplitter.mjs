@@ -174,6 +174,10 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
   }
 
   onBrowserDragOverToSplit(event) {
+    if (this.fakeBrowser) {
+      this.onBrowserDragEndToSplit(event);
+      return;
+    }
     var dt = event.dataTransfer;
     var draggedTab;
     if (dt.mozTypesAt(0)[0] == TAB_DROP_TYPE) {
@@ -1523,6 +1527,19 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
     this._canDrop = false;
 
     if (!canDrop || !this.fakeBrowser) {
+      this._maybeRemoveFakeBrowser(false);
+      return false;
+    }
+
+    // CHeck if it's inside the tabbox
+    const tabboxRect = gBrowser.tabbox.getBoundingClientRect();
+    const elementSeparation = ZenThemeModifier.elementSeparation;
+    if (
+      event.clientX < tabboxRect.left ||
+      event.clientX > tabboxRect.right - elementSeparation ||
+      event.clientY < tabboxRect.top ||
+      event.clientY > tabboxRect.bottom - elementSeparation
+    ) {
       this._maybeRemoveFakeBrowser(false);
       return false;
     }
