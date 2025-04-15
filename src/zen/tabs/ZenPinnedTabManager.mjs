@@ -988,7 +988,7 @@
       if (!pin) {
         return;
       }
-      if (pin.url === 'about:blank') {
+      if (pin.url === 'about:blank' && tab.linkedBrowser.currentURI.spec !== 'about:blank') {
         await this.replacePinnedUrlWithCurrent(tab);
       }
     }
