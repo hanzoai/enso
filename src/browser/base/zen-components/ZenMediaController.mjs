@@ -359,9 +359,10 @@
       for (const browser of window.gBrowser.browsers) {
         const isMatch = browser.innerWindowID === windowId;
         const isCurrentBrowser = this._currentBrowser?.browserId === browser.browserId;
+        const shouldShow = showCameraIndicator || showMicrophoneIndicator;
 
         if (!isMatch) continue;
-        if (!isCurrentBrowser && (showCameraIndicator || showMicrophoneIndicator)) {
+        if (shouldShow && !(isCurrentBrowser && this.isSharing)) {
           const webRTC = browser.browsingContext.currentWindowGlobal.getActor('WebRTC');
           webRTC.sendAsyncMessage('webrtc:UnmuteMicrophone');
           webRTC.sendAsyncMessage('webrtc:UnmuteCamera');
@@ -373,7 +374,7 @@
               this.activateMediaDeviceControls(browser)
             );
           } else this.activateMediaDeviceControls(browser);
-        } else if (isCurrentBrowser && this.isSharing && !(showCameraIndicator || showMicrophoneIndicator)) {
+        } else if (!shouldShow && isCurrentBrowser && this.isSharing) {
           this.isSharing = false;
           this._currentBrowser = null;
           this.hideMediaControls();
