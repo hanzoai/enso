@@ -151,7 +151,7 @@
         this.hideMediaControls();
       }
 
-      if (linkedBrowser?.browsingContext.mediaController) {
+      if (linkedBrowser?.browsingContext?.mediaController) {
         this.deinitMediaController(linkedBrowser.browsingContext.mediaController, true, isCurrentBrowser, true);
       }
     }
