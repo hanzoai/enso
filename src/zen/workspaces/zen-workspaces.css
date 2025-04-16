@@ -365,8 +365,32 @@
   background-color: var(--toolbarbutton-icon-fill-attention);
 }
 
+/* Enhanced visual feedback for Linux platform */
+@supports (-moz-gtk-csd-available) {
+  .zen-workspace-button.dragover {
+    background-color: color-mix(in srgb, var(--toolbarbutton-icon-fill-attention) 15%, transparent);
+  }
+
+  .zen-workspace-button.dragover::after {
+    height: 3px;
+  }
+}
+
 .zen-workspace-last-place-drop-target.dragover {
   background-color: var(--toolbarbutton-icon-fill-attention);
+}
+
+/* Enhanced visual feedback for Linux platform */
+@supports (-moz-gtk-csd-available) {
+  .zen-workspace-last-place-drop-target {
+    height: 6px;
+    margin: 4px 0;
+  }
+
+  .zen-workspace-last-place-drop-target.dragover {
+    background-color: var(--toolbarbutton-icon-fill-attention);
+    box-shadow: 0 0 4px var(--toolbarbutton-icon-fill-attention);
+  }
 }
 
 #PanelUI-zen-workspaces-reorder-mode[active='true'] {

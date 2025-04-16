@@ -1018,6 +1018,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
           element.classList.add('identity-color-' + containerGroup.color);
           element.setAttribute('data-usercontextid', containerGroup.userContextId);
         }
+        // Set draggable attribute based on reorder mode
         if (this.isReorderModeOn(browser)) {
           element.setAttribute('draggable', 'true');
         }
@@ -1028,6 +1029,15 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
               this.draggedElement = element;
               event.dataTransfer.effectAllowed = 'move';
               event.dataTransfer.setData('text/plain', element.getAttribute('zen-workspace-id'));
+
+              // Create a transparent drag image for Linux
+              if (AppConstants.platform === 'linux') {
+                const dragImage = document.createElement('canvas');
+                dragImage.width = 1;
+                dragImage.height = 1;
+                event.dataTransfer.setDragImage(dragImage, 0, 0);
+              }
+
               element.classList.add('dragging');
             } else {
               event.preventDefault();
@@ -1041,6 +1051,15 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
             if (this.isReorderModeOn(browser) && this.draggedElement) {
               event.preventDefault();
               event.dataTransfer.dropEffect = 'move';
+
+              // Ensure the dragover effect is visible on Linux
+              if (AppConstants.platform === 'linux') {
+                const targetId = element.getAttribute('zen-workspace-id');
+                const draggedId = this.draggedElement.getAttribute('zen-workspace-id');
+                if (targetId !== draggedId) {
+                  element.classList.add('dragover');
+                }
+              }
             }
           }.bind(browser.ZenWorkspaces)
         );
@@ -1150,6 +1169,11 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
             if (this.isReorderModeOn(browser) && this.draggedElement) {
               event.preventDefault();
               event.dataTransfer.dropEffect = 'move';
+
+              // Ensure the dragover effect is visible on Linux
+              if (AppConstants.platform === 'linux') {
+                element.classList.add('dragover');
+              }
             }
           }.bind(browser.ZenWorkspaces)
         );
@@ -1259,6 +1283,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     // Update draggable attribute
     const workspaceElements = document.querySelectorAll('.zen-workspace-button');
     workspaceElements.forEach((elem) => {
+      // When reorder mode is toggled off, remove draggable attribute
+      // When reorder mode is toggled on, set draggable attribute
       if (isActive) {
         elem.removeAttribute('draggable');
       } else {
