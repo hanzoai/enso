@@ -66,6 +66,11 @@
             // A bit of a hack to make sure the tabs toolbar is updated.
             // Just in case we didn't get the right size.
             gZenUIManager.updateTabsToolbar();
+
+            // Fix for https://github.com/zen-browser/desktop/issues/7605, specially in compact mode
+            if (gURLBar.hasAttribute('breakout-extend')) {
+              gURLBar.focus();
+            }
           }, 100);
         }, 0);
         this.closeWatermark();
