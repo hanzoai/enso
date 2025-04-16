@@ -1813,7 +1813,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   _shouldChangeToTab(aTab) {
-    return !(aTab.hasAttribute('zen-essential') || (aTab.pinned && aTab.hasAttribute('pending')));
+    return !(aTab?.hasAttribute('zen-essential') || (aTab?.pinned && aTab?.hasAttribute('pending')));
   }
 
   async _handleTabSelection(window, onInit, containerId, workspaces, previousWorkspaceId, prevTabUsed) {
@@ -2182,7 +2182,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   findTabToBlur(tab) {
-    if (!this._shouldChangeToTab(tab) && this._emptyTab) {
+    if ((!this._shouldChangeToTab(tab) || !tab) && this._emptyTab) {
       return this._emptyTab;
     }
     return tab;

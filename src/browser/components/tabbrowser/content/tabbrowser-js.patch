@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 5f406ea5d09273c9b70b84eee24c6267f88692f8..c4fa57b30e48c9364bf252e7f1f62ae9c6fa3b40 100644
+index 5f406ea5d09273c9b70b84eee24c6267f88692f8..22d077e528387a6fbe59a170784dd8caa0c65b26 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -424,11 +424,67 @@
@@ -565,7 +565,7 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..c4fa57b30e48c9364bf252e7f1f62ae9
        if (unloadBlocked) {
          return;
        }
-@@ -5159,7 +5324,7 @@
+@@ -5159,13 +5324,13 @@
          !excludeTabs.has(aTab.owner) &&
          Services.prefs.getBoolPref("browser.tabs.selectOwnerOnClose")
        ) {
@@ -574,6 +574,13 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..c4fa57b30e48c9364bf252e7f1f62ae9
        }
  
        // Try to find a remaining tab that comes after the given tab
+       let remainingTabs = Array.prototype.filter.call(
+         this.visibleTabs,
+-        tab => !excludeTabs.has(tab)
++        tab => !excludeTabs.has(tab) && ZenWorkspaces._shouldChangeToTab(tab)
+       );
+ 
+       let tab = this.tabContainer.findNextTab(aTab, {
 @@ -5181,7 +5346,7 @@
        }
  
