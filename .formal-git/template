@@ -1,1 +1,1 @@
-{type}: {bugId} - {message}, r={components}
+{type}: {message}, b=({bugId}), c={components}
