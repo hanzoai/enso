@@ -1379,6 +1379,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       }
       const browser = tab.linkedBrowser.closest('.browserSidebarContainer');
       if (active) {
+        tab.removeAttribute('pending');
         browser.setAttribute('zen-split', 'true');
 
         browser.addEventListener('dragstart', this.onBrowserDragStart);
