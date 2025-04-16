@@ -1,7 +1,7 @@
 diff --git a/browser/installer/windows/nsis/shared.nsh b/browser/installer/windows/nsis/shared.nsh
 old mode 100755
 new mode 100644
-index bc8f5775785e08a0cc1c8a6ad1f0e19e980c607d..bf11d30d10fb38855f6a0e8d5346be271042769e
+index bc8f5775785e08a0cc1c8a6ad1f0e19e980c607d..f45dd4d2b0623a4502bf63dd4e580faa674bd2bb
 --- a/browser/installer/windows/nsis/shared.nsh
 +++ b/browser/installer/windows/nsis/shared.nsh
 @@ -513,6 +513,7 @@ ${RemoveDefaultBrowserAgentShortcut}
@@ -28,6 +28,15 @@ index bc8f5775785e08a0cc1c8a6ad1f0e19e980c607d..bf11d30d10fb38855f6a0e8d5346be27
      ${WriteApplicationsSupportedType} ${RegKey} ".xht"
      ${WriteApplicationsSupportedType} ${RegKey} ".xhtml"
      ${WriteApplicationsSupportedType} ${RegKey} ".xml"
+@@ -878,7 +881,7 @@ ${RemoveDefaultBrowserAgentShortcut}
+     ${WriteRegStr2} $1 "$0" "DisplayVersion" "${AppVersion}" 0
+     ${WriteRegStr2} $1 "$0" "HelpLink" "${HelpLink}" 0
+     ${WriteRegStr2} $1 "$0" "InstallLocation" "$8" 0
+-    ${WriteRegStr2} $1 "$0" "Publisher" "Mozilla" 0
++    ${WriteRegStr2} $1 "$0" "Publisher" "Zen OSS Team" 0
+     ${WriteRegStr2} $1 "$0" "UninstallString" "$\"$8\uninstall\helper.exe$\"" 0
+     DeleteRegValue SHCTX "$0" "URLInfoAbout"
+ ; Don't add URLUpdateInfo which is the release notes url except for the release
 @@ -1727,6 +1730,8 @@ Function SetAsDefaultAppUserHKCU
      Pop $0
      AppAssocReg::SetAppAsDefault "$R9" ".avif" "file"
