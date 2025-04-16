@@ -1107,9 +1107,9 @@
       &::after {
         content: "";
         inset: -50%;
-        filter: blur(25px) brightness(1.8);
+        filter: blur(20px);
         position: absolute;
-        background-size: initial;
+        background-size: contain;
         background-clip: padding-box;
         background-image: var(--zen-tab-icon);
         z-index: -1;
@@ -1122,20 +1122,19 @@
       --zen-essential-bg-margin: 2px;
 
       &::before {
-        background: light-dark(rgba(255, 255, 255, 0.85), rgba(163, 163, 163, 0.65));
+        background: light-dark(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.65));
         margin: var(--zen-essential-bg-margin);
         border-radius: calc(var(--border-radius-medium) - var(--zen-essential-bg-margin));
         position: absolute;
         inset: 0;
         z-index: 0;
         content: "";
-        backdrop-filter: contrast(0.1);
         transition: background 0.1s ease-in-out;
       }
     }
 
     &[visuallyselected]:hover .tab-background::before {
-      background: light-dark(rgba(255, 255, 255, 0.80), rgba(150, 150, 150, 0.65));
+      background: light-dark(rgba(255, 255, 255, 0.80), rgba(255, 255, 255, 0.45));
     }
   }
 }
