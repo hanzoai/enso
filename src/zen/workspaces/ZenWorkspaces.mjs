@@ -2038,7 +2038,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       if (tab.hasAttribute('change-workspace') && this.moveTabToWorkspace(tab, workspaceID)) {
         this._lastSelectedWorkspaceTabs[workspaceID] = tab;
         tab.removeAttribute('change-workspace');
-        await this.changeWorkspace({ uuid: workspaceID }, { onInit: true });
+        await this.changeWorkspace({ uuid: workspaceID, containerTabId: tab.getAttribute('usercontextid') }, { onInit: true });
       }
       return;
     }
