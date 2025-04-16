@@ -112,6 +112,17 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   selectEmptyTab(newTabTarget = null) {
     if (this._emptyTab && gZenVerticalTabsManager._canReplaceNewTab) {
+      if (gBrowser.selectedTab !== this._emptyTab) {
+        window.addEventListener(
+          'TabSelect',
+          () => {
+            setTimeout(() => {
+              gURLBar.select();
+            }, 0);
+          },
+          { once: true }
+        );
+      }
       gBrowser.selectedTab = this._emptyTab;
       return this._emptyTab;
     }
