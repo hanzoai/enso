@@ -240,7 +240,11 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       // Add a min width to all the browser elements to prevent them from resizing
       const panelsWidth = gBrowser.tabbox.getBoundingClientRect().width;
       const halfWidth = panelsWidth / 2;
-      const side = event.clientX > halfWidth ? 'right' : 'left';
+      let threshold = gNavToolbox.getBoundingClientRect().width * (gZenVerticalTabsManager._prefsRightSide ? 0 : 1);
+      if (gZenCompactModeManager.preference) {
+        threshold = 0;
+      }
+      const side = (event.clientX - threshold) > halfWidth ? 'right' : 'left';
       for (const browser of gBrowser.browsers) {
         const width = browser.getBoundingClientRect().width;
         // Only apply it to the left side because if we add it to the right side,
@@ -326,7 +330,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       return;
     }
     const panelsWidth = panelsRect.width;
-    const halfWidth = panelsWidth / 2 + gNavToolbox.getBoundingClientRect().width;
+    const halfWidth = panelsWidth / 2;
     const padding = ZenThemeModifier.elementSeparation;
     if (!this.fakeBrowser) {
       return;
