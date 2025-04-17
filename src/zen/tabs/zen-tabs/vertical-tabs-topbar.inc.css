@@ -1,4 +1,5 @@
 height: var(--zen-toolbar-height);
+z-index: 1;
 
 @media -moz-pref('zen.view.hide-window-controls') {
   & {
@@ -15,7 +16,7 @@ height: var(--zen-toolbar-height);
 
   &:not([zen-has-hover='true']):not([has-popup-menu]):not(:focus-within):not(:has(*:is([panelopen='true'], [open='true']))) {
     transition-delay: 0.2s;
-    height: var(--zen-element-separation);
+    height: calc(var(--zen-element-separation) + 0.5px);
     overflow: hidden;
     opacity: 0;
     & > * {
