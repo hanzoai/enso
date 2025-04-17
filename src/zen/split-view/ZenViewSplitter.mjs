@@ -244,7 +244,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       if (gZenCompactModeManager.preference) {
         threshold = 0;
       }
-      const side = (event.clientX - threshold) > halfWidth ? 'right' : 'left';
+      const side = event.clientX - threshold > halfWidth ? 'right' : 'left';
       for (const browser of gBrowser.browsers) {
         const width = browser.getBoundingClientRect().width;
         // Only apply it to the left side because if we add it to the right side,
