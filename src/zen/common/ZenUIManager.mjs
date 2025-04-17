@@ -88,9 +88,11 @@ var gZenUIManager = {
     this.tabsWrapper.scrollTop = this._scrollbarState;
   },
 
-  onTabClose(event) {
-    this.updateTabsToolbar();
-    this.restoreScrollbarState();
+  onTabClose(event = undefined) {
+    if (!event?.target?._closedInMultiselection) {
+      this.updateTabsToolbar();
+      this.restoreScrollbarState();
+    }
   },
 
   openAndChangeToTab(url, options) {
