@@ -472,19 +472,15 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async _handleSwipeEnd(event) {
-    if (!this.workspaceEnabled || !this._swipeState?.isGestureActive) return;
+    if (!this.workspaceEnabled) return;
     event.preventDefault();
     event.stopPropagation();
     const isRTL = document.documentElement.matches(':-moz-locale-dir(rtl)');
-    const moveForward = (this._swipeState.direction === 'right') !== isRTL;
+    const moveForward = (event.direction === SimpleGestureEvent.DIRECTION_RIGHT) !== isRTL;
 
-    let rawDirection = moveForward ? 1 : -1;
-    if (this._swipeState.direction) {
-      let direction = this.naturalScroll ? -1 : 1;
-      this.changeWorkspaceShortcut(rawDirection * direction, true);
-    } else {
-      this._cancelSwipeAnimation();
-    }
+    const rawDirection = moveForward ? 1 : -1;
+    const direction = this.naturalScroll ? -1 : 1;
+    this.changeWorkspaceShortcut(rawDirection * direction, true);
 
     // Reset swipe state
     this._swipeState = {
