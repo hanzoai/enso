@@ -326,7 +326,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       return;
     }
     const panelsWidth = panelsRect.width;
-    const halfWidth = panelsWidth / 2;
+    const halfWidth = panelsWidth / 2 + gNavToolbox.getBoundingClientRect().width;
     const padding = ZenThemeModifier.elementSeparation;
     if (!this.fakeBrowser) {
       return;
