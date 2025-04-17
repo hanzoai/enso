@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 5f406ea5d09273c9b70b84eee24c6267f88692f8..c7c3f7a97c79ce2a298e0673d62587619c4d936b 100644
+index 5f406ea5d09273c9b70b84eee24c6267f88692f8..be8740305b28cfc7752ad8f48ca94e69f8d324d1 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -424,11 +424,67 @@
@@ -347,11 +347,12 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..c7c3f7a97c79ce2a298e0673d6258761
            if (!tabData.pinned) {
              this.unpinTab(tab);
            } else {
-@@ -3557,7 +3682,27 @@
+@@ -3557,8 +3682,28 @@
              skipLoad: true,
              preferredRemoteType,
            });
 -
+-          if (select) {
 +          if (tabData.zenWorkspace) {
 +            tab.setAttribute("zen-workspace-id", tabData.zenWorkspace);
 +          }
@@ -373,9 +374,10 @@ index 5f406ea5d09273c9b70b84eee24c6267f88692f8..c7c3f7a97c79ce2a298e0673d6258761
 +          if (tabData.zenPinnedEntry) {
 +            tab.setAttribute("zen-pinned-entry", tabData.zenPinnedEntry);
 +          }
-           if (select) {
++          if (select && !tabData.pinned) {
              tabToSelect = tab;
            }
+         }
 @@ -3570,8 +3715,8 @@
            // inserted in the DOM. If the tab is not yet in the DOM,
            // just insert it in the right place from the start.
