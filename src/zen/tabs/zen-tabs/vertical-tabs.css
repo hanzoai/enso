@@ -1122,7 +1122,7 @@
       --zen-essential-bg-margin: 2px;
 
       &::before {
-        background: light-dark(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.65));
+        background: light-dark(rgba(255, 255, 255, 0.85), rgba(68, 64, 64, 0.85));
         margin: var(--zen-essential-bg-margin);
         border-radius: calc(var(--border-radius-medium) - var(--zen-essential-bg-margin));
         position: absolute;
@@ -1134,7 +1134,7 @@
     }
 
     &[visuallyselected]:hover .tab-background::before {
-      background: light-dark(rgba(255, 255, 255, 0.80), rgba(255, 255, 255, 0.45));
+      background: light-dark(rgba(255, 255, 255, 0.80), rgba(68, 64, 64, 0.75));
     }
   }
 }

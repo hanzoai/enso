@@ -296,7 +296,6 @@
         --zen-toolbox-top-align: var(--zen-element-separation);
       }
 
-      & #sidebar-box,
       & #titlebar,
       & #zen-appcontent-wrapper,
       & #zen-sidebar-web-panel-wrapper:has(#zen-sidebar-web-panel:not([pinned='true'])) {
