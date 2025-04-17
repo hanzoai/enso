@@ -385,6 +385,7 @@
   }
 }
 
+/* Fix for https://github.com/zen-browser/desktop/issues/7615 */
 :root[zen-compact-mode='true']:not([customizing])[inDOMFullscreen='true'] {
   @media -moz-pref('zen.view.compact.hide-tabbar') or -moz-pref('zen.view.use-single-toolbar') {
     &:not([zen-compact-animating]) {
