@@ -466,10 +466,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       this._swipeState.direction = delta > 0 ? 'left' : 'right';
     }
 
-    if (Math.abs(translateX) >= 40) {
-      return this._handleSwipeEnd(event);
-    }
-
     // Apply a translateX to the tab strip to give the user feedback on the swipe
     const currentWorkspace = this.activeWorkspace;
     this._organizeWorkspaceStripLocations({ uuid: currentWorkspace }, true, translateX);
