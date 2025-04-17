@@ -111,6 +111,7 @@ jobs:
           set -x
           mkdir -p ~/win-cross
           cd engine/
+          sudo apt-get install python3-launchpadlib
           sudo add-apt-repository ppa:savoury1/backports
           sudo apt-get update
           sudo apt-get install -y python3-pip autoconf \
