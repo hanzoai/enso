@@ -3,118 +3,78 @@ var { Downloads } = ChromeUtils.importESModule('resource://gre/modules/Downloads
 {
   const CONFIG = Object.freeze({
     ANIMATION: {
-      APPEAR_DURATION: 400,
       FADE_DURATION: 300,
-      ARC_STEPS: 30,
-      DISTANCE_MULTIPLIER: 2, // Animation duration = distance * multiplier
-      MAX_ARC_HEIGHT: 200,
+      ARC_STEPS: 60,
+      DURATION: 1500,
+      MAX_ARC_HEIGHT: 500,
       ARC_HEIGHT_RATIO: 0.8, // Arc height = distance * ratio (capped at MAX_ARC_HEIGHT)
       SCALE_END: 0.5, // Final scale at destination
     },
-    FILE_TYPES: {
-      document: ['pdf', 'doc', 'docx', 'txt', 'rtf', 'odt', 'xls', 'xlsx', 'ppt', 'pptx'],
-      image: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp', 'tiff', 'ico'],
-      audio: ['mp3', 'wav', 'ogg', 'flac', 'aac', 'm4a', 'wma'],
-      video: ['mp4', 'webm', 'avi', 'mkv', 'mov', 'wmv', 'flv', 'm4v'],
-      archive: ['zip', 'rar', 'tar', 'gz', '7z', 'bz2', 'xz'],
-      application: ['exe', 'dmg', 'pkg', 'apk', 'msi', 'deb', 'rpm'],
-    },
   });
 
-  class ZenAnimationController {
-    constructor() {
+  class ZenDownloadAnimation extends ZenDOMOperatedFeature {
+    async init() {
       this._lastClickPosition = null;
       this._lastClickTime = 0;
-    }
-
-    async init() {
-      this._ensureAnimationComponent();
       this._setupClickListener();
-
-      console.log('Animation controller initialized');
-    }
-
-    _ensureAnimationComponent() {
-      if (!document.body) {
-        // Document not ready, try again later
-        setTimeout(() => this._ensureAnimationComponent(), 100);
-        return;
-      }
-
-      if (!document.querySelector('zen-download-animation')) {
-        const downloadAnimation = document.createElement('zen-download-animation');
-        document.body.appendChild(downloadAnimation);
-        console.log('Download animation component added to document body');
-      }
+      await this._setupDownloadListeners();
     }
 
     _setupClickListener() {
-      const handleClick = (event) => {
-        this._lastClickPosition = {
-          clientX: event.clientX,
-          clientY: event.clientY,
-        };
-      };
-
-      // Add regular click listener
-      document.addEventListener('click', handleClick, true);
-
-      // Add right-click (contextmenu) listener
-      document.addEventListener('contextmenu', handleClick, true);
-
-      // Track mousedown events for more reliable position capture
       document.addEventListener(
         'mousedown',
         (event) => {
-          // Only track right mouse button (button 2)
-          if (event.button === 2) {
-            handleClick(event);
-          }
+          this._lastClickPosition = {
+            clientX: event.clientX,
+            clientY: event.clientY,
+          };
         },
         true
       );
-
-      console.log('Global click and contextmenu listeners registered');
     }
 
-    getLastClickPosition() {
+    _getLastClickPosition() {
       if (this._lastClickPosition) {
         return this._lastClickPosition;
       }
       return null;
     }
 
-    getFileTypeFromPath(pathname) {
-      if (!pathname) return 'generic';
-
+    async _setupDownloadListeners() {
       try {
-        const extension = pathname.split('.').pop().toLowerCase();
-
-        // Check each file type category
-        for (const [type, extensions] of Object.entries(CONFIG.FILE_TYPES)) {
-          if (extensions.includes(extension)) {
-            return type;
-          }
-        }
+        const list = await Downloads.getList(Downloads.ALL);
+        list.addView({
+          onDownloadAdded: () => {
+            this._handleNewDownload();
+          },
+        });
       } catch (error) {
-        console.warn('Error parsing URL for file type:', error);
+        console.error('Failed to set up download listeners:', error);
+        throw error;
       }
-
-      return 'generic';
     }
 
-    animateDownload(startPosition, fileType) {
-      this._triggerAnimation(startPosition, fileType);
-    }
-
-    _triggerAnimation(startPosition, fileType) {
+    _animateDownload(startPosition) {
       const animationElement = document.querySelector('zen-download-animation');
       if (animationElement) {
-        animationElement.initializeAnimation(startPosition, fileType);
+        animationElement.initializeAnimation(startPosition);
       } else {
-        console.error('Animation component not found in the DOM');
-        this._ensureAnimationComponent();
+        if (!document.querySelector('zen-download-animation')) {
+          const downloadAnimation = document.createElement('zen-download-animation');
+          document.body.appendChild(downloadAnimation);
+        }
       }
+    }
+
+    _handleNewDownload() {
+      const clickPosition = this._getLastClickPosition();
+
+      if (!clickPosition) {
+        console.warn('No recent click position available for animation');
+        return;
+      }
+
+      this._animateDownload(clickPosition);
     }
   }
 
@@ -124,7 +84,6 @@ var { Downloads } = ChromeUtils.importESModule('resource://gre/modules/Downloads
       this.attachShadow({ mode: 'open' });
       this._createStyles();
     }
-
     _createStyles() {
       const style = document.createElement('style');
       style.textContent = `
@@ -141,76 +100,81 @@ var { Downloads } = ChromeUtils.importESModule('resource://gre/modules/Downloads
           position: absolute;
           width: 32px;
           height: 32px;
-          background-size: contain;
-          background-repeat: no-repeat;
-          background-position: center;
-          opacity: 0;
-          transform: translate(-50%, -50%);
-          will-change: transform, opacity;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 4px;
+          background-color: var(--zen-primary-color);
         }
-        .document {
-          background-image: url("chrome://browser/content/zen-images/downloads-icons/document.svg");
+        .download-animation-inner-circle {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background-color: black;
         }
-        .image {
-          background-image: url("chrome://browser/content/zen-images/downloads-icons/image.svg");
+        .download-animation-icon {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: var(--zen-primary-color);
+          -webkit-mask: url("chrome://browser/content/zen-images/downloads/download.svg") no-repeat center;
+          -webkit-mask-size: 70%;
+          mask: url("chrome://browser/content/zen-images/downloads/download.svg") no-repeat center;
+          mask-size: 70%;
         }
-        .audio {
-          background-image: url("chrome://browser/content/zen-images/downloads-icons/audio.svg");
-        }
-        .video {
-          background-image: url("chrome://browser/content/zen-images/downloads-icons/video.svg");
-        }
-        .archive {
-          background-image: url("chrome://browser/content/zen-images/downloads-icons/archive.svg");
-        }
-        .application {
-          background-image: url("chrome://browser/content/zen-images/downloads-icons/application.svg");
-        }
-        .generic {
-          background-image: url("chrome://browser/content/zen-images/downloads-icons/download.svg");
-        }
-      `;
+        `;
       this.shadowRoot.appendChild(style);
     }
 
-    initializeAnimation(startPosition, fileType) {
+    _createAnimationElement(startPosition) {
+      const animationElement = document.createElement('div');
+      animationElement.className = 'download-animation';
+      animationElement.style.position = 'absolute';
+      animationElement.style.left = `${startPosition.clientX}px`;
+      animationElement.style.top = `${startPosition.clientY}px`;
+      animationElement.style.transform = 'translate(-50%, -50%)';
+
+      const innerCircle = document.createElement('div');
+      innerCircle.className = 'download-animation-inner-circle';
+
+      const icon = document.createElement('div');
+      icon.className = 'download-animation-icon';
+
+      innerCircle.appendChild(icon);
+      animationElement.appendChild(innerCircle);
+      this.shadowRoot.appendChild(animationElement);
+      return animationElement;
+    }
+
+    initializeAnimation(startPosition) {
       if (!startPosition) {
-        console.log('No start position provided, skipping animation');
+        console.warn('No start position provided, skipping animation');
         return;
       }
 
-      // Find the download button
       const downloadsButton = document.getElementById('downloads-button');
+
       if (!downloadsButton) {
         console.warn('Downloads button not found, skipping animation');
         return;
       }
 
-      // Calculate end position (center of downloads button)
       const buttonRect = downloadsButton.getBoundingClientRect();
       const endPosition = {
         clientX: buttonRect.left + buttonRect.width / 2,
         clientY: buttonRect.top + buttonRect.height / 2,
       };
 
-      const animationElement = this._createAnimationElement(startPosition, fileType);
+      const animationElement = this._createAnimationElement(startPosition);
 
       const distance = this._calculateDistance(startPosition, endPosition);
       const arcHeight = Math.min(distance * CONFIG.ANIMATION.ARC_HEIGHT_RATIO, CONFIG.ANIMATION.MAX_ARC_HEIGHT);
 
-      this._runAnimationSequence(animationElement, startPosition, endPosition, distance, arcHeight, downloadsButton);
-    }
-
-    _createAnimationElement(startPosition, fileType) {
-      const animationElement = document.createElement('div');
-      animationElement.className = `download-animation ${fileType || 'generic'}`;
-      animationElement.style.position = 'absolute';
-      animationElement.style.left = `${startPosition.clientX}px`;
-      animationElement.style.top = `${startPosition.clientY}px`;
-      animationElement.style.opacity = '0';
-      animationElement.style.transform = 'translate(-50%, -50%)';
-      this.shadowRoot.appendChild(animationElement);
-      return animationElement;
+      this._runAnimationSequence(animationElement, startPosition, endPosition, arcHeight);
     }
 
     _calculateDistance(start, end) {
@@ -219,86 +183,90 @@ var { Downloads } = ChromeUtils.importESModule('resource://gre/modules/Downloads
       return Math.sqrt(distanceX * distanceX + distanceY * distanceY);
     }
 
-    _runAnimationSequence(element, start, end, distance, arcHeight, downloadsButton) {
+    _runAnimationSequence(element, start, end, arcHeight) {
       try {
         const distanceX = end.clientX - start.clientX;
         const distanceY = end.clientY - start.clientY;
 
-        this._runAnimation(element, distanceX, distanceY, distance, arcHeight, downloadsButton);
+        this._runAnimation(element, distanceX, distanceY, arcHeight);
       } catch (error) {
         console.error('Error in animation sequence:', error);
         this._cleanupAnimation(element);
       }
     }
 
-    _runAnimation(element, distanceX, distanceY, distance, arcHeight, downloadsButton) {
-      // Appear with a pop effect
-      gZenUIManager.motion.animate(
-        element,
-        {
-          opacity: [0, 1],
-          scale: [0.5, 1.2, 1],
-        },
-        {
-          duration: CONFIG.ANIMATION.APPEAR_DURATION / 1000, // Convert to seconds for motion module
-          ease: [0.34, 1.56, 0.64, 1], // Spring-like overshoot
-          onComplete: () => {
-            // Create the arc trajectory animation
-            this._createArcAnimation(element, distanceX, distanceY, distance, arcHeight).onfinish = () => {
-              // Add feedback to the downloads button
-              this._animateButtonFeedback(downloadsButton);
-
-              // Fade out the animation element
-              this._fadeOutAnimation(element);
-            };
-          },
-        }
-      );
+    _runAnimation(element, distanceX, distanceY, arcHeight) {
+      this._createArcAnimation(element, distanceX, distanceY, arcHeight).onfinish = () => {
+        this._fadeOutAnimation(element);
+      };
     }
 
-    _createArcAnimation(element, distanceX, distanceY, distance, arcHeight) {
+    _createArcAnimation(element, distanceX, distanceY, arcHeight) {
       const keyframes = [];
       const steps = CONFIG.ANIMATION.ARC_STEPS;
+      const endScale = CONFIG.ANIMATION.SCALE_END;
+
+      const opacityValues = [];
+      const scaleValues = [];
 
       for (let i = 0; i <= steps; i++) {
         const progress = i / steps;
 
-        // Calculate horizontal position (linear)
+        let opacity;
+        if (progress < 0.3) {
+          opacity = 0.3 + (progress / 0.3) * 0.6;
+        } else if (progress < 0.5) {
+          opacity = 0.9 + ((progress - 0.3) / 0.2) * 0.1;
+        } else {
+          opacity = 1;
+        }
+        opacityValues.push(opacity);
+
+        let scale;
+        if (progress < 0.3) {
+          scale = 0.5 + (progress / 0.3) * 0.5;
+        } else if (progress < 0.5) {
+          scale = 1 + ((progress - 0.3) / 0.2) * 0.05;
+        } else {
+          scale = 1.05 - ((progress - 0.5) / 0.5) * (1.05 - endScale);
+        }
+        scaleValues.push(scale);
+
         const x = distanceX * progress;
 
-        // Calculate vertical position (parabolic arc)
         const adjustedProgress = progress * 2 - 1; // -1 to 1
         const verticalOffset = -arcHeight * (1 - adjustedProgress * adjustedProgress);
         const y = distanceY * progress + verticalOffset;
 
-        // Scale down as it reaches the destination
-        let scale = 1 - (1 - CONFIG.ANIMATION.SCALE_END) * progress;
+        let rotation = 0;
+        let previousRotation = 0;
+
+        if (i > 0 && i < steps) {
+          const prevProgress = (i - 1) / steps;
+          const prevX = distanceX * prevProgress;
+          const prevAdjustedProgress = prevProgress * 2 - 1;
+          const prevVerticalOffset = -arcHeight * (1 - prevAdjustedProgress * prevAdjustedProgress);
+          const prevY = distanceY * prevProgress + prevVerticalOffset;
+
+          const targetRotation = Math.atan2(y - prevY, x - prevX) * (180 / Math.PI);
+
+          rotation = previousRotation + (targetRotation - previousRotation) * 0.1;
+
+          previousRotation = rotation;
+        }
 
         keyframes.push({
           offset: progress,
-          transform: `translate(calc(${x}px - 50%), calc(${y}px - 50%)) rotate(0deg) scale(${scale})`,
+          opacity: opacityValues[i],
+          transform: `translate(calc(${x}px - 50%), calc(${y}px - 50%)) rotate(${rotation}deg) scale(${scaleValues[i]})`,
         });
       }
 
       return element.animate(keyframes, {
-        duration: distance * CONFIG.ANIMATION.DISTANCE_MULTIPLIER,
+        duration: CONFIG.ANIMATION.DURATION,
         easing: 'cubic-bezier(0.37, 0, 0.63, 1)',
         fill: 'forwards',
       });
-    }
-
-    _animateButtonFeedback(button) {
-      button.animate(
-        [
-          { boxShadow: '0 0 0 0 rgba(0, 128, 255, 0)', transform: 'scale(1)' },
-          { boxShadow: '0 0 8px 2px rgba(0, 128, 255, 0.5)', transform: 'scale(1.08)' },
-          { boxShadow: '0 0 0 0 rgba(0, 128, 255, 0)', transform: 'scale(1)' },
-        ],
-        {
-          duration: 500,
-          easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-        }
-      );
     }
 
     _fadeOutAnimation(element) {
@@ -312,64 +280,6 @@ var { Downloads } = ChromeUtils.importESModule('resource://gre/modules/Downloads
       if (element && element.parentNode) {
         element.parentNode.removeChild(element);
       }
-    }
-  }
-
-  class ZenDownloadAnimation {
-    constructor() {
-      this.animationController = new ZenAnimationController();
-    }
-
-    async init() {
-      console.log('Initializing download manager...');
-
-      try {
-        // Initialize the animation controller
-        await this.animationController.init();
-
-        // Set up download listeners
-        await this._setupDownloadListeners();
-
-        console.log('Download animation initialized successfully');
-      } catch (error) {
-        console.error('Failed to initialize download animation:', error);
-      }
-    }
-
-    async _setupDownloadListeners() {
-      try {
-        const list = await Downloads.getList(Downloads.ALL);
-
-        list.addView({
-          onDownloadAdded: (download) => {
-            console.log('New download detected:', download);
-            this._handleNewDownload(download);
-          },
-        });
-
-        console.log('Download listeners set up successfully');
-      } catch (error) {
-        console.error('Failed to set up download listeners:', error);
-        throw error;
-      }
-    }
-
-    _handleNewDownload(download) {
-      // Get the last click position
-      const clickPosition = this.animationController.getLastClickPosition();
-
-      console.log('Download initiated:', download.source.url);
-
-      if (!clickPosition) {
-        console.log('No recent click position available for animation');
-        return;
-      }
-
-      // Get the file type from the URL
-      const fileType = this.animationController.getFileTypeFromPath(download.target.path);
-      console.log(`Animating download for ${fileType} file from ${download.source.url}`);
-
-      this.animationController.animateDownload(clickPosition, fileType);
     }
   }
 

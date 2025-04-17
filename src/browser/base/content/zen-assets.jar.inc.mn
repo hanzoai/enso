@@ -80,13 +80,7 @@
         content/browser/zen-images/grain-bg.png                                 (../../zen/images/grain-bg.png)
         content/browser/zen-images/note-indicator.svg                           (../../zen/images/note-indicator.svg)
 
-        content/browser/zen-images/downloads-icons/application.svg              (../../zen/images/downloads-icons/application.svg)
-        content/browser/zen-images/downloads-icons/archive.svg                  (../../zen/images/downloads-icons/archive.svg)
-        content/browser/zen-images/downloads-icons/audio.svg                    (../../zen/images/downloads-icons/audio.svg)
-        content/browser/zen-images/downloads-icons/document.svg                 (../../zen/images/downloads-icons/document.svg)
-        content/browser/zen-images/downloads-icons/download.svg                 (../../zen/images/downloads-icons/download.svg)
-        content/browser/zen-images/downloads-icons/image.svg                    (../../zen/images/downloads-icons/image.svg)
-        content/browser/zen-images/downloads-icons/video.svg                    (../../zen/images/downloads-icons/video.svg)
+        content/browser/zen-images/downloads/download.svg                       (../../zen/images/downloads/download.svg)
 
         # Fonts         
         content/browser/zen-fonts/JunicodeVF-Italic.woff2                       (../../zen/fonts/JunicodeVF-Italic.woff2)
