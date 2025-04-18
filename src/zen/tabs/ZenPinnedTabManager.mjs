@@ -195,15 +195,7 @@
           pinsToCreate.delete(pinId);
 
           if (lazy.zenPinnedTabRestorePinnedTabsToPinnedUrl && init) {
-            tab.addEventListener(
-              'SSTabRestored',
-              () => {
-                this._resetTabToStoredState(event.target);
-              },
-              {
-                once: true,
-              }
-            );
+            this._resetTabToStoredState(tab);
           }
         } else {
           // This is a pinned tab that no longer has a corresponding pin
@@ -566,7 +558,7 @@
       }
     }
 
-    async _resetTabToStoredState(tab) {
+    _resetTabToStoredState(tab) {
       const id = tab.getAttribute('zen-pin-id');
       if (!id) {
         return;
@@ -580,13 +572,19 @@
       const tabState = SessionStore.getTabState(tab);
       const state = JSON.parse(tabState);
 
-      state.entries = [
-        {
-          url: pin.url,
-          title: pin.title,
-          triggeringPrincipal_base64: lazy.E10SUtils.SERIALIZED_SYSTEMPRINCIPAL,
-        },
-      ];
+      const foundEntryIndex = state.entries?.findIndex((entry) => entry.url === pin.url);
+      if (!foundEntryIndex || foundEntryIndex === -1) {
+        state.entries = [
+          {
+            url: pin.url,
+            title: pin.title,
+            triggeringPrincipal_base64: lazy.E10SUtils.SERIALIZED_SYSTEMPRINCIPAL,
+          },
+        ];
+      } else {
+        // Remove everything except the entry we want to keep
+        state.entries = [state.entries[foundEntryIndex]];
+      }
 
       state.image = pin.iconUrl || null;
       state.index = 0;
