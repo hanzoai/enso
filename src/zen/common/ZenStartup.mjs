@@ -29,6 +29,7 @@
         }
 
         this._initSidebarScrolling();
+        this._hideUnusedElements();
 
         ZenWorkspaces.init();
         gZenVerticalTabsManager.init();
@@ -124,6 +125,18 @@
         const elem = document.getElementById(id);
         if (elem) {
           sidebarPanelWrapper.prepend(elem);
+        }
+      }
+    },
+
+    _hideUnusedElements() {
+      const kElements = [
+        'firefox-view-button',
+      ];
+      for (let id of kElements) {
+        const elem = document.getElementById(id);
+        if (elem) {
+          elem.setAttribute('hidden', 'true');
         }
       }
     },
