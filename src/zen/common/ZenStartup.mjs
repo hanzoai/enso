@@ -130,9 +130,7 @@
     },
 
     _hideUnusedElements() {
-      const kElements = [
-        'firefox-view-button',
-      ];
+      const kElements = ['firefox-view-button'];
       for (let id of kElements) {
         const elem = document.getElementById(id);
         if (elem) {

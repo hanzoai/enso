@@ -1,30 +1,29 @@
 diff --git a/browser/components/preferences/preferences.xhtml b/browser/components/preferences/preferences.xhtml
-index 951af951598c3edc9bc431dd106e68d006ec4316..eb420d6c5ea346639eee531805aabbe7726c7769 100644
+index 43be2b6ac84827bd13723e0211a3ade401934591..513584d7e720451efdb87350ac07d8b2590c1705 100644
 --- a/browser/components/preferences/preferences.xhtml
 +++ b/browser/components/preferences/preferences.xhtml
-@@ -43,6 +43,8 @@
-   />
+@@ -44,6 +44,8 @@
    <link rel="stylesheet" href="chrome://browser/skin/preferences/privacy.css" />
+   <link rel="stylesheet" href="chrome://browser/content/preferences/widgets/setting-group.css" />
  
 +#include zen-preferences-links.xhtml
 +
    <link rel="localization" href="branding/brand.ftl"/>
    <link rel="localization" href="browser/browser.ftl"/>
      <!-- Used by fontbuilder.js -->
-@@ -98,6 +100,12 @@
+@@ -105,6 +107,11 @@
    <hbox flex="1">
  
      <vbox class="navigation">
 +      <search-textbox
-+              id="searchInput"
-+              data-l10n-id="search-input-box2"
-+              data-l10n-attrs="placeholder, style"
-+              />
-+
++        id="searchInput"
++        data-l10n-id="search-input-box2"
++        data-l10n-attrs="placeholder, style"
++        />
        <!-- category list -->
        <richlistbox id="categories" data-l10n-id="category-list" data-l10n-attrs="aria-label">
          <richlistitem id="category-general"
-@@ -111,6 +119,50 @@
+@@ -117,6 +124,50 @@
            <label class="category-name" flex="1" data-l10n-id="pane-general-title"></label>
          </richlistitem>
  
@@ -75,21 +74,19 @@ index 951af951598c3edc9bc431dd106e68d006ec4316..eb420d6c5ea346639eee531805aabbe7
          <richlistitem id="category-home"
                        class="category"
                        value="paneHome"
-@@ -229,11 +281,13 @@
+@@ -228,11 +279,6 @@
                  <html:a href="about:policies" target="_blank" data-l10n-id="managed-notice"/>
                </hbox>
              </hbox>
-+#if 0
-             <search-textbox
-               id="searchInput"
-               data-l10n-id="search-input-box2"
-               data-l10n-attrs="placeholder, style"
-               />
-+#endif
+-            <search-textbox
+-              id="searchInput"
+-              data-l10n-id="search-input-box2"
+-              data-l10n-attrs="placeholder, style"
+-              />
            </hbox>
          </hbox>
          <vbox id="mainPrefPane">
-@@ -247,6 +301,10 @@
+@@ -246,6 +292,10 @@
  #include sync.inc.xhtml
  #include experimental.inc.xhtml
  #include moreFromMozilla.inc.xhtml
