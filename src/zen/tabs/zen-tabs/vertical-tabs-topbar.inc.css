@@ -16,7 +16,7 @@ z-index: 1;
 
   &:not([zen-has-hover='true']):not([has-popup-menu]):not(:focus-within):not(:has(*:is([panelopen='true'], [open='true']))) {
     transition-delay: 0.2s;
-    height: calc(var(--zen-element-separation) + 0.5px);
+    height: var(--zen-element-separation);
     overflow: hidden;
     opacity: 0;
     & > * {
