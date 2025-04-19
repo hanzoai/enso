@@ -110,9 +110,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     );
   }
 
-  selectEmptyTab(newTabTarget = null) {
+  selectEmptyTab(newTabTarget = null, selectURLBar = true) {
     if (this._emptyTab && gZenVerticalTabsManager._canReplaceNewTab) {
-      if (gBrowser.selectedTab !== this._emptyTab) {
+      if (gBrowser.selectedTab !== this._emptyTab && selectURLBar) {
         window.addEventListener(
           'TabSelect',
           () => {
@@ -1745,7 +1745,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       !onInit
     ) {
       prevTabUsed = gBrowser.selectedTab;
-      this.selectEmptyTab();
+      this.selectEmptyTab(null, false);
     }
     for (const tab of hiddenTabs) {
       gBrowser.hideTab(tab, undefined, true);
