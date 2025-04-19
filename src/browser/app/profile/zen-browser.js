@@ -475,4 +475,5 @@ pref("layers.gpu-process.enabled", true);
 
 // Picture-in-picture
 pref("media.videocontrols.picture-in-picture.video-toggle.enabled", true);
-pref("media.videocontrols.picture-in-picture.enable-when-switching-tabs.enabled", true);
+// TODO: Enable once we have a proper settings page
+pref("media.videocontrols.picture-in-picture.enable-when-switching-tabs.enabled", false);

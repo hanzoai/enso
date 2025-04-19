@@ -1,5 +1,5 @@
 diff --git a/browser/components/preferences/main.inc.xhtml b/browser/components/preferences/main.inc.xhtml
-index cdcf50ec1bc4a54c69f5baf4a6d40ab0c63a8121..105c008447377dbd48ff91c90586aa8981e407f5 100644
+index cdcf50ec1bc4a54c69f5baf4a6d40ab0c63a8121..87603323c2b0b9ea0c847a8a06e293a16c1252b8 100644
 --- a/browser/components/preferences/main.inc.xhtml
 +++ b/browser/components/preferences/main.inc.xhtml
 @@ -183,6 +183,7 @@
@@ -26,12 +26,3 @@ index cdcf50ec1bc4a54c69f5baf4a6d40ab0c63a8121..105c008447377dbd48ff91c90586aa89
  
    <checkbox id="useSystemLocale" hidden="true"
              data-l10n-id="use-system-locale"
-@@ -795,7 +798,7 @@
-     <checkbox id="pictureInPictureToggleEnabled"
-             class="tail-with-learn-more"
-             data-l10n-id="browsing-picture-in-picture-toggle-enabled"
--            preference="media.videocontrols.picture-in-picture.video-toggle.enabled"/>
-+            preference="media.videocontrols.picture-in-picture.enabled"/>
-     <html:a is="moz-support-link"
-           data-l10n-id="browsing-picture-in-picture-learn-more"
-           support-page="picture-in-picture"
