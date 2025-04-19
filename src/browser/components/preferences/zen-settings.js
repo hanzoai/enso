@@ -1024,4 +1024,9 @@ Preferences.addAll([
     type: 'bool',
     default: true,
   },
+  {
+    id: 'media.videocontrols.picture-in-picture.enabled',
+    type: 'bool',
+    default: true,
+  },
 ]);

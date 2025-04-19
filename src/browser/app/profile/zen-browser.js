@@ -475,3 +475,4 @@ pref("layers.gpu-process.enabled", true);
 
 // Picture-in-picture
 pref("media.videocontrols.picture-in-picture.video-toggle.enabled", true);
+pref("media.videocontrols.picture-in-picture.enable-when-switching-tabs.enabled", true);
