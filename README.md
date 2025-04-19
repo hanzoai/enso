@@ -85,7 +85,7 @@ winget install --id Zen-Team.Zen-Browser
 You can also install Zen using Homebrew:
 
 ```
-brew install --cask zen-browser
+brew install zen-browser
 ```
 
 #### Linux
