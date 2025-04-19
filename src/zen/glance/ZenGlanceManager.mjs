@@ -271,7 +271,7 @@
       this.closingGlance = true;
       this._animating = true;
 
-      gBrowser._insertTabAtIndex(this.#currentTab, {
+      gBrowser.zenInsertTabAtIndex(this.#currentTab, {
         index: this.getTabPosition(this.#currentParentTab),
       });
 
@@ -564,7 +564,7 @@
       this.animatingFullOpen = true;
       this.#currentTab.setAttribute('zen-dont-split-glance', true);
 
-      gBrowser._insertTabAtIndex(this.#currentTab, {
+      gBrowser.zenInsertTabAtIndex(this.#currentTab, {
         index: this.getTabPosition(this.#currentTab),
       });
 
