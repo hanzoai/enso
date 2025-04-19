@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index bfba253af3253a8cf547a5d69a1695651fc5c203..fca9c6c918f7d2353edd4f675dd19ca4c4208a50 100644
+index bfba253af3253a8cf547a5d69a1695651fc5c203..1ba8b8c51f27d92222f1e682681cf9c9f61ca14c 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -415,11 +415,67 @@
@@ -638,8 +638,8 @@ index bfba253af3253a8cf547a5d69a1695651fc5c203..fca9c6c918f7d2353edd4f675dd19ca4
          }
        }
 -
-+      if (tab.group?.hasAttribute("split-view-group")) {
-+        tab = tab.group;
++      if (element.group?.hasAttribute("split-view-group")) {
++        element = element.group;
 +      }
        // Don't allow mixing pinned and unpinned tabs.
        if (element.pinned && !targetElement?.pinned) {
@@ -652,7 +652,7 @@ index bfba253af3253a8cf547a5d69a1695651fc5c203..fca9c6c918f7d2353edd4f675dd19ca4
 +        targetElement = targetElement.group;
 +      }
        let getContainer = () => {
-+        if (tab.hasAttribute("zen-essential")) {
++        if (element.hasAttribute("zen-essential")) {
 +          return document.getElementById("zen-essentials-container");
 +        }
          if (element.pinned && this.tabContainer.verticalMode) {

@@ -1,20 +1,13 @@
 diff --git a/browser/themes/windows/browser.css b/browser/themes/windows/browser.css
-index 9af78803f0005a2b89e1c73f52153ed4d9e3154a..b63dc3d050144f048ac6a326acd57cc85fa8a3a7 100644
+index 3e75a5f366e76acf4b9457a510b58b0cb8af580f..4962151f34ff52e8d009b82a9a12da99c4745a7a 100644
 --- a/browser/themes/windows/browser.css
 +++ b/browser/themes/windows/browser.css
-@@ -40,14 +40,13 @@
-          * override these on the tabs toolbar because the accent color is
-          * arbitrary, so the hardcoded colors from browser-custom-colors might
-          * not provide sufficient contrast. */
--        --toolbarbutton-icon-fill: currentColor;
-         --toolbarbutton-hover-background: color-mix(in srgb, currentColor 17%, transparent);
-         --toolbarbutton-active-background: color-mix(in srgb, currentColor 30%, transparent);
+@@ -57,7 +57,7 @@
        }
      }
  
-     &[sizemode="normal"] #navigator-toolbox {
--      border-top: .5px solid ActiveBorder;
-+      /* border-top: .5px solid ActiveBorder; Zen: Remove annoying top border, dont remove */
+-    &[sizemode="normal"] #navigator-toolbox {
++    &[sizemode="normal"] #browser {
+       border-top: .5px solid ActiveBorder;
        &:-moz-window-inactive {
          border-top-color: InactiveBorder;
-       }

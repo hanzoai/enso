@@ -187,7 +187,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       if (!draggedTab || gBrowser.selectedTab.hasAttribute('zen-empty-tab')) {
         return;
       }
-      draggedTab.container._finishMoveTogetherSelectedTabs(draggedTab);
+      draggedTab.container.finishMoveTogetherSelectedTabs(draggedTab);
     }
     if (
       !draggedTab ||
