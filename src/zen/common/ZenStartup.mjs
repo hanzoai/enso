@@ -117,8 +117,7 @@
       const kElementsToAppend = ['sidebar-splitter', 'sidebar-box'];
 
       const browser = document.getElementById('browser');
-      const toolbox = document.getElementById('navigator-toolbox');
-      browser.prepend(toolbox);
+      browser.prepend(gNavToolbox);
 
       const sidebarPanelWrapper = document.getElementById('tabbrowser-tabbox');
       for (let id of kElementsToAppend) {

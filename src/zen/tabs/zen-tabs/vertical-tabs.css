@@ -1062,7 +1062,6 @@
   min-width: calc(100% + var(--zen-toolbox-padding) * 2);
   padding: 0 var(--zen-toolbox-padding);
 
-  transform: none !important; /* TODO: Animate essentials transition */
   display: grid;
   &[hidden='true'] {
     opacity: 0;

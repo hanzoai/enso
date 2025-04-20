@@ -343,11 +343,12 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   get _hoveringSidebar() {
-    return document.getElementById('navigator-toolbox').hasAttribute('zen-has-hover');
+    return gNavToolbox.hasAttribute('zen-has-hover');
   }
 
   _handleAppCommand(event) {
-    if (!this.workspaceEnabled || !this._hoveringSidebar) {
+    // note: Dont use this._hoveringSidebar as it's not as reliable as checking for :hover
+    if (!this.workspaceEnabled || !gNavToolbox.matches(':hover')) {
       return;
     }
 
@@ -368,7 +369,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   _setupSidebarHandlers() {
-    const toolbox = document.getElementById('navigator-toolbox');
+    const toolbox = gNavToolbox;
 
     const scrollCooldown = 200; // Milliseconds to wait before allowing another scroll
     const scrollThreshold = 2; // Minimum scroll delta to trigger workspace change
@@ -419,7 +420,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   initializeGestureHandlers() {
     const elements = [
-      document.getElementById('navigator-toolbox'),
+      gNavToolbox,
       // event handlers do not work on elements inside shadow DOM so we need to attach them directly
       document.getElementById('tabbrowser-arrowscrollbox').shadowRoot.querySelector('scrollbox'),
     ];
@@ -1739,6 +1740,26 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     const animations = [];
     const workspaces = await this._workspaces();
     const newWorkspaceIndex = workspaces.workspaces.findIndex((w) => w.uuid === newWorkspace.uuid);
+    const clonedEssentials = [];
+    const essentialsContainerMap = {};
+    if (shouldAnimate) {
+      for (const workspace of workspaces.workspaces) {
+        const essentialsContainer = this.getEssentialsSection(workspace.containerTabId);
+        essentialsContainer.setAttribute('hidden', 'true');
+        const essentialsClone = essentialsContainer.cloneNode(true);
+        essentialsClone.removeAttribute('hidden');
+        clonedEssentials.push({
+          container: essentialsClone,
+          workspaceId: workspace.uuid,
+          contextId: workspace.containerTabId,
+          originalContainer: essentialsContainer,
+          repeat: 0
+        });
+        essentialsContainer.parentNode.appendChild(essentialsClone);
+        // +0 to convert null to 0
+        essentialsContainerMap[workspace.containerTabId + 0] = essentialsContainer;
+      }
+    }
     for (const element of document.querySelectorAll('.zen-workspace-tabs-section')) {
       if (element.classList.contains('zen-essentials-container')) {
         continue;
@@ -1763,6 +1784,26 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
             }
           )
         );
+        if (element.parentNode.id === 'zen-current-workspace-indicator-container') {
+          // Get essential container clone for this workspace
+          const clonedEssential = clonedEssentials.find((cloned) => cloned.workspaceId === elementWorkspaceId);
+          if (clonedEssential && !clonedEssential.animating) {
+            clonedEssential.animating = true; // Avoid motion hanging due to animating the same element twice
+            animations.push(
+              gZenUIManager.motion.animate(
+                clonedEssential.container,
+                {
+                  transform: existingTransform ? [existingTransform, newTransform] : newTransform,
+                },
+                {
+                  type: 'spring',
+                  bounce: 0,
+                  duration: kGlobalAnimationDuration,
+                }
+              )
+            );
+          }
+        }
       }
       if (offset === 0) {
         element.setAttribute('active', 'true');
@@ -1774,6 +1815,15 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       }
     }
     await Promise.all(animations);
+    if (shouldAnimate) {
+      for (const cloned of clonedEssentials) {
+        cloned.container.remove();
+      }
+    }
+    const essentialsContainer = this.getEssentialsSection(newWorkspace.containerTabId);
+    essentialsContainer.removeAttribute('hidden');
+    essentialsContainer.style.transform = 'none';
+    gBrowser.tabContainer._invalidateCachedTabs();
     this._animatingChange = false;
   }
 

@@ -28,7 +28,7 @@ var gZenUIManager = {
         gZenCompactModeManager.getAndApplySidebarWidth.bind(gZenCompactModeManager),
         this.sidebarHeightThrottle
       )
-    ).observe(document.getElementById('navigator-toolbox'));
+    ).observe(gNavToolbox);
 
     SessionStore.promiseAllWindowsRestored.then(() => {
       this._hasLoadedDOM = true;
@@ -322,11 +322,7 @@ var gZenVerticalTabsManager = {
   },
 
   get navigatorToolbox() {
-    if (this._navigatorToolbox) {
-      return this._navigatorToolbox;
-    }
-    this._navigatorToolbox = document.getElementById('navigator-toolbox');
-    return this._navigatorToolbox;
+    return gNavToolbox;
   },
 
   initRightSideOrderContextMenu() {
@@ -678,7 +674,7 @@ var gZenVerticalTabsManager = {
 
   _updateMaxWidth() {
     const maxWidth = Services.prefs.getIntPref('zen.view.sidebar-expanded.max-width');
-    const toolbox = document.getElementById('navigator-toolbox');
+    const toolbox = gNavToolbox;
     if (!this._prefsCompactMode) {
       toolbox.style.maxWidth = `${maxWidth}px`;
     } else {

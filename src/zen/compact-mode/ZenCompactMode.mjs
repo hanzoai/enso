@@ -88,10 +88,7 @@ var gZenCompactModeManager = {
   },
 
   get sidebar() {
-    if (!this._sidebar) {
-      this._sidebar = document.getElementById('navigator-toolbox');
-    }
-    return this._sidebar;
+    return gNavToolbox;
   },
 
   flashSidebarIfNecessary(aInstant = false) {
