@@ -195,7 +195,7 @@ var ZenWorkspacesStorage = {
       name: row.getResultByName('name'),
       icon: row.getResultByName('icon'),
       default: !!row.getResultByName('is_default'),
-      containerTabId: row.getResultByName('container_id'),
+      containerTabId: row.getResultByName('container_id') ?? 0,
       position: row.getResultByName('position'),
       theme: row.getResultByName('theme_type')
         ? {

@@ -497,7 +497,7 @@
     position: relative;
   }
 
-  & #zen-essentials-container {
+  & #zen-essentials-wrapper {
     --tab-min-height: 44px;
   }
 
@@ -650,7 +650,7 @@
     opacity: .4;
     align-items: center;
   }
-  & #zen-essentials-container {
+  & .zen-essentials-container {
     justify-content: center;
   }
   & #vertical-tabs-newtab-button {
@@ -1045,24 +1045,32 @@
 
 
 /* Mark: Essentials Toolbar */
-#zen-essentials-container {
+#zen-essentials-wrapper {
+  margin-left: calc(-1 * var(--zen-toolbox-padding));
+  min-width: calc(100% + var(--zen-toolbox-padding) * 2);
+}
+
+.zen-essentials-container {
   padding-bottom: var(--zen-toolbox-padding);
   overflow: hidden;
   gap: calc(var(--zen-toolbox-padding) - 2px);
-}
-
-#zen-essentials-container {
-  overflow: hidden;
   transition: max-height 0.3s ease-out;
   opacity: 1;
   grid-template-columns: repeat(auto-fit, minmax(49px, auto));
   overflow: hidden;
   scrollbar-width: thin;
+  min-width: calc(100% + var(--zen-toolbox-padding) * 2);
+  padding: 0 var(--zen-toolbox-padding);
+
+  transform: none !important; /* TODO: Animate essentials transition */
   display: grid;
-  padding: 0;
+  &[hidden='true'] {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
-#zen-essentials-container > .tabbrowser-tab,
+.zen-essentials-container > .tabbrowser-tab,
 #zen-welcome-initial-essentials-browser-sidebar-essentials .tabbrowser-tab {
   --toolbarbutton-inner-padding: 0;
   max-width: unset;
@@ -1240,15 +1248,6 @@
   }
 }
 
-/* Horizontal tabs reordering indicators */
-#zen-essentials-container .tabbrowser-tab.drag-over-before {
-  box-shadow: 3px 0 6px -2px var(--toolbarbutton-active-background, rgba(0, 255, 0, 0.2));
-}
-
-#zen-essentials-container .tabbrowser-tab.drag-over-after {
-  box-shadow: -3px 0 6px -2px var(--toolbarbutton-active-background, rgba(0, 255, 0, 0.2));
-}
-
 /* Renaming tabs */
 .tab-label-container-editing {
   display: none !important;
@@ -1267,9 +1266,12 @@
 .zen-workspace-tabs-section {
   position: absolute;
   transform: translateX(-100%);
-  min-width: calc(100% - var(--zen-toolbox-padding) * 2);
 
-  &:not(.zen-current-workspace-indicator) {
+  &:not(.zen-essentials-container) {
+    min-width: calc(100% - var(--zen-toolbox-padding) * 2);
+  }
+
+  &:not(.zen-current-workspace-indicator):not(.zen-essentials-container) {
     margin: 0 var(--zen-toolbox-padding);
   }
 }
