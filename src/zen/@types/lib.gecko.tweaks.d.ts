@@ -17,21 +17,21 @@ interface ChromeWindow extends Window {
 }
 
 interface Document {
-  createXULElement(name: "browser"): XULBrowserElement;
+  createXULElement(name: 'browser'): XULBrowserElement;
 }
 
 type nsIGleanPingNoReason = {
-  [K in keyof nsIGleanPing]: K extends "submit" ? (_?: never) => void : nsIGleanPing[K];
-}
+  [K in keyof nsIGleanPing]: K extends 'submit' ? (_?: never) => void : nsIGleanPing[K];
+};
 
 type nsIGleanPingWithReason<T> = {
-  [K in keyof nsIGleanPing]: K extends "submit" ? (reason: T) => void : nsIGleanPing[K];
-}
+  [K in keyof nsIGleanPing]: K extends 'submit' ? (reason: T) => void : nsIGleanPing[K];
+};
 
 interface MessageListenerManagerMixin {
   // Overloads that define `data` arg as required, since it's ~always expected.
-  addMessageListener(msg: string, listener: { receiveMessage(_: ReceiveMessageArgument & { data })});
-  removeMessageListener(msg: string, listener: { receiveMessage(_: ReceiveMessageArgument & { data })});
+  addMessageListener(msg: string, listener: { receiveMessage(_: ReceiveMessageArgument & { data }) });
+  removeMessageListener(msg: string, listener: { receiveMessage(_: ReceiveMessageArgument & { data }) });
 }
 
 interface MozQueryInterface {
@@ -52,31 +52,30 @@ interface nsISupports {
 }
 
 interface nsIXPCComponents_Constructor {
-  <const T, IIDs = nsIXPCComponents_Interfaces>(cid, id: T, init?): {
+  <const T, IIDs = nsIXPCComponents_Interfaces>(
+    cid,
+    id: T,
+    init?
+  ): {
     new (...any): nsQIResult<T extends keyof IIDs ? IIDs[T] : T>;
     (...any): nsQIResult<T extends keyof IIDs ? IIDs[T] : T>;
-  }
+  };
 }
 
 interface ComponentsExceptionOptions {
-  result?: number,
-  stack?: nsIStackFrame,
-  data?: object,
+  result?: number;
+  stack?: nsIStackFrame;
+  data?: object;
 }
 
 interface nsIException extends Exception {}
 
 interface nsIXPCComponents_Exception {
-  (
-    message?: string,
-    resultOrOptions?: number | ComponentsExceptionOptions,
-    stack?: nsIStackFrame,
-    data?: object
-  ): nsIException;
+  (message?: string, resultOrOptions?: number | ComponentsExceptionOptions, stack?: nsIStackFrame, data?: object): nsIException;
 }
 
 interface nsIXPCComponents_ID {
-  (uuid: string): nsID
+  (uuid: string): nsID;
 }
 
 interface nsIXPCComponents_utils_Sandbox {
@@ -87,7 +86,7 @@ interface nsXPCComponents_Classes {
   [cid: string]: {
     createInstance<T>(aID: T): nsQIResult<T>;
     getService<T>(aID?: T): unknown extends T ? nsISupports : nsQIResult<T>;
-  }
+  };
 }
 
 // Generic overloads.

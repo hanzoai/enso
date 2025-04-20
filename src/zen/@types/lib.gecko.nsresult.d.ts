@@ -5,7 +5,6 @@
  */
 
 interface nsIXPCComponents_Results {
-
   // Error Message definitions.
 
   // xpconnect specific codes (from nsIXPConnect.h)
