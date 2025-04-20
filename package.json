@@ -43,6 +43,7 @@
     "@zen-browser/surfer": "^1.11.7"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.27.0",
     "formal-git": "^1.1.5",
     "husky": "^9.1.7",
     "lint-staged": "^15.3.0",
