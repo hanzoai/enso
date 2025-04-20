@@ -73,7 +73,10 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       'zen.workspaces.open-new-tab-if-last-unpinned-tab-is-closed',
       false
     );
-    this.containerSpecificEssentials = Services.prefs.getBoolPref('zen.workspaces.container-specific-essentials-enabled', false);
+    this.containerSpecificEssentials = Services.prefs.getBoolPref(
+      'zen.workspaces.container-specific-essentials-enabled',
+      false
+    );
     ChromeUtils.defineLazyGetter(this, 'tabContainer', () => document.getElementById('tabbrowser-tabs'));
     this._activeWorkspace = Services.prefs.getStringPref('zen.workspaces.active', '');
 
@@ -1618,11 +1621,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     // Second pass: Handle tab selection
     this.tabContainer._invalidateCachedTabs();
-    const tabToSelect = await this._handleTabSelection(
-      window,
-      onInit,
-      previousWorkspace.uuid
-    );
+    const tabToSelect = await this._handleTabSelection(window, onInit, previousWorkspace.uuid);
 
     // Update UI and state
     await this._updateWorkspaceState(window, onInit, tabToSelect);
@@ -1661,10 +1660,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         gZenUIManager.motion.animate(
           arrowscrollbox,
           {
-            marginTop: [
-              arrowscrollbox.style.marginTop,
-              arrowMarginTop
-            ]
+            marginTop: [arrowscrollbox.style.marginTop, arrowMarginTop],
           },
           {
             type: 'spring',
@@ -1697,9 +1693,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       }
     }
     // Hide other essentials with different containerTabId
-    const otherContainersEssentials = document.querySelectorAll(
-      `#zen-essentials-wrapper .zen-workspace-tabs-section`
-    );
+    const otherContainersEssentials = document.querySelectorAll(`#zen-essentials-wrapper .zen-workspace-tabs-section`);
     for (const container of otherContainersEssentials) {
       if (container.getAttribute('container') != workspace.containerTabId) {
         container.setAttribute('hidden', 'true');
@@ -1753,7 +1747,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
           workspaceId: workspace.uuid,
           contextId: workspace.containerTabId,
           originalContainer: essentialsContainer,
-          repeat: 0
+          repeat: 0,
         });
         essentialsContainer.parentNode.appendChild(essentialsClone);
         // +0 to convert null to 0
