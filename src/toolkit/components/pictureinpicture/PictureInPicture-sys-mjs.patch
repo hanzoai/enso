@@ -6,7 +6,7 @@ index 5da0404b2672ba8cce7bcf808bf2373474776654..6a22fce1212bd6ac6bdd4962b8247c3d
          if (browser.ownerGlobal.gBrowser.selectedBrowser == browser) {
            break;
          }
-+        if (browser.ownerGlobal.gBrowser.getTabForBrowser(browser).muted) {
++        if (browser.audioMuted) {
 +          break;
 +        }
          let actor = browsingContext.currentWindowGlobal.getActor(
