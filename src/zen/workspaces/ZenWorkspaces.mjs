@@ -255,7 +255,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (!this.containerSpecificEssentials) {
       container = 0;
     }
-    let essentialsContainer = document.querySelector(`.zen-essentials-container[container="${container}"]`);
+    let essentialsContainer = document.querySelector(`.zen-essentials-container[container="${container}"]:not([clone])`);
     if (!essentialsContainer) {
       essentialsContainer = document.createXULElement('vbox');
       essentialsContainer.className = 'zen-essentials-container zen-workspace-tabs-section';
@@ -657,7 +657,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (this._initialTab) {
       this.moveTabToWorkspace(this._initialTab, this.activeWorkspace);
       gBrowser.selectedTab = this._initialTab;
-      gBrowser.moveTabTo(this._initialTab, 0, { forceUngrouped: true });
+      gBrowser.moveTabTo(this._initialTab, { forceUngrouped: true, tabIndex: 0 });
       this._initialTab._possiblyEmpty = false;
       this._initialTab = null;
     }
@@ -1735,23 +1735,26 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     const workspaces = await this._workspaces();
     const newWorkspaceIndex = workspaces.workspaces.findIndex((w) => w.uuid === newWorkspace.uuid);
     const clonedEssentials = [];
-    const essentialsContainerMap = {};
-    if (shouldAnimate) {
+    if (shouldAnimate && this.containerSpecificEssentials) {
       for (const workspace of workspaces.workspaces) {
         const essentialsContainer = this.getEssentialsSection(workspace.containerTabId);
+        if (clonedEssentials[clonedEssentials.length - 1]?.contextId == workspace.containerTabId) {
+          clonedEssentials[clonedEssentials.length - 1].repeat++;
+          clonedEssentials[clonedEssentials.length - 1].workspaces.push(workspace);
+          continue;
+        }
         essentialsContainer.setAttribute('hidden', 'true');
         const essentialsClone = essentialsContainer.cloneNode(true);
         essentialsClone.removeAttribute('hidden');
+        essentialsClone.setAttribute('cloned', 'true');
         clonedEssentials.push({
           container: essentialsClone,
-          workspaceId: workspace.uuid,
+          workspaces: [workspace],
           contextId: workspace.containerTabId,
           originalContainer: essentialsContainer,
           repeat: 0,
         });
         essentialsContainer.parentNode.appendChild(essentialsClone);
-        // +0 to convert null to 0
-        essentialsContainerMap[workspace.containerTabId + 0] = essentialsContainer;
       }
     }
     for (const element of document.querySelectorAll('.zen-workspace-tabs-section')) {
@@ -1778,26 +1781,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
             }
           )
         );
-        if (element.parentNode.id === 'zen-current-workspace-indicator-container') {
-          // Get essential container clone for this workspace
-          const clonedEssential = clonedEssentials.find((cloned) => cloned.workspaceId === elementWorkspaceId);
-          if (clonedEssential && !clonedEssential.animating) {
-            clonedEssential.animating = true; // Avoid motion hanging due to animating the same element twice
-            animations.push(
-              gZenUIManager.motion.animate(
-                clonedEssential.container,
-                {
-                  transform: existingTransform ? [existingTransform, newTransform] : newTransform,
-                },
-                {
-                  type: 'spring',
-                  bounce: 0,
-                  duration: kGlobalAnimationDuration,
-                }
-              )
-            );
-          }
-        }
       }
       if (offset === 0) {
         element.setAttribute('active', 'true');
@@ -1806,6 +1789,58 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         }
       } else {
         element.removeAttribute('active');
+      }
+    }
+    if (this.containerSpecificEssentials) {
+      // Animate essentials
+      for (const cloned of clonedEssentials) {
+        const container = cloned.container;
+        const essentialsWorkspacess = cloned.workspaces;
+        const repeats = cloned.repeat;
+        const containerId = cloned.contextId;
+        // Animate like the workspaces above expect essentials are a bit more
+        // complicated because they are not based on workspaces but on containers
+        // So, if we have the following arangement:
+        //  | [workspace1] [workspace2] [workspace3] [workspace4]
+        //  | [container1] [container1] [container2] [container1]
+        // And if we are changing from workspace 1 to workspace 4,
+        // we should be doing the following:
+        // First container (repeat 2 times) will stay in place until
+        // we reach container 3, then animate to the left and container 2
+        // also move to the left after that while container 1 in workspace 4
+        // will slide in from the right
+
+        // Get the index from first and last workspace
+        const firstWorkspaceIndex = workspaces.workspaces.findIndex((w) => w.uuid === essentialsWorkspacess[0].uuid);
+        const lastWorkspaceIndex = workspaces.workspaces.findIndex(
+          (w) => w.uuid === essentialsWorkspacess[essentialsWorkspacess.length - 1].uuid
+        );
+        const isGoingLeft = newWorkspaceIndex > lastWorkspaceIndex;
+        const isGoingInsideSameContainer = essentialsWorkspacess.some((w) => w.uuid === newWorkspace.uuid);
+        if (isGoingInsideSameContainer) {
+          continue; // We dont want to animate if we are going inside the same container
+        }
+        const firstOffset = -(newWorkspaceIndex - firstWorkspaceIndex - (isGoingLeft ? repeats : -repeats)) * 100;
+        const lastOffset = -(newWorkspaceIndex - lastWorkspaceIndex - (isGoingLeft ? repeats : -repeats)) * 100;
+        const newTransform = `translateX(${firstOffset}%)`;
+        const existingTransform = `translateX(${lastOffset}%)`;
+        const stepsInBetween = Math.abs(lastWorkspaceIndex - firstWorkspaceIndex);
+        if (shouldAnimate) {
+          container.style.transform = newTransform;
+          animations.push(
+            gZenUIManager.motion.animate(
+              container,
+              {
+                transform: [existingTransform, new Array(stepsInBetween).fill(newTransform).join(',')],
+              },
+              {
+                type: 'spring',
+                bounce: 0,
+                duration: kGlobalAnimationDuration,
+              }
+            )
+          );
+        }
       }
     }
     await Promise.all(animations);
@@ -2391,6 +2426,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
     const containers = [...essentialsContainer, ...pinnedContainers, ...normalContainers];
     for (const container of containers) {
+      if (container.hasAttribute('cloned')) {
+        continue;
+      }
       for (const tab of container.children) {
         if (tab.tagName === 'tab') {
           tabs.push(tab);

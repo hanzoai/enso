@@ -800,7 +800,7 @@
               if (tabsTarget === gBrowser.tabs.at(-1)) {
                 newIndex++;
               }
-              gBrowser.moveTabTo(draggedTab, newIndex, { forceUngrouped: true });
+              gBrowser.moveTabTo(draggedTab, { tabIndex: newIndex, forceUngrouped: true });
             }
           }
         }
