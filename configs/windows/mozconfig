@@ -37,7 +37,7 @@ if test "$SURFER_COMPAT" = "x86_64"; then
   export RUSTFLAGS="-Clink-args=--icf=safe"
 elif test "$SURFER_COMPAT" = "aarch64"; then
   ac_add_options --target=aarch64-pc-windows-msvc
-  ac_add_options --enable-eme=widevine
+  ac_add_options --enable-eme=widevine,wmfcdm
 
   ac_add_options --enable-optimize="-O2 -mtune=cortex-a55 -march=armv8.2-a+simd"
 

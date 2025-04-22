@@ -7,9 +7,9 @@ else
     export CXX=clang++
 fi
 
+ac_add_options --enable-eme=widevine
 if test "$SURFER_COMPAT" = "x86_64"; then
     ac_add_options --target=x86_64-pc-linux
-    ac_add_options --enable-eme=widevine
 
     # Enable Profile Guided Optimization
     if test "$ZEN_GA_DISABLE_PGO"; then
