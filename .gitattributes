@@ -1,1 +1,2 @@
 *.patch linguist-language=C++
+*.d.ts  linguist-language=TypeScript
