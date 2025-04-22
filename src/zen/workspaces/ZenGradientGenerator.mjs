@@ -35,6 +35,14 @@
         this.onDarkModeChange.bind(this)
       );
 
+      this.panel.addEventListener('popupshowing', this.handlePanelOpen.bind(this));
+      this.panel.addEventListener('popuphidden', this.handlePanelClose.bind(this));
+      this.panel.addEventListener('command', this.handlePanelCommand.bind(this));
+
+      document
+        .getElementById('PanelUI-zen-gradient-generator-opacity')
+        .addEventListener('input', this.onOpacityChange.bind(this));
+
       this.initCanvas();
       this.initCustomColorInput();
       this.initTextureInput();
@@ -402,6 +410,18 @@
       this.panel.querySelector('.zen-theme-picker-gradient').appendChild(dot);
       this.customColorInput.value = '';
       await this.updateCurrentWorkspace();
+    }
+
+    handlePanelCommand(event) {
+      const target = event.target.closest('toolbarbutton');
+      if (!target) {
+        return;
+      }
+      switch (target.id) {
+        case 'PanelUI-zen-gradient-generator-color-custom-add':
+          this.addCustomColor();
+          break;
+      }
     }
 
     spawnDot(relativePosition, primary = false) {

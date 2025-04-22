@@ -839,7 +839,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       <menuseparator/>
       <menuitem id="context_zenSplitTabs"
                 data-lazy-l10n-id="tab-zen-split-tabs"
-                oncommand="gZenViewSplitter.contextSplitTabs();"/>
+                command="cmd_zenSplitViewContextMenu"/>
       <menuseparator/>
     `);
     document.getElementById('context_closeDuplicateTabs').after(element);

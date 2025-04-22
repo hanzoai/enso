@@ -1267,10 +1267,16 @@
   transform: translateX(-100%);
 
   &:not(.zen-essentials-container) {
+    display: flex;
     min-width: calc(100% - var(--zen-toolbox-padding) * 2);
   }
 
   &:not(.zen-current-workspace-indicator):not(.zen-essentials-container) {
     margin: 0 var(--zen-toolbox-padding);
+  }
+
+  &[hidden='true'] {
+    opacity: 0;
+    pointer-events: none;
   }
 }
