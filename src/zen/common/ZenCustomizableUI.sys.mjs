@@ -35,7 +35,7 @@ export var ZenCustomizableUI = new (class {
   }
 
   _addSidebarButtons(window) {
-    const toolbox = window.document.getElementById('navigator-toolbox');
+    const toolbox = window.gNavToolbox;
 
     // Set a splitter to navigator-toolbox
     const splitter = window.document.createXULElement('splitter');

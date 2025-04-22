@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..eee9613b4405a8a301cef3db1ae6a3f9d21d56ac 100644
+index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..37870bfe9e0d9605907515fd17c437c2dfc167e6 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -83,7 +83,7 @@
@@ -155,7 +155,7 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..eee9613b4405a8a301cef3db1ae6a3f9
  
        this.#allTabs = [
 -        ...this.verticalPinnedTabsContainer.children,
-+        ...document.getElementById("zen-essentials-container").children, ...this.verticalPinnedTabsContainer.children,
++        ...ZenWorkspaces.getCurrentEssentialsContainer().children, ...this.verticalPinnedTabsContainer.children,
          ...children,
        ];
 +      const lastPinnedTabIdx = gBrowser.pinnedTabCount;
@@ -210,7 +210,7 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..eee9613b4405a8a301cef3db1ae6a3f9
  
        let focusableItems = [];
 -      for (let child of children) {
-+      for (let child of [...document.getElementById("zen-essentials-container").children, ...verticalPinnedTabsContainer.children, ...children]) {
++      for (let child of [...ZenWorkspaces.getCurrentEssentialsContainer().children, ...verticalPinnedTabsContainer.children, ...children]) {
          if (isTab(child) && child.visible) {
            child.elementIndex = elementIndex++;
            focusableItems.push(child);
@@ -271,15 +271,6 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..eee9613b4405a8a301cef3db1ae6a3f9
            const newTab2 = this.newTabButton;
            const newTabVertical = document.getElementById(
              "vertical-tabs-newtab-button"
-@@ -1929,7 +1963,7 @@
-           let rect = ele => {
-             return window.windowUtils.getBoundsWithoutFlushing(ele);
-           };
--          let tab = this.visibleTabs[gBrowser.pinnedTabCount];
-+          let tab = this.visibleTabs[gBrowser._numVisiblePinTabs];
-           if (tab && rect(tab).width <= this._tabClipWidth) {
-             this.setAttribute("closebuttons", "activetab");
-           } else {
 @@ -1941,10 +1975,12 @@
  
      _handleTabSelect(aInstant) {
@@ -307,12 +298,12 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..eee9613b4405a8a301cef3db1ae6a3f9
 -        let tabs = this.visibleTabs;
 +      if (!ZenWorkspaces._hasInitializedTabsStrip) return;
 +      let count = ZenWorkspaces.makeSurePinTabIsInCorrectPosition();
-+      if (gBrowser.pinnedTabCount !== (verticalTabsContainer.children.length - count - 1 + document.getElementById("zen-essentials-container").children.length)) {
++      if (gBrowser.pinnedTabCount !== (verticalTabsContainer.children.length - count - 1 + ZenWorkspaces.getCurrentEssentialsContainer().children.length)) {
 +        let tabs = this.allTabs.filter(tab => !tab.hasAttribute("zen-glance-tab"));
          for (let i = 0; i < numPinned; i++) {
            tabs[i].style.marginInlineStart = "";
 -          verticalTabsContainer.appendChild(tabs[i]);
-+          tabs[i].hasAttribute("zen-essential") ? document.getElementById("zen-essentials-container").appendChild(tabs[i].group?.hasAttribute("split-view-group") ? tabs[i].group : tabs[i]) : verticalTabsContainer.insertBefore(tabs[i].group?.hasAttribute("split-view-group") ? tabs[i].group : tabs[i], verticalTabsContainer.lastChild);
++          tabs[i].hasAttribute("zen-essential") ? ZenWorkspaces.getCurrentEssentialsContainer().appendChild(tabs[i].group?.hasAttribute("split-view-group") ? tabs[i].group : tabs[i]) : verticalTabsContainer.insertBefore(tabs[i].group?.hasAttribute("split-view-group") ? tabs[i].group : tabs[i], verticalTabsContainer.lastChild);
          }
        }
  
@@ -327,17 +318,15 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..eee9613b4405a8a301cef3db1ae6a3f9
  
        if (!verticalTabsContainer.children.length) {
          return;
-@@ -2117,8 +2150,8 @@
+@@ -2117,7 +2150,7 @@
      }
  
      _positionPinnedTabs() {
 -      let tabs = this.visibleTabs;
--      let numPinned = gBrowser.pinnedTabCount;
 +      let tabs = this.visibleTabs.filter(tab => !tab.hasAttribute("zen-glance-tab"));
-+      let numPinned = gBrowser._numVisiblePinTabs;
+       let numPinned = gBrowser.pinnedTabCount;
        let absPositionHorizontalTabs =
          this.overflowing && tabs.length > numPinned && numPinned > 0;
- 
 @@ -2127,7 +2160,7 @@
  
        if (this.verticalMode) {
@@ -374,7 +363,7 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..eee9613b4405a8a301cef3db1ae6a3f9
 -      let tabs = this.ariaFocusableItems.slice(
 -        isPinned ? 0 : numPinned,
 -        isPinned ? numPinned : undefined
-+      let isPinned = draggedTab?.group.pinned || draggedTab.pinned;
++      let isPinned = draggedTab?.group ? draggedTab.group.pinned : draggedTab.pinned;
 +      let numPinned = gBrowser._numVisiblePinTabsWithoutCollapsed;
 +      let essential = draggedTab.hasAttribute("zen-essential");
 +      let tabs = this.ariaFocusableItems.filter(tab => !tab.hasAttribute("zen-glance-tab")).slice(
