@@ -208,7 +208,7 @@ pref('zen.workspaces.wrap-around-navigation', true);
 pref('zen.workspaces.natural-scroll', false);
 pref('zen.workspaces.scroll-modifier-key','ctrl'); // can be ctrl, alt, shift, or a meta key
 pref('services.sync.engine.workspaces', false);
-pref('zen.workspaces.container-specific-essentials-enabled', true);
+pref('zen.workspaces.container-specific-essentials-enabled', false);
 
 // Essentials
 pref('zen.essentials.enabled', true);
