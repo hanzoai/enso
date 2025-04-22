@@ -647,6 +647,11 @@
         this.onTabIconChanged(tab);
       }
       gZenUIManager.updateTabsToolbar();
+      // Dispatch the event to update the UI
+      const event = new CustomEvent('TabAddedToEssentials', {
+        detail: { tab },
+      });
+      tab.dispatchEvent(event);
     }
 
     removeEssentials(tab, unpin = true) {
@@ -667,6 +672,11 @@
         }
       }
       gZenUIManager.updateTabsToolbar();
+      // Dispatch the event to update the UI
+      const event = new CustomEvent('TabRemovedFromEssentials', {
+        detail: { tab },
+      });
+      tab.dispatchEvent(event);
     }
 
     _insertItemsIntoTabContextMenu() {

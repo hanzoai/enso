@@ -629,8 +629,11 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       this._initializeWorkspaceTabContextMenus();
       await this.workspaceBookmarks();
       window.addEventListener('TabBrowserInserted', this.onTabBrowserInserted.bind(this));
-      window.addEventListener('TabOpen', this.updateTabsContainers.bind(this));
-      window.addEventListener('TabClose', this.updateTabsContainers.bind(this));
+      const tabUpdateListener = this.updateTabsContainers.bind(this);
+      window.addEventListener('TabOpen', tabUpdateListener);
+      window.addEventListener('TabClose', tabUpdateListener);
+      window.addEventListener('TabAddedToEssentials', tabUpdateListener);
+      window.addEventListener('TabRemovedFromEssentials', tabUpdateListener);
       let activeWorkspace = await this.getActiveWorkspace();
       this.activeWorkspace = activeWorkspace?.uuid;
       try {
@@ -1624,7 +1627,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     const tabToSelect = await this._handleTabSelection(window, onInit, previousWorkspace.uuid);
 
     // Update UI and state
-    await this._updateWorkspaceState(window, onInit, tabToSelect);
+    const previousWorkspaceIndex = workspaces.workspaces.findIndex((w) => w.uuid === previousWorkspace.uuid);
+    await this._updateWorkspaceState(window, onInit, tabToSelect, { previousWorkspaceIndex, previousWorkspace });
   }
 
   _moveEmptyTabToWorkspace(workspaceUuid) {
@@ -1656,7 +1660,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       pinnedContainer.style.marginTop = essentialsHeight + 'px';
       workspaceIndicator.style.marginTop = essentialsHeight + 'px';
       const arrowMarginTop = pinnedContainer.getBoundingClientRect().height + essentialsHeight + 'px';
-      if (!this._animatingChange) {
+      if (!true) {
+        // TODO:
         gZenUIManager.motion.animate(
           arrowscrollbox,
           {
@@ -1695,7 +1700,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     // Hide other essentials with different containerTabId
     const otherContainersEssentials = document.querySelectorAll(`#zen-essentials-wrapper .zen-workspace-tabs-section`);
     for (const container of otherContainersEssentials) {
-      if (container.getAttribute('container') != workspace.containerTabId) {
+      if (container.getAttribute('container') != workspace.containerTabId && this.containerSpecificEssentials) {
         container.setAttribute('hidden', 'true');
       } else {
         container.removeAttribute('hidden');
@@ -1728,12 +1733,18 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
   }
 
-  async _animateTabs(newWorkspace, shouldAnimate, tabToSelect = null) {
+  async _animateTabs(
+    newWorkspace,
+    shouldAnimate,
+    tabToSelect = null,
+    { previousWorkspaceIndex = null, previousWorkspace = null } = {}
+  ) {
     const kGlobalAnimationDuration = 0.3;
     this._animatingChange = true;
     const animations = [];
     const workspaces = await this._workspaces();
     const newWorkspaceIndex = workspaces.workspaces.findIndex((w) => w.uuid === newWorkspace.uuid);
+    const isGoingLeft = newWorkspaceIndex <= previousWorkspaceIndex;
     const clonedEssentials = [];
     if (shouldAnimate && this.containerSpecificEssentials) {
       for (const workspace of workspaces.workspaces) {
@@ -1793,11 +1804,13 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
     if (this.containerSpecificEssentials) {
       // Animate essentials
+      const newWorkspaceEssentialsContainer = clonedEssentials.find((cloned) =>
+        cloned.workspaces.some((w) => w.uuid === newWorkspace.uuid)
+      );
       for (const cloned of clonedEssentials) {
         const container = cloned.container;
         const essentialsWorkspacess = cloned.workspaces;
         const repeats = cloned.repeat;
-        const containerId = cloned.contextId;
         // Animate like the workspaces above expect essentials are a bit more
         // complicated because they are not based on workspaces but on containers
         // So, if we have the following arangement:
@@ -1815,16 +1828,64 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         const lastWorkspaceIndex = workspaces.workspaces.findIndex(
           (w) => w.uuid === essentialsWorkspacess[essentialsWorkspacess.length - 1].uuid
         );
-        const isGoingLeft = newWorkspaceIndex > lastWorkspaceIndex;
-        const isGoingInsideSameContainer = essentialsWorkspacess.some((w) => w.uuid === newWorkspace.uuid);
-        if (isGoingInsideSameContainer) {
-          continue; // We dont want to animate if we are going inside the same container
+        let stepsInBetween = Math.abs(newWorkspaceIndex - (isGoingLeft ? firstWorkspaceIndex : lastWorkspaceIndex)) + 1;
+        const usingSameContainer =
+          newWorkspaceEssentialsContainer.workspaces.some((w) => w.uuid === newWorkspace.uuid) &&
+          newWorkspaceEssentialsContainer.workspaces.some((w) => w.uuid === previousWorkspace.uuid);
+        let newOffset =
+          -(
+            newWorkspaceIndex -
+            (isGoingLeft ? firstWorkspaceIndex : lastWorkspaceIndex) +
+            (!isGoingLeft ? repeats - 1 : -repeats + 1)
+          ) * 100;
+
+        let existingOffset =
+          -(
+            newWorkspaceIndex -
+            (isGoingLeft ? lastWorkspaceIndex : firstWorkspaceIndex) +
+            (isGoingLeft ? repeats - 1 : -repeats + 1)
+          ) * 100;
+
+        const needsOffsetAdjustment = stepsInBetween > essentialsWorkspacess.length || usingSameContainer;
+
+        if (repeats > 0 && needsOffsetAdjustment) {
+          if (!isGoingLeft) {
+            if (existingOffset !== 0) existingOffset += 100;
+            if (newOffset !== 0) newOffset += 100;
+          } else {
+            if (existingOffset !== 0) existingOffset -= 100;
+            if (newOffset !== 0) newOffset -= 100;
+          }
         }
-        const firstOffset = -(newWorkspaceIndex - firstWorkspaceIndex - (isGoingLeft ? repeats : -repeats)) * 100;
-        const lastOffset = -(newWorkspaceIndex - lastWorkspaceIndex - (isGoingLeft ? repeats : -repeats)) * 100;
-        const newTransform = `translateX(${firstOffset}%)`;
-        const existingTransform = `translateX(${lastOffset}%)`;
-        const stepsInBetween = Math.abs(lastWorkspaceIndex - firstWorkspaceIndex);
+
+        // Special case: going forward from single reused container to a new one
+        if (!usingSameContainer && !isGoingLeft && lastWorkspaceIndex === newWorkspaceIndex - 1) {
+          existingOffset = 0;
+          newOffset = -100;
+          stepsInBetween = 1;
+        }
+        if (!usingSameContainer && isGoingLeft && firstWorkspaceIndex === newWorkspaceIndex + 1) {
+          existingOffset = 0;
+          newOffset = 100;
+          stepsInBetween = 1;
+        }
+        if (
+          !usingSameContainer &&
+          isGoingLeft &&
+          (firstWorkspaceIndex === newWorkspaceIndex - 1 || firstWorkspaceIndex === newWorkspaceIndex)
+        ) {
+          existingOffset = -100;
+          newOffset = 0;
+          stepsInBetween = 1;
+        }
+        if (!usingSameContainer && !isGoingLeft && firstWorkspaceIndex === newWorkspaceIndex) {
+          existingOffset = 100;
+          newOffset = 0;
+          stepsInBetween = 1;
+        }
+
+        const newTransform = `translateX(${newOffset}%)`;
+        const existingTransform = `translateX(${existingOffset}%)`;
         if (shouldAnimate) {
           container.style.transform = newTransform;
           animations.push(
@@ -1904,7 +1965,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     return tabToSelect;
   }
 
-  async _updateWorkspaceState(workspace, onInit, tabToSelect) {
+  async _updateWorkspaceState(workspace, onInit, tabToSelect, { previousWorkspaceIndex, previousWorkspace } = {}) {
     // Update document state
     document.documentElement.setAttribute('zen-workspace-id', workspace.uuid);
 
@@ -1913,13 +1974,16 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     // Update workspace UI
     await this._updateWorkspacesChangeContextMenu();
-    gZenUIManager.updateTabsToolbar();
+    // gZenUIManager.updateTabsToolbar();
     await this._propagateWorkspaceData({ clearCache: false });
 
     gZenThemePicker.onWorkspaceChange(workspace);
 
     document.getElementById('zen-tabs-wrapper').style.scrollbarWidth = 'none';
-    await this._animateTabs(workspace, !onInit && !this._animatingChange, tabToSelect);
+    await this._animateTabs(workspace, !onInit && !this._animatingChange, tabToSelect, {
+      previousWorkspaceIndex,
+      previousWorkspace,
+    });
     await this._organizeWorkspaceStripLocations(workspace, true);
     document.getElementById('zen-tabs-wrapper').style.scrollbarWidth = '';
 
