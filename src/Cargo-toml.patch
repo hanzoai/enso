@@ -1,14 +1,14 @@
 diff --git a/Cargo.toml b/Cargo.toml
-index a99b447250d36dd0146e031fa22503bc88eeae39..86829fc7075054f832a04825c98325a925cf5b0f 100644
+index d3d529b487f80d4b4f3bfa13cdd3f62946352db8..b35a9e0e3339d48d1cd0cab7b22d030f330e40d1 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -205,6 +205,9 @@ rure = { path = "third_party/rust/rure" }
+@@ -217,6 +217,9 @@ rure = { path = "third_party/rust/rure" }
  # Patch `plist` to work with `indexmap` 2.*
  plist = { path = "third_party/rust/plist" }
  
 +# Patch mime_guess to add missing mime types
 +mime_guess = { path = "third_party/rust/mime_guess" }
 +
- # To-be-published changes.
- unicode-bidi = { git = "https://github.com/servo/unicode-bidi", rev = "ca612daf1c08c53abe07327cb3e6ef6e0a760f0c" }
- nss-gk-api = { git = "https://github.com/beurdouche/nss-gk-api", rev = "e48a946811ffd64abc78de3ee284957d8d1c0d63" }
+ # Patch `unicode-width` 0.1.* to 0.2.
+ unicode-width = { path = "build/rust/unicode-width" }
+ 

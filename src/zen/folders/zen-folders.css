@@ -4,6 +4,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+tab-group {
+  & .tabbrowser-tab {
+    margin-inline-start: 0 !important;
+  }
+}
+
 tab-group[split-view-group] {
   display: flex;
   flex-wrap: nowrap;

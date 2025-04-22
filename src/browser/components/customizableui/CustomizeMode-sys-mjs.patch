@@ -1,9 +1,9 @@
 diff --git a/browser/components/customizableui/CustomizeMode.sys.mjs b/browser/components/customizableui/CustomizeMode.sys.mjs
-index c9bdc165ff9afc8c3e43ed2cda0612b32a55450f..34f8af56753e2a898f49247036d47973c70543a9 100644
+index 619bb2af5a3a0995fc93fa040696dd2854848ab5..bbc6bad906e9ccaf668ca99f4a0411f564ef1e56 100644
 --- a/browser/components/customizableui/CustomizeMode.sys.mjs
 +++ b/browser/components/customizableui/CustomizeMode.sys.mjs
-@@ -357,7 +357,7 @@ CustomizeMode.prototype = {
-       this._transitioning = true;
+@@ -500,7 +500,7 @@ export class CustomizeMode {
+       this.#transitioning = true;
  
        let customizer = document.getElementById("customization-container");
 -      let browser = document.getElementById("browser");
@@ -11,7 +11,7 @@ index c9bdc165ff9afc8c3e43ed2cda0612b32a55450f..34f8af56753e2a898f49247036d47973
        browser.hidden = true;
        customizer.hidden = false;
  
-@@ -488,7 +488,7 @@ CustomizeMode.prototype = {
+@@ -637,7 +637,7 @@ export class CustomizeMode {
      }
  
      let customizer = document.getElementById("customization-container");
@@ -20,9 +20,9 @@ index c9bdc165ff9afc8c3e43ed2cda0612b32a55450f..34f8af56753e2a898f49247036d47973
      customizer.hidden = true;
      browser.hidden = false;
  
-@@ -2397,6 +2397,20 @@ CustomizeMode.prototype = {
+@@ -3125,6 +3125,20 @@ export class CustomizeMode {
          if (makeSpaceImmediately) {
-           aItem.setAttribute("notransition", "true");
+           aDraggedOverItem.setAttribute("notransition", "true");
          }
 +        if (aItem.parentElement.id === "TabsToolbar-customization-target")  {
 +          // We change the border values so we can properly implement the native vertical tabs
@@ -38,6 +38,6 @@ index c9bdc165ff9afc8c3e43ed2cda0612b32a55450f..34f8af56753e2a898f49247036d47973
 +            aItem.style.borderBottomStyle = "solid";
 +          }
 +        }
-         aItem.style[prop] = borderWidth + "px";
-         aItem.style.removeProperty(otherProp);
+         aDraggedOverItem.style[prop] = borderWidth + "px";
+         aDraggedOverItem.style.removeProperty(otherProp);
          if (makeSpaceImmediately) {

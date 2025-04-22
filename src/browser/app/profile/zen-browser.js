@@ -31,6 +31,7 @@ pref("browser.privateWindowSeparation.enabled", false);
 // Mica
 pref("widget.windows.mica", true);
 pref("widget.windows.mica.popups", true);
+pref("widget.windows.mica.toplevel-backdrop", 2);
 #endif
 
 pref('browser.newtabpage.activity-stream.newtabWallpapers.enabled', true);
@@ -140,10 +141,6 @@ pref('zen.urlbar.hide-one-offs', true);
 pref('zen.view.experimental-rounded-view', false);
 #else
 pref('zen.view.experimental-rounded-view', true);
-#endif
-
-#ifdef XP_WIN
-pref('zen.widget.windows.acrylic', true);
 #endif
 
 // Glance

@@ -1,15 +1,15 @@
 diff --git a/toolkit/mozapps/extensions/internal/XPIProvider.sys.mjs b/toolkit/mozapps/extensions/internal/XPIProvider.sys.mjs
-index 3af9a7779dd43a6ded906ceaf6768c56d53c8605..c0b597fa3f8073b9bfb4118d5352246a5b54c2d7 100644
+index 2cafde2156680a557081c5b82923f14618749358..0f4f5160f649165df80f35fbe72e02786a5b867e 100644
 --- a/toolkit/mozapps/extensions/internal/XPIProvider.sys.mjs
 +++ b/toolkit/mozapps/extensions/internal/XPIProvider.sys.mjs
-@@ -2556,8 +2556,8 @@ export var XPIProvider = {
+@@ -2674,8 +2674,8 @@ export var XPIProvider = {
+       if (AppConstants.platform != "android") {
+         // Keep version in sync with toolkit/mozapps/extensions/default-theme/manifest.json
+         this.maybeInstallBuiltinAddon(
+-          "default-theme@mozilla.org",
+-          "1.4.1",
++          "firefox-compact-dark@mozilla.org",
++          "1.3",
+           "resource://default-theme/"
+         );
        }
-       // Keep version in sync with toolkit/mozapps/extensions/default-theme/manifest.json
-       this.maybeInstallBuiltinAddon(
--        "default-theme@mozilla.org",
--        "1.4.1",
-+        "firefox-compact-dark@mozilla.org",
-+        "1.3",
-         "resource://default-theme/"
-       );
- 

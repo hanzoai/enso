@@ -29,6 +29,7 @@
         }
 
         this._initSidebarScrolling();
+        this._hideUnusedElements();
 
         ZenWorkspaces.init();
         gZenVerticalTabsManager.init();
@@ -116,14 +117,23 @@
       const kElementsToAppend = ['sidebar-splitter', 'sidebar-box'];
 
       const browser = document.getElementById('browser');
-      const toolbox = document.getElementById('navigator-toolbox');
-      browser.prepend(toolbox);
+      browser.prepend(gNavToolbox);
 
       const sidebarPanelWrapper = document.getElementById('tabbrowser-tabbox');
       for (let id of kElementsToAppend) {
         const elem = document.getElementById(id);
         if (elem) {
           sidebarPanelWrapper.prepend(elem);
+        }
+      }
+    },
+
+    _hideUnusedElements() {
+      const kElements = ['firefox-view-button'];
+      for (let id of kElements) {
+        const elem = document.getElementById(id);
+        if (elem) {
+          elem.setAttribute('hidden', 'true');
         }
       }
     },
