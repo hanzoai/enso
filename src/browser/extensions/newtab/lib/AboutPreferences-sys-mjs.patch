@@ -1,8 +1,8 @@
 diff --git a/browser/extensions/newtab/lib/AboutPreferences.sys.mjs b/browser/extensions/newtab/lib/AboutPreferences.sys.mjs
-index df9d63c2713b4237d8acca93f108d5c788caed8d..a80cc02fdec6e1056d26a6b5a1cdc1a602e5cf2a 100644
+index a325becabddda511204fc5bd2022edc332cdde7c..6bb29b21f1e6c1d6ea3d38d50f01148e0a51f0d7 100644
 --- a/browser/extensions/newtab/lib/AboutPreferences.sys.mjs
 +++ b/browser/extensions/newtab/lib/AboutPreferences.sys.mjs
-@@ -34,7 +34,7 @@ const PREFS_BEFORE_SECTIONS = () => [
+@@ -52,7 +52,7 @@ const PREFS_BEFORE_SECTIONS = () => [
        titleString: "home-prefs-shortcuts-header",
        descString: "home-prefs-shortcuts-description",
        get nestedPrefs() {

@@ -1,8 +1,8 @@
 diff --git a/browser/components/urlbar/UrlbarView.sys.mjs b/browser/components/urlbar/UrlbarView.sys.mjs
-index 0e6724f590490354cc4d4bde5176556f7e4b4a7c..bffc52488443d62de46abe5cbdac4504831c4a09 100644
+index d5382623595de8daed8cd13ea2eb2de329a4bd92..8e160e0bb5a1cd626753feba2008a24e3bbd84cd 100644
 --- a/browser/components/urlbar/UrlbarView.sys.mjs
 +++ b/browser/components/urlbar/UrlbarView.sys.mjs
-@@ -610,7 +610,7 @@ export class UrlbarView {
+@@ -609,7 +609,7 @@ export class UrlbarView {
        !this.input.value ||
        this.input.getAttribute("pageproxystate") == "valid"
      ) {

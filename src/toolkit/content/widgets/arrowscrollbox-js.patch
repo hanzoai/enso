@@ -1,5 +1,5 @@
 diff --git a/toolkit/content/widgets/arrowscrollbox.js b/toolkit/content/widgets/arrowscrollbox.js
-index 328c770d275ebbaada8a44438eaf738b1a62d985..95460108c6356408170b8a4a40d55a8f0621756b 100644
+index f9191af09f1b7a1654aff62807e7dad573afc172..f94a8b3dc5871fba5d0dbed5d487d6e32a1ff29a 100644
 --- a/toolkit/content/widgets/arrowscrollbox.js
 +++ b/toolkit/content/widgets/arrowscrollbox.js
 @@ -98,6 +98,7 @@

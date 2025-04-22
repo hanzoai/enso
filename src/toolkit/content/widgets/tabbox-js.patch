@@ -1,5 +1,5 @@
 diff --git a/toolkit/content/widgets/tabbox.js b/toolkit/content/widgets/tabbox.js
-index 717f0583f224be2d09a7966ee5627ebab83cc07f..ec251b99562f2a9b6dcfecc4588e44bbff315612 100644
+index 6775a7635c6cdbb276b3a912d0bba07840acb28f..fc5d3b1fab286c657c27b98d56bb616dfab3caef 100644
 --- a/toolkit/content/widgets/tabbox.js
 +++ b/toolkit/content/widgets/tabbox.js
 @@ -213,7 +213,7 @@
@@ -11,7 +11,7 @@ index 717f0583f224be2d09a7966ee5627ebab83cc07f..ec251b99562f2a9b6dcfecc4588e44bb
          this._selectedPanel?.classList.add("deck-selected");
        }
        this.setAttribute("selectedIndex", val);
-@@ -609,7 +609,7 @@
+@@ -610,7 +610,7 @@
        if (!tab) {
          return;
        }
@@ -20,7 +20,7 @@ index 717f0583f224be2d09a7966ee5627ebab83cc07f..ec251b99562f2a9b6dcfecc4588e44bb
          if (otherTab != tab && otherTab.selected) {
            otherTab._selected = false;
          }
-@@ -822,7 +822,7 @@
+@@ -823,7 +823,7 @@
          if (tab == startTab) {
            return null;
          }
@@ -29,7 +29,7 @@ index 717f0583f224be2d09a7966ee5627ebab83cc07f..ec251b99562f2a9b6dcfecc4588e44bb
            return tab;
          }
        }
-@@ -887,7 +887,7 @@
+@@ -888,7 +888,7 @@
        let { ariaFocusedItem } = this;
        let startTab = ariaFocusedItem;
        if (!ariaFocusedItem || !this.allTabs.includes(ariaFocusedItem)) {

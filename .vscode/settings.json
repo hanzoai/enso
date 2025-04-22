@@ -26,5 +26,6 @@
     "system_error": "cpp",
     "regex": "cpp",
     "type_traits": "cpp"
-  }
+  },
+  "git.ignoreLimitWarning": true
 }
