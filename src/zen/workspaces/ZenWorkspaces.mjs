@@ -50,6 +50,16 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async init() {
+    // Initialize tab selection state
+    this._tabSelectionState = {
+      inProgress: false,
+      lastSelectionTime: 0,
+      debounceTime: 100, // ms to wait between tab selections
+    };
+
+    // Initialize workspace change mutex
+    this._workspaceChangeInProgress = false;
+
     if (!this.shouldHaveWorkspaces) {
       this._resolveInitialized();
       document.getElementById('zen-current-workspace-indicator-container').setAttribute('hidden', 'true');
@@ -108,28 +118,130 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     );
   }
 
-  selectEmptyTab(newTabTarget = null, selectURLBar = true) {
-    if (this._emptyTab && gZenVerticalTabsManager._canReplaceNewTab) {
-      if (gBrowser.selectedTab !== this._emptyTab && selectURLBar) {
-        window.addEventListener(
-          'TabSelect',
-          () => {
-            setTimeout(() => {
-              gURLBar.select();
-            }, 0);
-          },
-          { once: true }
-        );
+  // Validate browser state before tab operations
+  _validateBrowserState() {
+    // Check if browser window is still open
+    if (window.closed) {
+      return false;
+    }
+
+    // Check if gBrowser is available
+    if (!gBrowser || !gBrowser.tabContainer) {
+      return false;
+    }
+
+    // Check if URL bar is available
+    if (!gURLBar) {
+      return false;
+    }
+
+    return true;
+  }
+
+  // Safely select a tab with debouncing to prevent race conditions
+  async _safelySelectTab(tab) {
+    if (!tab || tab.closing || !tab.ownerGlobal || tab.ownerGlobal.closed) {
+      return false;
+    }
+
+    // Check if we need to debounce
+    const now = Date.now();
+    const timeSinceLastSelection = now - this._tabSelectionState.lastSelectionTime;
+
+    if (timeSinceLastSelection < this._tabSelectionState.debounceTime) {
+      await new Promise((resolve) => setTimeout(resolve, this._tabSelectionState.debounceTime - timeSinceLastSelection));
+    }
+
+    // Mark selection as in progress
+    this._tabSelectionState.inProgress = true;
+
+    try {
+      gBrowser.selectedTab = tab;
+      this._tabSelectionState.lastSelectionTime = Date.now();
+      return true;
+    } catch (e) {
+      console.error('Error selecting tab:', e);
+      return false;
+    } finally {
+      this._tabSelectionState.inProgress = false;
+    }
+  }
+
+  async selectEmptyTab(newTabTarget = null, selectURLBar = true) {
+    // Validate browser state first
+    if (!this._validateBrowserState()) {
+      console.warn('Browser state invalid for empty tab selection');
+      return null;
+    }
+
+    try {
+      // Check if we have a valid empty tab and can replace new tab
+      if (
+        this._emptyTab &&
+        !this._emptyTab.closing &&
+        this._emptyTab.ownerGlobal &&
+        !this._emptyTab.ownerGlobal.closed &&
+        gZenVerticalTabsManager._canReplaceNewTab
+      ) {
+        // Only set up URL bar selection if we're switching to a different tab
+        if (gBrowser.selectedTab !== this._emptyTab && selectURLBar) {
+          // Use a Promise-based approach for better sequencing
+          const urlBarSelectionPromise = new Promise((resolve) => {
+            const tabSelectListener = () => {
+              // Remove the event listener first to prevent any chance of multiple executions
+              window.removeEventListener('TabSelect', tabSelectListener);
+
+              // Use requestAnimationFrame to ensure DOM is updated
+              requestAnimationFrame(() => {
+                // Then use setTimeout to ensure browser has time to process tab switch
+                setTimeout(() => {
+                  if (gURLBar) {
+                    try {
+                      gURLBar.select();
+                    } catch (e) {
+                      console.warn('Error selecting URL bar:', e);
+                    }
+                  }
+                  resolve();
+                }, 50);
+              });
+            };
+
+            window.addEventListener('TabSelect', tabSelectListener, { once: true });
+          });
+        }
+
+        // Safely switch to the empty tab using our debounced method
+        const success = await this._safelySelectTab(this._emptyTab);
+        if (!success) {
+          throw new Error('Failed to select empty tab');
+        }
+
+        return this._emptyTab;
       }
-      gBrowser.selectedTab = this._emptyTab;
-      return this._emptyTab;
+
+      // Fall back to creating a new tab
+      const newTabUrl = newTabTarget || Services.prefs.getStringPref('browser.startup.homepage');
+      let tab = gZenUIManager.openAndChangeToTab(newTabUrl);
+
+      // Set workspace ID if available
+      if (window.uuid) {
+        tab.setAttribute('zen-workspace-id', this.activeWorkspace);
+      }
+      return tab;
+    } catch (e) {
+      console.error('Error in selectEmptyTab:', e);
+
+      // Create a fallback tab as a last resort, with proper validation
+      try {
+        if (this._validateBrowserState()) {
+          return gBrowser.addTrustedTab('about:blank');
+        }
+      } catch (fallbackError) {
+        console.error('Critical error creating fallback tab:', fallbackError);
+      }
+      return null;
     }
-    const newTabUrl = newTabTarget || Services.prefs.getStringPref('browser.startup.homepage');
-    let tab = gZenUIManager.openAndChangeToTab(newTabUrl);
-    if (window.uuid) {
-      tab.setAttribute('zen-workspace-id', this.activeWorkspace);
-    }
-    return tab;
   }
 
   async delayedStartup() {
@@ -2560,10 +2672,45 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async switchTabIfNeeded(tab) {
-    if (!tab.hasAttribute('zen-essential') && tab.getAttribute('zen-workspace-id') !== this.activeWorkspace) {
-      await this.changeWorkspace({ uuid: tab.getAttribute('zen-workspace-id') });
+    // Validate browser state first
+    if (!this._validateBrowserState()) {
+      console.warn('Browser state invalid for tab switching');
+      return;
     }
-    gBrowser.selectedTab = tab;
+
+    if (!tab) {
+      console.warn('switchTabIfNeeded called with null tab');
+      return;
+    }
+
+    // Validate tab state
+    if (tab.closing || !tab.ownerGlobal || tab.ownerGlobal.closed || !tab.linkedBrowser) {
+      console.warn('Tab is no longer valid, cannot select it');
+      return;
+    }
+
+    try {
+      // Check if we need to change workspace
+      if (!tab.hasAttribute('zen-essential') && tab.getAttribute('zen-workspace-id') !== this.activeWorkspace) {
+        // Use a mutex-like approach to prevent concurrent workspace changes
+        if (this._workspaceChangeInProgress) {
+          console.warn('Workspace change already in progress, deferring tab switch');
+          return;
+        }
+
+        this._workspaceChangeInProgress = true;
+        try {
+          await this.changeWorkspace({ uuid: tab.getAttribute('zen-workspace-id') });
+        } finally {
+          this._workspaceChangeInProgress = false;
+        }
+      }
+
+      // Safely switch to the tab using our debounced method
+      await this._safelySelectTab(tab);
+    } catch (e) {
+      console.error('Error in switchTabIfNeeded:', e);
+    }
   }
 
   getDefaultContainer() {
