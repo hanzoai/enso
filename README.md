@@ -57,10 +57,6 @@ Zen is divided into 2 main branches. We use `dev` for development and `stable` f
 
 We divide into 2 branches in case there's any really important security update (for example) that needs to be released before the next stable release. This allows us to do patches without releasing unstable versions to the public.
 
-## ⚡ Performance
-
-Zen is built with performance in mind, and we have optimized the browser to be as fast as possible! Checkout the latest [performance benchmarks](https://docs.zen-browser.app/benchmarks)!
-
 ## 📥 Installation
 
 ### Supported Operating Systems
