@@ -63,35 +63,6 @@ diff --git a/taskcluster/kinds/toolchain/macos-sdk.yml b/taskcluster/kinds/toolc
      description: "iPhoneOS17.4 SDK"
      treeherder:
          symbol: TM(ios17.4)
-diff --git a/taskcluster/kinds/toolchain/misc.yml b/taskcluster/kinds/toolchain/misc.yml
---- a/taskcluster/kinds/toolchain/misc.yml
-+++ b/taskcluster/kinds/toolchain/misc.yml
-@@ -250,11 +250,11 @@
-             v8_symbol_level=0
-         ]
-         toolchain-artifact: public/build/car_macosx.tar.zst
-     fetches:
-         toolchain:
--            - MacOSX15.2.sdk
-+            - MacOSX15.4.sdk
- 
- macosx-arm64-custom-car:
-     description: "Custom chromium-as-release build for mac (apple silicon)"
-     worker-type: b-osx-arm64
-     attributes:
-@@ -286,11 +286,11 @@
-             v8_symbol_level=0
-         ]
-         toolchain-artifact: public/build/car_macosx_arm.tar.zst
-     fetches:
-         toolchain:
--            - MacOSX15.2.sdk
-+            - MacOSX15.4.sdk
- 
- android-custom-car:
-     description: "Custom chromium-as-release build for Android"
-     attributes:
-         cached_task: false
 diff --git a/taskcluster/scripts/misc/build-cpython.sh b/taskcluster/scripts/misc/build-cpython.sh
 --- a/taskcluster/scripts/misc/build-cpython.sh
 +++ b/taskcluster/scripts/misc/build-cpython.sh
