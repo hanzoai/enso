@@ -1959,7 +1959,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         essentialsContainer.parentNode.appendChild(essentialsClone);
       }
     }
-    if (shouldAnimate) {
+    if (shouldAnimate && this.containerSpecificEssentials) {
       document.getElementById('zen-tabs-wrapper').style.marginTop = '';
     }
     for (const element of document.querySelectorAll('.zen-workspace-tabs-section')) {
@@ -1972,7 +1972,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       const offset = -(newWorkspaceIndex - elementWorkspaceIndex) * 100;
       const newTransform = `translateX(${offset}%)`;
       if (shouldAnimate) {
-        if (element.classList.contains('zen-workspace-pinned-tabs-section')) {
+        if (element.classList.contains('zen-workspace-pinned-tabs-section') && this.containerSpecificEssentials) {
           await this.updateTabsContainers(element, true);
         }
         element.removeAttribute('hidden');
