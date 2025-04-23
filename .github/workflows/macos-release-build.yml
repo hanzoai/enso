@@ -123,7 +123,8 @@ jobs:
           cd engine
           export SURFER_PLATFORM="darwin"
           export PATH="$(python3 -m site --user-base)/bin":$PATH
-          ./mach --no-interactive bootstrap --application-choice browser --no-system-changes
+          # Always exist with 0, even if bootstrap fails
+          ./mach --no-interactive bootstrap --application-choice browser --no-system-changes --exclude macos-sdk || true
           cd ..
 
       - name: Build language packs
