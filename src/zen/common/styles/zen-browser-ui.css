@@ -230,3 +230,22 @@
     opacity: 1;
   }
 }
+.zen-split-view-splitter[orient='horizontal'] {
+  &::before {
+    height: 2px;
+    width: 50px;
+    background: var(--button-primary-bgcolor);
+    border-radius: 2px;
+    content: '';
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+    pointer-events: none;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+}
