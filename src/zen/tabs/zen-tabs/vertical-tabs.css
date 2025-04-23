@@ -1063,10 +1063,6 @@
   padding: 0 var(--zen-toolbox-padding);
 
   display: grid;
-  &[hidden='true'] {
-    opacity: 0;
-    pointer-events: none;
-  }
 }
 
 .zen-essentials-container > .tabbrowser-tab,
@@ -1267,6 +1263,7 @@
   transform: translateX(-100%);
 
   &:not(.zen-essentials-container) {
+    display: flex;
     min-width: calc(100% - var(--zen-toolbox-padding) * 2);
   }
 
@@ -1275,7 +1272,7 @@
   }
 
   &[hidden='true'] {
-    opacity: 0;
+    visibility: hidden;
     pointer-events: none;
   }
 }

@@ -1841,7 +1841,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   _updateMarginTopPinnedTabs(arrowscrollbox, pinnedContainer, essentialContainer, workspaceIndicator, forAnimation = false) {
     if (arrowscrollbox) {
       const essentialsHeight = essentialContainer.getBoundingClientRect().height;
-      pinnedContainer.style.marginTop = essentialsHeight + 'px';
       workspaceIndicator.style.marginTop = essentialsHeight + 'px';
       let arrowMarginTop = pinnedContainer.getBoundingClientRect().height;
       const isActive = arrowscrollbox.getAttribute('active') === 'true';
@@ -1850,8 +1849,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         pinnedContainer.style.marginTop = '';
       } else {
         arrowMarginTop += essentialsHeight;
+        pinnedContainer.style.marginTop = essentialsHeight + 'px';
       }
-      if (!true) {
+      if (!forAnimation && !this._inChangingWorkspace) {
         // TODO:
         gZenUIManager.motion.animate(
           arrowscrollbox,
@@ -2319,6 +2319,10 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   async onPinnedTabsResize(entries, forAnimation = false) {
     if (!this._hasInitializedTabsStrip) {
       return;
+    }
+    // forAnimation may be of type "ResizeObserver" if it's not a boolean, just ignore it
+    if (typeof forAnimation !== 'boolean') {
+      forAnimation = false;
     }
     for (const entry of entries) {
       const originalWorkspaceId = entry.target.getAttribute('zen-workspace-id');
