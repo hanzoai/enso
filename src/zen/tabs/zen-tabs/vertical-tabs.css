@@ -1267,7 +1267,6 @@
   transform: translateX(-100%);
 
   &:not(.zen-essentials-container) {
-    display: flex;
     min-width: calc(100% - var(--zen-toolbox-padding) * 2);
   }
 

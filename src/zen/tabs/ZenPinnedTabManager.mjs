@@ -645,13 +645,14 @@
         }
         this._onTabMove(tab);
         this.onTabIconChanged(tab);
+
+        // Dispatch the event to update the UI
+        const event = new CustomEvent('TabAddedToEssentials', {
+          detail: { tab },
+        });
+        tab.dispatchEvent(event);
       }
       gZenUIManager.updateTabsToolbar();
-      // Dispatch the event to update the UI
-      const event = new CustomEvent('TabAddedToEssentials', {
-        detail: { tab },
-      });
-      tab.dispatchEvent(event);
     }
 
     removeEssentials(tab, unpin = true) {
@@ -670,13 +671,14 @@
           gBrowser.tabContainer._invalidateCachedTabs();
           this._onTabMove(tab);
         }
+
+        // Dispatch the event to update the UI
+        const event = new CustomEvent('TabRemovedFromEssentials', {
+          detail: { tab },
+        });
+        tab.dispatchEvent(event);
       }
       gZenUIManager.updateTabsToolbar();
-      // Dispatch the event to update the UI
-      const event = new CustomEvent('TabRemovedFromEssentials', {
-        detail: { tab },
-      });
-      tab.dispatchEvent(event);
     }
 
     _insertItemsIntoTabContextMenu() {

@@ -368,7 +368,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (!this.containerSpecificEssentials) {
       container = 0;
     }
-    let essentialsContainer = document.querySelector(`.zen-essentials-container[container="${container}"]:not([clone])`);
+    let essentialsContainer = document.querySelector(`.zen-essentials-container[container="${container}"]:not([cloned])`);
     if (!essentialsContainer) {
       essentialsContainer = document.createXULElement('vbox');
       essentialsContainer.className = 'zen-essentials-container zen-workspace-tabs-section';
@@ -395,10 +395,12 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   async _createWorkspaceTabsSection(workspace, tabs, perifery) {
     const container = gBrowser.tabContainer.arrowScrollbox;
     const section = this.#createWorkspaceSection(workspace);
+    section.classList.add('zen-workspace-normal-tabs-section');
     container.appendChild(section);
 
     const pinnedContainer = document.getElementById('vertical-pinned-tabs-container');
     const pinnedSection = this.#createWorkspaceSection(workspace);
+    pinnedSection.classList.add('zen-workspace-pinned-tabs-section');
     this._organizeTabsToWorkspaceSections(workspace, section, pinnedSection, tabs);
     section.appendChild(perifery.cloneNode(true));
     pinnedSection.appendChild(
@@ -1836,14 +1838,14 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
   }
 
-  _updateMarginTopPinnedTabs(arrowscrollbox, pinnedContainer, essentialContainer, workspaceIndicator) {
+  _updateMarginTopPinnedTabs(arrowscrollbox, pinnedContainer, essentialContainer, workspaceIndicator, forAnimation = false) {
     if (arrowscrollbox) {
       const essentialsHeight = essentialContainer.getBoundingClientRect().height;
       pinnedContainer.style.marginTop = essentialsHeight + 'px';
       workspaceIndicator.style.marginTop = essentialsHeight + 'px';
       let arrowMarginTop = pinnedContainer.getBoundingClientRect().height;
       const isActive = arrowscrollbox.getAttribute('active') === 'true';
-      if (isActive || !this.containerSpecificEssentials) {
+      if ((isActive || !this.containerSpecificEssentials) && !forAnimation) {
         document.getElementById('zen-tabs-wrapper').style.marginTop = essentialsHeight + 'px';
         pinnedContainer.style.marginTop = '';
       } else {
@@ -1935,7 +1937,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     const newWorkspaceIndex = workspaces.workspaces.findIndex((w) => w.uuid === newWorkspace.uuid);
     const isGoingLeft = newWorkspaceIndex <= previousWorkspaceIndex;
     const clonedEssentials = [];
-    if (shouldAnimate && this.containerSpecificEssentials) {
+    if (shouldAnimate && this.containerSpecificEssentials && previousWorkspace) {
       for (const workspace of workspaces.workspaces) {
         const essentialsContainer = this.getEssentialsSection(workspace.containerTabId);
         if (clonedEssentials[clonedEssentials.length - 1]?.contextId == workspace.containerTabId) {
@@ -1957,6 +1959,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         essentialsContainer.parentNode.appendChild(essentialsClone);
       }
     }
+    if (shouldAnimate) {
+      document.getElementById('zen-tabs-wrapper').style.marginTop = '';
+    }
     for (const element of document.querySelectorAll('.zen-workspace-tabs-section')) {
       if (element.classList.contains('zen-essentials-container')) {
         continue;
@@ -1967,6 +1972,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       const offset = -(newWorkspaceIndex - elementWorkspaceIndex) * 100;
       const newTransform = `translateX(${offset}%)`;
       if (shouldAnimate) {
+        if (element.classList.contains('zen-workspace-pinned-tabs-section')) {
+          await this.updateTabsContainers(element, true);
+        }
         element.removeAttribute('hidden');
         animations.push(
           gZenUIManager.motion.animate(
@@ -1991,7 +1999,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         element.removeAttribute('active');
       }
     }
-    if (this.containerSpecificEssentials) {
+    if (this.containerSpecificEssentials && previousWorkspace) {
       // Animate essentials
       const newWorkspaceEssentialsContainer = clonedEssentials.find((cloned) =>
         cloned.workspaces.some((w) => w.uuid === newWorkspace.uuid)
@@ -2093,11 +2101,15 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         }
       }
     }
+    if (shouldAnimate) {
+      gZenUIManager.updateTabsToolbar();
+    }
     await Promise.all(animations);
     if (shouldAnimate) {
       for (const cloned of clonedEssentials) {
         cloned.container.remove();
       }
+      this.updateTabsContainers();
     }
     const essentialsContainer = this.getEssentialsSection(newWorkspace.containerTabId);
     essentialsContainer.removeAttribute('hidden');
@@ -2283,8 +2295,11 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     return workspaceData;
   }
 
-  updateTabsContainers() {
-    this.onPinnedTabsResize([{ target: this.pinnedTabsContainer }]);
+  async updateTabsContainers(target = undefined, forAnimation = false) {
+    if (target && !(target instanceof HTMLElement)) {
+      target = null;
+    }
+    await this.onPinnedTabsResize([{ target: target ?? this.pinnedTabsContainer }], forAnimation);
   }
 
   updateShouldHideSeparator(arrowScrollbox, pinnedContainer) {
@@ -2301,7 +2316,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
   }
 
-  async onPinnedTabsResize(entries) {
+  async onPinnedTabsResize(entries, forAnimation = false) {
     if (!this._hasInitializedTabsStrip) {
       return;
     }
@@ -2331,7 +2346,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         );
         const workspaceObject = this._workspaceCache.workspaces.find((w) => w.uuid === workspaceId);
         const essentialContainer = this.getEssentialsSection(workspaceObject.containerTabId);
-        this._updateMarginTopPinnedTabs(arrowScrollbox, pinnedContainer, essentialContainer, workspaceIndicator);
+        this._updateMarginTopPinnedTabs(arrowScrollbox, pinnedContainer, essentialContainer, workspaceIndicator, forAnimation);
         this.updateShouldHideSeparator(arrowScrollbox, pinnedContainer);
       }
     }
