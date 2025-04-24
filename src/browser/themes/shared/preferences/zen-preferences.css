@@ -470,10 +470,33 @@ groupbox h2 {
   align-items: center;
 }
 
+.zenThemeMarketplaceItemHomepageButton {
+  width: 30px;
+  min-width: 0;
+  position: relative;
+  cursor: pointer;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 18px;
+    height: 18px;
+    background-image: url('chrome://browser/skin/home.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    fill: currentColor;
+    -moz-context-properties: fill, fill-opacity;
+  }
+}
+
 .zenThemeMarketplaceItemConfigureButton {
   width: 30px;
   min-width: 0;
   position: relative;
+  cursor: pointer;
 
   &::before {
     content: '';
