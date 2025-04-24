@@ -70,9 +70,12 @@ var gZenUIManager = {
     } catch (error) {
       console.error('Error updating layout breakout:', error);
     }
-    setTimeout(() => {
-      ZenWorkspaces.updateTabsContainers();
-    }, 0);
+    if (!this._preventToolbarRebuild) {
+      setTimeout(() => {
+        ZenWorkspaces.updateTabsContainers();
+      }, 0);
+    }
+    delete this._preventToolbarRebuild;
   },
 
   get tabsWrapper() {
