@@ -24,7 +24,7 @@ on:
 jobs:
   mac-build:
     name: Build macOS - ${{ matrix.arch }}
-    runs-on: ${{ inputs.release-branch == 'release' && 'macos-14' || 'macos-14' }}
+    runs-on: macos-latest
 
     strategy:
       fail-fast: false
