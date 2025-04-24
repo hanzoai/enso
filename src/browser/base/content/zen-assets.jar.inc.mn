@@ -69,7 +69,9 @@
         content/browser/zen-components/ZenMediaController.mjs                   (../../zen/media/ZenMediaController.mjs)
         content/browser/zen-styles/zen-media-controls.css                       (../../zen/media/zen-media-controls.css)
 
-        content/browser/zen-components/ZenDownloadAnimation.mjs                 (../../zen/downloads/ZenDownloadAnimation.mjs)
+        content/browser/zen-components/ZenDownloadAnimation.mjs                 (../../zen/animations/ZenDownloadAnimation.mjs)
+        content/browser/zen-styles/zen-download-animation.css                   (../../zen/animations/zen-download-animation.css)
+
 
         # Images                
         content/browser/zen-images/gradient.png                                 (../../zen/images/gradient.png)
@@ -80,7 +82,7 @@
         content/browser/zen-images/grain-bg.png                                 (../../zen/images/grain-bg.png)
         content/browser/zen-images/note-indicator.svg                           (../../zen/images/note-indicator.svg)
 
-        content/browser/zen-images/downloads/download.svg                       (../../zen/images/downloads/download.svg)
+        content/browser/zen-images/animations/download.svg                       (../../zen/images/animations/download.svg)
 
         # Fonts         
         content/browser/zen-fonts/JunicodeVF-Italic.woff2                       (../../zen/fonts/JunicodeVF-Italic.woff2)

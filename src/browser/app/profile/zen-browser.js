@@ -197,6 +197,10 @@ pref('zen.splitView.enable-tab-drop', true);
 pref('zen.splitView.min-resize-width', 7);
 pref('zen.splitView.rearrange-hover-size', 24);
 
+// Zen Download Animations
+pref('zen.animations.download-animation', true);
+pref('zen.animations.download-animation-duration', 1200); // ms
+
 // Startup flags
 pref('zen.startup.smooth-scroll-in-tabs', true);
 
