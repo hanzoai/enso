@@ -380,7 +380,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   getCurrentEssentialsContainer() {
-    const currentWorkspace = this.activeWorkspace;
+    const currentWorkspace = this.getActiveWorkspaceFromCache();
     return this.getEssentialsSection(currentWorkspace?.containerTabId);
   }
 
