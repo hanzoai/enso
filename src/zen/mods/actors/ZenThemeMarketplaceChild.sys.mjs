@@ -42,7 +42,7 @@ export class ZenThemeMarketplaceChild extends JSWindowActorChild {
     return null;
   }
 
-  // This function will be caleld from about:preferences
+  // This function will be called from about:preferences
   checkForThemeUpdates(event) {
     event.preventDefault();
     this.sendAsyncMessage('ZenThemeMarketplace:CheckForUpdates');
