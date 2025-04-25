@@ -380,7 +380,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   getCurrentEssentialsContainer() {
-    const currentWorkspace = this.activeWorkspace;
+    const currentWorkspace = this.getActiveWorkspaceFromCache();
     return this.getEssentialsSection(currentWorkspace?.containerTabId);
   }
 
@@ -956,7 +956,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   handleContextMenuCommand(event) {
-    const target = event.target.closest('toolbarbutton');
+    const target = event.target.closest('menuitem');
     if (!target) {
       return;
     }
@@ -1974,7 +1974,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       const newTransform = `translateX(${offset}%)`;
       if (shouldAnimate) {
         if (element.classList.contains('zen-workspace-pinned-tabs-section') && this.containerSpecificEssentials) {
-          await this.updateTabsContainers(element, true);
+          // Note: Do not call with await on purpose, for better timing on animations
+          this.updateTabsContainers(element, true);
         }
         element.removeAttribute('hidden');
         animations.push(
@@ -2103,6 +2104,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       }
     }
     if (shouldAnimate) {
+      gZenUIManager._preventToolbarRebuild = true;
       gZenUIManager.updateTabsToolbar();
     }
     await Promise.all(animations);
@@ -2297,7 +2299,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async updateTabsContainers(target = undefined, forAnimation = false) {
-    if (target && !(target instanceof HTMLElement)) {
+    if (target && !target.parentNode) {
       target = null;
     }
     await this.onPinnedTabsResize([{ target: target ?? this.pinnedTabsContainer }], forAnimation);
