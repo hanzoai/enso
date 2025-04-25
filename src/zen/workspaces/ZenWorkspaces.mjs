@@ -956,7 +956,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   handleContextMenuCommand(event) {
-    const target = event.target.closest('toolbarbutton');
+    const target = event.target.closest('menuitem');
     if (!target) {
       return;
     }
