@@ -1809,6 +1809,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     // Second pass: Handle tab selection
     this.tabContainer._invalidateCachedTabs();
     const tabToSelect = await this._handleTabSelection(window, onInit, previousWorkspace.uuid);
+    gBrowser.warmupTab(tabToSelect);
 
     // Update UI and state
     const previousWorkspaceIndex = workspaces.workspaces.findIndex((w) => w.uuid === previousWorkspace.uuid);
@@ -2771,8 +2772,12 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
 
     try {
+      const currentWorkspace = this.getActiveWorkspaceFromCache();
       // Check if we need to change workspace
-      if (!tab.hasAttribute('zen-essential') && tab.getAttribute('zen-workspace-id') !== this.activeWorkspace) {
+      if (
+        tab.getAttribute('zen-workspace-id') !== this.activeWorkspace ||
+        (currentWorkspace.containerTabId !== tab.getAttribute('usercontextid') && this.containerSpecificEssentials)
+      ) {
         // Use a mutex-like approach to prevent concurrent workspace changes
         if (this._workspaceChangeInProgress) {
           console.warn('Workspace change already in progress, deferring tab switch');
@@ -2781,7 +2786,10 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
         this._workspaceChangeInProgress = true;
         try {
-          await this.changeWorkspace({ uuid: tab.getAttribute('zen-workspace-id') });
+          await this.changeWorkspace({
+            uuid: tab.getAttribute('zen-workspace-id'),
+            containerTabId: tab.getAttribute('usercontextid'),
+          });
         } finally {
           this._workspaceChangeInProgress = false;
         }
