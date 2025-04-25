@@ -1274,5 +1274,6 @@
   &[hidden='true'] {
     visibility: hidden;
     pointer-events: none;
+    position: fixed;
   }
 }

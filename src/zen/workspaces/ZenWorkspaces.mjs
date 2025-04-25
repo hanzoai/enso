@@ -1809,6 +1809,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     // Second pass: Handle tab selection
     this.tabContainer._invalidateCachedTabs();
     const tabToSelect = await this._handleTabSelection(window, onInit, previousWorkspace.uuid);
+    gBrowser.warmupTab(tabToSelect);
 
     // Update UI and state
     const previousWorkspaceIndex = workspaces.workspaces.findIndex((w) => w.uuid === previousWorkspace.uuid);
@@ -2773,17 +2774,36 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
 
     try {
+      const currentWorkspace = this.getActiveWorkspaceFromCache();
       // Check if we need to change workspace
-      if (!tab.hasAttribute('zen-essential') && tab.getAttribute('zen-workspace-id') !== this.activeWorkspace) {
+      if (
+        tab.getAttribute('zen-workspace-id') !== this.activeWorkspace ||
+        tab.hasAttribute('zen-essential') ||
+        (currentWorkspace.containerTabId !== parseInt(tab.parentNode.getAttribute('container')) &&
+          this.containerSpecificEssentials)
+      ) {
         // Use a mutex-like approach to prevent concurrent workspace changes
         if (this._workspaceChangeInProgress) {
           console.warn('Workspace change already in progress, deferring tab switch');
           return;
         }
 
+        let workspaceToSwitch = undefined;
+        if (tab.hasAttribute('zen-essential')) {
+          // Find first workspace with the same container
+          const containerTabId = parseInt(tab.parentNode.getAttribute('container'));
+          workspaceToSwitch = this._workspaceCache.workspaces.find((workspace) => workspace.containerTabId === containerTabId);
+        } else {
+          workspaceToSwitch = this._workspaceCache.workspaces.find((workspace) => workspace.uuid === tab.getAttribute('zen-workspace-id'));
+        }
+        if (!workspaceToSwitch) {
+          console.error('No workspace found for tab, cannot switch');
+          return;
+        }
+
         this._workspaceChangeInProgress = true;
         try {
-          await this.changeWorkspace({ uuid: tab.getAttribute('zen-workspace-id') });
+          await this.changeWorkspace(workspaceToSwitch);
         } finally {
           this._workspaceChangeInProgress = false;
         }
