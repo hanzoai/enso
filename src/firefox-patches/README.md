@@ -1,3 +1,3 @@
-# Temporal patches done to firefox
+# Temporal patches done to Firefox
 
-**IMPORTANT**: Once they start failing (on new firefox reelases), they should be removed as these patches are imported from future versions of firefox as termporary solutions while we wait.
+**IMPORTANT**: Once they start failing (on new Firefox releases), they should be removed as these patches are imported from future versions of Firefox as temporary solutions while we wait.

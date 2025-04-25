@@ -24,7 +24,7 @@ Start-Job -Name "DownloadGitl10n" -ScriptBlock {
     cd $PWD
     $env:ZEN_L10N_CURR_DIR=[regex]::replace($PWD, "^([A-Z]):", { "/" + $args.value.Substring(0, 1).toLower() }) -replace "\\", "/"
     C:\mozilla-build\start-shell.bat $PWD\scripts\download-language-packs.sh
-    echo "Fetched l10n and firefox's one"
+    echo "Fetched l10n and Firefox's one"
 } -Verbose -ArgumentList $PWD -Debug
 
 Start-Job -Name "SurferInit" -ScriptBlock {
@@ -84,7 +84,7 @@ function DownloadArtifacts($name) {
 
     echo "Downloading artifact to $tempFile"
     DownloadFile $artifactUrl $tempFile
-    
+
     Start-Job -Name "UnzipArtifact$name" -ScriptBlock {
         param($tempFile, $outputPath)
         echo "Unzipping artifact to $outputPath"
@@ -128,13 +128,13 @@ function SignAndPackage($name) {
 
     echo "Removing old obj dir"
     rmdir engine\obj-$objName-pc-windows-msvc\ -Recurse -ErrorAction SilentlyContinue
-    
+
     echo "Creating new obj dir"
     cp windsign-temp\windows-x64-obj-$name engine\obj-$objName-pc-windows-msvc\ -Recurse
 
     echo "Copying setup.exe into obj dir"
     $env:ZEN_SETUP_EXE_PATH="$PWD\windsign-temp\windows-x64-obj-$name\browser\installer\windows\instgen\setup.exe"
-    
+
     if ($name -eq "arm64") {
         $env:WIN32_REDIST_DIR="$PWD\win-cross\vs2022\VC\Redist\MSVC\14.38.33135\arm64\Microsoft.VC143.CRT"
     } else {

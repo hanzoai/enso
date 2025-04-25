@@ -339,7 +339,7 @@ pref("network.http.rcwn.enabled", false);
 pref("devtools.debugger.remote-enabled", false);
 pref("devtools.chrome.enabled", true);
 
-// Disable firefox's revamp
+// Disable Firefox's revamp
 pref("sidebar.revamp", false, locked);
 pref("sidebar.verticalTabs", false, locked);
 
