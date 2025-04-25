@@ -242,6 +242,8 @@ var gZenMarketplaceManager = {
 
       document.body.appendChild(a);
       a.click();
+      a.remove();
+      successBox.hidden = false;
     } catch (error) {
       console.error('[ZenThemeMarketplaceParent:settings]: Error while exporting themes:', error);
       errorBox.hidden = false;
