@@ -16,6 +16,8 @@ var gZenMarketplaceManager = {
 
     header.appendChild(this._initDisableAll());
 
+    this._initImportExport();
+
     this.__hasInitializedEvents = true;
 
     await this._buildThemesList();
@@ -54,6 +56,23 @@ var gZenMarketplaceManager = {
       this.themesList.innerHTML = '';
       this._doNotRebuildThemesList = false;
     });
+  },
+
+  _initImportExport() {
+    const importButton = document.getElementById('zenThemeMarketplaceImport');
+    const exportButton = document.getElementById('zenThemeMarketplaceExport');
+
+    if (importButton) {
+      importButton.addEventListener('click', async () => {
+        await this._importThemes();
+      });
+    }
+
+    if (exportButton) {
+      exportButton.addEventListener('click', async () => {
+        await this._exportThemes();
+      });
+    }
   },
 
   _initDisableAll() {
@@ -151,6 +170,89 @@ var gZenMarketplaceManager = {
   _triggerBuildUpdateWithoutRebuild() {
     this._doNotRebuildThemesList = true;
     this.triggerThemeUpdate();
+  },
+
+  async _importThemes() {
+    const errorBox = document.getElementById('zenThemeMarketplaceImportFailure');
+    const successBox = document.getElementById('zenThemeMarketplaceImportSuccess');
+    successBox.hidden = true;
+    errorBox.hidden = true;
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.style.display = 'none';
+    input.setAttribute('moz-accept', '.json');
+    input.setAttribute('accept', '.json');
+
+    let timeout;
+    const filePromise = new Promise((resolve) => {
+      input.addEventListener('change', (event) => {
+        if (timeout) clearTimeout(timeout);
+        const file = event.target.files[0];
+        resolve(file);
+      });
+      timeout = setTimeout(() => {
+        console.warn('[ZenThemeMarketplaceParent:settings]: Import timeout reached, aborting.');
+        resolve(null);
+      }, 60000);
+    });
+
+    input.click();
+
+    try {
+      const file = await filePromise;
+      if (!file) {
+        return;
+      }
+      const content = await file.text();
+
+      const themes = JSON.parse(content);
+      const existingThemes = await ZenThemesCommon.getThemes();
+      const uniqueThemes = { ...themes, ...existingThemes };
+
+      console.log(`[ZenThemeMarketplaceParent:settings]: Importing ${Object.keys(themes).length} themes`);
+      await IOUtils.writeJSON(ZenThemesCommon.themesDataFile, uniqueThemes);
+      this.triggerThemeUpdate();
+      successBox.hidden = false;
+    } catch (error) {
+      console.error('[ZenThemeMarketplaceParent:settings]: Error while importing themes:', error);
+      errorBox.hidden = false;
+    } finally {
+      if (input) input.remove();
+    }
+  },
+
+  async _exportThemes() {
+    const errorBox = document.getElementById('zenThemeMarketplaceExportFailure');
+    const successBox = document.getElementById('zenThemeMarketplaceExportSuccess');
+
+    successBox.hidden = true;
+    errorBox.hidden = true;
+
+    let a, url;
+    try {
+      const themes = await ZenThemesCommon.getThemes();
+      const themesJson = JSON.stringify(themes, null, 2);
+      const blob = new Blob([themesJson], { type: 'application/json' });
+      url = URL.createObjectURL(blob);
+      // Creating a link to download the JSON file
+      a = document.createElement('a');
+      a.href = url;
+      a.download = 'zen-themes-export.json';
+
+      document.body.appendChild(a);
+      a.click();
+    } catch (error) {
+      console.error('[ZenThemeMarketplaceParent:settings]: Error while exporting themes:', error);
+      errorBox.hidden = false;
+    } finally {
+      if (a) {
+        a.remove();
+      }
+      if (url) {
+        URL.revokeObjectURL(url);
+      }
+    }
   },
 
   async _buildThemesList() {
