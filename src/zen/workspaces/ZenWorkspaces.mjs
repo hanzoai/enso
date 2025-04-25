@@ -2778,7 +2778,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       // Check if we need to change workspace
       if (
         tab.getAttribute('zen-workspace-id') !== this.activeWorkspace ||
-        (currentWorkspace.containerTabId !== tab.getAttribute('usercontextid') && this.containerSpecificEssentials)
+        tab.hasAttribute('zen-essential') ||
+        (currentWorkspace.containerTabId !== parseInt(tab.parentNode.getAttribute('container')) &&
+          this.containerSpecificEssentials)
       ) {
         // Use a mutex-like approach to prevent concurrent workspace changes
         if (this._workspaceChangeInProgress) {
@@ -2786,12 +2788,22 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
           return;
         }
 
+        let workspaceToSwitch = undefined;
+        if (tab.hasAttribute('zen-essential')) {
+          // Find first workspace with the same container
+          const containerTabId = parseInt(tab.parentNode.getAttribute('container'));
+          workspaceToSwitch = this._workspaceCache.workspaces.find((workspace) => workspace.containerTabId === containerTabId);
+        } else {
+          workspaceToSwitch = this._workspaceCache.workspaces.find((workspace) => workspace.uuid === tab.getAttribute('zen-workspace-id'));
+        }
+        if (!workspaceToSwitch) {
+          console.error('No workspace found for tab, cannot switch');
+          return;
+        }
+
         this._workspaceChangeInProgress = true;
         try {
-          await this.changeWorkspace({
-            uuid: tab.getAttribute('zen-workspace-id'),
-            containerTabId: tab.getAttribute('usercontextid'),
-          });
+          await this.changeWorkspace(workspaceToSwitch);
         } finally {
           this._workspaceChangeInProgress = false;
         }
