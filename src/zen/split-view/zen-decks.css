@@ -37,7 +37,7 @@
 
   &.deck-selected:has(.dialogStack:not([hidden='true'])) {
     /* Fix for issue https://github.com/zen-browser/desktop/issues/7564 */
-    z-index: 1; 
+    z-index: 1;
   }
 }
 
