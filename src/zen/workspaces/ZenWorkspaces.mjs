@@ -281,13 +281,13 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       if (element.classList.contains('tabbrowser-tab')) {
         continue;
       }
-      this._pinnedTabsResizeObserver.observe(element);
+      this._pinnedTabsResizeObserver.observe(element, { box: 'border-box' });
     }
     for (let element of document.getElementById('zen-essentials-wrapper').children) {
       if (element.classList.contains('tabbrowser-tab')) {
         continue;
       }
-      this._pinnedTabsResizeObserver.observe(element);
+      this._pinnedTabsResizeObserver.observe(element, { box: 'border-box' });
     }
   }
 
@@ -1840,7 +1840,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   _updateMarginTopPinnedTabs(arrowscrollbox, pinnedContainer, essentialContainer, workspaceIndicator, forAnimation = false) {
-    if (arrowscrollbox) {
+    if (arrowscrollbox && !(this._inChangingWorkspace && !forAnimation && !this._alwaysAnimateMarginTop)) {
+      delete this._alwaysAnimateMarginTop;
       const essentialsHeight = essentialContainer.getBoundingClientRect().height;
       workspaceIndicator.style.marginTop = essentialsHeight + 'px';
       let arrowMarginTop = pinnedContainer.getBoundingClientRect().height;
@@ -1849,8 +1850,11 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         document.getElementById('zen-tabs-wrapper').style.marginTop = essentialsHeight + 'px';
         pinnedContainer.style.marginTop = '';
       } else {
-        arrowMarginTop += essentialsHeight;
+        arrowMarginTop += forAnimation ? 0 : essentialsHeight;
         pinnedContainer.style.marginTop = essentialsHeight + 'px';
+        if (forAnimation) {
+          document.getElementById('zen-tabs-wrapper').style.marginTop = '';
+        }
       }
       if (!forAnimation && !this._inChangingWorkspace) {
         // TODO:
@@ -2112,6 +2116,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       for (const cloned of clonedEssentials) {
         cloned.container.remove();
       }
+      this._alwaysAnimateMarginTop = true;
       this.updateTabsContainers();
     }
     const essentialsContainer = this.getEssentialsSection(newWorkspace.containerTabId);
@@ -2794,7 +2799,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
           const containerTabId = parseInt(tab.parentNode.getAttribute('container'));
           workspaceToSwitch = this._workspaceCache.workspaces.find((workspace) => workspace.containerTabId === containerTabId);
         } else {
-          workspaceToSwitch = this._workspaceCache.workspaces.find((workspace) => workspace.uuid === tab.getAttribute('zen-workspace-id'));
+          workspaceToSwitch = this._workspaceCache.workspaces.find(
+            (workspace) => workspace.uuid === tab.getAttribute('zen-workspace-id')
+          );
         }
         if (!workspaceToSwitch) {
           console.error('No workspace found for tab, cannot switch');
