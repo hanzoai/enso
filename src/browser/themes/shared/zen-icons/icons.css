@@ -24,10 +24,6 @@
   list-style-image: url('move-tab.svg') !important;
 }
 
-.zen-tab-unsplit-button {
-  list-style-image: url('unpin.svg') !important;
-}
-
 #forward-button,
 #zen-sidebar-web-panel-forward {
   list-style-image: url('forward.svg') !important;
@@ -267,7 +263,8 @@
 #restore-button,
 #fullscreen-button,
 #zen-glance-sidebar-open,
-#appMenu-fullscreen-button2 {
+#appMenu-fullscreen-button2,
+.zen-tab-unsplit-button {
   list-style-image: url('fullscreen.svg') !important;
 }
 

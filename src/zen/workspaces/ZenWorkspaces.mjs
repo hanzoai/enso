@@ -1666,27 +1666,37 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   moveTabToWorkspace(tab, workspaceID) {
-    const parent = tab.pinned ? '#vertical-pinned-tabs-container ' : '#tabbrowser-arrowscrollbox ';
-    const container = document.querySelector(parent + `.zen-workspace-tabs-section[zen-workspace-id="${workspaceID}"]`);
+    return this.moveTabsToWorkspace([tab], workspaceID);
+  }
 
-    if (container?.contains(tab)) {
-      return false;
-    }
+  moveTabsToWorkspace(tabs, workspaceID, justChangeId = false) {
+    for (let tab of tabs) {
+      const parent = tab.pinned ? '#vertical-pinned-tabs-container ' : '#tabbrowser-arrowscrollbox ';
+      const container = document.querySelector(parent + `.zen-workspace-tabs-section[zen-workspace-id="${workspaceID}"]`);
 
-    tab.setAttribute('zen-workspace-id', workspaceID);
-    if (tab.hasAttribute('zen-essential')) {
-      return false;
-    }
+      if (container?.contains(tab)) {
+        continue;
+      }
 
-    if (container) {
-      container.insertBefore(tab, container.lastChild);
-    }
-    // also change glance tab if it's the same tab
-    const glanceTab = tab.querySelector('.tabbrowser-tab[zen-glance-tab]');
-    if (glanceTab) {
-      glanceTab.setAttribute('zen-workspace-id', workspaceID);
-    }
+      tab.setAttribute('zen-workspace-id', workspaceID);
+      if (tab.hasAttribute('zen-essential')) {
+        continue;
+      }
 
+      if (container && !justChangeId) {
+        if (tab.group?.hasAttribute('split-view-group')) {
+          this.moveTabsToWorkspace(tab.group.tabs, workspaceID, true);
+          container.insertBefore(tab.group, container.lastChild);
+          continue;
+        }
+        container.insertBefore(tab, container.lastChild);
+      }
+      // also change glance tab if it's the same tab
+      const glanceTab = tab.querySelector('.tabbrowser-tab[zen-glance-tab]');
+      if (glanceTab) {
+        glanceTab.setAttribute('zen-workspace-id', workspaceID);
+      }
+    }
     return true;
   }
 
