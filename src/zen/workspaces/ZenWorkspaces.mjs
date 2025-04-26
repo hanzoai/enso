@@ -266,7 +266,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   _initializeEmptyTab() {
-    if (Services.prefs.getBoolPref('zen.workspaces.disable_empty_state_for_testing', false)) {
+    if (gZenUIManager.testingEnabled) {
       return;
     }
     this._emptyTab = gBrowser.addTrustedTab('about:blank', { inBackground: true, userContextId: 0, _forZenEmptyTab: true });
@@ -678,8 +678,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   get workspaceEnabled() {
     if (typeof this._workspaceEnabled === 'undefined') {
-      this._workspaceEnabled =
-        !Services.prefs.getBoolPref('zen.workspaces.disabled_for_testing', false) && this.shouldHaveWorkspaces;
+      this._workspaceEnabled = !gZenUIManager.testingEnabled && this.shouldHaveWorkspaces;
     }
     return this._workspaceEnabled && !window.closed;
   }
@@ -769,7 +768,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async _selectStartPage() {
-    if (Services.prefs.getBoolPref('zen.workspaces.disable_empty_state_for_testing', false)) {
+    if (gZenUIManager.testingEnabled) {
       return;
     }
     if (this._initialTab) {

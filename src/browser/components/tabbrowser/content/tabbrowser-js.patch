@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 6dece2b9d0462d90a28e75350ce983d87816ef73..b1f6a5e05281cdc9707f4e82fe3df611d246cc6f 100644
+index 6dece2b9d0462d90a28e75350ce983d87816ef73..e80730ed2db404c0d47f2e29c3235c66f0137ad2 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -415,11 +415,58 @@
@@ -67,7 +67,7 @@ index 6dece2b9d0462d90a28e75350ce983d87816ef73..b1f6a5e05281cdc9707f4e82fe3df611
        this.tabpanels.appendChild(panel);
  
        let tab = this.tabs[0];
-+      ZenWorkspaces.handleInitialTab(tab, (!remoteType || remoteType === E10SUtils.PRIVILEGEDABOUT_REMOTE_TYPE) && !Services.prefs.getBoolPref('zen.workspaces.disable_empty_state_for_testing', false));
++      ZenWorkspaces.handleInitialTab(tab, (!remoteType || remoteType === E10SUtils.PRIVILEGEDABOUT_REMOTE_TYPE) && !gZenUIManager.testingEnabled);
        tab.linkedPanel = uniqueId;
        this._selectedTab = tab;
        this._selectedBrowser = browser;

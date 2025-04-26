@@ -29,11 +29,11 @@
 
 # Scripts used all over the browser
 <script>
+Services.scriptloader.loadSubScript("chrome://browser/content/ZenUIManager.mjs", this);
 Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenFolders.mjs", this);
 Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenThemesCommon.mjs", this);
 Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenThemesImporter.mjs", this);
 Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenCompactMode.mjs", this);
-Services.scriptloader.loadSubScript("chrome://browser/content/ZenUIManager.mjs", this);
 Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenTabUnloader.mjs", this);
 Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenPinnedTabsStorage.mjs", this);
 Services.scriptloader.loadSubScript("chrome://browser/content/zen-components/ZenWorkspacesStorage.mjs", this);
