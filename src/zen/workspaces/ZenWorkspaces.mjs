@@ -684,8 +684,12 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   getActiveWorkspaceFromCache() {
+    return this.getWoekspaceFromId(this.activeWorkspace);
+  }
+
+  getWoekspaceFromId(id) {
     try {
-      return this._workspaceCache.workspaces.find((workspace) => workspace.uuid === this.activeWorkspace);
+      return this._workspaceCache.workspaces.find((workspace) => workspace.uuid === id);
     } catch (e) {
       return null;
     }
@@ -706,7 +710,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     const activeWorkspaceId = this.activeWorkspace;
 
     if (activeWorkspaceId) {
-      const activeWorkspace = this._workspaceCache.workspaces.find((w) => w.uuid === activeWorkspaceId);
+      const activeWorkspace = this.getWoekspaceFromId(activeWorkspaceId);
       // Set the active workspace ID to the first one if the one with selected id doesn't exist
       if (!activeWorkspace) {
         this.activeWorkspace = this._workspaceCache.workspaces[0]?.uuid;
@@ -2370,7 +2374,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         const workspaceIndicator = document.querySelector(
           `#zen-current-workspace-indicator-container .zen-workspace-tabs-section[zen-workspace-id="${workspaceId}"]`
         );
-        const workspaceObject = this._workspaceCache.workspaces.find((w) => w.uuid === workspaceId);
+        const workspaceObject = this.getWoekspaceFromId(workspaceId);
         const essentialContainer = this.getEssentialsSection(workspaceObject.containerTabId);
         this._updateMarginTopPinnedTabs(arrowScrollbox, pinnedContainer, essentialContainer, workspaceIndicator, forAnimation);
         this.updateShouldHideSeparator(arrowScrollbox, pinnedContainer);
@@ -2435,7 +2439,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
       // Switch workspace if needed
       if (workspaceID && workspaceID !== activeWorkspace.uuid && this._hasInitializedTabsStrip) {
-        await this.changeWorkspace({ uuid: workspaceID });
+        const workspaceToChange = this.getWoekspaceFromId(workspaceID);
+        await this.changeWorkspace(workspaceToChange);
       }
     }
   }
@@ -2619,7 +2624,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   // Tab browser utilities
   createContainerTabMenu(event) {
     let window = event.target.ownerGlobal;
-    const workspace = this._workspaceCache.workspaces.find((workspace) => this._contextMenuId === workspace.uuid);
+    const workspace = this.getWoekspaceFromId(this._contextMenuId);
     let containerTabId = workspace.containerTabId;
     return window.createUserContextMenu(event, {
       isContextMenu: true,
@@ -2811,11 +2816,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         if (tab.hasAttribute('zen-essential')) {
           // Find first workspace with the same container
           const containerTabId = parseInt(tab.parentNode.getAttribute('container'));
-          workspaceToSwitch = this._workspaceCache.workspaces.find((workspace) => workspace.containerTabId === containerTabId);
+          workspaceToSwitch = this.getWoekspaceFromId(containerTabId);
         } else {
-          workspaceToSwitch = this._workspaceCache.workspaces.find(
-            (workspace) => workspace.uuid === tab.getAttribute('zen-workspace-id')
-          );
+          workspaceToSwitch = this.getWoekspaceFromId(tab.getAttribute('zen-workspace-id'));
         }
         if (!workspaceToSwitch) {
           console.error('No workspace found for tab, cannot switch');
