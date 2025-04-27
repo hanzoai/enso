@@ -58,7 +58,6 @@ pref('browser.newtabpage.activity-stream.feeds.section.topstories', false);
 pref("browser.topsites.contile.enabled", true);
 
 // Pdf
-pref('browser.download.open_pdf_attachments_inline', true);
 pref('pdfjs.enableHighlightEditor', true);
 pref('pdfjs.enableHighlightFloatingButton', true);
 
@@ -121,7 +120,7 @@ pref('zen.theme.color-prefs.use-workspace-colors', true);
 
 pref('zen.view.compact.hide-tabbar', true);
 pref('zen.view.compact.hide-toolbar', false);
-pref('zen.view.compact.toolbar-flash-popup', true);
+pref('zen.view.compact.toolbar-flash-popup', false);
 pref('zen.view.compact.toolbar-flash-popup.duration', 800);
 pref('zen.view.compact.toolbar-hide-after-hover.duration', 1000);
 pref('zen.view.compact.color-toolbar', true);
@@ -193,6 +192,10 @@ pref("browser.profiles.enabled", false);
 pref('zen.splitView.enable-tab-drop', true);
 pref('zen.splitView.min-resize-width', 7);
 pref('zen.splitView.rearrange-hover-size', 24);
+
+// Zen Download Animations
+pref('zen.downloads.download-animation', true);
+pref('zen.downloads.download-animation-duration', 1000); // ms
 
 // Startup flags
 pref('zen.startup.smooth-scroll-in-tabs', true);
@@ -271,8 +274,9 @@ pref("pdfjs.enableScripting", false);
 pref("extensions.postDownloadThirdPartyPrompt", false);
 
 // Downloads
-pref("browser.download.always_ask_before_handling_new_types", true);
 pref("browser.download.manager.addToRecentDocs", false);
+pref('browser.download.open_pdf_attachments_inline', true);
+pref('browser.download.alwaysOpenPanel', false);
 
 // Tracking protection
 pref("urlclassifier.trackingSkipURLs", "*.reddit.com, *.x.com, *.twimg.com, *.tiktok.com");
