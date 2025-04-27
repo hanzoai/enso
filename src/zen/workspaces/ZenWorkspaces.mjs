@@ -2162,7 +2162,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     // Save current tab as last selected for old workspace if it shouldn't be visible in new workspace
     if (oldWorkspaceId && oldWorkspaceId !== window.uuid) {
-      this._lastSelectedWorkspaceTabs[oldWorkspaceId] = currentSelectedTab;
+      this._lastSelectedWorkspaceTabs[oldWorkspaceId] = gZenGlanceManager.getTabOrGlanceParent(currentSelectedTab);
     }
 
     let tabToSelect = null;
@@ -2400,7 +2400,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     if (workspaceID) {
       if (tab.hasAttribute('change-workspace') && this.moveTabToWorkspace(tab, workspaceID)) {
-        this._lastSelectedWorkspaceTabs[workspaceID] = tab;
+        this._lastSelectedWorkspaceTabs[workspaceID] = gZenGlanceManager.getTabOrGlanceParent(tab);
         tab.removeAttribute('change-workspace');
         await this.changeWorkspace({ uuid: workspaceID, containerTabId: tab.getAttribute('usercontextid') }, { onInit: true });
       }
@@ -2441,7 +2441,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
       // Only update last selected tab for non-essential tabs in their workspace
       if (workspaceID === activeWorkspace.uuid) {
-        this._lastSelectedWorkspaceTabs[workspaceID] = tab;
+        this._lastSelectedWorkspaceTabs[workspaceID] = gZenGlanceManager.getTabOrGlanceParent(tab);
       }
 
       // Switch workspace if needed
@@ -2623,7 +2623,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       }
     }
     // Make sure we select the last tab in the new workspace
-    this._lastSelectedWorkspaceTabs[workspaceID] = tabs[tabs.length - 1];
+    this._lastSelectedWorkspaceTabs[workspaceID] = gZenGlanceManager.getTabOrGlanceParent(tabs[tabs.length - 1]);
     const workspaces = await this._workspaces();
     await this.changeWorkspace(workspaces.workspaces.find((workspace) => workspace.uuid === workspaceID));
   }

@@ -645,6 +645,16 @@
         }
       }
     }
+
+    getTabOrGlanceParent(tab) {
+      if (tab.hasAttribute('glance-id')) {
+        const parentTab = this.#glances.get(tab.getAttribute('glance-id')).parentTab;
+        if (parentTab) {
+          return parentTab;
+        }
+      }
+      return tab;
+    }
   }
 
   window.gZenGlanceManager = new ZenGlanceManager();
