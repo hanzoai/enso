@@ -214,6 +214,11 @@ var gZenMarketplaceManager = {
       await IOUtils.writeJSON(ZenThemesCommon.themesDataFile, uniqueThemes);
       this.triggerThemeUpdate();
       successBox.hidden = false;
+
+      let buttonIndex = await confirmRestartPrompt(true, 1, true, true);
+      if (buttonIndex == CONFIRM_RESTART_PROMPT_RESTART_NOW) {
+        Services.startup.quit(Ci.nsIAppStartup.eAttemptQuit | Ci.nsIAppStartup.eRestart);
+      }
     } catch (error) {
       console.error('[ZenThemeMarketplaceParent:settings]: Error while importing themes:', error);
       errorBox.hidden = false;
