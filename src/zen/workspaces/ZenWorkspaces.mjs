@@ -2040,6 +2040,11 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         const lastWorkspaceIndex = workspaces.workspaces.findIndex(
           (w) => w.uuid === essentialsWorkspacess[essentialsWorkspacess.length - 1].uuid
         );
+        // Check if the container is even going to appear on the screen, to save on animation
+        if (firstWorkspaceIndex > newWorkspaceIndex || lastWorkspaceIndex < newWorkspaceIndex) {
+          container.remove();
+          continue;
+        }
         let stepsInBetween = Math.abs(newWorkspaceIndex - (isGoingLeft ? firstWorkspaceIndex : lastWorkspaceIndex)) + 1;
         const usingSameContainer =
           newWorkspaceEssentialsContainer.workspaces.some((w) => w.uuid === newWorkspace.uuid) &&
