@@ -81,8 +81,8 @@
 
   async function openInitialPinTab() {
     const tabs = [
-      ['https://reddit.com/r/zen_browser', 'Zen on Reddit', 'https://zen-browser.github.io/static-cdn/reddit.png'],
-      ['https://x.com/zen_browser', 'Zen on Twitter', 'https://zen-browser.github.io/static-cdn/x.png'],
+      ['https://reddit.com/r/zen_browser', 'Zen on Reddit', 'https://private-cdn.zen-browser.app/reddit.png'],
+      ['https://x.com/zen_browser', 'Zen on Twitter', 'https://private-cdn.zen-browser.app/x.png'],
     ];
     for (const site of tabs) {
       const tab = window.gBrowser.addTrustedTab(site[0], {
@@ -374,47 +374,47 @@
                   <html:div></html:div>
                 </hbox>
                 <html:div id="zen-welcome-initial-essentials-browser-sidebar-essentials">
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://obsidian.md" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/obsidian.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://obsidian.md" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/obsidian.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://discord.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/discord.png');">
+                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://discord.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/discord.png');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://trello.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/trello.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://trello.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/trello.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://slack.com/" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/slack.png');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://slack.com/" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/slack.png');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://github.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/github.png');">
+                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://github.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/github.png');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://twitter.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/x.png');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://twitter.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/x.png');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://notion.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/notion.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://notion.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/notion.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://calendar.google.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/calendar.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://calendar.google.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/calendar.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://youtube.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/youtube.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://youtube.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/youtube.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>

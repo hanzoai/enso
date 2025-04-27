@@ -91,7 +91,7 @@
         }
       }
 
-      &:not([zen-single-toolbar='true']) .zen-essentials-container {
+      &:not([zen-sidebar-expanded='true']) .zen-essentials-container {
         padding: 0;
       }
 
