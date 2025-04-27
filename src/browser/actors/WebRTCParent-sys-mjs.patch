@@ -1,5 +1,5 @@
 diff --git a/browser/actors/WebRTCParent.sys.mjs b/browser/actors/WebRTCParent.sys.mjs
-index be66de4a1ef044341c2e1d6953806550897df45a..ff6ef3511076b25e00ca4d0189f666ec7aa94fe8 100644
+index 40e3a057a1d4b2f9bcfb73fa5ff96b2555865434..a92bed06766dd930bd336d56cd9ddcf3c6c0eeca 100644
 --- a/browser/actors/WebRTCParent.sys.mjs
 +++ b/browser/actors/WebRTCParent.sys.mjs
 @@ -152,6 +152,7 @@ export class WebRTCParent extends JSWindowActorParent {

@@ -1,8 +1,8 @@
 diff --git a/browser/components/places/PlacesUIUtils.sys.mjs b/browser/components/places/PlacesUIUtils.sys.mjs
-index fbdd6a34b12d4d957f7a2d9d95df0bfd65ba3f61..baaf34536f557c69fce3cc43e6f12658514db39f 100644
+index 1f5e163bae58f3f1cac750ca32846cc8a80bd2ca..16034842b4ca5295aa3c9237db55035ecc4016d2 100644
 --- a/browser/components/places/PlacesUIUtils.sys.mjs
 +++ b/browser/components/places/PlacesUIUtils.sys.mjs
-@@ -58,6 +58,7 @@ class BookmarkState {
+@@ -59,6 +59,7 @@ class BookmarkState {
      info,
      tags = "",
      keyword = "",
@@ -10,7 +10,7 @@ index fbdd6a34b12d4d957f7a2d9d95df0bfd65ba3f61..baaf34536f557c69fce3cc43e6f12658
      isFolder = false,
      children = [],
      autosave = false,
-@@ -82,12 +83,18 @@ class BookmarkState {
+@@ -83,12 +84,18 @@ class BookmarkState {
        keyword,
        parentGuid: info.parentGuid,
        index,
@@ -29,7 +29,7 @@ index fbdd6a34b12d4d957f7a2d9d95df0bfd65ba3f61..baaf34536f557c69fce3cc43e6f12658
    /**
     * Save edited title for the bookmark
     *
-@@ -181,6 +188,14 @@ class BookmarkState {
+@@ -182,6 +189,14 @@ class BookmarkState {
        "BookmarkState::createBookmark"
      );
      this._guid = results?.[0];
@@ -44,7 +44,7 @@ index fbdd6a34b12d4d957f7a2d9d95df0bfd65ba3f61..baaf34536f557c69fce3cc43e6f12658
      return this._guid;
    }
  
-@@ -214,6 +229,14 @@ class BookmarkState {
+@@ -215,6 +230,14 @@ class BookmarkState {
        "BookmarkState::save::createFolder"
      );
      this._guid = results[0];
@@ -59,7 +59,7 @@ index fbdd6a34b12d4d957f7a2d9d95df0bfd65ba3f61..baaf34536f557c69fce3cc43e6f12658
      return this._guid;
    }
  
-@@ -300,11 +323,97 @@ class BookmarkState {
+@@ -301,11 +324,97 @@ class BookmarkState {
        await lazy.PlacesTransactions.batch(transactions, "BookmarkState::save");
      }
  
@@ -157,7 +157,7 @@ index fbdd6a34b12d4d957f7a2d9d95df0bfd65ba3f61..baaf34536f557c69fce3cc43e6f12658
    /**
     * Append transactions to update tags by given information.
     *
-@@ -902,8 +1011,15 @@ export var PlacesUIUtils = {
+@@ -903,8 +1012,15 @@ export var PlacesUIUtils = {
      aNode,
      aWhere,
      aWindow,

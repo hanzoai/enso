@@ -170,7 +170,6 @@ var gZenMarketplaceManager = {
     for (const theme of Object.values(themes).sort((a, b) => a.name.localeCompare(b.name))) {
       const sanitizedName = `theme-${theme.name?.replaceAll(/\s/g, '-')?.replaceAll(/[^A-z_-]+/g, '')}`;
       const isThemeEnabled = theme.enabled === undefined || theme.enabled;
-
       const fragment = window.MozXULElement.parseXULToFragment(`
         <vbox class="zenThemeMarketplaceItem">
           <vbox class="zenThemeMarketplaceItemContent">
@@ -181,6 +180,7 @@ var gZenMarketplaceManager = {
           </vbox>
           <hbox class="zenThemeMarketplaceItemActions">
             ${theme.preferences ? `<button id="zenThemeMarketplaceItemConfigureButton-${sanitizedName}" class="zenThemeMarketplaceItemConfigureButton" hidden="true"></button>` : ''}
+            ${theme.homepage ? `<button id="zenThemeMarketplaceItemHomePageLink-${sanitizedName}" class="zenThemeMarketplaceItemHomepageButton" zen-theme-id="${theme.id}"></button>` : ''}
             <button class="zenThemeMarketplaceItemUninstallButton" data-l10n-id="zen-theme-marketplace-remove-button" zen-theme-id="${theme.id}"></button>
           </hbox>
         </vbox>
@@ -273,6 +273,16 @@ var gZenMarketplaceManager = {
 
         await this.removeTheme(event.target.getAttribute('zen-theme-id'));
       });
+
+      if (theme.homepage) {
+        const homepageButton = fragment.querySelector('.zenThemeMarketplaceItemHomepageButton');
+        homepageButton.addEventListener('click', () => {
+          // open the homepage url in a new tab
+          const url = theme.homepage;
+
+          window.open(url, '_blank');
+        });
+      }
 
       if (theme.preferences) {
         fragment.querySelector('.zenThemeMarketplaceItemConfigureButton').addEventListener('click', () => {
@@ -1021,6 +1031,11 @@ Preferences.addAll([
   },
   {
     id: 'zen.view.show-newtab-button-top',
+    type: 'bool',
+    default: true,
+  },
+  {
+    id: 'media.videocontrols.picture-in-picture.enabled',
     type: 'bool',
     default: true,
   },

@@ -2,6 +2,7 @@ var gZenUIManager = {
   _popupTrackingElements: [],
   _hoverPausedForExpand: false,
   _hasLoadedDOM: false,
+  testingEnabled: Services.prefs.getBoolPref('zen.testing.enabled', false),
 
   init() {
     document.addEventListener('popupshowing', this.onPopupShowing.bind(this));
@@ -28,7 +29,7 @@ var gZenUIManager = {
         gZenCompactModeManager.getAndApplySidebarWidth.bind(gZenCompactModeManager),
         this.sidebarHeightThrottle
       )
-    ).observe(document.getElementById('navigator-toolbox'));
+    ).observe(gNavToolbox);
 
     SessionStore.promiseAllWindowsRestored.then(() => {
       this._hasLoadedDOM = true;
@@ -70,6 +71,12 @@ var gZenUIManager = {
     } catch (error) {
       console.error('Error updating layout breakout:', error);
     }
+    if (!this._preventToolbarRebuild) {
+      setTimeout(() => {
+        ZenWorkspaces.updateTabsContainers();
+      }, 0);
+    }
+    delete this._preventToolbarRebuild;
   },
 
   get tabsWrapper() {
@@ -175,25 +182,140 @@ var gZenUIManager = {
   _clearTimeout: null,
   _lastTab: null,
 
+  // Track tab switching state to prevent race conditions
+  _tabSwitchState: {
+    inProgress: false,
+    lastSwitchTime: 0,
+    debounceTime: 100, // ms to wait between tab switches
+    queue: [],
+    processingQueue: false,
+  },
+
+  // Queue tab switch operations to prevent race conditions
+  async _queueTabOperation(operation) {
+    // Add operation to queue
+    this._tabSwitchState.queue.push(operation);
+
+    // If already processing queue, just return
+    if (this._tabSwitchState.processingQueue) {
+      return;
+    }
+
+    // Start processing queue
+    this._tabSwitchState.processingQueue = true;
+
+    try {
+      while (this._tabSwitchState.queue.length > 0) {
+        // Get next operation
+        const nextOp = this._tabSwitchState.queue.shift();
+
+        // Check if we need to wait for debounce
+        const now = Date.now();
+        const timeSinceLastSwitch = now - this._tabSwitchState.lastSwitchTime;
+
+        if (timeSinceLastSwitch < this._tabSwitchState.debounceTime) {
+          await new Promise((resolve) => setTimeout(resolve, this._tabSwitchState.debounceTime - timeSinceLastSwitch));
+        }
+
+        // Execute operation
+        this._tabSwitchState.inProgress = true;
+        await nextOp();
+        this._tabSwitchState.inProgress = false;
+        this._tabSwitchState.lastSwitchTime = Date.now();
+      }
+    } finally {
+      this._tabSwitchState.processingQueue = false;
+    }
+  },
+
+  // Check if browser elements are in a valid state for tab operations
+  _validateBrowserState() {
+    // Check if browser window is still open
+    if (window.closed) {
+      return false;
+    }
+
+    // Check if gBrowser is available
+    if (!gBrowser || !gBrowser.tabContainer) {
+      return false;
+    }
+
+    // Check if URL bar is available
+    if (!gURLBar) {
+      return false;
+    }
+
+    return true;
+  },
+
   handleNewTab(werePassedURL, searchClipboard, where) {
+    // Validate browser state first
+    if (!this._validateBrowserState()) {
+      console.warn('Browser state invalid for new tab operation');
+      return false;
+    }
+
+    if (this.testingEnabled) {
+      return false;
+    }
+
     const shouldOpenURLBar = gZenVerticalTabsManager._canReplaceNewTab && !werePassedURL && !searchClipboard && where === 'tab';
-    if (shouldOpenURLBar) {
+
+    if (!shouldOpenURLBar) {
+      return false;
+    }
+
+    // Queue the tab operation to prevent race conditions
+    this._queueTabOperation(async () => {
+      // Clear any existing timeout
       if (this._clearTimeout) {
         clearTimeout(this._clearTimeout);
+        this._clearTimeout = null;
       }
+
+      // Store the current tab
       this._lastTab = gBrowser.selectedTab;
-      this._lastTab._visuallySelected = false;
-      this._prevUrlbarLabel = gURLBar._untrimmedValue;
+      if (!this._lastTab) {
+        console.warn('No selected tab found when creating new tab');
+        return false;
+      }
+
+      // Set visual state with proper validation
+      if (this._lastTab && !this._lastTab.closing) {
+        this._lastTab._visuallySelected = false;
+      }
+
+      // Store URL bar state
+      this._prevUrlbarLabel = gURLBar._untrimmedValue || '';
+
+      // Set up URL bar for new tab
       gURLBar._zenHandleUrlbarClose = this.handleUrlbarClose.bind(this);
       gURLBar.setAttribute('zen-newtab', true);
+
+      // Update newtab buttons
       for (const button of this.newtabButtons) {
         button.setAttribute('in-urlbar', true);
       }
-      document.getElementById('Browser:OpenLocation').doCommand();
-      gURLBar.search(this._lastSearch);
-      return true;
-    }
-    return false;
+
+      // Open location command
+      try {
+        // Wait for a small delay to ensure DOM is ready
+        await new Promise((resolve) => setTimeout(resolve, 10));
+
+        document.getElementById('Browser:OpenLocation').doCommand();
+
+        // Wait for URL bar to be ready
+        await new Promise((resolve) => setTimeout(resolve, 10));
+
+        gURLBar.search(this._lastSearch || '');
+      } catch (e) {
+        console.error('Error opening location in new tab:', e);
+        this.handleUrlbarClose(false);
+        return false;
+      }
+    });
+
+    return true;
   },
 
   clearUrlbarData() {
@@ -202,30 +324,67 @@ var gZenUIManager = {
   },
 
   handleUrlbarClose(onSwitch) {
-    gURLBar._zenHandleUrlbarClose = null;
-    gURLBar.removeAttribute('zen-newtab');
-    this._lastTab._visuallySelected = true;
-    this._lastTab = null;
-    for (const button of this.newtabButtons) {
-      button.removeAttribute('in-urlbar');
+    // Validate browser state first
+    if (!this._validateBrowserState()) {
+      console.warn('Browser state invalid for URL bar close operation');
+      return;
     }
-    if (onSwitch) {
-      this.clearUrlbarData();
-    } else {
-      this._lastSearch = gURLBar._untrimmedValue;
-      this._clearTimeout = setTimeout(() => {
-        this.clearUrlbarData();
-      }, this.urlbarWaitToClear);
-    }
-    gURLBar.setURI(this._prevUrlbarLabel, onSwitch, false, false, !onSwitch);
-    gURLBar.handleRevert();
-    if (gURLBar.focused) {
-      gURLBar.view.close({ elementPicked: onSwitch });
-      gURLBar.updateTextOverflow();
-      if (gBrowser.selectedTab.linkedBrowser && onSwitch) {
-        gURLBar.getBrowserState(gBrowser.selectedTab.linkedBrowser).urlbarFocused = false;
+
+    // Queue the operation to prevent race conditions
+    this._queueTabOperation(async () => {
+      // Reset URL bar state
+      if (gURLBar._zenHandleUrlbarClose) {
+        gURLBar._zenHandleUrlbarClose = null;
       }
-    }
+      gURLBar.removeAttribute('zen-newtab');
+
+      // Safely restore tab visual state with proper validation
+      if (this._lastTab && !this._lastTab.closing && this._lastTab.ownerGlobal && !this._lastTab.ownerGlobal.closed) {
+        this._lastTab._visuallySelected = true;
+        this._lastTab = null;
+      }
+
+      // Reset newtab buttons
+      for (const button of this.newtabButtons) {
+        button.removeAttribute('in-urlbar');
+      }
+
+      // Handle search data
+      if (onSwitch) {
+        this.clearUrlbarData();
+      } else {
+        this._lastSearch = gURLBar._untrimmedValue || '';
+
+        if (this._clearTimeout) {
+          clearTimeout(this._clearTimeout);
+        }
+
+        this._clearTimeout = setTimeout(() => {
+          this.clearUrlbarData();
+        }, this.urlbarWaitToClear);
+      }
+
+      // Safely restore URL bar state with proper validation
+      if (this._prevUrlbarLabel) {
+        gURLBar.setURI(this._prevUrlbarLabel, onSwitch, false, false, !onSwitch);
+      }
+
+      gURLBar.handleRevert();
+
+      if (gURLBar.focused) {
+        gURLBar.view.close({ elementPicked: onSwitch });
+        gURLBar.updateTextOverflow();
+
+        // Ensure tab and browser are valid before updating state
+        const selectedTab = gBrowser.selectedTab;
+        if (selectedTab && selectedTab.linkedBrowser && !selectedTab.closing && onSwitch) {
+          const browserState = gURLBar.getBrowserState(selectedTab.linkedBrowser);
+          if (browserState) {
+            browserState.urlbarFocused = false;
+          }
+        }
+      }
+    });
   },
 
   urlbarTrim(aURL) {
@@ -322,11 +481,7 @@ var gZenVerticalTabsManager = {
   },
 
   get navigatorToolbox() {
-    if (this._navigatorToolbox) {
-      return this._navigatorToolbox;
-    }
-    this._navigatorToolbox = document.getElementById('navigator-toolbox');
-    return this._navigatorToolbox;
+    return gNavToolbox;
   },
 
   initRightSideOrderContextMenu() {
@@ -480,7 +635,7 @@ var gZenVerticalTabsManager = {
   },
 
   _updateEvent({ forCustomizableMode = false, dontRebuildAreas = false } = {}) {
-    if (this._isUpdating) {
+    if (this._isUpdating || gZenUIManager.testingEnabled) {
       return;
     }
     this._isUpdating = true;
@@ -678,7 +833,7 @@ var gZenVerticalTabsManager = {
 
   _updateMaxWidth() {
     const maxWidth = Services.prefs.getIntPref('zen.view.sidebar-expanded.max-width');
-    const toolbox = document.getElementById('navigator-toolbox');
+    const toolbox = gNavToolbox;
     if (!this._prefsCompactMode) {
       toolbox.style.maxWidth = `${maxWidth}px`;
     } else {

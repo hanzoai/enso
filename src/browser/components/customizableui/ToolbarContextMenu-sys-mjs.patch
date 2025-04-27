@@ -1,5 +1,5 @@
 diff --git a/browser/components/customizableui/ToolbarContextMenu.sys.mjs b/browser/components/customizableui/ToolbarContextMenu.sys.mjs
-index af22f766a052372a68faca139161cccbf0d768f0..199591ca0609e8902e84a87baf50acc29f84ee3a 100644
+index b88b0166fb99bc3d44a2e05798650b8ad6ab9a46..2e66c8294f0ef4f91ae160bd55b7417b55e9f5b2 100644
 --- a/browser/components/customizableui/ToolbarContextMenu.sys.mjs
 +++ b/browser/components/customizableui/ToolbarContextMenu.sys.mjs
 @@ -240,8 +240,8 @@ export var ToolbarContextMenu = {

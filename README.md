@@ -30,7 +30,7 @@
 
 Zen is currently built using Firefox version `137.0.2`! 🚀
 
-- [`Zen Twilight`](https://zen-browser.app/download?twilight) - Is currently built using Firefox version `RC 137.0.2`!
+- [`Zen Twilight`](https://zen-browser.app/download?twilight) - Is currently built using Firefox version `RC 138.0`!
 - Check out the latest [release notes](https://zen-browser.app/release-notes)!
 - Part of our mission is to keep Zen up-to-date with the latest version of Firefox, so you can enjoy the latest features and security updates!
 
@@ -57,10 +57,6 @@ Zen is divided into 2 main branches. We use `dev` for development and `stable` f
 
 We divide into 2 branches in case there's any really important security update (for example) that needs to be released before the next stable release. This allows us to do patches without releasing unstable versions to the public.
 
-## ⚡ Performance
-
-Zen is built with performance in mind, and we have optimized the browser to be as fast as possible! Checkout the latest [performance benchmarks](https://docs.zen-browser.app/benchmarks)!
-
 ## 📥 Installation
 
 ### Supported Operating Systems
@@ -85,7 +81,7 @@ winget install --id Zen-Team.Zen-Browser
 You can also install Zen using Homebrew:
 
 ```
-brew install --cask zen-browser
+brew install zen-browser
 ```
 
 #### Linux
@@ -118,11 +114,11 @@ To upgrade the browser to a newer version, use the embedded update functionality
 
 ## 👨‍💻 Development and Contributing
 
-Some components used by @zen-browser as an attempt to make firefox forks a better place, and for other to enjoy the beauty of OSS. You can find them [here](https://github.com/zen-browser/desktop/tree/dev/src/browser/base/zen-components).
+Some components used by @zen-browser as an attempt to make Firefox forks a better place, and for other to enjoy the beauty of OSS. You can find them [here](https://github.com/zen-browser/desktop/tree/dev/src/zen).
 
 #### `Run Locally`
 
-In order to download and run Zen locally, please follow [these instructions](https://docs.zen-browser.app/building).
+In order to download and run Zen locally, please follow [these instructions](https://docs.zen-browser.app/guides/building).
 
 #### `Special Thanks`
 

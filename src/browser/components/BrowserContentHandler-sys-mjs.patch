@@ -1,5 +1,5 @@
 diff --git a/browser/components/BrowserContentHandler.sys.mjs b/browser/components/BrowserContentHandler.sys.mjs
-index 7747d90981aea9437bf2d9cf46ec17be0b9ad64c..656d640da0efeb59a4037bb450e0cb1f69dda0ba 100644
+index 5911b276fdc9889d3cb61bac3d302ec5239e4a90..a405f8a0204e98fa9de08f1cd7b6761f0fc6198e 100644
 --- a/browser/components/BrowserContentHandler.sys.mjs
 +++ b/browser/components/BrowserContentHandler.sys.mjs
 @@ -1270,6 +1270,7 @@ function maybeRecordToHandleTelemetry(uri, isLaunch) {

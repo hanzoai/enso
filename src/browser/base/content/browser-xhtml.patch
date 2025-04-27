@@ -1,5 +1,5 @@
 diff --git a/browser/base/content/browser.xhtml b/browser/base/content/browser.xhtml
-index 0d0a559a6473149b50f4bf18d059e86907c4acd3..25ad798eb26f04262d069fdaf1f3fb00adec9807 100644
+index 51a25aaa5558e6e17246d54a7ed95d5ddf3ecdab..b49984c8711fc9f5f19f0cf6ecca07a8cca0d125 100644
 --- a/browser/base/content/browser.xhtml
 +++ b/browser/base/content/browser.xhtml
 @@ -26,6 +26,7 @@
@@ -10,35 +10,28 @@ index 0d0a559a6473149b50f4bf18d059e86907c4acd3..25ad798eb26f04262d069fdaf1f3fb00
          persist="screenX screenY width height sizemode"
          data-l10n-sync="true">
  <head>
-@@ -104,6 +105,8 @@
+@@ -104,8 +105,11 @@
  
    <title data-l10n-id="browser-main-window-default-title"></title>
  
 +#include zen-preloaded.inc.xhtml
 +
- # All JS files which are needed by browser.xhtml and other top level windows to
- # support MacOS specific features *must* go into the global-scripts.inc file so
- # that they can be shared with macWindow.inc.xhtml.
-@@ -148,6 +151,7 @@
-   window.addEventListener("DOMContentLoaded",
-     gBrowserInit.onDOMContentLoaded.bind(gBrowserInit), { once: true });
- </script>
+   <script src="chrome://browser/content/global-scripts.js"></script>
+   <script src="chrome://browser/content/browser-main.js"></script>
 +#include zen-assets.inc.xhtml
  </head>
  <html:body xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
  # All sets except for popupsets (commands, keys, and stringbundles)
-@@ -169,9 +173,11 @@
+@@ -127,9 +131,12 @@
      </vbox>
    </html:template>
  
--#include navigator-toolbox.inc.xhtml
--
--#include browser-box.inc.xhtml
-+  <hbox id="zen-main-app-wrapper" flex="1" persist="zen-compact-mode">
-+    <vbox id="zen-toast-container"></vbox>
-+    #include navigator-toolbox.inc.xhtml
-+    #include browser-box.inc.xhtml
-+  </hbox>
++<hbox id="zen-main-app-wrapper" flex="1" persist="zen-compact-mode">
++  <vbox id="zen-toast-container"></vbox>
+ #include navigator-toolbox.inc.xhtml
+ 
+ #include browser-box.inc.xhtml
++</hbox>
  
    <html:template id="customizationPanel">
      <box id="customization-container" flex="1" hidden="true"><![CDATA[

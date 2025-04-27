@@ -1,8 +1,8 @@
 diff --git a/toolkit/mozapps/extensions/internal/XPIDatabase.sys.mjs b/toolkit/mozapps/extensions/internal/XPIDatabase.sys.mjs
-index f6333f54da4cd0e81ef0cdf5720d54480a9c865e..2d098b0675e3efdfd6fa1ac0fed0e293b5367b1e 100644
+index 1b01851e2fff6d07a4be8e282bd4b85e934a7978..1354405f0b2938d2f22a3dea000405babdafd665 100644
 --- a/toolkit/mozapps/extensions/internal/XPIDatabase.sys.mjs
 +++ b/toolkit/mozapps/extensions/internal/XPIDatabase.sys.mjs
-@@ -138,7 +138,7 @@ const KEY_APP_GLOBAL = "app-global";
+@@ -139,7 +139,7 @@ const KEY_APP_GLOBAL = "app-global";
  const KEY_APP_PROFILE = "app-profile";
  const KEY_APP_TEMPORARY = "app-temporary";
  
@@ -11,7 +11,7 @@ index f6333f54da4cd0e81ef0cdf5720d54480a9c865e..2d098b0675e3efdfd6fa1ac0fed0e293
  
  // Properties to cache and reload when an addon installation is pending
  const PENDING_INSTALL_METADATA = [
-@@ -1771,8 +1771,11 @@ const updatedAddonFluentIds = new Map([
+@@ -1778,8 +1778,11 @@ const updatedAddonFluentIds = new Map([
            updatedAddonFluentIds.get(defaultFluentId) || defaultFluentId;
          [formattedMessage] = l10n.formatMessagesSync([{ id: fluentId }]);
        }

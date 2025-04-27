@@ -1,17 +1,16 @@
 diff --git a/testing/profiles/profileserver/user.js b/testing/profiles/profileserver/user.js
-index 19ff7d474f6d22d2d386764e2e6942ce6a324470..a1ed4b51f26f458f965fbc29dfa7b8ad451faf7f 100644
+index 19ff7d474f6d22d2d386764e2e6942ce6a324470..a68a1f692e050c2a2a7e5e1390dec9556e71d7ed 100644
 --- a/testing/profiles/profileserver/user.js
 +++ b/testing/profiles/profileserver/user.js
-@@ -8,3 +8,12 @@
+@@ -8,3 +8,11 @@
  user_pref("dom.timeout.enable_budget_timer_throttling", false);
  // Turn off update
  user_pref("app.update.disabledForTesting", true);
 +
 +// zen:
 +// Disable some of zen's features to better match the default Firefox experience
-+user_pref("zen.workspaces.disabled_for_testing", true);
-+user_pref("zen.workspaces.disable_empty_state_for_testing", true);
 +user_pref("zen.welcome-screen.seen", true);
 +user_pref("zen.tab-unloader.enabled", false);
 +user_pref("zen.watermark.enabled", false);
-+user_pref("zen.glance.enabled", false);
++user_pref("zen.urlbar.replace-newtab", false);
++user_pref("zen.testing.enabled", true);

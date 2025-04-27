@@ -91,6 +91,10 @@
         }
       }
 
+      &:not([zen-single-toolbar='true']) .zen-essentials-container {
+        padding: 0;
+      }
+
       &[zen-right-side='true'] {
         & #navigator-toolbox {
           --zen-compact-float: calc(var(--zen-element-separation) + 1px);

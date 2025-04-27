@@ -1,5 +1,5 @@
 diff --git a/browser/components/customizableui/content/panelUI.js b/browser/components/customizableui/content/panelUI.js
-index 010d0813557efd6d5a3a84ea589989f6e9ff195a..e26cc1be1f56919e6ec5f2432854b284837671ac 100644
+index ec52437dba30633a374299a46c856e1df05dec0e..48617e32d56c3b3f525557ddeac6297555c48c04 100644
 --- a/browser/components/customizableui/content/panelUI.js
 +++ b/browser/components/customizableui/content/panelUI.js
 @@ -515,8 +515,7 @@ const PanelUI = {
@@ -12,7 +12,7 @@ index 010d0813557efd6d5a3a84ea589989f6e9ff195a..e26cc1be1f56919e6ec5f2432854b284
          .appendChild(tempPanel);
  
        let multiView = document.createXULElement("panelmultiview");
-@@ -960,7 +959,7 @@ const PanelUI = {
+@@ -957,7 +956,7 @@ const PanelUI = {
          el.removeAttribute("data-lazy-l10n-id");
        });
  

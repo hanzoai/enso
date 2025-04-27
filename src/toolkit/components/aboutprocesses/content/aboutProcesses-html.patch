@@ -1,5 +1,5 @@
 diff --git a/toolkit/components/aboutprocesses/content/aboutProcesses.html b/toolkit/components/aboutprocesses/content/aboutProcesses.html
-index 3d7085f487eb8eb3fb94dcc89e390dee525d8375..94298c2cb237edce7bb344797c054ba61b9f4d24 100644
+index 1d936bcca6a606f062b9438d78a1165445468471..cbefb51920e7b2ad11621ab2b36c69fa63967dfe 100644
 --- a/toolkit/components/aboutprocesses/content/aboutProcesses.html
 +++ b/toolkit/components/aboutprocesses/content/aboutProcesses.html
 @@ -20,6 +20,7 @@

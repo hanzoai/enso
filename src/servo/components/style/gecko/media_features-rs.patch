@@ -1,5 +1,5 @@
 diff --git a/servo/components/style/gecko/media_features.rs b/servo/components/style/gecko/media_features.rs
-index 2baf0df323c83107a9a38e76bda3a273892b121e..8d03eeb78638c7c1bfc2cfff59571c76af11a607 100644
+index cc24406e22f536733b07a9398580a8719b61e134..214f238b38377a8480711ea2d0ec30e99800bb5c 100644
 --- a/servo/components/style/gecko/media_features.rs
 +++ b/servo/components/style/gecko/media_features.rs
 @@ -13,6 +13,9 @@ use crate::values::computed::{CSSPixelLength, Context, Ratio, Resolution};
@@ -12,7 +12,7 @@ index 2baf0df323c83107a9a38e76bda3a273892b121e..8d03eeb78638c7c1bfc2cfff59571c76
  
  fn device_size(device: &Device) -> Size2D<Au> {
      let mut width = 0;
-@@ -615,6 +618,13 @@ fn eval_moz_overlay_scrollbars(context: &Context) -> bool {
+@@ -606,6 +609,13 @@ fn eval_moz_overlay_scrollbars(context: &Context) -> bool {
      unsafe { bindings::Gecko_MediaFeatures_UseOverlayScrollbars(context.device().document()) }
  }
  
@@ -26,7 +26,7 @@ index 2baf0df323c83107a9a38e76bda3a273892b121e..8d03eeb78638c7c1bfc2cfff59571c76
  fn get_lnf_int(int_id: i32) -> i32 {
      unsafe { bindings::Gecko_GetLookAndFeelInt(int_id) }
  }
-@@ -662,7 +672,7 @@ macro_rules! lnf_int_feature {
+@@ -653,7 +663,7 @@ macro_rules! lnf_int_feature {
  /// to support new types in these entries and (2) ensuring that either
  /// nsPresContext::MediaFeatureValuesChanged is called when the value that
  /// would be returned by the evaluator function could change.
@@ -35,7 +35,7 @@ index 2baf0df323c83107a9a38e76bda3a273892b121e..8d03eeb78638c7c1bfc2cfff59571c76
      feature!(
          atom!("width"),
          AllowsRanges::Yes,
-@@ -927,6 +937,12 @@ pub static MEDIA_FEATURES: [QueryFeatureDescription; 61] = [
+@@ -918,6 +928,12 @@ pub static MEDIA_FEATURES: [QueryFeatureDescription; 61] = [
          Evaluator::BoolInteger(eval_moz_overlay_scrollbars),
          FeatureFlags::CHROME_AND_UA_ONLY,
      ),

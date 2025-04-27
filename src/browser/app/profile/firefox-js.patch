@@ -1,8 +1,8 @@
 diff --git a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
-index 78572e5480a6137c5b7de89c489956f5d68ef698..1c72fe9a5419e211dea25271113981aeda46ec66 100644
+index 89b8b830e8f53582dd9910b0172098d31a8d8967..51bdc847823cb95f811b7e9d2d864b9aacf0e364 100644
 --- a/browser/app/profile/firefox.js
 +++ b/browser/app/profile/firefox.js
-@@ -3363,3 +3363,5 @@ pref("toolkit.contentRelevancy.enabled", false);
+@@ -3375,3 +3375,5 @@ pref("toolkit.contentRelevancy.enabled", false);
  pref("toolkit.contentRelevancy.ingestEnabled", false);
  // Pref to enable extra logging for the content relevancy feature
  pref("toolkit.contentRelevancy.log", false);

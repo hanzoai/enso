@@ -25,7 +25,7 @@ EOF
 if [ "$RELEASE_BRANCH" = "release" ]; then
   echo "${EXTRA_NOTES}" >> "release_notes.md"
 
-  if echo "$LATEST_RELEASE" | jq -e 'has("features")' > /dev/null; then
+  if echo "$LATEST_RELEASE" | jq -e '(.features // []) | length > 0' > /dev/null; then
     cat << EOF >> "release_notes.md"
 
 ## New Features
@@ -33,7 +33,7 @@ $(echo "$LATEST_RELEASE" | jq -r '.features[] | "- " + .')
 EOF
   fi
 
-  if echo "$LATEST_RELEASE" | jq -e 'has("fixes")' > /dev/null; then
+  if echo "$LATEST_RELEASE" | jq -e '(.fixes // []) | length > 0' > /dev/null; then
     cat << EOF >> "release_notes.md"
 
 ## Fixes
@@ -41,7 +41,7 @@ EOF
     echo "$LATEST_RELEASE" | jq -r '.fixes[] | if type=="object" then "- " + .description + " ([#" + (.issue|tostring) + "](" + "https://github.com/zen-browser/desktop/issues/" + (.issue|tostring) + "))" else "- " + . end' >> "release_notes.md"
   fi
 
-  if echo "$LATEST_RELEASE" | jq -e 'has("breakingChanges")' > /dev/null; then
+  if echo "$LATEST_RELEASE" | jq -e '(.breakingChanges // []) | length > 0' > /dev/null; then
     cat << EOF >> "release_notes.md"
 
 ## Breaking Changes
@@ -49,7 +49,7 @@ EOF
     echo "$LATEST_RELEASE" | jq -r '.breakingChanges[] | if type=="string" then "- " + . else "- " + .description + " [Learn more](" + .link + ")" end' >> "release_notes.md"
   fi
 
-  if echo "$LATEST_RELEASE" | jq -e 'has("themeChanges")' > /dev/null; then
+  if echo "$LATEST_RELEASE" | jq -e '(.themeChanges // []) | length > 0' > /dev/null; then
     cat << EOF >> "release_notes.md"
 
 ## Theme Changes
