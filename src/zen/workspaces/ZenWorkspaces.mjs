@@ -2826,7 +2826,10 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         if (tab.hasAttribute('zen-essential')) {
           // Find first workspace with the same container
           const containerTabId = parseInt(tab.parentNode.getAttribute('container'));
-          workspaceToSwitch = this.getWoekspaceFromId(containerTabId);
+          // +0 to convert to number
+          workspaceToSwitch = this._workspaceCache.workspaces.find(
+            (workspace) => workspace.containerTabId + 0 === containerTabId
+          );
         } else {
           workspaceToSwitch = this.getWoekspaceFromId(tab.getAttribute('zen-workspace-id'));
         }
