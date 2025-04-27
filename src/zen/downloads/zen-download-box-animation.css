@@ -5,9 +5,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--zen-colors-secondary);
-  border-radius: var(--zen-border-radius);
+  background-color: var(--zen-colors-primary);
+  border-radius: var(--zen-native-content-radius);
   box-shadow: var(--zen-big-shadow);
+  pointer-events: none;
   z-index: 1100;
 }
 
@@ -15,8 +16,6 @@
   width: 50%;
   height: 50%;
   background-color: var(--zen-primary-color);
-  -webkit-mask: url('chrome://browser/content/zen-images/downloads/archive.svg') no-repeat center;
-  -webkit-mask-size: contain;
   mask: url('chrome://browser/content/zen-images/downloads/archive.svg') no-repeat center;
   mask-size: contain;
   display: block;

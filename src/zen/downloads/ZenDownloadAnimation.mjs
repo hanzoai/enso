@@ -145,11 +145,11 @@
 
     #createArcAnimationElement(startPosition) {
       const arcAnimationHTML = `
-            <div class="zen-download-arc-animation">
-              <div class="zen-download-arc-animation-inner-circle">
-                <div class="zen-download-arc-animation-icon"></div>
-              </div>
-            </div>
+            <box class="zen-download-arc-animation">
+              <box class="zen-download-arc-animation-inner-circle">
+                <html:div class="zen-download-arc-animation-icon"></html:div>
+              </box>
+            </box>
           `;
 
       const fragment = window.MozXULElement.parseXULToFragment(arcAnimationHTML);
@@ -200,13 +200,13 @@
           this.#startBoxAnimation(areTabsPositionedRight);
         }
 
-        const arcAnimation = await gZenUIManager.motion.animate(arcAnimationElement, sequence, {
+        await gZenUIManager.motion.animate(arcAnimationElement, sequence, {
           duration: Services.prefs.getIntPref('zen.downloads.download-animation-duration') / 1000,
           easing: 'cubic-bezier(0.37, 0, 0.63, 1)',
           fill: 'forwards',
         });
 
-        arcAnimation.onfinish = () => this.#cleanArcAnimation(arcAnimationElement);
+        this.#cleanArcAnimation(arcAnimationElement);
       } catch (error) {
         console.error('[ZenDownloadAnimationElement] Error in animation sequence:', error);
         this.#cleanArcAnimation(arcAnimationElement);
@@ -275,15 +275,14 @@
         sequence.transform.push(`translate(calc(${x}px - 50%), calc(${y}px - 50%)) rotate(${rotation}deg) scale(${scale})`);
       }
 
+      // Last opacity should be 0
+      sequence.opacity[steps] = 0;
+
       return sequence;
     }
 
     #cleanArcAnimation(element) {
-      if (element && element.parentNode) {
-        element.remove();
-      } else {
-        console.warn(`[${ZenDownloadAnimationElement.name}] Error cleaning download animation`);
-      }
+      element.remove();
     }
 
     async #startBoxAnimation(areTabsPositionedRight) {
@@ -312,9 +311,9 @@
 
       try {
         const boxAnimationHTML = `
-            <div class="zen-download-box-animation">
-              <div class="zen-download-box-animation-icon"></div>
-            </div>
+            <box class="zen-download-box-animation">
+              <html:div class="zen-download-box-animation-icon"></html:div>
+            </box>
           `;
 
         const sideProp = areTabsPositionedRight ? 'right' : 'left';
