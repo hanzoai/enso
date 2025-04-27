@@ -1,5 +1,5 @@
 diff --git a/browser/components/sessionstore/SessionStore.sys.mjs b/browser/components/sessionstore/SessionStore.sys.mjs
-index 5633e5032f5d50c70512187d27e045b579978927..7604adcd38308c38c7c62d16aa29c860a7726649 100644
+index 5633e5032f5d50c70512187d27e045b579978927..dd7aa4827eaa809dadc7e1fe6cdd1083e79f383a 100644
 --- a/browser/components/sessionstore/SessionStore.sys.mjs
 +++ b/browser/components/sessionstore/SessionStore.sys.mjs
 @@ -3202,7 +3202,7 @@ var SessionStoreInternal = {
@@ -11,16 +11,17 @@ index 5633e5032f5d50c70512187d27e045b579978927..7604adcd38308c38c7c62d16aa29c860
        return;
      }
  
-@@ -3911,6 +3911,8 @@ var SessionStoreInternal = {
+@@ -3911,6 +3911,9 @@ var SessionStoreInternal = {
          Math.min(tabState.index, tabState.entries.length)
        );
        tabState.pinned = false;
 +      tabState.zenEssential = false;
 +      tabState.zenPinnedId = null;
++      tabState.zenHasStaticLabel = false;
  
        if (inBackground === false) {
          aWindow.gBrowser.selectedTab = newTab;
-@@ -5416,14 +5418,15 @@ var SessionStoreInternal = {
+@@ -5416,14 +5419,15 @@ var SessionStoreInternal = {
      }
  
      let tabbrowser = aWindow.gBrowser;
@@ -38,7 +39,7 @@ index 5633e5032f5d50c70512187d27e045b579978927..7604adcd38308c38c7c62d16aa29c860
          continue;
        }
        let tabData = lazy.TabState.collect(tab, TAB_CUSTOM_VALUES.get(tab));
-@@ -5442,7 +5445,7 @@ var SessionStoreInternal = {
+@@ -5442,7 +5446,7 @@ var SessionStoreInternal = {
      // We don't store the Firefox View tab in Session Store, so if it was the last selected "tab" when
      // a window is closed, point to the first item in the tab strip instead (it will never be the Firefox View tab,
      // since it's only inserted into the tab strip after it's selected).
@@ -47,7 +48,7 @@ index 5633e5032f5d50c70512187d27e045b579978927..7604adcd38308c38c7c62d16aa29c860
        selectedIndex = 1;
        winData.title = tabbrowser.tabs[0].label;
      }
-@@ -5599,6 +5602,7 @@ var SessionStoreInternal = {
+@@ -5599,6 +5603,7 @@ var SessionStoreInternal = {
          winData.tabs,
          winData.groups ?? []
        );
@@ -55,7 +56,7 @@ index 5633e5032f5d50c70512187d27e045b579978927..7604adcd38308c38c7c62d16aa29c860
        this._log.debug(
          `restoreWindow, createTabsForSessionRestore returned ${tabs.length} tabs`
        );
-@@ -6148,8 +6152,23 @@ var SessionStoreInternal = {
+@@ -6148,8 +6153,23 @@ var SessionStoreInternal = {
  
      // Most of tabData has been restored, now continue with restoring
      // attributes that may trigger external events.
