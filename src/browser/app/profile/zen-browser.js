@@ -279,7 +279,6 @@ pref("pdfjs.enableScripting", false);
 pref("extensions.postDownloadThirdPartyPrompt", false);
 
 // Downloads
-pref("browser.download.always_ask_before_handling_new_types", true);
 pref("browser.download.manager.addToRecentDocs", false);
 
 // Tracking protection
