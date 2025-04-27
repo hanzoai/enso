@@ -107,6 +107,9 @@ mk_add_options MOZ_DATA_REPORTING=
 mk_add_options MOZ_SERVICES_HEALTHREPORT=
 mk_add_options MOZ_TELEMETRY_REPORTING=
 
+ac_add_options MOZ_DATA_REPORTING=
+ac_add_options MOZ_TELEMETRY_REPORTING=
+
 # Allow loading unsigned extensions
 export MOZ_REQUIRE_SIGNING=
 mk_add_options MOZ_REQUIRE_SIGNING=

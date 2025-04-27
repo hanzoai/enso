@@ -1008,7 +1008,9 @@
       if (!pin) {
         return;
       }
-      if (pin.url === 'about:blank' && tab.linkedBrowser.currentURI.spec !== 'about:blank') {
+      tab._recalculateAfterPinning = true;
+      if ((pin.url === 'about:blank' && tab.linkedBrowser.currentURI.spec !== 'about:blank') || tab._recalculateAfterPinning) {
+        delete tab._recalculateAfterPinning;
         await this.replacePinnedUrlWithCurrent(tab);
       }
     }

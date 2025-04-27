@@ -279,9 +279,6 @@ pref('browser.download.open_pdf_attachments_inline', true);
 pref('browser.download.alwaysOpenPanel', false);
 
 // Tracking protection
-pref("urlclassifier.trackingSkipURLs", "*.reddit.com, *.x.com, *.twimg.com, *.tiktok.com");
-pref("urlclassifier.features.socialtracking.skipURLs", "*.instagram.com, *.x.com, *.twimg.com");
-pref("network.cookie.sameSite.noneRequiresSecure", true);
 pref("browser.helperApps.deleteTempFileOnExit", true);
 pref("browser.uitour.enabled", false);
 

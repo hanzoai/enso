@@ -43,12 +43,19 @@
   }
 
   function openInitialPinTab() {
-    const tabs = ['https://reddit.com/r/zen_browser', 'https://x.com/zen_browser'];
-    for (const url of tabs) {
-      const tab = window.gBrowser.addTrustedTab(url, {
+    const tabs = [
+      ['https://reddit.com/r/zen_browser', 'Zen on Reddit', 'https://private-cdn.zen-browser.app/reddit.png'],
+      ['https://x.com/zen_browser', 'Zen on Twitter', 'https://private-cdn.zen-browser.app/twitter.ico'],
+    ];
+    for (const site of tabs) {
+      const tab = window.gBrowser.addTrustedTab(site[0], {
         inBackground: true,
         skipAnimation: true,
+        createLazyBrowser: true,
+        lazyTabTitle: site[1],
       });
+      gBrowser.setIcon(tab, site[2], site[2], Services.scriptSecurityManager.getSystemPrincipal());
+      tab._recalculateAfterPinning = true;
       _tabsToPin.push(tab);
     }
   }
@@ -210,6 +217,7 @@
         gBrowser.pinTab(tab);
       }
       for (const tab of _tabsToPinEssentials) {
+        tab._recalculateAfterPinning = true;
         gZenPinnedTabManager.addToEssentials(tab);
       }
     }
@@ -329,42 +337,42 @@
                   <html:div></html:div>
                 </hbox>
                 <html:div id="zen-welcome-initial-essentials-browser-sidebar-essentials">
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://web.whatsapp.com" style="--zen-tab-icon: url('https://web.whatsapp.com/favicon.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://obsidian.md" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/obsidian.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://discord.com" style="--zen-tab-icon: url('https://www.google.com/s2/favicons?domain=discord.com');">
+                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://discord.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/discord.png');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://trello.com" style="--zen-tab-icon: url('https://trello.com/favicon.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://trello.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/trello.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://slack.com/" style="--zen-tab-icon: url('https://a.slack-edge.com/80588/marketing/img/meta/favicon-32.png');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://slack.com/" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/slack.png');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://github.com" style="--zen-tab-icon: url('https://github.githubassets.com/favicons/favicon-dark.png');">
+                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://github.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/github.png');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://twitter.com" style="--zen-tab-icon: url('https://abs.twimg.com/favicons/twitter.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://twitter.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/twitter.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://notion.com" style="--zen-tab-icon: url('https://www.notion.so/front-static/favicon.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://notion.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/notion.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://calendar.google.com" style="--zen-tab-icon: url('https://calendar.google.com/googlecalendar/images/favicons_2020q4/calendar_6.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://calendar.google.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/calendar.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
@@ -400,7 +408,15 @@
             const url = tab.getAttribute('data-url');
             const createdTab = window.gBrowser.addTrustedTab(url, {
               inBackground: true,
+              skipAnimation: true,
+              createLazyBrowser: true,
             });
+            gBrowser.setIcon(
+              createdTab,
+              tab.style.getPropertyValue('--zen-tab-icon'),
+              tab.style.getPropertyValue('--zen-tab-icon'),
+              Services.scriptSecurityManager.getSystemPrincipal()
+            );
             _tabsToPinEssentials.push(createdTab);
           }
           openInitialPinTab();
