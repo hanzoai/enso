@@ -20,9 +20,17 @@ panel[type='arrow'][animate='open'] {
       }
     }
   }
-  @media (-moz-platform: linux) or ((-moz-platform: windows) and (not (-moz-windows-mica-popups))) {
+  @media (-moz-platform: windows) and (not (-moz-windows-mica-popups)) {
     /* Mica popups have a weird background while the animation is running */
     &::part(content) {
+      animation: zen-jello-animation 0.35s ease;
+    }
+  }
+
+  @media (-moz-platform: linux) {
+    /* Check https://github.com/zen-browser/desktop/issues/7633 as in
+     * to why we dont animate addons */
+    &:not(#customizationui-widget-panel)::part(content) {
       animation: zen-jello-animation 0.35s ease;
     }
   }

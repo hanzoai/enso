@@ -428,7 +428,9 @@ var gZenUIManager = {
   },
 
   get panelUIPosition() {
-    return gZenVerticalTabsManager._hasSetSingleToolbar ? 'bottomleft topleft' : 'bottomright topright';
+    return gZenVerticalTabsManager._hasSetSingleToolbar && !gZenVerticalTabsManager._prefsRightSide
+      ? 'bottomleft topleft'
+      : 'bottomright topright';
   },
 };
 
