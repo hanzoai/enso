@@ -47,6 +47,7 @@
     for (const url of tabs) {
       const tab = window.gBrowser.addTrustedTab(url, {
         inBackground: true,
+        skipAnimation: true,
       });
       _tabsToPin.push(tab);
     }

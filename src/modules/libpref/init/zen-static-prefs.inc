@@ -11,10 +11,3 @@
   value: 1
   mirror: always
 #endif
-
-#ifdef XP_WIN
-- name: zen.widget.windows.acrylic
-  type: bool
-  value: true
-  mirror: always
-#endif

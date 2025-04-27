@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/browser-ctrlTab.js b/browser/components/tabbrowser/content/browser-ctrlTab.js
-index 6753641cb579032306453be3f5054d7bc7661e8c..e0eda8d77637334ca30ee1842057cb43b4af2c21 100644
+index 6753641cb579032306453be3f5054d7bc7661e8c..436ee8940c8a73d238a7aed10768a0a752a3f119 100644
 --- a/browser/components/tabbrowser/content/browser-ctrlTab.js
 +++ b/browser/components/tabbrowser/content/browser-ctrlTab.js
 @@ -252,7 +252,7 @@ var ctrlTab = {
@@ -17,6 +17,15 @@ index 6753641cb579032306453be3f5054d7bc7661e8c..e0eda8d77637334ca30ee1842057cb43
      // happen for Firefox View).
 -    if (aTab.closing || (aTab.hidden && !aTab.selected)) {
 +    if (aTab.closing || (aTab.hidden && !aTab.selected) || aTab.hasAttribute("zen-empty-tab")) {
+       return;
+     }
+ 
+@@ -483,7 +483,7 @@ var ctrlTab = {
+   },
+ 
+   open: function ctrlTab_open() {
+-    if (this.isOpen) {
++    if (this.isOpen || !this.tabCount) {
        return;
      }
  

@@ -10,11 +10,6 @@ on:
         required: false
         type: boolean
         default: true
-      use-sccache:
-        description: 'Use sccache'
-        required: false
-        type: boolean
-        default: false
 
 jobs:
   twilight-release-schedule:
@@ -25,7 +20,7 @@ jobs:
     with:
       create_release: ${{ github.event_name != 'workflow_dispatch' && true || inputs.create_release }}
       update_branch: twilight
-      use-sccache: ${{ github.event_name != 'workflow_dispatch' && false || inputs.use-sccache }}
+      use-sccache: false
       update_version: false
 
   post-build:

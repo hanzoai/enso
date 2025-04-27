@@ -294,9 +294,6 @@
           }
           gBrowser.tabContainer._invalidateCachedTabs();
           newTab.initialize();
-          if (!ZenWorkspaces.essentialShouldShowTab(newTab)) {
-            gBrowser.hideTab(newTab, undefined, true);
-          }
         } catch (ex) {
           console.error('Failed to initialize pinned tabs:', ex);
         }
@@ -332,7 +329,7 @@
     }
 
     async _onTabMove(tab) {
-      if (!tab.pinned) {
+      if (!tab.pinned || !this._pinsCache) {
         return;
       }
 
@@ -648,6 +645,12 @@
         }
         this._onTabMove(tab);
         this.onTabIconChanged(tab);
+
+        // Dispatch the event to update the UI
+        const event = new CustomEvent('TabAddedToEssentials', {
+          detail: { tab },
+        });
+        tab.dispatchEvent(event);
       }
       gZenUIManager.updateTabsToolbar();
     }
@@ -668,6 +671,12 @@
           gBrowser.tabContainer._invalidateCachedTabs();
           this._onTabMove(tab);
         }
+
+        // Dispatch the event to update the UI
+        const event = new CustomEvent('TabRemovedFromEssentials', {
+          detail: { tab },
+        });
+        tab.dispatchEvent(event);
       }
       gZenUIManager.updateTabsToolbar();
     }
@@ -729,8 +738,20 @@
       try {
         const pinnedTabsTarget =
           event.target.closest('#vertical-pinned-tabs-container') || event.target.closest('.zen-current-workspace-indicator');
-        const essentialTabsTarget = event.target.closest('#zen-essentials-container');
+        const essentialTabsTarget = event.target.closest('.zen-essentials-container');
         const tabsTarget = event.target.closest('#tabbrowser-arrowscrollbox');
+        // Remove group labels from the moving tabs and replace it
+        // with the sub tabs
+        for (let i = 0; i < movingTabs.length; i++) {
+          const draggedTab = movingTabs[i];
+          if (draggedTab.classList.contains('tab-group-label')) {
+            const group = draggedTab.group;
+            // remove label and add sub tabs to moving tabs
+            if (group) {
+              movingTabs.splice(i, 1, ...group.tabs);
+            }
+          }
+        }
 
         let isVertical = this.expandedSidebarMode;
         let moved = false;
@@ -791,7 +812,7 @@
               if (tabsTarget === gBrowser.tabs.at(-1)) {
                 newIndex++;
               }
-              gBrowser.moveTabTo(draggedTab, newIndex, { forceStandaloneTab: true });
+              gBrowser.moveTabTo(draggedTab, { tabIndex: newIndex, forceUngrouped: true });
             }
           }
         }
@@ -901,10 +922,11 @@
 
     applyDragoverClass(event, draggedTab) {
       const pinnedTabsTarget = event.target.closest('#vertical-pinned-tabs-container');
-      const essentialTabsTarget = event.target.closest('#zen-essentials-container');
+      const essentialTabsTarget = event.target.closest('.zen-essentials-container');
       const tabsTarget = event.target.closest('#tabbrowser-arrowscrollbox');
       let targetTab = event.target.closest('.tabbrowser-tab');
       targetTab = targetTab?.group || targetTab;
+      draggedTab = draggedTab?.group?.hasAttribute('split-view-group') ? draggedTab.group : draggedTab;
       if (event.target.closest('.zen-current-workspace-indicator')) {
         this.removeTabContainersDragoverClass();
         ZenWorkspaces.activeWorkspaceIndicator?.setAttribute('open', true);

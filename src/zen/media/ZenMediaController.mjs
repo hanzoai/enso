@@ -586,12 +586,10 @@
     }
 
     onMediaMute() {
-      if (!this.mediaControlBar.hasAttribute('muted')) {
-        this._currentBrowser.mute();
-        this.mediaControlBar.setAttribute('muted', '');
-      } else {
-        this._currentBrowser.unmute();
-        this.mediaControlBar.removeAttribute('muted');
+      const tab = window.gBrowser.getTabForBrowser(this._currentBrowser);
+      if (tab) {
+        tab.toggleMuteAudio();
+        this.updateMuteState();
       }
     }
 
@@ -639,7 +637,7 @@
 
     updateMuteState() {
       if (!this._currentBrowser) return;
-      this.mediaControlBar.toggleAttribute('muted', this._currentBrowser._audioMuted);
+      this.mediaControlBar.toggleAttribute('muted', this._currentBrowser.audioMuted);
     }
 
     updatePipButton() {

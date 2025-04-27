@@ -17,6 +17,15 @@ document.addEventListener(
           case 'cmd_zenCompactModeShowSidebar':
             gZenCompactModeManager.toggleSidebar();
             break;
+          case 'cmd_zenCompactModeHideSidebar':
+            gZenCompactModeManager.hideSidebar();
+            break;
+          case 'cmd_zenCompactModeHideToolbar':
+            gZenCompactModeManager.hideToolbar();
+            break;
+          case 'cmd_zenCompactModeHideBoth':
+            gZenCompactModeManager.hideBoth();
+            break;
           case 'cmd_zenCompactModeShowToolbar':
             gZenCompactModeManager.toggleToolbar();
             break;
@@ -37,6 +46,9 @@ document.addEventListener(
             break;
           case 'cmd_zenSplitViewUnsplit':
             gZenViewSplitter.toggleShortcut('unsplit');
+            break;
+          case 'cmd_zenSplitViewContextMenu':
+            gZenViewSplitter.contextSplitTabs();
             break;
           case 'cmd_zenCopyCurrentURLMarkdown':
             gZenCommonActions.copyCurrentURLAsMarkdownToClipboard();

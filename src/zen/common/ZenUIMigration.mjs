@@ -6,7 +6,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
 
 class ZenUIMigration {
   PREF_NAME = 'zen.migration.version';
-  MIGRATION_VERSION = 1;
+  MIGRATION_VERSION = 2;
 
   init(isNewProfile, win) {
     if (!isNewProfile) {
@@ -27,13 +27,16 @@ class ZenUIMigration {
     if (this._migrationVersion < 1) {
       this._migrateV1(win);
     }
+    if (this._migrationVersion < 2) {
+      this._migrateV2(win);
+    }
   }
 
   clearVariables() {
     this._migrationVersion = this.MIGRATION_VERSION;
   }
 
-  async _migrateV1(win) {
+  _migrateV1(win) {
     // Introduction of the new URL bar, show a message to the user
     const notification = win.gNotificationBox.appendNotification(
       'zen-new-urlbar-notification',
@@ -56,6 +59,13 @@ class ZenUIMigration {
         },
       ]
     );
+  }
+
+  _migrateV2(win) {
+    if (Services.prefs.getBoolPref('zen.widget.windows.acrylic', false)) {
+      Services.prefs.setIntPref('widget.windows.mica.toplevel-backdrop', 2);
+      Services.prefs.clearUserPref('zen.widget.windows.acrylic');
+    }
   }
 }
 

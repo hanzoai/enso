@@ -1,8 +1,8 @@
 diff --git a/devtools/startup/DevToolsStartup.sys.mjs b/devtools/startup/DevToolsStartup.sys.mjs
-index de5cd910c85a195496eddf38d85b78fb97694ef1..d10d6dfeb25bf01e86d84d3843c5a42551cac3bd 100644
+index 91b27e5b5fd938f8c5f141214b934999e0ad871e..d2fdae0b0de64c016abbdd5bf124da278d425b24 100644
 --- a/devtools/startup/DevToolsStartup.sys.mjs
 +++ b/devtools/startup/DevToolsStartup.sys.mjs
-@@ -806,6 +806,7 @@ DevToolsStartup.prototype = {
+@@ -813,6 +813,7 @@ DevToolsStartup.prototype = {
      // account (see bug 832984).
      const mainKeyset = doc.getElementById("mainKeyset");
      mainKeyset.parentNode.insertBefore(keyset, mainKeyset);

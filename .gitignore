@@ -12,3 +12,5 @@ venv/
 
 !firefox-cache/
 win-cross/
+
+!firefox-patches/

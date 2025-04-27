@@ -31,6 +31,7 @@ pref("browser.privateWindowSeparation.enabled", false);
 // Mica
 pref("widget.windows.mica", true);
 pref("widget.windows.mica.popups", true);
+pref("widget.windows.mica.toplevel-backdrop", 2);
 #endif
 
 pref('browser.newtabpage.activity-stream.newtabWallpapers.enabled', true);
@@ -142,10 +143,6 @@ pref('zen.view.experimental-rounded-view', false);
 pref('zen.view.experimental-rounded-view', true);
 #endif
 
-#ifdef XP_WIN
-pref('zen.widget.windows.acrylic', true);
-#endif
-
 // Glance
 pref('zen.glance.enabled', true);
 pref('zen.glance.hold-duration', 300); // in ms
@@ -205,7 +202,6 @@ pref('zen.downloads.download-animation-duration', 1210); // ms
 pref('zen.startup.smooth-scroll-in-tabs', true);
 
 // Zen Workspaces
-pref('zen.workspaces.disabled_for_testing', false);
 pref('zen.workspaces.hide-default-container-indicator', true);
 pref('zen.workspaces.force-container-workspace', false);
 pref('zen.workspaces.open-new-tab-if-last-unpinned-tab-is-closed', false);
@@ -342,11 +338,7 @@ pref("network.predictor.enable-hover-on-ssl", true);
 pref("network.http.speculative-parallel-limit", 10);
 pref("network.http.rcwn.enabled", false);
 
-// Enable Browser Toolbox, Ctrl+Shift+Alt+I for debugging and modifying UI
-pref("devtools.debugger.remote-enabled", false);
-pref("devtools.chrome.enabled", true);
-
-// Disable firefox's revamp
+// Disable Firefox's revamp
 pref("sidebar.revamp", false, locked);
 pref("sidebar.verticalTabs", false, locked);
 
@@ -461,10 +453,6 @@ pref("browser.ml.chat.sidebar", false);
 pref("browser.ml.enable", false);
 
 // ---- Experimental settings to try make zen faster
-pref("gfx.canvas.accelerated.cache-items", 32768);
-pref("gfx.canvas.accelerated.cache-size", 256);
-pref("gfx.content.skia-font-cache-size", 80);
-
 pref("media.memory_cache_max_size", 1048576);
 pref("media.cache_readahead_limit", 9000);
 pref("media.cache_resume_threshold", 3600);
@@ -479,4 +467,5 @@ pref("layers.gpu-process.enabled", true);
 
 // Picture-in-picture
 pref("media.videocontrols.picture-in-picture.video-toggle.enabled", true);
-pref("media.videocontrols.picture-in-picture.enable-when-switching-tabs.enabled", true);
+// TODO: Enable once we have a proper settings page
+pref("media.videocontrols.picture-in-picture.enable-when-switching-tabs.enabled", false);
