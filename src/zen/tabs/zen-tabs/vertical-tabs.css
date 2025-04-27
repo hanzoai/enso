@@ -991,6 +991,7 @@
 #tabs-newtab-button {
   display: none;
   opacity: 0.5;
+  -moz-user-focus: ignore !important;
 }
 
 @media -moz-pref('zen.tabs.show-newtab-vertical') {

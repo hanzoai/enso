@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..75a14c7c52e9a8b2f39b8e9822c7988b5a33fd7b 100644
+index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a469d122622fcf361eea8faa4a8d3a13a5a9e4f1 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -68,6 +68,13 @@ XPCOMUtils.defineLazyPreferenceGetter(
@@ -200,3 +200,12 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..75a14c7c52e9a8b2f39b8e9822c7988b
  
          // Keep the focus status, since the attribute may be changed
          // upon calling this.focus().
+@@ -4218,7 +4277,7 @@ export class UrlbarInput {
+         }
+         // Don't close the view when clicking on a tab; we may want to keep the
+         // view open on tab switch, and the TabSelect event arrived earlier.
+-        if (event.target.closest("tab")) {
++        if (event.target.closest("tab") || event.target.closest("#tabs-newtab-button")) {
+           break;
+         }
+ 

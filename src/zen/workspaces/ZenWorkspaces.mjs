@@ -1863,7 +1863,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         document.getElementById('zen-tabs-wrapper').style.marginTop = essentialsHeight + 'px';
         pinnedContainer.style.marginTop = '';
       } else {
-        arrowMarginTop += forAnimation ? 0 : essentialsHeight;
+        arrowMarginTop += essentialsHeight;
         pinnedContainer.style.marginTop = essentialsHeight + 'px';
         if (forAnimation) {
           document.getElementById('zen-tabs-wrapper').style.marginTop = '';
@@ -1977,8 +1977,15 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         essentialsContainer.parentNode.appendChild(essentialsClone);
       }
     }
-    if (shouldAnimate && this.containerSpecificEssentials) {
-      document.getElementById('zen-tabs-wrapper').style.marginTop = '';
+    if (shouldAnimate) {
+      if (shouldAnimate && this.containerSpecificEssentials) {
+        document.getElementById('zen-tabs-wrapper').style.marginTop = '';
+        const waitForContainers = [];
+        for (const element of document.querySelectorAll('.zen-workspace-tabs-section.zen-workspace-pinned-tabs-section')) {
+          waitForContainers.push(this.updateTabsContainers(element, true));
+        }
+        await Promise.all(waitForContainers);
+      }
     }
     for (const element of document.querySelectorAll('.zen-workspace-tabs-section')) {
       if (element.classList.contains('zen-essentials-container')) {
@@ -1990,16 +1997,16 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       const offset = -(newWorkspaceIndex - elementWorkspaceIndex) * 100;
       const newTransform = `translateX(${offset}%)`;
       if (shouldAnimate) {
-        if (element.classList.contains('zen-workspace-pinned-tabs-section') && this.containerSpecificEssentials) {
-          // Note: Do not call with await on purpose, for better timing on animations
-          this.updateTabsContainers(element, true);
-        }
         element.removeAttribute('hidden');
+        // For some reason, motion seems to reset the margin top randomly
+        // so we explicitly set it to the current value
+        const marginTop = element.style.marginTop;
         animations.push(
           gZenUIManager.motion.animate(
             element,
             {
               transform: existingTransform ? [existingTransform, newTransform] : newTransform,
+              marginTop: existingTransform ? [marginTop, marginTop] : marginTop,
             },
             {
               type: 'spring',

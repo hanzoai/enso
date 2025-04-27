@@ -742,11 +742,13 @@ var gZenWorkspacesSettings = {
     };
     Services.prefs.addObserver('zen.tab-unloader.enabled', tabsUnloaderPrefListener);
     Services.prefs.addObserver('zen.glance.enabled', tabsUnloaderPrefListener); // We can use the same listener for both prefs
+    Services.prefs.addObserver('zen.workspaces.container-specific-essentials-enabled', tabsUnloaderPrefListener);
     Services.prefs.addObserver('zen.glance.activation-method', tabsUnloaderPrefListener);
     window.addEventListener('unload', () => {
       Services.prefs.removeObserver('zen.tab-unloader.enabled', tabsUnloaderPrefListener);
       Services.prefs.removeObserver('zen.glance.enabled', tabsUnloaderPrefListener);
       Services.prefs.removeObserver('zen.glance.activation-method', tabsUnloaderPrefListener);
+      Services.prefs.removeObserver('zen.workspaces.container-specific-essentials-enabled', tabsUnloaderPrefListener);
     });
   },
 };
