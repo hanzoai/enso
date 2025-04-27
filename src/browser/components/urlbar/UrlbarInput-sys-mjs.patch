@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..100f96cb58499dbae490b3772effef0f79aec75b 100644
+index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..75a14c7c52e9a8b2f39b8e9822c7988b5a33fd7b 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -68,6 +68,13 @@ XPCOMUtils.defineLazyPreferenceGetter(
@@ -138,16 +138,15 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..100f96cb58499dbae490b3772effef0f
      return where;
    }
  
-@@ -3626,7 +3677,7 @@ export class UrlbarInput {
-     pasteAndGo.setAttribute("anonid", "paste-and-go");
-     pasteAndGo.addEventListener("command", () => {
-       this._suppressStartQuery = true;
--
-+      this.view.close();
-       this.select();
-       this.window.goDoCommand("cmd_paste");
+@@ -3632,6 +3683,7 @@ export class UrlbarInput {
        this.setResultForCurrentValue(null);
-@@ -3639,7 +3690,6 @@ export class UrlbarInput {
+       this.handleCommand();
+       this.controller.clearLastQueryContextCache();
++      this.view.close();
+ 
+       this._suppressStartQuery = false;
+     });
+@@ -3639,7 +3691,6 @@ export class UrlbarInput {
      contextMenu.addEventListener("popupshowing", () => {
        // Close the results pane when the input field contextual menu is open,
        // because paste and go doesn't want a result selection.
@@ -155,7 +154,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..100f96cb58499dbae490b3772effef0f
  
        let controller =
          this.document.commandDispatcher.getControllerForCommand("cmd_paste");
-@@ -4053,6 +4103,11 @@ export class UrlbarInput {
+@@ -4053,6 +4104,11 @@ export class UrlbarInput {
    }
  
    _on_click(event) {
@@ -167,7 +166,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..100f96cb58499dbae490b3772effef0f
      if (
        event.target == this.inputField ||
        event.target == this._inputContainer ||
-@@ -4124,7 +4179,7 @@ export class UrlbarInput {
+@@ -4124,7 +4180,7 @@ export class UrlbarInput {
        }
      }
  
@@ -176,7 +175,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..100f96cb58499dbae490b3772effef0f
        this.view.autoOpen({ event });
      } else {
        if (this._untrimOnFocusAfterKeydown) {
-@@ -4164,9 +4219,12 @@ export class UrlbarInput {
+@@ -4164,9 +4220,12 @@ export class UrlbarInput {
    }
  
    _on_mousedown(event) {
@@ -190,7 +189,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..100f96cb58499dbae490b3772effef0f
  
          if (
            event.target != this.inputField &&
-@@ -4176,8 +4234,8 @@ export class UrlbarInput {
+@@ -4176,8 +4235,8 @@ export class UrlbarInput {
            break;
          }
  
