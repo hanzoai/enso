@@ -631,7 +631,7 @@ var gZenVerticalTabsManager = {
       try {
         gURLBar.zenUpdateLayoutBreakout();
       } catch (e) {
-        console.error(e);
+        console.warn(e);
       }
     }
   },
