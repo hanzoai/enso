@@ -560,10 +560,20 @@ groupbox h2 {
 
 .zenThemeMarketplaceItemUninstallButton {
   margin-left: auto;
+  cursor: pointer;
+}
+
+#zenThemeMarketplaceImport {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+#zenThemeMarketplaceExport {
+  cursor: pointer;
 }
 
 #zenThemeMarketplaceCheckForUpdates {
-  margin-left: auto;
+  cursor: pointer;
 }
 
 .zenThemeMarketplaceItemPreferenceDialog {
