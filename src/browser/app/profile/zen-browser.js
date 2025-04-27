@@ -58,7 +58,6 @@ pref('browser.newtabpage.activity-stream.feeds.section.topstories', false);
 pref("browser.topsites.contile.enabled", true);
 
 // Pdf
-pref('browser.download.open_pdf_attachments_inline', true);
 pref('pdfjs.enableHighlightEditor', true);
 pref('pdfjs.enableHighlightFloatingButton', true);
 
@@ -121,7 +120,7 @@ pref('zen.theme.color-prefs.use-workspace-colors', true);
 
 pref('zen.view.compact.hide-tabbar', true);
 pref('zen.view.compact.hide-toolbar', false);
-pref('zen.view.compact.toolbar-flash-popup', true);
+pref('zen.view.compact.toolbar-flash-popup', false);
 pref('zen.view.compact.toolbar-flash-popup.duration', 800);
 pref('zen.view.compact.toolbar-hide-after-hover.duration', 1000);
 pref('zen.view.compact.color-toolbar', true);
@@ -194,11 +193,14 @@ pref('zen.splitView.enable-tab-drop', true);
 pref('zen.splitView.min-resize-width', 7);
 pref('zen.splitView.rearrange-hover-size', 24);
 
+// Zen Download Animations
+pref('zen.downloads.download-animation', true);
+pref('zen.downloads.download-animation-duration', 1000); // ms
+
 // Startup flags
 pref('zen.startup.smooth-scroll-in-tabs', true);
 
 // Zen Workspaces
-pref('zen.workspaces.disabled_for_testing', false);
 pref('zen.workspaces.hide-default-container-indicator', true);
 pref('zen.workspaces.force-container-workspace', false);
 pref('zen.workspaces.open-new-tab-if-last-unpinned-tab-is-closed', false);
@@ -272,8 +274,9 @@ pref("pdfjs.enableScripting", false);
 pref("extensions.postDownloadThirdPartyPrompt", false);
 
 // Downloads
-pref("browser.download.always_ask_before_handling_new_types", true);
 pref("browser.download.manager.addToRecentDocs", false);
+pref('browser.download.open_pdf_attachments_inline', true);
+pref('browser.download.alwaysOpenPanel', false);
 
 // Tracking protection
 pref("urlclassifier.trackingSkipURLs", "*.reddit.com, *.x.com, *.twimg.com, *.tiktok.com");
@@ -334,10 +337,6 @@ pref("network.dns.disablePrefetchFromHTTPS", false);
 pref("network.predictor.enable-hover-on-ssl", true);
 pref("network.http.speculative-parallel-limit", 10);
 pref("network.http.rcwn.enabled", false);
-
-// Enable Browser Toolbox, Ctrl+Shift+Alt+I for debugging and modifying UI
-pref("devtools.debugger.remote-enabled", false);
-pref("devtools.chrome.enabled", true);
 
 // Disable Firefox's revamp
 pref("sidebar.revamp", false, locked);
@@ -454,10 +453,6 @@ pref("browser.ml.chat.sidebar", false);
 pref("browser.ml.enable", false);
 
 // ---- Experimental settings to try make zen faster
-pref("gfx.canvas.accelerated.cache-items", 32768);
-pref("gfx.canvas.accelerated.cache-size", 256);
-pref("gfx.content.skia-font-cache-size", 80);
-
 pref("media.memory_cache_max_size", 1048576);
 pref("media.cache_readahead_limit", 9000);
 pref("media.cache_resume_threshold", 3600);

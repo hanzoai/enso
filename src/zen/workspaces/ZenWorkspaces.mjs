@@ -266,7 +266,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   _initializeEmptyTab() {
-    if (Services.prefs.getBoolPref('zen.workspaces.disable_empty_state_for_testing', false)) {
+    if (gZenUIManager.testingEnabled) {
       return;
     }
     this._emptyTab = gBrowser.addTrustedTab('about:blank', { inBackground: true, userContextId: 0, _forZenEmptyTab: true });
@@ -281,13 +281,13 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       if (element.classList.contains('tabbrowser-tab')) {
         continue;
       }
-      this._pinnedTabsResizeObserver.observe(element);
+      this._pinnedTabsResizeObserver.observe(element, { box: 'border-box' });
     }
     for (let element of document.getElementById('zen-essentials-wrapper').children) {
       if (element.classList.contains('tabbrowser-tab')) {
         continue;
       }
-      this._pinnedTabsResizeObserver.observe(element);
+      this._pinnedTabsResizeObserver.observe(element, { box: 'border-box' });
     }
   }
 
@@ -678,8 +678,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   get workspaceEnabled() {
     if (typeof this._workspaceEnabled === 'undefined') {
-      this._workspaceEnabled =
-        !Services.prefs.getBoolPref('zen.workspaces.disabled_for_testing', false) && this.shouldHaveWorkspaces;
+      this._workspaceEnabled = !gZenUIManager.testingEnabled && this.shouldHaveWorkspaces;
     }
     return this._workspaceEnabled && !window.closed;
   }
@@ -769,7 +768,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async _selectStartPage() {
-    if (Services.prefs.getBoolPref('zen.workspaces.disable_empty_state_for_testing', false)) {
+    if (gZenUIManager.testingEnabled) {
       return;
     }
     if (this._initialTab) {
@@ -1666,27 +1665,37 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   moveTabToWorkspace(tab, workspaceID) {
-    const parent = tab.pinned ? '#vertical-pinned-tabs-container ' : '#tabbrowser-arrowscrollbox ';
-    const container = document.querySelector(parent + `.zen-workspace-tabs-section[zen-workspace-id="${workspaceID}"]`);
+    return this.moveTabsToWorkspace([tab], workspaceID);
+  }
 
-    if (container?.contains(tab)) {
-      return false;
-    }
+  moveTabsToWorkspace(tabs, workspaceID, justChangeId = false) {
+    for (let tab of tabs) {
+      const parent = tab.pinned ? '#vertical-pinned-tabs-container ' : '#tabbrowser-arrowscrollbox ';
+      const container = document.querySelector(parent + `.zen-workspace-tabs-section[zen-workspace-id="${workspaceID}"]`);
 
-    tab.setAttribute('zen-workspace-id', workspaceID);
-    if (tab.hasAttribute('zen-essential')) {
-      return false;
-    }
+      if (container?.contains(tab)) {
+        continue;
+      }
 
-    if (container) {
-      container.insertBefore(tab, container.lastChild);
-    }
-    // also change glance tab if it's the same tab
-    const glanceTab = tab.querySelector('.tabbrowser-tab[zen-glance-tab]');
-    if (glanceTab) {
-      glanceTab.setAttribute('zen-workspace-id', workspaceID);
-    }
+      tab.setAttribute('zen-workspace-id', workspaceID);
+      if (tab.hasAttribute('zen-essential')) {
+        continue;
+      }
 
+      if (container && !justChangeId) {
+        if (tab.group?.hasAttribute('split-view-group')) {
+          this.moveTabsToWorkspace(tab.group.tabs, workspaceID, true);
+          container.insertBefore(tab.group, container.lastChild);
+          continue;
+        }
+        container.insertBefore(tab, container.lastChild);
+      }
+      // also change glance tab if it's the same tab
+      const glanceTab = tab.querySelector('.tabbrowser-tab[zen-glance-tab]');
+      if (glanceTab) {
+        glanceTab.setAttribute('zen-workspace-id', workspaceID);
+      }
+    }
     return true;
   }
 
@@ -1840,7 +1849,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   _updateMarginTopPinnedTabs(arrowscrollbox, pinnedContainer, essentialContainer, workspaceIndicator, forAnimation = false) {
-    if (arrowscrollbox) {
+    if (arrowscrollbox && !(this._inChangingWorkspace && !forAnimation && !this._alwaysAnimateMarginTop)) {
+      delete this._alwaysAnimateMarginTop;
       const essentialsHeight = essentialContainer.getBoundingClientRect().height;
       workspaceIndicator.style.marginTop = essentialsHeight + 'px';
       let arrowMarginTop = pinnedContainer.getBoundingClientRect().height;
@@ -1849,8 +1859,11 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         document.getElementById('zen-tabs-wrapper').style.marginTop = essentialsHeight + 'px';
         pinnedContainer.style.marginTop = '';
       } else {
-        arrowMarginTop += essentialsHeight;
+        arrowMarginTop += forAnimation ? 0 : essentialsHeight;
         pinnedContainer.style.marginTop = essentialsHeight + 'px';
+        if (forAnimation) {
+          document.getElementById('zen-tabs-wrapper').style.marginTop = '';
+        }
       }
       if (!forAnimation && !this._inChangingWorkspace) {
         // TODO:
@@ -2112,6 +2125,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       for (const cloned of clonedEssentials) {
         cloned.container.remove();
       }
+      this._alwaysAnimateMarginTop = true;
       this.updateTabsContainers();
     }
     const essentialsContainer = this.getEssentialsSection(newWorkspace.containerTabId);
@@ -2794,7 +2808,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
           const containerTabId = parseInt(tab.parentNode.getAttribute('container'));
           workspaceToSwitch = this._workspaceCache.workspaces.find((workspace) => workspace.containerTabId === containerTabId);
         } else {
-          workspaceToSwitch = this._workspaceCache.workspaces.find((workspace) => workspace.uuid === tab.getAttribute('zen-workspace-id'));
+          workspaceToSwitch = this._workspaceCache.workspaces.find(
+            (workspace) => workspace.uuid === tab.getAttribute('zen-workspace-id')
+          );
         }
         if (!workspaceToSwitch) {
           console.error('No workspace found for tab, cannot switch');

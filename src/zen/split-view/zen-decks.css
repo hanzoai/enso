@@ -34,6 +34,11 @@
   margin-left: 0 !important;
   position: absolute !important;
   overflow: hidden;
+
+  &.deck-selected:has(.dialogStack:not([hidden='true'])) {
+    /* Fix for issue https://github.com/zen-browser/desktop/issues/7564 */
+    z-index: 1;
+  }
 }
 
 #tabbrowser-tabpanels[zen-split-view='true']:not([zen-split-resizing]) > [zen-split-anim='true'] {
@@ -125,7 +130,7 @@
   display: flex;
   align-items: center;
   position: fixed;
-  padding: 0.4rem 0.6rem;
+  padding: 0.4rem 0.6rem 0.2rem 0.6rem;
   border-radius: 8px;
   background-color: light-dark(rgba(255, 255, 255, 1), rgba(0, 0, 0, 1));
   box-shadow: 0 0 0 1px var(--button-primary-border-color);
@@ -144,7 +149,7 @@
 }
 
 .zen-view-splitter-header-container toolbarbutton {
-  display: block;
+  display: flex;
   -moz-context-properties: fill, fill-opacity;
   border-radius: var(--tab-border-radius);
   color: inherit;
@@ -161,6 +166,11 @@
   & image {
     width: 14px;
     height: 14px;
+  }
+
+  &.zen-tab-unsplit-button image {
+    height: 10px;
+    width: 10px;
   }
 
   &.zen-tab-rearrange-button {

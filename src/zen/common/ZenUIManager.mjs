@@ -2,6 +2,7 @@ var gZenUIManager = {
   _popupTrackingElements: [],
   _hoverPausedForExpand: false,
   _hasLoadedDOM: false,
+  testingEnabled: Services.prefs.getBoolPref('zen.testing.enabled', false),
 
   init() {
     document.addEventListener('popupshowing', this.onPopupShowing.bind(this));
@@ -251,6 +252,10 @@ var gZenUIManager = {
     // Validate browser state first
     if (!this._validateBrowserState()) {
       console.warn('Browser state invalid for new tab operation');
+      return false;
+    }
+
+    if (this.testingEnabled) {
       return false;
     }
 
@@ -630,7 +635,7 @@ var gZenVerticalTabsManager = {
   },
 
   _updateEvent({ forCustomizableMode = false, dontRebuildAreas = false } = {}) {
-    if (this._isUpdating) {
+    if (this._isUpdating || gZenUIManager.testingEnabled) {
       return;
     }
     this._isUpdating = true;
