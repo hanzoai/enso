@@ -42,20 +42,57 @@
     window.MozXULElement.insertFTLIfNeeded('browser/zen-welcome.ftl');
   }
 
-  function openInitialPinTab() {
+  var _iconToData = {};
+
+  async function getIconData(iconURL) {
+    if (_iconToData[iconURL]) {
+      return _iconToData[iconURL];
+    }
+    const response = await fetch(iconURL);
+    if (!response.ok) {
+      console.error(`Failed to fetch icon: ${iconURL}`);
+      return null;
+    }
+    const blob = await response.blob();
+    const reader = new FileReader();
+    const data = await new Promise((resolve) => {
+      reader.onloadend = () => {
+        const base64Data = reader.result.split(',')[1];
+        _iconToData[iconURL] = `data:${blob.type};base64,${base64Data}`;
+        resolve(_iconToData[iconURL]);
+      };
+      reader.readAsDataURL(blob);
+    });
+    return data;
+  }
+
+  async function setCachedFaviconForURL(pageUrl, iconURL) {
+    try {
+      // TODO: This always return "NS_ERROR_NOT_AVAILABLE" for some reason, figure out why
+      await PlacesUtils.favicons.setFaviconForPage(
+        Services.io.newURI(pageUrl),
+        Services.io.newURI('fake-favicon-uri:' + pageUrl),
+        Services.io.newURI(iconURL)
+      );
+    } catch (ex) {
+      console.error(`Failed to set cached favicon for ${pageUrl}: ${ex}`);
+    }
+  }
+
+  async function openInitialPinTab() {
     const tabs = [
-      ['https://reddit.com/r/zen_browser', 'Zen on Reddit', 'https://private-cdn.zen-browser.app/reddit.png'],
-      ['https://x.com/zen_browser', 'Zen on Twitter', 'https://private-cdn.zen-browser.app/twitter.ico'],
+      ['https://reddit.com/r/zen_browser', 'Zen on Reddit', 'https://zen-browser.github.io/static-cdn/reddit.png'],
+      ['https://x.com/zen_browser', 'Zen on Twitter', 'https://zen-browser.github.io/static-cdn/x.png'],
     ];
     for (const site of tabs) {
       const tab = window.gBrowser.addTrustedTab(site[0], {
         inBackground: true,
-        skipAnimation: true,
         createLazyBrowser: true,
         lazyTabTitle: site[1],
       });
-      gBrowser.setIcon(tab, site[2], site[2], Services.scriptSecurityManager.getSystemPrincipal());
-      tab._recalculateAfterPinning = true;
+      const iconData = await getIconData(site[2]);
+      await setCachedFaviconForURL(site[0], iconData);
+      gBrowser.setIcon(tab, iconData);
       _tabsToPin.push(tab);
     }
   }
@@ -195,6 +232,7 @@
     }
 
     async finish() {
+      _iconToData = undefined; // Unload icon data
       ZenWorkspaces.reorganizeTabsAfterWelcome();
       await animate('#zen-welcome-page-content', { x: [0, '100%'] }, { bounce: 0 });
       document.getElementById('zen-welcome-page-content').remove();
@@ -217,7 +255,6 @@
         gBrowser.pinTab(tab);
       }
       for (const tab of _tabsToPinEssentials) {
-        tab._recalculateAfterPinning = true;
         gZenPinnedTabManager.addToEssentials(tab);
       }
     }
@@ -337,47 +374,47 @@
                   <html:div></html:div>
                 </hbox>
                 <html:div id="zen-welcome-initial-essentials-browser-sidebar-essentials">
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://obsidian.md" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/obsidian.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://obsidian.md" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/obsidian.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://discord.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/discord.png');">
+                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://discord.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/discord.png');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://trello.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/trello.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://trello.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/trello.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://slack.com/" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/slack.png');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://slack.com/" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/slack.png');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://github.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/github.png');">
+                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://github.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/github.png');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://twitter.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/twitter.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://twitter.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/x.png');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://notion.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/notion.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://notion.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/notion.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://calendar.google.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/calendar.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://calendar.google.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/calendar.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://youtube.com" style="--zen-tab-icon: url('https://www.youtube.com/favicon.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://youtube.com" style="--zen-tab-icon: url('https://zen-browser.github.io/static-cdn/youtube.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
@@ -400,7 +437,7 @@
               tab.toggleAttribute('visuallyselected');
             });
         },
-        fadeOut() {
+        async fadeOut() {
           const selectedTabs = document
             .getElementById('zen-welcome-initial-essentials-browser-sidebar-essentials')
             .querySelectorAll('.tabbrowser-tab[visuallyselected]');
@@ -408,18 +445,17 @@
             const url = tab.getAttribute('data-url');
             const createdTab = window.gBrowser.addTrustedTab(url, {
               inBackground: true,
-              skipAnimation: true,
               createLazyBrowser: true,
             });
-            gBrowser.setIcon(
-              createdTab,
-              tab.style.getPropertyValue('--zen-tab-icon'),
-              tab.style.getPropertyValue('--zen-tab-icon'),
-              Services.scriptSecurityManager.getSystemPrincipal()
-            );
+            let essentialIconUrl = tab.style.getPropertyValue('--zen-tab-icon');
+            // Remove url() from the icon URL
+            essentialIconUrl = essentialIconUrl.replace(/url\(['"]?/, '').replace(/['"]?\)/, '');
+            essentialIconUrl = await getIconData(essentialIconUrl);
+            await setCachedFaviconForURL(url, essentialIconUrl);
+            gBrowser.setIcon(createdTab, essentialIconUrl);
             _tabsToPinEssentials.push(createdTab);
           }
-          openInitialPinTab();
+          await openInitialPinTab();
         },
       },
       {

@@ -290,7 +290,7 @@
               container.insertBefore(newTab, container.lastChild);
             }
           } else {
-            document.getElementById('zen-essentials-container').appendChild(newTab);
+            ZenWorkspaces.getEssentialsSection(pin.containerTabId).appendChild(newTab);
           }
           gBrowser.tabContainer._invalidateCachedTabs();
           newTab.initialize();
@@ -1009,8 +1009,7 @@
         return;
       }
 
-      if ((pin.url === 'about:blank' && tab.linkedBrowser.currentURI.spec !== 'about:blank') || tab._recalculateAfterPinning) {
-        delete tab._recalculateAfterPinning;
+      if (pin.url === 'about:blank' && tab.linkedBrowser.currentURI.spec !== 'about:blank') {
         await this.replacePinnedUrlWithCurrent(tab);
       }
     }
