@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a469d122622fcf361eea8faa4a8d3a13a5a9e4f1 100644
+index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a864dd8854611d78e3ace9db301cf7c4f1357a32 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -68,6 +68,13 @@ XPCOMUtils.defineLazyPreferenceGetter(
@@ -58,7 +58,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a469d122622fcf361eea8faa4a8d3a13
      if (!this.#providesSearchMode(result)) {
 -      this.view.close({ elementPicked: true });
 +      if (this._zenHandleUrlbarClose) {
-+        this._zenHandleUrlbarClose(true);
++        this._zenHandleUrlbarClose(true, true);
 +      } else {
 +        this.view.close({ elementPicked: true });
 +      }
