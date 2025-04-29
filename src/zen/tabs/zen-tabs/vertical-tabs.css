@@ -1250,15 +1250,9 @@
   gap: calc(var(--zen-toolbox-padding) - 2px);
   transition: max-height 0.3s ease-out;
   opacity: 1;
-  grid-template-columns: repeat(auto-fit, minmax(49px, auto));
-  &[data-hack-type] {
-    &[data-hack-type='3'] {
-      --zen-hack-type: 3;
-    }
-    &[data-hack-type='4'] {
-      --zen-hack-type: 4;
-    }
-    grid-template-columns: repeat(auto-fit, minmax(calc(100% / var(--zen-hack-type) - 1%), auto));
+  grid-template-columns: repeat(auto-fit, minmax(48px, 1fr) minmax(48px, 1fr));
+  &[data-hack-type='3'] {
+    grid-template-columns: repeat(auto-fit, minmax(calc(100% / 3 - 1%), auto));
   }
   scrollbar-width: thin;
   min-width: calc(100% + var(--zen-toolbox-padding) * 2);
