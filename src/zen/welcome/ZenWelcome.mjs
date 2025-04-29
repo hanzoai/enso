@@ -68,10 +68,9 @@
 
   async function setCachedFaviconForURL(pageUrl, iconURL) {
     try {
-      // TODO: This always return "NS_ERROR_NOT_AVAILABLE" for some reason, figure out why
       await PlacesUtils.favicons.setFaviconForPage(
         Services.io.newURI(pageUrl),
-        Services.io.newURI('fake-favicon-uri:' + pageUrl),
+        Services.io.newURI(iconURL),
         Services.io.newURI(iconURL)
       );
     } catch (ex) {
@@ -84,6 +83,18 @@
       ['https://reddit.com/r/zen_browser', 'Zen on Reddit', 'https://private-cdn.zen-browser.app/reddit.png'],
       ['https://x.com/zen_browser', 'Zen on Twitter', 'https://private-cdn.zen-browser.app/x.png'],
     ];
+
+    await PlacesUtils.history.insertMany(
+      tabs.map((site) => ({
+        url: site[0],
+        visits: [
+          {
+            transition: PlacesUtils.history.TRANSITIONS.TYPED,
+          },
+        ],
+      }))
+    );
+
     for (const site of tabs) {
       const tab = window.gBrowser.addTrustedTab(site[0], {
         inBackground: true,
@@ -443,6 +454,18 @@
           const selectedTabs = document
             .getElementById('zen-welcome-initial-essentials-browser-sidebar-essentials')
             .querySelectorAll('.tabbrowser-tab[visuallyselected]');
+
+          await PlacesUtils.history.insertMany(
+            [...selectedTabs].map((tab) => ({
+              url: tab.getAttribute('data-url'),
+              visits: [
+                {
+                  transition: PlacesUtils.history.TRANSITIONS.TYPED,
+                },
+              ],
+            }))
+          );
+
           for (const tab of selectedTabs) {
             const url = tab.getAttribute('data-url');
             const createdTab = window.gBrowser.addTrustedTab(url, {
