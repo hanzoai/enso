@@ -678,7 +678,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   get workspaceEnabled() {
     if (typeof this._workspaceEnabled === 'undefined') {
-      this._workspaceEnabled = !gZenUIManager.testingEnabled && this.shouldHaveWorkspaces;
+      this._workspaceEnabled = this.shouldHaveWorkspaces;
     }
     return this._workspaceEnabled && !window.closed;
   }
