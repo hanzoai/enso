@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a469d122622fcf361eea8faa4a8d3a13a5a9e4f1 100644
+index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2de9f51784a92442da84ead54312e879c1da127b 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -68,6 +68,13 @@ XPCOMUtils.defineLazyPreferenceGetter(
@@ -58,7 +58,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a469d122622fcf361eea8faa4a8d3a13
      if (!this.#providesSearchMode(result)) {
 -      this.view.close({ elementPicked: true });
 +      if (this._zenHandleUrlbarClose) {
-+        this._zenHandleUrlbarClose(true);
++        this._zenHandleUrlbarClose(true, true);
 +      } else {
 +        this.view.close({ elementPicked: true });
 +      }
@@ -108,6 +108,15 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a469d122622fcf361eea8faa4a8d3a13
      this.removeAttribute("breakout-extend");
      this.#updateTextboxPosition();
    }
+@@ -2485,7 +2529,7 @@ export class UrlbarInput {
+ 
+         this.textbox.parentNode.style.setProperty(
+           "--urlbar-container-height",
+-          px(getBoundsWithoutFlushing(this.textbox.parentNode).height)
++          px(getBoundsWithoutFlushing(this.textbox.parentNode).height + 8)
+         );
+         this.textbox.style.setProperty(
+           "--urlbar-height",
 @@ -2998,7 +3042,7 @@ export class UrlbarInput {
     */
    _trimValue(val) {
@@ -158,7 +167,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a469d122622fcf361eea8faa4a8d3a13
    }
  
    _on_click(event) {
-+    if (lazy.ZEN_URLBAR_BEHAVIOR === 'float' && event.target == this.inputField) {
++    if (event.target == this.inputField) {
 +      event.zenOriginalTarget = this.textbox;
 +      this._on_mousedown(event);
 +    }
@@ -183,7 +192,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a469d122622fcf361eea8faa4a8d3a13
 +    switch (event.zenOriginalTarget || event.currentTarget) {
        case this.textbox: {
          this._mousedownOnUrlbarDescendant = true;
-+        if (event.type != "click" && lazy.ZEN_URLBAR_BEHAVIOR === 'float') {
++        if (event.type != "click") {
 +          return true;
 +        }
  

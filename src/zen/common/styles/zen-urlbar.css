@@ -9,17 +9,28 @@
   padding-block: 0 !important;
 }
 
+:root[zen-single-toolbar='true'] {
+  --urlbar-container-padding: 4px;
+  & #urlbar:not([breakout-extend='true']) {
+    padding: 1px;
+    --toolbarbutton-border-radius: 6px;
+  }
+}
+
 #urlbar {
-  --toolbarbutton-border-radius: 8px;
   --urlbarView-separator-color: light-dark(hsl(0, 0%, 90%), hsl(0, 0%, 20%));
   --urlbarView-hover-background: var(--toolbarbutton-hover-background);
   --urlbarView-highlight-background: var(--toolbarbutton-hover-background);
-  border-radius: var(--toolbarbutton-border-radius);
-  padding: 1px;
+  border-radius: calc(var(--toolbarbutton-border-radius) - 2px);
+  --urlbarView-results-padding: 10px !important;
 
   :root:not([zen-single-toolbar='true']) &[zen-floating-urlbar='true'] {
     --urlbar-container-padding: 2px !important;
   }
+}
+
+:root:not([zen-single-toolbar='true']) #urlbar:not([zen-floating-urlbar='true']) {
+  --urlbarView-results-padding: 6px !important;
 }
 
 .urlbar-input::placeholder {
@@ -84,8 +95,11 @@
   position: relative;
 }
 
-#urlbar:not([breakout-extend='true']) #identity-box {
+:root[zen-single-toolbar='true'] #urlbar:not([breakout-extend='true']) #identity-box {
   margin-inline-end: 0 !important;
+  &.chromeUI:not([pageproxystate='invalid']) #identity-icon-box {
+    border-radius: 10px !important;
+  }
 }
 
 .urlbar-page-action,
@@ -177,7 +191,7 @@
     transform: none !important;
     display: flex;
     #urlbar:not(:hover) & {
-      transition: 0;
+      transition: none;
     }
   }
 
@@ -325,11 +339,6 @@ button.popup-notification-dropmarker {
   border-radius: var(--urlbar-icon-border-radius) !important;
 }
 
-/* Extensions or similar */
-#urlbar:not([breakout-extend='true']) #identity-box.chromeUI:not([pageproxystate='invalid']) #identity-icon-box {
-  border-radius: 10px !important;
-}
-
 /* Notification Stack */
 
 .notificationbox-stack {
@@ -407,7 +416,7 @@ button.popup-notification-dropmarker {
 
 #urlbar[open] {
   z-index: 2;
-  --urlbar-margin-inline: 5px !important;
+  --urlbar-margin-inline: 5px;
 
   & #identity-box {
     margin-right: var(--urlbar-margin-inline);
@@ -537,5 +546,9 @@ button.popup-notification-dropmarker {
     .urlbarView-title-separator::before {
       color: color-mix(in srgb, var(--zen-colors-primary) 30%, lightgray) !important;
     }
+  }
+
+  &[selected] {
+    background-color: color-mix(in srgb, var(--zen-primary-color) 50%, transparent 50%) !important;
   }
 }

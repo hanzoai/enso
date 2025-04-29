@@ -370,7 +370,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
     let essentialsContainer = document.querySelector(`.zen-essentials-container[container="${container}"]:not([cloned])`);
     if (!essentialsContainer) {
-      essentialsContainer = document.createXULElement('vbox');
+      essentialsContainer = document.createXULElement('hbox');
       essentialsContainer.className = 'zen-essentials-container zen-workspace-tabs-section';
       essentialsContainer.setAttribute('flex', '1');
       essentialsContainer.setAttribute('container', container);
@@ -678,7 +678,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   get workspaceEnabled() {
     if (typeof this._workspaceEnabled === 'undefined') {
-      this._workspaceEnabled = !gZenUIManager.testingEnabled && this.shouldHaveWorkspaces;
+      this._workspaceEnabled = this.shouldHaveWorkspaces;
     }
     return this._workspaceEnabled && !window.closed;
   }
@@ -2386,6 +2386,16 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         );
         const workspaceObject = this.getWorkspaceFromId(workspaceId);
         const essentialContainer = this.getEssentialsSection(workspaceObject.containerTabId);
+        const essentialNumChildren = essentialContainer.children.length;
+        let essentialHackType = 0;
+        if (essentialNumChildren % 3 === 0) {
+          essentialHackType = 3;
+        }
+        if (essentialHackType > 0) {
+          essentialContainer.setAttribute('data-hack-type', essentialHackType);
+        } else {
+          essentialContainer.removeAttribute('data-hack-type');
+        }
         this._updateMarginTopPinnedTabs(arrowScrollbox, pinnedContainer, essentialContainer, workspaceIndicator, forAnimation);
         this.updateShouldHideSeparator(arrowScrollbox, pinnedContainer);
       }

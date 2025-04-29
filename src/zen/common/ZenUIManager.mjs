@@ -323,7 +323,7 @@ var gZenUIManager = {
     this._lastSearch = '';
   },
 
-  handleUrlbarClose(onSwitch) {
+  handleUrlbarClose(onSwitch = false, onElementPicked = false) {
     // Validate browser state first
     if (!this._validateBrowserState()) {
       console.warn('Browser state invalid for URL bar close operation');
@@ -350,26 +350,28 @@ var gZenUIManager = {
       }
 
       // Handle search data
-      if (onSwitch) {
-        this.clearUrlbarData();
-      } else {
-        this._lastSearch = gURLBar._untrimmedValue || '';
+      if (!onElementPicked) {
+        if (onSwitch) {
+          this.clearUrlbarData();
+        } else {
+          this._lastSearch = gURLBar._untrimmedValue || '';
 
-        if (this._clearTimeout) {
-          clearTimeout(this._clearTimeout);
+          if (this._clearTimeout) {
+            clearTimeout(this._clearTimeout);
+          }
+
+          this._clearTimeout = setTimeout(() => {
+            this.clearUrlbarData();
+          }, this.urlbarWaitToClear);
         }
 
-        this._clearTimeout = setTimeout(() => {
-          this.clearUrlbarData();
-        }, this.urlbarWaitToClear);
-      }
+        // Safely restore URL bar state with proper validation
+        if (this._prevUrlbarLabel) {
+          gURLBar.setURI(this._prevUrlbarLabel, onSwitch, false, false, !onSwitch);
+        }
 
-      // Safely restore URL bar state with proper validation
-      if (this._prevUrlbarLabel) {
-        gURLBar.setURI(this._prevUrlbarLabel, onSwitch, false, false, !onSwitch);
+        gURLBar.handleRevert();
       }
-
-      gURLBar.handleRevert();
 
       if (gURLBar.focused) {
         gURLBar.view.close({ elementPicked: onSwitch });

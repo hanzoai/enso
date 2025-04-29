@@ -68,10 +68,9 @@
 
   async function setCachedFaviconForURL(pageUrl, iconURL) {
     try {
-      // TODO: This always return "NS_ERROR_NOT_AVAILABLE" for some reason, figure out why
       await PlacesUtils.favicons.setFaviconForPage(
         Services.io.newURI(pageUrl),
-        Services.io.newURI('fake-favicon-uri:' + pageUrl),
+        Services.io.newURI(iconURL),
         Services.io.newURI(iconURL)
       );
     } catch (ex) {
@@ -81,9 +80,21 @@
 
   async function openInitialPinTab() {
     const tabs = [
-      ['https://reddit.com/r/zen_browser', 'Zen on Reddit', 'https://private-cdn.zen-browser.app/reddit.png'],
-      ['https://x.com/zen_browser', 'Zen on Twitter', 'https://private-cdn.zen-browser.app/x.png'],
+      ['https://reddit.com/r/zen_browser', 'Zen on Reddit', 'chrome://browser/content/zen-images/favicons/reddit.ico'],
+      ['https://x.com/zen_browser', 'Zen on Twitter', 'chrome://browser/content/zen-images/favicons/x.ico'],
     ];
+
+    await PlacesUtils.history.insertMany(
+      tabs.map((site) => ({
+        url: site[0],
+        visits: [
+          {
+            transition: PlacesUtils.history.TRANSITIONS.TYPED,
+          },
+        ],
+      }))
+    );
+
     for (const site of tabs) {
       const tab = window.gBrowser.addTrustedTab(site[0], {
         inBackground: true,
@@ -376,47 +387,47 @@
                   <html:div></html:div>
                 </hbox>
                 <html:div id="zen-welcome-initial-essentials-browser-sidebar-essentials">
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://obsidian.md" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/obsidian.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://obsidian.md" style="--zen-tab-icon: url('chrome://browser/content/zen-images/favicons/obsidian.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://discord.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/discord.png');">
+                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://discord.com" style="--zen-tab-icon: url('chrome://browser/content/zen-images/favicons/discord.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://trello.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/trello.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://trello.com" style="--zen-tab-icon: url('chrome://browser/content/zen-images/favicons/trello.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://slack.com/" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/slack.png');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://slack.com/" style="--zen-tab-icon: url('chrome://browser/content/zen-images/favicons/slack.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://github.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/github.png');">
+                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://github.com" style="--zen-tab-icon: url('chrome://browser/content/zen-images/favicons/github.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://twitter.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/x.png');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://twitter.com" style="--zen-tab-icon: url('chrome://browser/content/zen-images/favicons/x.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://notion.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/notion.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" visuallyselected="" data-url="https://notion.com" style="--zen-tab-icon: url('chrome://browser/content/zen-images/favicons/notion.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://calendar.google.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/calendar.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://calendar.google.com" style="--zen-tab-icon: url('chrome://browser/content/zen-images/favicons/calendar.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
                   </html:div>
-                  <html:div class="tabbrowser-tab" fadein="" data-url="https://youtube.com" style="--zen-tab-icon: url('https://private-cdn.zen-browser.app/youtube.ico');">
+                  <html:div class="tabbrowser-tab" fadein="" data-url="https://figma.com" style="--zen-tab-icon: url('chrome://browser/content/zen-images/favicons/figma.ico');">
                     <stack class="tab-stack">
                       <html:div class="tab-background"></html:div>
                     </stack>
@@ -443,6 +454,18 @@
           const selectedTabs = document
             .getElementById('zen-welcome-initial-essentials-browser-sidebar-essentials')
             .querySelectorAll('.tabbrowser-tab[visuallyselected]');
+
+          await PlacesUtils.history.insertMany(
+            [...selectedTabs].map((tab) => ({
+              url: tab.getAttribute('data-url'),
+              visits: [
+                {
+                  transition: PlacesUtils.history.TRANSITIONS.TYPED,
+                },
+              ],
+            }))
+          );
+
           for (const tab of selectedTabs) {
             const url = tab.getAttribute('data-url');
             const createdTab = window.gBrowser.addTrustedTab(url, {

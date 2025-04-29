@@ -83,8 +83,23 @@
 
     onTabIconChanged(tab, url = null) {
       const iconUrl = url ?? tab.iconImage.src;
-      if (tab.hasAttribute('zen-essential')) {
-        tab.querySelector('.tab-background').style.setProperty('--zen-tab-icon', `url(${iconUrl})`);
+      if (!iconUrl) {
+        try {
+          setTimeout(() => {
+            PlacesUtils.favicons.getFaviconURLForPage(
+              tab.linkedBrowser.currentURI,
+              (url) => {
+                if (url) gBrowser.setIcon(tab, url.spec);
+              },
+
+              0
+            );
+          });
+        } catch {}
+      } else {
+        if (tab.hasAttribute('zen-essential')) {
+          tab.querySelector('.tab-background').style.setProperty('--zen-tab-icon', `url(${iconUrl})`);
+        }
       }
       // TODO: work on this
       //if (tab.hasAttribute('zen-pinned-changed') || !this._pinsCache) {
@@ -570,9 +585,9 @@
       const state = JSON.parse(tabState);
 
       const foundEntryIndex = state.entries?.findIndex((entry) => entry.url === pin.url);
-      if (!foundEntryIndex || foundEntryIndex === -1) {
+      if (foundEntryIndex === -1) {
         state.entries = [
-          {
+          [state.entries[0]] ?? {
             url: pin.url,
             title: pin.title,
             triggeringPrincipal_base64: lazy.E10SUtils.SERIALIZED_SYSTEMPRINCIPAL,
