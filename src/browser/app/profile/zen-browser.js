@@ -387,7 +387,7 @@ pref('zen.widget.linux.transparency', false);
 #endif
 
 // Urlbar and autocomplete
-pref("browser.urlbar.maxRichResults", 6);
+pref("browser.urlbar.maxRichResults", 8);
 pref("browser.urlbar.trimHttps", true);
 pref("browser.search.separatePrivateDefault.ui.enabled", true);
 pref("browser.urlbar.update2.engineAliasRefresh", true);
