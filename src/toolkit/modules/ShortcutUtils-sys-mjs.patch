@@ -1,8 +1,16 @@
 diff --git a/toolkit/modules/ShortcutUtils.sys.mjs b/toolkit/modules/ShortcutUtils.sys.mjs
-index 360a7dbeeae3899af01945e35d5fe3aa0cb3c562..895d39fe5887ffae9cdbce9576df8b00d4cc8442 100644
+index 360a7dbeeae3899af01945e35d5fe3aa0cb3c562..354c0c9e65e443682a2b12113bc618af9e07910f 100644
 --- a/toolkit/modules/ShortcutUtils.sys.mjs
 +++ b/toolkit/modules/ShortcutUtils.sys.mjs
-@@ -382,12 +382,12 @@ export var ShortcutUtils = {
+@@ -140,6 +140,7 @@ export var ShortcutUtils = {
+         key = keyCode.replace(/^VK_/, "");
+       }
+     } else {
++      if (!keyAttribute) return "";
+       key = keyAttribute.toUpperCase();
+     }
+ 
+@@ -382,12 +383,12 @@ export var ShortcutUtils = {
            return ShortcutUtils.MOVE_TAB_FORWARD;
          }
          break;

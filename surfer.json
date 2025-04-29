@@ -4,7 +4,7 @@
   "appId": "zen",
   "binaryName": "zen",
   "version": {
-    "product": "firefox-beta",
+    "product": "firefox",
     "version": "137.0.2",
     "candidate": "138.0"
   },
