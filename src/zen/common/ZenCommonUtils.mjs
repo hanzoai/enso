@@ -36,6 +36,7 @@ class ZenMultiWindowFeature {
     }
     for (const browser of ZenMultiWindowFeature.browsers) {
       try {
+        if (browser.closed) continue;
         await callback(browser);
       } catch (e) {
         console.error(e);

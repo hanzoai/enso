@@ -585,9 +585,9 @@
       const state = JSON.parse(tabState);
 
       const foundEntryIndex = state.entries?.findIndex((entry) => entry.url === pin.url);
-      if (!foundEntryIndex || foundEntryIndex === -1) {
+      if (foundEntryIndex === -1) {
         state.entries = [
-          {
+          [state.entries[0]] ?? {
             url: pin.url,
             title: pin.title,
             triggeringPrincipal_base64: lazy.E10SUtils.SERIALIZED_SYSTEMPRINCIPAL,
