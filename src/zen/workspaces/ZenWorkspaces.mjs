@@ -2386,6 +2386,18 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         );
         const workspaceObject = this.getWorkspaceFromId(workspaceId);
         const essentialContainer = this.getEssentialsSection(workspaceObject.containerTabId);
+        const essentialNumChildren = essentialContainer.children.length;
+        let essentialHackType = 0;
+        if (essentialNumChildren % 3 === 0) {
+          essentialHackType = 3;
+        } else if (essentialNumChildren % 4 === 0 || essentialNumChildren % 4 === 3) {
+          essentialHackType = 4;
+        }
+        if (essentialHackType > 0) {
+          essentialContainer.setAttribute('data-hack-type', essentialHackType);
+        } else {
+          essentialContainer.removeAttribute('data-hack-type');
+        }
         this._updateMarginTopPinnedTabs(arrowScrollbox, pinnedContainer, essentialContainer, workspaceIndicator, forAnimation);
         this.updateShouldHideSeparator(arrowScrollbox, pinnedContainer);
       }
