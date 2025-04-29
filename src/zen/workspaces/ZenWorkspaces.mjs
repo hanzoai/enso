@@ -684,10 +684,10 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   getActiveWorkspaceFromCache() {
-    return this.getWoekspaceFromId(this.activeWorkspace);
+    return this.getWorkspaceFromId(this.activeWorkspace);
   }
 
-  getWoekspaceFromId(id) {
+  getWorkspaceFromId(id) {
     try {
       return this._workspaceCache.workspaces.find((workspace) => workspace.uuid === id);
     } catch (e) {
@@ -710,7 +710,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     const activeWorkspaceId = this.activeWorkspace;
 
     if (activeWorkspaceId) {
-      const activeWorkspace = this.getWoekspaceFromId(activeWorkspaceId);
+      const activeWorkspace = this.getWorkspaceFromId(activeWorkspaceId);
       // Set the active workspace ID to the first one if the one with selected id doesn't exist
       if (!activeWorkspace) {
         this.activeWorkspace = this._workspaceCache.workspaces[0]?.uuid;
@@ -2384,7 +2384,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         const workspaceIndicator = document.querySelector(
           `#zen-current-workspace-indicator-container .zen-workspace-tabs-section[zen-workspace-id="${workspaceId}"]`
         );
-        const workspaceObject = this.getWoekspaceFromId(workspaceId);
+        const workspaceObject = this.getWorkspaceFromId(workspaceId);
         const essentialContainer = this.getEssentialsSection(workspaceObject.containerTabId);
         this._updateMarginTopPinnedTabs(arrowScrollbox, pinnedContainer, essentialContainer, workspaceIndicator, forAnimation);
         this.updateShouldHideSeparator(arrowScrollbox, pinnedContainer);
@@ -2405,7 +2405,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       if (tab.hasAttribute('change-workspace') && this.moveTabToWorkspace(tab, workspaceID)) {
         this._lastSelectedWorkspaceTabs[workspaceID] = gZenGlanceManager.getTabOrGlanceParent(tab);
         tab.removeAttribute('change-workspace');
-        await this.changeWorkspace({ uuid: workspaceID, containerTabId: tab.getAttribute('usercontextid') }, { onInit: true });
+        const workspace = this.getWorkspaceFromId(workspaceID);
+        await this.changeWorkspace(workspace);
       }
       return;
     }
@@ -2449,7 +2450,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
       // Switch workspace if needed
       if (workspaceID && workspaceID !== activeWorkspace.uuid && this._hasInitializedTabsStrip) {
-        const workspaceToChange = this.getWoekspaceFromId(workspaceID);
+        const workspaceToChange = this.getWorkspaceFromId(workspaceID);
         await this.changeWorkspace(workspaceToChange);
       }
     }
@@ -2634,7 +2635,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   // Tab browser utilities
   createContainerTabMenu(event) {
     let window = event.target.ownerGlobal;
-    const workspace = this.getWoekspaceFromId(this._contextMenuId);
+    const workspace = this.getWorkspaceFromId(this._contextMenuId);
     let containerTabId = workspace.containerTabId;
     return window.createUserContextMenu(event, {
       isContextMenu: true,
@@ -2831,7 +2832,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
             (workspace) => workspace.containerTabId + 0 === containerTabId
           );
         } else {
-          workspaceToSwitch = this.getWoekspaceFromId(tab.getAttribute('zen-workspace-id'));
+          workspaceToSwitch = this.getWorkspaceFromId(tab.getAttribute('zen-workspace-id'));
         }
         if (!workspaceToSwitch) {
           console.error('No workspace found for tab, cannot switch');
