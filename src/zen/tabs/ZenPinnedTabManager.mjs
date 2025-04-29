@@ -83,8 +83,23 @@
 
     onTabIconChanged(tab, url = null) {
       const iconUrl = url ?? tab.iconImage.src;
-      if (tab.hasAttribute('zen-essential')) {
-        tab.querySelector('.tab-background').style.setProperty('--zen-tab-icon', `url(${iconUrl})`);
+      if (!iconUrl) {
+        try {
+          setTimeout(() => {
+            PlacesUtils.favicons.getFaviconURLForPage(
+              tab.linkedBrowser.currentURI,
+              (url) => {
+                if (url) gBrowser.setIcon(tab, url.spec);
+              },
+
+              0
+            );
+          });
+        } catch {}
+      } else {
+        if (tab.hasAttribute('zen-essential')) {
+          tab.querySelector('.tab-background').style.setProperty('--zen-tab-icon', `url(${iconUrl})`);
+        }
       }
       // TODO: work on this
       //if (tab.hasAttribute('zen-pinned-changed') || !this._pinsCache) {
