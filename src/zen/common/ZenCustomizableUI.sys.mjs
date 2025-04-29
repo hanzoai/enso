@@ -77,7 +77,7 @@ export var ZenCustomizableUI = new (class {
     });
 
     // remove all styles except for the width, since we are xulstoring the complet style list
-    const width = toolbox.style.width || '180px';
+    const width = toolbox.style.width || '228px';
     toolbox.removeAttribute('style');
     toolbox.style.width = width;
 

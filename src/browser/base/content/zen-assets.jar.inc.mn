@@ -92,3 +92,15 @@
         # JS Vendor
         content/browser/zen-vendor/tsparticles.confetti.bundle.min.js           (../../zen/vendor/tsparticles.confetti.bundle.min.js)
         content/browser/zen-vendor/motion.min.mjs                               (../../zen/vendor/motion.min.mjs)
+
+        # FavIcons for startup
+        content/browser/zen-images/favicons/calendar.ico                           (../../zen/images/favicons/calendar.ico)
+        content/browser/zen-images/favicons/discord.ico                            (../../zen/images/favicons/discord.ico)
+        content/browser/zen-images/favicons/figma.ico                              (../../zen/images/favicons/figma.ico)
+        content/browser/zen-images/favicons/github.ico                            (../../zen/images/favicons/github.ico)
+        content/browser/zen-images/favicons/notion.ico                             (../../zen/images/favicons/notion.ico)
+        content/browser/zen-images/favicons/obsidian.ico                          (../../zen/images/favicons/obsidian.ico)
+        content/browser/zen-images/favicons/slack.ico                             (../../zen/images/favicons/slack.ico)
+        content/browser/zen-images/favicons/reddit.ico                            (../../zen/images/favicons/reddit.ico)
+        content/browser/zen-images/favicons/x.ico                                 (../../zen/images/favicons/x.ico)
+        content/browser/zen-images/favicons/trello.ico                            (../../zen/images/favicons/trello.ico)
