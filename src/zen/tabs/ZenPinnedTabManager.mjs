@@ -653,7 +653,7 @@
             pin.isEssential = true;
             this.savePin(pin);
           }
-          document.getElementById('zen-essentials-container').appendChild(tab);
+          ZenWorkspaces.getEssentialsSection(tab).appendChild(tab);
           gBrowser.tabContainer._invalidateCachedTabs();
         } else {
           gBrowser.pinTab(tab);
