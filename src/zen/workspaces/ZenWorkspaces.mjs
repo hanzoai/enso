@@ -2396,7 +2396,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         const essentialContainer = this.getEssentialsSection(workspaceObject.containerTabId);
         const essentialNumChildren = essentialContainer.children.length;
         let essentialHackType = 0;
-        if (essentialNumChildren % 2 === 0) {
+        if (essentialNumChildren === 6) {
+          essentialHackType = 1;
+        } else if (essentialNumChildren % 2 === 0) {
           essentialHackType = 2;
         }
         if (essentialHackType > 0) {

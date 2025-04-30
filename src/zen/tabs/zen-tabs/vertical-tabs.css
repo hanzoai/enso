@@ -1255,6 +1255,9 @@
   transition: max-height 0.3s ease-out;
   opacity: 1;
   grid-template-columns: repeat(auto-fit, minmax(max(23.7%, 48px), 1fr));
+  &[data-hack-type='1'] {
+    grid-template-columns: repeat(auto-fit, minmax(max(30%, 48px), auto));
+  }
   &[data-hack-type='2'] {
     grid-template-columns: repeat(auto-fit, minmax(max(23.7%, 48px), 1fr) minmax(max(23.7%, 48px), 1fr));
   }
