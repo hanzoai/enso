@@ -66,11 +66,7 @@ var gZenUIManager = {
     tabs.style.removeProperty('flex');
     tabs.style.maxHeight = height + 'px';
     gZenVerticalTabsManager.actualWindowButtons.removeAttribute('zen-has-hover');
-    try {
-      gURLBar.zenUpdateLayoutBreakout();
-    } catch (error) {
-      console.error('Error updating layout breakout:', error);
-    }
+    gZenVerticalTabsManager.recalculateURLBarHeight();
     if (!this._preventToolbarRebuild) {
       setTimeout(() => {
         ZenWorkspaces.updateTabsContainers();

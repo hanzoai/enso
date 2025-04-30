@@ -678,7 +678,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   get workspaceEnabled() {
     if (typeof this._workspaceEnabled === 'undefined') {
-      this._workspaceEnabled = this.shouldHaveWorkspaces;
+      this._workspaceEnabled = this.shouldHaveWorkspaces && !Services.prefs.getBoolPref('zen.testing.profiling.enabled', false);
     }
     return this._workspaceEnabled && !window.closed;
   }
