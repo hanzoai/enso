@@ -1251,6 +1251,9 @@
   transition: max-height 0.3s ease-out;
   opacity: 1;
   grid-template-columns: repeat(auto-fit, minmax(max(23.7%, 48px), 1fr));
+  &[data-hack-type='2'] {
+    grid-template-columns: repeat(auto-fit, minmax(max(23.7%, 48px), 1fr) minmax(max(23.7%, 48px), 1fr));
+  }
   scrollbar-width: thin;
   min-width: calc(100% + var(--zen-toolbox-padding) * 2);
   padding: 0 var(--zen-toolbox-padding);

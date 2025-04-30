@@ -518,7 +518,7 @@ button.popup-notification-dropmarker {
   margin-left: 0 !important;
   margin-right: 12px !important;
   padding: 6px !important;
-  border-radius: 6px !important;
+  border-radius: 4px !important;
 }
 
 .urlbarView-row[has-action]:is([type='switchtab'], [type='remotetab'], [type='clipboard']) .urlbarView-action {
@@ -527,23 +527,25 @@ button.popup-notification-dropmarker {
 }
 
 .urlbarView-row {
-  .urlbarView-favicon {
-    transition: background-color 0.05s;
-  }
+  --urlbarView-item-inline-padding: 0.9rem;
+  --urlbarView-item-block-padding: 1rem;
 
   &:hover {
     .urlbarView-favicon,
     & {
       background-color: color-mix(in srgb, var(--zen-branding-bg-reverse) 5%, transparent 95%) !important;
     }
-
-    .urlbarView-url,
-    .urlbarView-title-separator::before {
-      color: color-mix(in srgb, var(--zen-colors-primary) 30%, lightgray) !important;
-    }
   }
 
   &[selected] {
     background-color: color-mix(in srgb, var(--zen-primary-color) 50%, transparent 50%) !important;
+
+    & * {
+      color: white !important;
+    }
+
+    & .urlbarView-favicon {
+      background-color: rgba(255, 255, 255, 0.9) !important;
+    }
   }
 }
