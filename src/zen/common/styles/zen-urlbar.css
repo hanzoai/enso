@@ -161,7 +161,7 @@
       due to performance issues */
     background-color: light-dark(
       hsl(0, 0%, 100%),
-      color-mix(in srgb, hsl(0, 0%, 5%) 60%, var(--zen-colors-primary) 40%)
+      color-mix(in srgb, hsl(0, 0%, 5%) 70%, var(--zen-colors-primary) 30%)
     ) !important;
     box-shadow: 0px 0px 90px -10px rgba(0, 0, 0, 0.6) !important;
     backdrop-filter: none !important;
