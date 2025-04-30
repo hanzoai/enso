@@ -71,6 +71,7 @@ var gZenCompactModeManager = {
       // We dont want the user to be able to spam the button
       return value;
     }
+    this.sidebar.removeAttribute('zen-user-show');
     // We use this element in order to make it persis across restarts, by using the XULStore.
     // main-window can't store attributes other than window sizes, so we use this instead
     lazyCompactMode.mainAppWrapper.setAttribute('zen-compact-mode', value);
@@ -407,7 +408,7 @@ var gZenCompactModeManager = {
       const onEnter = (event) => {
         if (event.type === 'mouseenter' && !event.target.matches(':hover')) return;
         // Dont register the hover if the urlbar is floating and we are hovering over it
-        if (event.target.querySelector('#urlbar[zen-floating-urlbar]')) return;
+        if (event.target.closest('#urlbar[zen-floating-urlbar]')) return;
         this.clearFlashTimeout('has-hover' + target.id);
         window.requestAnimationFrame(() => target.setAttribute('zen-has-hover', 'true'));
       };

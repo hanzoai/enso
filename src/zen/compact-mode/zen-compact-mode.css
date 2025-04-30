@@ -59,7 +59,6 @@
           top: 0;
           bottom: var(--zen-element-separation);
           padding: 0 var(--zen-compact-float) !important;
-          opacity: 0;
 
           :root[zen-single-toolbar='true'] & {
             top: calc(var(--zen-element-separation) / 2);
@@ -111,7 +110,6 @@
       }
 
       #navigator-toolbox:not([animate='true']) #titlebar {
-        box-shadow: var(--zen-big-shadow);
         border-radius: calc(var(--zen-native-inner-radius) + var(--zen-element-separation) / 4);
         padding: var(--zen-toolbox-padding) !important;
         position: relative;
@@ -283,6 +281,10 @@
             :root[zen-right-side='true'] & {
               right: calc(var(--zen-element-separation) / -2);
               left: auto;
+            }
+
+            & #titlebar {
+              box-shadow: var(--zen-big-shadow);
             }
           }
         }
