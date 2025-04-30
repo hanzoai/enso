@@ -1787,8 +1787,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   _cancelSwipeAnimation() {
-    const currentWorkspace = this.activeWorkspace;
-    this._animateTabs({ uuid: currentWorkspace }, true);
+    this._animateTabs(this.getActiveWorkspaceFromCache(), true);
   }
 
   async _performWorkspaceChange(window, { onInit = false, alwaysChange = false, whileScrolling = false } = {}) {
@@ -1905,11 +1904,33 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
     // Hide other essentials with different containerTabId
     const otherContainersEssentials = document.querySelectorAll(`#zen-essentials-wrapper .zen-workspace-tabs-section`);
+    const workspaceContextId = workspace.containerTabId;
+    const nextWorkspaceContextId = workspaces.workspaces[workspaceIndex + (offsetPixels > 0 ? -1 : 1)]?.containerTabId;
+    if (nextWorkspaceContextId !== workspaceContextId && offsetPixels && this.containerSpecificEssentials) {
+      document.getElementById('zen-tabs-wrapper').style.marginTop = '';
+      const waitForContainers = [];
+      for (const element of document.querySelectorAll('.zen-workspace-tabs-section.zen-workspace-pinned-tabs-section')) {
+        waitForContainers.push(this.updateTabsContainers(element, true));
+      }
+      await Promise.all(waitForContainers);
+    }
     for (const container of otherContainersEssentials) {
+      // Get the next workspace contextId, if it's the same, dont apply offsetPixels
+      // if it's not we do apply it
       if (container.getAttribute('container') != workspace.containerTabId && this.containerSpecificEssentials) {
         container.setAttribute('hidden', 'true');
       } else {
         container.removeAttribute('hidden');
+      }
+      if (nextWorkspaceContextId !== workspaceContextId && offsetPixels) {
+        container.removeAttribute('hidden');
+        // Animate from the currently selected workspace
+        if (container.getAttribute('container') == workspaceContextId) {
+          container.style.transform = `translateX(${offsetPixels / 2}%)`;
+        } else {
+          // Animate from the next workspace, transitioning towards the current one
+          container.style.transform = `translateX(${offsetPixels / 2 + (offsetPixels > 0 ? -100 : 100)}%)`;
+        }
       }
     }
   }
@@ -2048,6 +2069,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         const lastWorkspaceIndex = workspaces.workspaces.findIndex(
           (w) => w.uuid === essentialsWorkspaces[essentialsWorkspaces.length - 1].uuid
         );
+        cloned.originalContainer.style.removeProperty('transform');
         // Check if the container is even going to appear on the screen, to save on animation
         if (
           (isGoingLeft && newWorkspaceIndex > lastWorkspaceIndex) ||
@@ -2124,7 +2146,10 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         }
 
         const newTransform = `translateX(${newOffset}%)`;
-        const existingTransform = `translateX(${existingOffset}%)`;
+        let existingTransform = `translateX(${existingOffset}%)`;
+        if (container.style.transform) {
+          existingTransform = container.style.transform;
+        }
         if (shouldAnimate) {
           container.style.transform = newTransform;
           animations.push(
@@ -2153,7 +2178,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         cloned.container.remove();
       }
       this._alwaysAnimateMarginTop = true;
-      this.updateTabsContainers();
+      await this.updateTabsContainers();
     }
     const essentialsContainer = this.getEssentialsSection(newWorkspace.containerTabId);
     essentialsContainer.removeAttribute('hidden');

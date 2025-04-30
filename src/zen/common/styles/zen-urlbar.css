@@ -454,7 +454,7 @@ button.popup-notification-dropmarker {
     font-size: 1.5em !important;
     width: min(90%, 60rem) !important;
   }
-  top: 22svh !important;
+  top: 20svh !important;
   transform: translateX(-50%);
   left: 50% !important;
 
