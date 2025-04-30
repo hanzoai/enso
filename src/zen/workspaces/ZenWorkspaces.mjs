@@ -784,13 +784,10 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
     const currentTab = gBrowser.selectedTab;
     let showed = false;
-    if (currentTab.pinned) {
+    if (this._tabToRemoveForEmpty) {
       this.selectEmptyTab();
-      try {
-        gZenTabUnloader.explicitUnloadTabs([currentTab]);
-      } catch (e) {
-        console.error('ZenWorkspaces: Error unloading tab', e);
-      }
+      gBrowser.removeTab(this._tabToRemoveForEmpty);
+      delete this._tabToRemoveForEmpty;
       showed = true;
     } else {
       const currentTabURL = currentTab.linkedBrowser?.currentURI?.spec;
@@ -2660,7 +2657,12 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       return [userContextId, false, undefined];
     }
 
-    if (this.shouldForceContainerTabsToWorkspace && typeof userContextId !== 'undefined' && this._workspaceCache?.workspaces) {
+    if (
+      this.shouldForceContainerTabsToWorkspace &&
+      typeof userContextId !== 'undefined' &&
+      this._workspaceCache?.workspaces &&
+      !fromExternal
+    ) {
       // Find all workspaces that match the given userContextId
       const matchingWorkspaces = this._workspaceCache.workspaces.filter(
         (workspace) => workspace.containerTabId === userContextId
@@ -2682,6 +2684,17 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       return [userContextId, false, undefined];
     }
     return [activeWorkspaceUserContextId, true, undefined];
+  }
+
+  getTabsToExclude(aTab) {
+    const tabWorkspaceId = aTab.getAttribute('zen-workspace-id');
+    // Return all tabs that are not on the same workspace
+    return this.allStoredTabs.filter(
+      (tab) =>
+        tab.getAttribute('zen-workspace-id') !== tabWorkspaceId &&
+        !tab.hasAttribute('zen-essential') &&
+        !(this.containerSpecificEssentials && tab.getAttribute('container') !== aTab.getAttribute('container'))
+    );
   }
 
   async shortcutSwitchTo(index) {
