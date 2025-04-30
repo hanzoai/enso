@@ -629,7 +629,7 @@ var gZenVerticalTabsManager = {
     document.getElementById('urlbar').removeAttribute('--urlbar-height');
     if (!this._hasSetSingleToolbar) {
       document.getElementById('urlbar').style.setProperty('--urlbar-height', '32px');
-    } else {
+    } else if (gURLBar.getAttribute('breakout') !== 'true') {
       try {
         gURLBar.zenUpdateLayoutBreakout();
       } catch (e) {

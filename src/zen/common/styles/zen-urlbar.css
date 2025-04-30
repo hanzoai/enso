@@ -147,11 +147,28 @@
   position: fixed;
 }
 
-#urlbar[breakout-extend='true'] #urlbar-background {
-  box-shadow: 0px 0px 90px -10px rgba(0, 0, 0, 0.6) !important;
-  border: 1px solid hsla(0, 0%, 100%, 0.1) !important;
-  backdrop-filter: none !important;
-  border-radius: 0.8rem !important;
+#urlbar[breakout-extend='true'] {
+  z-index: 2;
+  --urlbar-margin-inline: 5px;
+
+  & #identity-box {
+    margin-right: var(--urlbar-margin-inline);
+  }
+
+  & #urlbar-background {
+    /* We cant have a transparent background with a backdrop-filter because on normal websites,
+      the backdrop woudn't work, we would need to apply a clip-path to the site and that's not recommended
+      due to performance issues */
+    background-color: light-dark(
+      hsl(0, 0%, 100%),
+      color-mix(in srgb, hsl(0, 0%, 5%) 60%, var(--zen-colors-primary) 40%)
+    ) !important;
+    box-shadow: 0px 0px 90px -10px rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: none !important;
+    border-radius: 1.1rem !important;
+    outline: 0.5px solid rgba(255, 255, 255, 0.15) !important;
+    outline-offset: -2px;
+  }
 }
 
 #urlbar-go-button {
@@ -411,28 +428,6 @@ button.popup-notification-dropmarker {
 
   & .search-panel-one-offs-container .searchbar-engine-one-off-item {
     box-shadow: none;
-  }
-}
-
-#urlbar[open] {
-  z-index: 2;
-  --urlbar-margin-inline: 5px;
-
-  & #identity-box {
-    margin-right: var(--urlbar-margin-inline);
-  }
-
-  & #urlbar-background {
-    /* We cant have a transparent background with a backdrop-filter because on normal websites,
-      the backdrop woudn't work, we would need to apply a clip-path to the site and that's not recommended
-      due to performance issues */
-    background-color: light-dark(
-      hsl(0, 0%, 100%),
-      color-mix(in srgb, hsl(0, 0%, 5%) 90%, var(--zen-colors-primary) 10%)
-    ) !important;
-    @media (-prefers-color-scheme: dark) {
-      outline: 1px solid rgba(0, 0, 0, 0.3) !important;
-    }
   }
 }
 

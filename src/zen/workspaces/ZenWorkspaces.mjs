@@ -2032,7 +2032,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       );
       for (const cloned of clonedEssentials) {
         const container = cloned.container;
-        const essentialsWorkspacess = cloned.workspaces;
+        const essentialsWorkspaces = cloned.workspaces;
         const repeats = cloned.repeat;
         // Animate like the workspaces above expect essentials are a bit more
         // complicated because they are not based on workspaces but on containers
@@ -2047,9 +2047,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         // will slide in from the right
 
         // Get the index from first and last workspace
-        const firstWorkspaceIndex = workspaces.workspaces.findIndex((w) => w.uuid === essentialsWorkspacess[0].uuid);
+        const firstWorkspaceIndex = workspaces.workspaces.findIndex((w) => w.uuid === essentialsWorkspaces[0].uuid);
         const lastWorkspaceIndex = workspaces.workspaces.findIndex(
-          (w) => w.uuid === essentialsWorkspacess[essentialsWorkspacess.length - 1].uuid
+          (w) => w.uuid === essentialsWorkspaces[essentialsWorkspaces.length - 1].uuid
         );
         // Check if the container is even going to appear on the screen, to save on animation
         if (
@@ -2077,7 +2077,18 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
             (isGoingLeft ? repeats - 1 : -repeats + 1)
           ) * 100;
 
-        const needsOffsetAdjustment = stepsInBetween > essentialsWorkspacess.length || usingSameContainer;
+        // If we are on the same container and both new and old workspace are in the same "essentialsWorkspaces"
+        // we can simply not animate the essentials
+        if (
+          usingSameContainer &&
+          essentialsWorkspaces.some((w) => w.uuid === newWorkspace.uuid) &&
+          essentialsWorkspaces.some((w) => w.uuid === previousWorkspace.uuid)
+        ) {
+          newOffset = 0;
+          existingOffset = 0;
+        }
+
+        const needsOffsetAdjustment = stepsInBetween > essentialsWorkspaces.length || usingSameContainer;
 
         if (repeats > 0 && needsOffsetAdjustment) {
           if (!isGoingLeft) {
@@ -2386,16 +2397,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         );
         const workspaceObject = this.getWorkspaceFromId(workspaceId);
         const essentialContainer = this.getEssentialsSection(workspaceObject.containerTabId);
-        const essentialNumChildren = essentialContainer.children.length;
-        let essentialHackType = 0;
-        if (essentialNumChildren % 3 === 0) {
-          essentialHackType = 3;
-        }
-        if (essentialHackType > 0) {
-          essentialContainer.setAttribute('data-hack-type', essentialHackType);
-        } else {
-          essentialContainer.removeAttribute('data-hack-type');
-        }
         this._updateMarginTopPinnedTabs(arrowScrollbox, pinnedContainer, essentialContainer, workspaceIndicator, forAnimation);
         this.updateShouldHideSeparator(arrowScrollbox, pinnedContainer);
       }

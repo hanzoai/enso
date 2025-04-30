@@ -1250,10 +1250,7 @@
   gap: calc(var(--zen-toolbox-padding) - 2px);
   transition: max-height 0.3s ease-out;
   opacity: 1;
-  grid-template-columns: repeat(auto-fit, minmax(48px, 1fr) minmax(48px, 1fr));
-  &[data-hack-type='3'] {
-    grid-template-columns: repeat(auto-fit, minmax(calc(100% / 3 - 1%), auto));
-  }
+  grid-template-columns: repeat(auto-fit, minmax(max(23.7%, 48px), 1fr));
   scrollbar-width: thin;
   min-width: calc(100% + var(--zen-toolbox-padding) * 2);
   padding: 0 var(--zen-toolbox-padding);
