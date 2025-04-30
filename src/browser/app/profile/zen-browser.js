@@ -226,9 +226,6 @@ pref('zen.watermark.enabled', false, sticky);
 pref('dom.private-attribution.submission.enabled', false);
 pref('dom.security.https_only_mode', true);
 
-// Enable EME
-pref('media.eme.enabled', true);
-
 // Crash reports
 pref("breakpad.reportURL", "");
 pref("browser.tabs.crashReporting.sendReport", false);
