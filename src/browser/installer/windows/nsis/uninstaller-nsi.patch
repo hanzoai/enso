@@ -1,7 +1,7 @@
 diff --git a/browser/installer/windows/nsis/uninstaller.nsi b/browser/installer/windows/nsis/uninstaller.nsi
 old mode 100755
 new mode 100644
-index 559c8b46ee06bc42c91da49b5d9e397fe8ff6126..62094a5d98712a41a607ba01ca2adfa1e4f51ccd
+index 559c8b46ee06bc42c91da49b5d9e397fe8ff6126..2920621824af171588b1cd38ac8b2329fbdb6e25
 --- a/browser/installer/windows/nsis/uninstaller.nsi
 +++ b/browser/installer/windows/nsis/uninstaller.nsi
 @@ -507,6 +507,7 @@ Section "Uninstall"
@@ -12,3 +12,16 @@ index 559c8b46ee06bc42c91da49b5d9e397fe8ff6126..62094a5d98712a41a607ba01ca2adfa1
  
    ${un.RegCleanFileHandler}  ".pdf"   "FirefoxPDF-$AppUserModelID"
  
+@@ -980,12 +981,6 @@ FunctionEnd
+ 
+ Function un.onUninstSuccess
+   ; Send a ping at un.onGUIEnd, to avoid freezing the GUI.
+-  StrCpy $ShouldSendPing "1"
+-
+-  ${If} ${Silent}
+-    ; If this is a silent uninstall then un.onGUIEnd doesn't run, so do it now.
+-    Call un.SendUninstallPing
+-  ${EndIf}
+ FunctionEnd
+ 
+ Function un.preFinish

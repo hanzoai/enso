@@ -326,10 +326,8 @@ pref('browser.preferences.experimental', true);
 // Prefetching:
 pref("network.dns.disablePrefetch", false);
 pref("network.prefetch-next", true);
-pref("network.predictor.enabled", true);
 pref("network.dns.disablePrefetchFromHTTPS", false);
 pref("network.predictor.enable-hover-on-ssl", true);
-pref("network.http.speculative-parallel-limit", 10);
 pref("network.http.rcwn.enabled", false);
 
 // Disable Firefox's revamp
@@ -389,9 +387,9 @@ pref("browser.urlbar.trimHttps", true);
 pref("browser.search.separatePrivateDefault.ui.enabled", true);
 pref("browser.urlbar.update2.engineAliasRefresh", true);
 pref("browser.search.suggest.enabled", false);
-pref("browser.urlbar.quicksuggest.enabled", false);
-pref("browser.urlbar.suggest.quicksuggest.sponsored", false);
-pref("browser.urlbar.suggest.quicksuggest.nonsponsored", false);
+pref("browser.urlbar.quicksuggest.enabled", false, locked);
+pref("browser.urlbar.suggest.quicksuggest.sponsored", false, locked);
+pref("browser.urlbar.suggest.quicksuggest.nonsponsored", false, locked);
 pref("browser.urlbar.groupLabels.enabled", false);
 pref("browser.urlbar.keepPanelOpenDuringImeComposition", true); // IMPORTANT: Fixes closing the urlbar when on some languages
 pref("browser.formfill.enable", false);
