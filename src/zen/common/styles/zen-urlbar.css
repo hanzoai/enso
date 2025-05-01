@@ -527,8 +527,8 @@ button.popup-notification-dropmarker {
 }
 
 .urlbarView-row {
-  --urlbarView-item-inline-padding: 0.9rem;
-  --urlbarView-item-block-padding: 1rem;
+  --urlbarView-item-inline-padding: 10px;
+  --urlbarView-item-block-padding: 12px;
 
   &:hover {
     .urlbarView-favicon,
