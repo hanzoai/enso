@@ -1441,20 +1441,18 @@
    Section: Tab Workspaces Stylings
    ========================================================================== */
 
-/* Style for individual workspace tab sections */
 .zen-workspace-tabs-section {
-  position: absolute; /* Position absolutely for transitions */
-  transform: translateX(-100%); /* Initially off-screen to the left */
+  position: absolute;
+  transform: translateX(-100%);
 
-  /* Apply flex layout unless it's the essentials container */
   &:not(.zen-essentials-container) {
     display: flex;
     min-width: calc(100% - var(--zen-toolbox-padding) * 2); /* Set width based on padding */
   }
 
-  /* Apply horizontal margins unless it's the indicator or essentials */
   &:not(.zen-current-workspace-indicator):not(.zen-essentials-container) {
-    margin: 0 var(--zen-toolbox-padding);
+    padding: 0 var(--zen-toolbox-padding);
+    width: 100%;
   }
 
   /* Hide section visually and disable interaction when hidden attribute is present */
