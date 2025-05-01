@@ -460,7 +460,7 @@
 }
 
 .zen-current-workspace-indicator {
-  padding: calc(15px + var(--zen-toolbox-padding)) calc(4px + var(--tab-inline-padding));
+  padding: calc(15px + var(--zen-toolbox-padding)) calc(4px + var(--tab-inline-padding) + var(--zen-toolbox-padding));
   font-weight: 600;
   position: absolute;
   max-height: var(--zen-workspace-indicator-height);
@@ -479,8 +479,8 @@
     content: '';
     position: absolute;
     top: var(--zen-toolbox-padding);
-    left: calc(var(--zen-toolbox-padding) / 2);
-    width: calc(100% - var(--zen-toolbox-padding));
+    left: calc(var(--zen-toolbox-padding) + 2px);
+    width: calc(100% - var(--zen-toolbox-padding) * 2 - 4px);
     height: calc(100% - var(--zen-toolbox-padding) * 2);
   }
 

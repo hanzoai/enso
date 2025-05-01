@@ -1942,7 +1942,12 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       } else {
         container.removeAttribute('hidden');
       }
-      if (nextWorkspaceContextId !== workspaceContextId && offsetPixels && this.containerSpecificEssentials) {
+      if (
+        nextWorkspaceContextId !== workspaceContextId &&
+        offsetPixels &&
+        this.containerSpecificEssentials &&
+        container.getAttribute('container') == nextWorkspaceContextId
+      ) {
         container.removeAttribute('hidden');
         // Animate from the currently selected workspace
         if (container.getAttribute('container') == workspaceContextId) {
