@@ -373,3 +373,12 @@ menuitem {
     }
   }
 }
+
+#downloadsHistory {
+  border: none !important;
+}
+
+.downloadButton {
+  padding: 0 !important;
+  min-width: unset !important;
+}
