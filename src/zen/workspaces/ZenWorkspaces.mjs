@@ -1946,7 +1946,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         nextWorkspaceContextId !== workspaceContextId &&
         offsetPixels &&
         this.containerSpecificEssentials &&
-        container.getAttribute('container') == nextWorkspaceContextId
+        (container.getAttribute('container') == nextWorkspaceContextId ||
+          container.getAttribute('container') == workspaceContextId)
       ) {
         container.removeAttribute('hidden');
         // Animate from the currently selected workspace
