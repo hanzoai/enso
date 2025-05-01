@@ -1259,7 +1259,10 @@
     grid-template-columns: repeat(auto-fit, minmax(max(30%, 48px), auto));
   }
   &[data-hack-type='2'] {
-    grid-template-columns: repeat(auto-fit, minmax(max(23.7%, 48px), 1fr) minmax(max(23.7%, 48px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(max(23%, 48px), 1fr) minmax(max(23%, 48px), 1fr));
+  }
+  &[data-hack-type='3'] {
+    grid-template-columns: repeat(auto-fit, minmax(max(25%, 48px), 1fr));
   }
   scrollbar-width: thin;
   min-width: calc(100% + var(--zen-toolbox-padding) * 2);
@@ -1456,5 +1459,6 @@
   &[hidden='true'] {
     visibility: hidden;
     pointer-events: none;
+    position: fixed; /* Fix position to prevent scrolling */
   }
 }

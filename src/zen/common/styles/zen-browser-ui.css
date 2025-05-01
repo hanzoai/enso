@@ -188,8 +188,10 @@
   }
 }
 
-:root[zen-window-buttons-reversed='true'][zen-right-side='true'] .titlebar-buttonbox-container {
-  margin-inline-start: calc(var(--zen-element-separation) - 3px);
+@media (-moz-platform: macos) {
+  :root[zen-window-buttons-reversed='true'][zen-right-side='true'] .titlebar-buttonbox-container {
+    margin-inline-start: max(calc(var(--zen-element-separation) - 3px), 4px);
+  }
 }
 
 .zen-split-view-splitter[orient='vertical'],

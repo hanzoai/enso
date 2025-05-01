@@ -75,24 +75,28 @@ export class ZenThemeMarketplaceParent extends JSWindowActorParent {
     console.info('ZenThemeMarketplaceParent: Checking for theme updates');
 
     let updates = [];
-    this._themes = null;
+    this._themes = {};
 
     for (const theme of Object.values(await this.getThemes())) {
-      const themeInfo = await this.sendQuery('ZenThemeMarketplace:GetThemeInfo', { themeId: theme.id });
+      try {
+        const themeInfo = await this.sendQuery('ZenThemeMarketplace:GetThemeInfo', { themeId: theme.id });
 
-      if (!themeInfo) {
-        continue;
-      }
+        if (!themeInfo) {
+          continue;
+        }
 
-      if (!this.compareVersions(themeInfo.version, theme.version || '0.0.0') && themeInfo.version != theme.version) {
-        console.info('ZenThemeMarketplaceParent: Theme update found', theme.id, theme.version, themeInfo.version);
+        if (!this.compareVersions(themeInfo.version, theme.version || '0.0.0') && themeInfo.version != theme.version) {
+          console.info('ZenThemeMarketplaceParent: Theme update found', theme.id, theme.version, themeInfo.version);
 
-        themeInfo.enabled = theme.enabled;
-        updates.push(themeInfo);
+          themeInfo.enabled = theme.enabled;
+          updates.push(themeInfo);
 
-        await this.removeTheme(theme.id, false);
+          await this.removeTheme(theme.id, false);
 
-        this._themes[themeInfo.id] = themeInfo;
+          this._themes[themeInfo.id] = themeInfo;
+        }
+      } catch (e) {
+        console.error('ZenThemeMarketplaceParent: Error checking for theme updates', e);
       }
     }
 
@@ -179,16 +183,18 @@ export class ZenThemeMarketplaceParent extends JSWindowActorParent {
     const themeIds = Object.keys(themes);
 
     for (const themeId of themeIds) {
-      const theme = themes[themeId];
+      try {
+        const theme = themes[themeId];
+        if (!theme) {
+          continue;
+        }
 
-      if (!theme) {
-        continue;
-      }
-
-      const themePath = PathUtils.join(this.themesRootPath, themeId);
-
-      if (!(await IOUtils.exists(themePath))) {
-        await this.installTheme(theme);
+        const themePath = PathUtils.join(this.themesRootPath, themeId);
+        if (!(await IOUtils.exists(themePath))) {
+          await this.installTheme(theme);
+        }
+      } catch (e) {
+        console.error('ZenThemeMarketplaceParent: Error checking for theme changes', e);
       }
     }
 

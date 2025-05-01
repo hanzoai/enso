@@ -43,28 +43,6 @@ var gZenUIManager = {
   },
 
   updateTabsToolbar() {
-    // Set tabs max-height to the "toolbar-items" height
-    const tabs = this.tabsWrapper;
-    // Remove tabs so we can accurately calculate the height
-    // without them affecting the height of the toolbar
-    for (const tab of gBrowser.tabs) {
-      if (tab.hasAttribute('zen-essential')) {
-        continue;
-      }
-      tab.style.maxHeight = '0px';
-    }
-    tabs.style.flex = '1';
-    tabs.style.removeProperty('max-height');
-    const toolbarRect = tabs.getBoundingClientRect();
-    let height = toolbarRect.height;
-    for (const tab of gBrowser.tabs) {
-      if (tab.hasAttribute('zen-essential')) {
-        continue;
-      }
-      tab.style.removeProperty('max-height');
-    }
-    tabs.style.removeProperty('flex');
-    tabs.style.maxHeight = height + 'px';
     gZenVerticalTabsManager.actualWindowButtons.removeAttribute('zen-has-hover');
     gZenVerticalTabsManager.recalculateURLBarHeight();
     if (!this._preventToolbarRebuild) {
@@ -625,7 +603,7 @@ var gZenVerticalTabsManager = {
     document.getElementById('urlbar').removeAttribute('--urlbar-height');
     if (!this._hasSetSingleToolbar) {
       document.getElementById('urlbar').style.setProperty('--urlbar-height', '32px');
-    } else if (gURLBar.getAttribute('breakout') !== 'true') {
+    } else if (gURLBar.getAttribute('breakout-extend') !== 'true') {
       try {
         gURLBar.zenUpdateLayoutBreakout();
       } catch (e) {

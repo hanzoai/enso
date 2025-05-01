@@ -275,9 +275,6 @@
         sequence.transform.push(`translate(calc(${x}px - 50%), calc(${y}px - 50%)) rotate(${rotation}deg) scale(${scale})`);
       }
 
-      // Last opacity should be 0
-      sequence.opacity[steps] = 0;
-
       return sequence;
     }
 
