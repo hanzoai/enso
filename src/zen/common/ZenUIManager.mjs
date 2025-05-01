@@ -793,7 +793,8 @@ var gZenVerticalTabsManager = {
       this.recalculateURLBarHeight();
 
       // Always move the splitter next to the sidebar
-      this.navigatorToolbox.after(document.getElementById('zen-sidebar-splitter'));
+      const splitter = document.getElementById('zen-sidebar-splitter');
+      this.navigatorToolbox.after(splitter);
       window.dispatchEvent(new Event('resize'));
       if (!isCompactMode) {
         gZenCompactModeManager.getAndApplySidebarWidth();

@@ -35,6 +35,7 @@ export var ZenCustomizableUI = new (class {
   }
 
   _addSidebarButtons(window) {
+    const kDefaultSidebarWidth = '228px';
     const toolbox = window.gNavToolbox;
 
     // Set a splitter to navigator-toolbox
@@ -77,9 +78,16 @@ export var ZenCustomizableUI = new (class {
     });
 
     // remove all styles except for the width, since we are xulstoring the complet style list
-    const width = toolbox.style.width || '228px';
+    const width = toolbox.style.width || kDefaultSidebarWidth;
     toolbox.removeAttribute('style');
     toolbox.style.width = width;
+    toolbox.setAttribute('width', width);
+
+    splitter.addEventListener('dblclick', (e) => {
+      if (e.button !== 0) return;
+      toolbox.style.width = kDefaultSidebarWidth;
+      toolbox.setAttribute('width', kDefaultSidebarWidth);
+    });
 
     const newTab = window.document.getElementById('vertical-tabs-newtab-button');
     newTab.classList.add('zen-sidebar-action-button');
