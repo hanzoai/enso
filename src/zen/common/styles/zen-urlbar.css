@@ -526,6 +526,10 @@ button.popup-notification-dropmarker {
   margin-right: 0 !important;
 }
 
+.urlbarView:not([action-override='true']) .urlbarView-row[type='switchtab'] .urlbarView-no-wrap {
+  width: 100%;
+}
+
 .urlbarView-row {
   --urlbarView-item-inline-padding: 8px;
   --urlbarView-item-block-padding: 10px;
@@ -540,7 +544,8 @@ button.popup-notification-dropmarker {
   &[selected] {
     background-color: color-mix(in srgb, var(--zen-primary-color) 50%, transparent 50%) !important;
 
-    & * {
+    & *,
+    & .urlbarView-title-separator::before {
       color: white !important;
     }
 

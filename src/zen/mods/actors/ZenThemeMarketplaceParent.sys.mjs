@@ -75,7 +75,7 @@ export class ZenThemeMarketplaceParent extends JSWindowActorParent {
     console.info('ZenThemeMarketplaceParent: Checking for theme updates');
 
     let updates = [];
-    this._themes = {};
+    this._themes = null;
 
     for (const theme of Object.values(await this.getThemes())) {
       try {

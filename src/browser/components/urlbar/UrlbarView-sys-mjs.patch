@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarView.sys.mjs b/browser/components/urlbar/UrlbarView.sys.mjs
-index d5382623595de8daed8cd13ea2eb2de329a4bd92..8e160e0bb5a1cd626753feba2008a24e3bbd84cd 100644
+index d5382623595de8daed8cd13ea2eb2de329a4bd92..3b33e083c40f70a97d153934f2eb6ba73bf986b5 100644
 --- a/browser/components/urlbar/UrlbarView.sys.mjs
 +++ b/browser/components/urlbar/UrlbarView.sys.mjs
 @@ -609,7 +609,7 @@ export class UrlbarView {
@@ -11,3 +11,12 @@ index d5382623595de8daed8cd13ea2eb2de329a4bd92..8e160e0bb5a1cd626753feba2008a24e
          // Try to reuse the cached top-sites context. If it's not cached, then
          // there will be a gap of time between when the input is focused and
          // when the view opens that can be perceived as flicker.
+@@ -2975,7 +2975,7 @@ export class UrlbarView {
+   }
+ 
+   #enableOrDisableRowWrap() {
+-    let wrap = getBoundsWithoutFlushing(this.input.textbox).width < 650;
++    let wrap = false;
+     this.#rows.toggleAttribute("wrap", wrap);
+     this.oneOffSearchButtons.container.toggleAttribute("wrap", wrap);
+   }

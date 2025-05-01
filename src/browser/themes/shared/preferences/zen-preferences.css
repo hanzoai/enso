@@ -558,20 +558,13 @@ groupbox h2 {
   margin: 15px 0;
 }
 
-.zenThemeMarketplaceItemUninstallButton {
-  margin-left: auto;
-  cursor: pointer;
-}
-
+.zenThemeMarketplaceItemUninstallButton,
 #zenThemeMarketplaceImport {
   margin-left: auto;
   cursor: pointer;
 }
 
-#zenThemeMarketplaceExport {
-  cursor: pointer;
-}
-
+#zenThemeMarketplaceExport,
 #zenThemeMarketplaceCheckForUpdates {
   cursor: pointer;
 }

@@ -408,8 +408,13 @@ var gZenCompactModeManager = {
       const onEnter = (event) => {
         if (event.type === 'mouseenter' && !event.target.matches(':hover')) return;
         // Dont register the hover if the urlbar is floating and we are hovering over it
-        if (event.target.closest('#urlbar[zen-floating-urlbar]')) return;
         this.clearFlashTimeout('has-hover' + target.id);
+        if (
+          event.target.closest('#urlbar[zen-floating-urlbar]') ||
+          this.sidebar.getAttribute('supress-primary-adjustment') === 'true'
+        ) {
+          return;
+        }
         window.requestAnimationFrame(() => target.setAttribute('zen-has-hover', 'true'));
       };
 
@@ -433,7 +438,11 @@ var gZenCompactModeManager = {
           return;
         }
 
-        if (this.hoverableElements[i].keepHoverDuration && !event.target.querySelector('#urlbar[zen-floating-urlbar]')) {
+        if (
+          this.hoverableElements[i].keepHoverDuration &&
+          !event.target.querySelector('#urlbar[zen-floating-urlbar]') &&
+          !this.sidebar.getAttribute('supress-primary-adjustment') === 'true'
+        ) {
           this.flashElement(target, this.hoverableElements[i].keepHoverDuration, 'has-hover' + target.id, 'zen-has-hover');
         } else {
           this._removeHoverFrames[target.id] = window.requestAnimationFrame(() => target.removeAttribute('zen-has-hover'));

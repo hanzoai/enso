@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..22c2a5040913b7518ea85ed781c9cd499e386a78 100644
+index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..8ae25b8ba4ff4f599e1b5b2c545c681a87a77c58 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -68,6 +68,13 @@ XPCOMUtils.defineLazyPreferenceGetter(
@@ -24,7 +24,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..22c2a5040913b7518ea85ed781c9cd49
      this.inputField.select();
 +    this.document.ownerGlobal.setTimeout(() => {
 +      this.document.getElementById("navigator-toolbox").removeAttribute("supress-primary-adjustment");
-+    }, 100);
++    }, 1000);
      this._suppressPrimaryAdjustment = false;
    }
  

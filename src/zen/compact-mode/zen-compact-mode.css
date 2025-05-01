@@ -43,7 +43,7 @@
       }
 
       #navigator-toolbox {
-        --zen-toolbox-max-width: 64px !important;
+        --zen-toolbox-max-width: 48px !important;
         --zen-compact-float: var(--zen-element-separation);
 
         /* Initial padding for when we are animating */
@@ -76,7 +76,7 @@
       }
 
       &:not([zen-right-side='true']) #navigator-toolbox {
-        left: calc(-1 * var(--actual-zen-sidebar-width));
+        left: calc(-1 * var(--actual-zen-sidebar-width) + 0.1px);
       }
 
       /* When we have multiple toolbars and the top-toolbar is NOT being hidden,
@@ -96,7 +96,7 @@
 
       &[zen-right-side='true'] {
         & #navigator-toolbox:not([animate='true']) {
-          right: calc(-1 * var(--actual-zen-sidebar-width));
+          right: calc(-1 * var(--actual-zen-sidebar-width) + 0.1px);
         }
 
         & .browserSidebarContainer {

@@ -455,16 +455,18 @@
             .getElementById('zen-welcome-initial-essentials-browser-sidebar-essentials')
             .querySelectorAll('.tabbrowser-tab[visuallyselected]');
 
-          await PlacesUtils.history.insertMany(
-            [...selectedTabs].map((tab) => ({
-              url: tab.getAttribute('data-url'),
-              visits: [
-                {
-                  transition: PlacesUtils.history.TRANSITIONS.TYPED,
-                },
-              ],
-            }))
-          );
+          if (selectedTabs.length) {
+            await PlacesUtils.history.insertMany(
+              [...selectedTabs].map((tab) => ({
+                url: tab.getAttribute('data-url'),
+                visits: [
+                  {
+                    transition: PlacesUtils.history.TRANSITIONS.TYPED,
+                  },
+                ],
+              }))
+            );
+          }
 
           for (const tab of selectedTabs) {
             const url = tab.getAttribute('data-url');

@@ -1258,7 +1258,7 @@
   gap: calc(var(--zen-toolbox-padding) - 2px);
   transition:
     max-height 0.3s ease-out,
-    grid-template-rows 0.3s ease-out;
+    grid-template-columns 0.3s ease-out;
   opacity: 1;
   grid-template-columns: repeat(auto-fit, minmax(max(23.7%, 48px), 1fr));
   &[data-hack-type='1'] {
@@ -1272,12 +1272,14 @@
   }
   scrollbar-width: thin;
   min-width: calc(100% + var(--zen-toolbox-padding) * 2);
+  width: calc(100% + var(--zen-toolbox-padding) * 2);
   padding: 0 var(--zen-toolbox-padding);
   display: grid;
 
   &[hidden='true'] {
-    max-width: var(--actual-zen-sidebar-width) !important; /* To still allow essentials to grid the tabs */
-    min-width: var(--actual-zen-sidebar-width) !important;
+    --hidden-essentials-width: calc(var(--actual-zen-sidebar-width) - var(--zen-toolbox-padding) * 2);
+    max-width: var(--hidden-essentials-width) !important; /* To still allow essentials to grid the tabs */
+    min-width: var(--hidden-essentials-width) !important;
   }
 }
 
