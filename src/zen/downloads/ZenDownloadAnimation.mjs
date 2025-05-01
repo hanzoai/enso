@@ -314,7 +314,6 @@
           `;
 
         const sideProp = areTabsPositionedRight ? 'right' : 'left';
-        const startSideValue = areTabsPositionedRight ? '50px' : '-50px';
 
         const fragment = window.MozXULElement.parseXULToFragment(boxAnimationHTML);
         this.#boxAnimationElement = fragment.querySelector('.zen-download-box-animation');
@@ -322,7 +321,7 @@
         Object.assign(this.#boxAnimationElement.style, {
           bottom: '24px',
           transform: 'scale(0.8)',
-          [sideProp]: startSideValue,
+          [sideProp]: '-50px',
         });
 
         wrapper.appendChild(this.#boxAnimationElement);
