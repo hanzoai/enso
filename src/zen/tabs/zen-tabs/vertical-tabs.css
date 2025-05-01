@@ -1276,7 +1276,8 @@
   display: grid;
 
   &[hidden='true'] {
-    max-width: var(--actual-zen-sidebar-width); /* To still allow essentials to grid the tabs */
+    max-width: var(--actual-zen-sidebar-width) !important; /* To still allow essentials to grid the tabs */
+    min-width: var(--actual-zen-sidebar-width) !important;
   }
 }
 
