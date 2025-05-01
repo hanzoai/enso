@@ -76,7 +76,7 @@
       }
 
       &:not([zen-right-side='true']) #navigator-toolbox {
-        left: calc(-1 * var(--actual-zen-sidebar-width) + 1px);
+        left: calc(-1 * var(--actual-zen-sidebar-width));
       }
 
       /* When we have multiple toolbars and the top-toolbar is NOT being hidden,
@@ -95,12 +95,8 @@
       }
 
       &[zen-right-side='true'] {
-        & #navigator-toolbox {
-          --zen-compact-float: calc(var(--zen-element-separation) + 1px);
-
-          &:not([animate='true']) {
-            right: calc(-1 * var(--actual-zen-sidebar-width) + 1px);
-          }
+        & #navigator-toolbox:not([animate='true']) {
+          right: calc(-1 * var(--actual-zen-sidebar-width));
         }
 
         & .browserSidebarContainer {
