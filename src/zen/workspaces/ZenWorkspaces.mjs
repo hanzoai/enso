@@ -2823,6 +2823,10 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         } else if (tab.tagName == 'tab-group') {
           for (const groupTab of tab.tabs) {
             tabs.push(groupTab);
+            const glance = groupTab.querySelector('.tabbrowser-tab[glance-id]');
+            if (glance) {
+              tabs.push(glance);
+            }
           }
         }
       }
