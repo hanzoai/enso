@@ -1883,6 +1883,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         pinnedContainer.style.marginTop = essentialsHeight + 'px';
         if (forAnimation) {
           document.getElementById('zen-tabs-wrapper').style.marginTop = '';
+          gZenUIManager.tabsWrapper.scrollTop = 0;
         }
       }
       if (!forAnimation && animateContainer) {
@@ -1986,6 +1987,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     tabToSelect = null,
     { previousWorkspaceIndex = null, previousWorkspace = null } = {}
   ) {
+    gZenUIManager.tabsWrapper.style.scrollbarWidth = 'none';
     const kGlobalAnimationDuration = 0.3;
     this._animatingChange = true;
     const animations = [];
@@ -2202,6 +2204,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     essentialsContainer.removeAttribute('hidden');
     essentialsContainer.style.transform = 'none';
     gBrowser.tabContainer._invalidateCachedTabs();
+    gZenUIManager.tabsWrapper.style.removeProperty('scrollbar-width');
     this._animatingChange = false;
   }
 
@@ -2597,11 +2600,19 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async contextChangeContainerTab(event) {
+    this._organizingWorkspaceStrip = true;
     let workspaces = await this._workspaces();
     let workspace = workspaces.workspaces.find((workspace) => workspace.uuid === this._contextMenuId);
     let userContextId = parseInt(event.target.getAttribute('data-usercontextid'));
-    workspace.containerTabId = userContextId;
+    workspace.containerTabId = userContextId + 0; // +0 to convert to number
     await this.saveWorkspace(workspace);
+    window.requestAnimationFrame(async () => {
+      if (workspace.uuid === this.activeWorkspace) {
+        await this.changeWorkspace(workspace, {
+          alwaysChange: true,
+        });
+      }
+    }, 0);
   }
 
   onContextMenuClose() {
