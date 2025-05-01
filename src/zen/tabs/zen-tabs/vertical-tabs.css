@@ -757,6 +757,7 @@
   /* Center items in essentials container */
   & .zen-essentials-container {
     justify-content: center;
+    grid-template-columns: 1fr !important;
   }
 
   /* Style new tab button when collapsed */

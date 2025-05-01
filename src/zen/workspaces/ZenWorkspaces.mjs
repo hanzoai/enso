@@ -929,7 +929,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     const onWorkspaceIconContainerClick = this.onWorkspaceIconContainerClick.bind(this);
     for (const element of document.querySelectorAll('.PanelUI-zen-workspaces-icons-container')) {
-      element.addEventListener('command', onWorkspaceIconContainerClick);
+      element.addEventListener('click', onWorkspaceIconContainerClick);
     }
 
     document
