@@ -1249,6 +1249,8 @@
 
 /* Container for essential items (often pinned/favorite tabs) */
 .zen-essentials-container {
+  will-change: transform;
+
   padding-bottom: var(--zen-toolbox-padding);
   overflow: hidden;
   gap: calc(var(--zen-toolbox-padding) - 2px);
