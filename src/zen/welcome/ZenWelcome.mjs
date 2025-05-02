@@ -239,7 +239,7 @@
         return;
       }
       await Promise.all([this.fadeInTitles(currentPage), this.fadeInButtons(currentPage)]);
-      currentPage.fadeIn();
+      await currentPage.fadeIn();
       await this.fadeInContent();
     }
 
@@ -288,6 +288,57 @@
           bounce: 0,
         }
       );
+    }
+  }
+
+  class ZenSearchEngineStore {
+    constructor() {
+      this._engines = [];
+    }
+
+    async init() {
+      const visibleEngines = await Services.search.getVisibleEngines();
+      this.initSpecificEngine(visibleEngines);
+    }
+
+    getEngines() {
+      return this._engines.filter((engine) => !engine.name.toLowerCase().includes('wikipedia'));
+    }
+
+    initSpecificEngine(engines) {
+      for (const engine of engines) {
+        try {
+          this._engines.push(this._cloneEngine(engine));
+        } catch (e) {
+          // Ignore engines that throw an exception when cloning.
+          console.error(e);
+        }
+      }
+    }
+
+    getEngineByName(name) {
+      return this._engines.find((engine) => engine.name == name);
+    }
+
+    _cloneEngine(aEngine) {
+      const clonedObj = {};
+
+      for (const i of ['name', 'alias', '_iconURI', 'hidden']) {
+        clonedObj[i] = aEngine[i];
+      }
+
+      clonedObj.originalEngine = aEngine;
+
+      return clonedObj;
+    }
+
+    async getDefaultEngine() {
+      let engineName = await Services.search.getDefault();
+      return this.getEngineByName(engineName._name);
+    }
+
+    async setDefaultEngine(engine) {
+      await Services.search.setDefault(engine.originalEngine, Ci.nsISearchService.CHANGE_REASON_USER);
     }
   }
 
@@ -355,6 +406,72 @@
               return;
             }
           }
+        },
+      },
+      {
+        text: [
+          {
+            id: 'zen-welcome-default-search-title',
+          },
+          {
+            id: 'zen-welcome-default-search-description',
+          },
+        ],
+        buttons: [
+          {
+            l10n: 'zen-welcome-next-action',
+            onclick: async () => {
+              return true;
+            },
+          },
+        ],
+        async fadeIn() {
+          const content = document.getElementById('zen-welcome-page-content');
+          const engineStore = new ZenSearchEngineStore();
+          engineStore.init();
+
+          content.setAttribute('select-engine', 'true');
+
+          const defaultEngine = await Services.search.getDefault();
+          const promises = [];
+          engineStore.getEngines().forEach((engine) => {
+            const label = document.createElement('label');
+            const engineId = engine.name.replace(/\s+/g, '-').toLowerCase();
+            label.setAttribute('for', engineId);
+            const input = document.createElement('input');
+            input.setAttribute('type', 'radio');
+            input.setAttribute('id', engineId);
+            input.setAttribute('name', 'zen-welcome-set-default-browser');
+            input.setAttribute('hidden', 'true');
+            if (engine.name === defaultEngine.name) {
+              input.setAttribute('checked', true);
+            }
+            label.appendChild(input);
+            const engineLabel = document.createXULElement('label');
+            engineLabel.textContent = engine.name;
+            const icon = document.createElement('img');
+            promises.push(
+              (async () => {
+                icon.setAttribute('src', await engine.originalEngine.getIconURL());
+              })()
+            );
+            icon.setAttribute('width', '32');
+            icon.setAttribute('height', '32');
+            icon.setAttribute('class', 'engine-icon');
+            label.appendChild(icon);
+            label.appendChild(engineLabel);
+            content.appendChild(label);
+            label.addEventListener('click', async () => {
+              const selectedEngine = engineStore.getEngineByName(engine.name);
+              if (selectedEngine) {
+                await engineStore.setDefaultEngine(selectedEngine);
+              }
+            });
+          });
+          await Promise.all(promises);
+        },
+        async fadeOut() {
+          document.getElementById('zen-welcome-page-content').removeAttribute('select-engine');
         },
       },
       {

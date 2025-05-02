@@ -147,7 +147,14 @@
     flex-direction: column;
     gap: 1.6rem;
 
-    & label {
+    &[select-engine='true'] {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      box-sizing: border-box;
+      padding: 5rem;
+    }
+
+    & > label {
       opacity: 0;
       transition:
         scale 0.1s,
@@ -170,6 +177,18 @@
         border: 2px solid var(--zen-primary-color);
         scale: 1.03;
       }
+    }
+
+    &[select-engine='true'] > label {
+      flex-direction: column;
+      font-weight: 600;
+      aspect-ratio: 1 / 0.7;
+      align-items: center;
+      width: 60%;
+      height: 50%;
+      justify-self: center;
+      align-self: center;
+      justify-content: space-around;
     }
 
     #zen-welcome-workspace-colors-anchor {
