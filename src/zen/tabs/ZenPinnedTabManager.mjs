@@ -639,7 +639,7 @@
           ? gBrowser.selectedTabs
           : [TabContextMenu.contextTab];
       for (let i = 0; i < tabs.length; i++) {
-        const tab = tabs[i];
+        let tab = tabs[i];
         if (tab.hasAttribute('zen-essential')) {
           continue;
         }
@@ -653,7 +653,14 @@
             pin.isEssential = true;
             this.savePin(pin);
           }
-          ZenWorkspaces.getEssentialsSection(tab).appendChild(tab);
+          if (tab.ownerGlobal !== window) {
+            tab = gBrowser.adoptTab(tab, {
+              selectTab: tab.selected,
+            });
+            tab.setAttribute('zen-essential', 'true');
+          } else {
+            ZenWorkspaces.getEssentialsSection(tab).appendChild(tab);
+          }
           gBrowser.tabContainer._invalidateCachedTabs();
         } else {
           gBrowser.pinTab(tab);

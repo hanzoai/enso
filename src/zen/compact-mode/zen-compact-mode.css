@@ -5,6 +5,16 @@
  */
 /* All overrides for compact mode go here */
 
+:root {
+  --zen-compact-mode-offset: 0.1px;
+
+  @media not (-moz-platform: macos) { 
+    &[sizemode='maximized'][zen-right-side='true'] {
+      --zen-compact-mode-offset: 1px;
+    }
+  }
+}
+
 :root[zen-compact-mode='true']:not([customizing]):not([inDOMFullscreen='true']) {
 %include ../tabs/zen-tabs/vertical-tabs-topbuttons-fix.css
   @media -moz-pref('zen.view.compact.hide-tabbar') or -moz-pref('zen.view.use-single-toolbar') {

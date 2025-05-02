@@ -445,7 +445,7 @@ var gZenCompactModeManager = {
         if (
           this.hoverableElements[i].keepHoverDuration &&
           !event.target.querySelector('#urlbar[zen-floating-urlbar]') &&
-          !this.sidebar.getAttribute('supress-primary-adjustment') === 'true'
+          !(this.sidebar.getAttribute('supress-primary-adjustment') === 'true')
         ) {
           this.flashElement(target, this.hoverableElements[i].keepHoverDuration, 'has-hover' + target.id, 'zen-has-hover');
         } else {

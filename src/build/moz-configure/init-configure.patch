@@ -1,12 +1,13 @@
 diff --git a/build/moz.configure/init.configure b/build/moz.configure/init.configure
-index 9bf4bb29a40045da21909dc1a2a49dbca5d6ac3e..e45bb12cabd7fb8a77b29e7e1e03ed3e92cd3625 100644
+index 9bf4bb29a40045da21909dc1a2a49dbca5d6ac3e..bb594ec0a0e00760763bb3f6313e9cf576f2c4b7 100644
 --- a/build/moz.configure/init.configure
 +++ b/build/moz.configure/init.configure
-@@ -1101,7 +1101,7 @@ def milestone(build_env, build_project, version_path, as_milestone, _):
+@@ -1101,7 +1101,8 @@ def milestone(build_env, build_project, version_path, as_milestone, _):
  
      is_nightly = is_release_or_beta = None
  
 -    if "a1" in milestone:
++    is_nightly = True
 +    if "t" in milestone:
          is_nightly = True
      elif "a" not in milestone:
