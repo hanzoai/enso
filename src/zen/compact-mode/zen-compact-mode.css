@@ -44,7 +44,7 @@
 
       #navigator-toolbox {
         --zen-toolbox-max-width: 48px !important;
-        --zen-compact-float: max(var(--zen-element-separation), 4px);
+        --zen-compact-float: var(--zen-element-separation);
 
         /* Initial padding for when we are animating */
         padding: 0 0 0 var(--zen-toolbox-padding) !important;
