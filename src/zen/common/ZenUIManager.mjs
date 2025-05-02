@@ -341,6 +341,8 @@ var gZenUIManager = {
         }
 
         gURLBar.handleRevert();
+      } else if (onElementPicked && onSwitch) {
+        this.clearUrlbarData();
       }
 
       if (gURLBar.focused) {

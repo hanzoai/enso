@@ -245,22 +245,31 @@ var gZenCompactModeManager = {
               }
             )
             .then(() => {
+              if (gZenUIManager._hasSetSingleToolbar) {
+                gURLBar.textbox.style.visibility = 'visible';
+              }
               this.sidebar.style.transition = 'none';
-              this.sidebar.style.opacity = 0;
+              const titlebar = document.getElementById('titlebar');
+              titlebar.style.visibility = 'hidden';
+              titlebar.style.transition = 'none';
+              this.sidebar.removeAttribute('animate');
+              document.documentElement.removeAttribute('zen-compact-animating');
+
+              this.getAndApplySidebarWidth({});
+              this._ignoreNextResize = true;
+
               setTimeout(() => {
-                this.sidebar.removeAttribute('animate');
-                document.documentElement.removeAttribute('zen-compact-animating');
-
-                this.getAndApplySidebarWidth({});
-                this._ignoreNextResize = true;
-
                 this.sidebar.style.removeProperty('margin-right');
                 this.sidebar.style.removeProperty('margin-left');
-                this.sidebar.style.removeProperty('opacity');
                 this.sidebar.style.removeProperty('transition');
+                this.sidebar.style.removeProperty('transform');
 
+                titlebar.style.removeProperty('visibility');
+                titlebar.style.removeProperty('transition');
+
+                gURLBar.textbox.style.removeProperty('visibility');
                 resolve();
-              }, 0);
+              });
             });
         } else if (canHideSidebar && !isCompactMode) {
           document.getElementById('browser').style.overflow = 'clip';
