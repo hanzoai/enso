@@ -318,7 +318,7 @@ pref("dom.ipc.processPriorityManager.backgroundUsesEcoQoS", false);
 pref("widget.gtk.rounded-bottom-corners.enabled", true);
 #endif
 
-pref('browser.newtabpage.activity-stream.system.showWeather', true);
+pref('browser.newtabpage.activity-stream.system.showWeather', false);
 
 // Enable experimental settings page (Used for Zen Labs)
 pref('browser.preferences.experimental', true);
@@ -461,3 +461,6 @@ pref("layers.gpu-process.enabled", true);
 pref("media.videocontrols.picture-in-picture.video-toggle.enabled", true);
 // TODO: Enable once we have a proper settings page
 pref("media.videocontrols.picture-in-picture.enable-when-switching-tabs.enabled", false);
+
+// More Privacy
+pref("extensions.getAddons.cache.enabled", false);
