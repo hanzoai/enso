@@ -5,16 +5,6 @@
  */
 /* All overrides for compact mode go here */
 
-:root {
-  --zen-compact-mode-offset: 0.1px;
-
-  @media not (-moz-platform: macos) { 
-    &[sizemode='maximized'][zen-right-side='true'] {
-      --zen-compact-mode-offset: 1px;
-    }
-  }
-}
-
 :root[zen-compact-mode='true']:not([customizing]):not([inDOMFullscreen='true']) {
 %include ../tabs/zen-tabs/vertical-tabs-topbuttons-fix.css
   @media -moz-pref('zen.view.compact.hide-tabbar') or -moz-pref('zen.view.use-single-toolbar') {
@@ -54,10 +44,14 @@
 
       #navigator-toolbox {
         --zen-toolbox-max-width: 48px !important;
-        --zen-compact-float: var(--zen-element-separation);
+        --zen-compact-float: max(var(--zen-element-separation), 4px);
 
         /* Initial padding for when we are animating */
         padding: 0 0 0 var(--zen-toolbox-padding) !important;
+
+        & #urlbar {
+          visibility: visible;
+        }
 
         &:not([animate='true']) {
           position: fixed;
@@ -69,7 +63,6 @@
           top: 0;
           bottom: var(--zen-element-separation);
           padding: 0 var(--zen-compact-float) !important;
-          visibility: hidden;
 
           :root[zen-single-toolbar='true'] & {
             top: calc(var(--zen-element-separation) / 2);
@@ -125,6 +118,8 @@
         outline-offset: -1px;
         min-width: var(--zen-toolbox-min-width);
         box-shadow: var(--zen-big-shadow);
+        transition: visibility 0.15s; /* Same as the toolbox */
+        visibility: hidden;
 
         :root[zen-sidebar-expanded='true'] & {
           width: calc(var(--zen-sidebar-width) + var(--zen-toolbox-padding));
@@ -142,11 +137,6 @@
           /* NOTE: We MUST not add a backdrop-filter if we want the URL
           * bar to be floating correctly:
           * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_display/Containing_block#identifying_the_containing_block */
-        }
-
-        & #urlbar[open][zen-floating-urlbar='true'] {
-          transition: left 0.05s ease;
-          visibility: visible;
         }
 
         &::before {
@@ -175,8 +165,6 @@
       #navigator-toolbox:has(
           *:is([panelopen='true'], [open='true'], #urlbar:focus-within):not(#urlbar[zen-floating-urlbar='true']):not(tab):not(.zen-compact-mode-ignore)
         ) {
-        visibility: visible;
-
         &:not([animate='true']) {
           --zen-compact-mode-func: linear(
             0 0%,
@@ -291,6 +279,11 @@
             right var(--zen-compact-mode-time) var(--zen-compact-mode-func);
 
           &:not([supress-primary-adjustment='true']) {
+            & #titlebar {
+              transition: none;
+              visibility: visible;
+            }
+
             left: calc(var(--zen-element-separation) / -2);
             :root[zen-right-side='true'] & {
               right: calc(var(--zen-element-separation) / -2);

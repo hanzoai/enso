@@ -277,10 +277,6 @@ var gZenUIManager = {
         await new Promise((resolve) => setTimeout(resolve, 10));
 
         document.getElementById('Browser:OpenLocation').doCommand();
-
-        // Wait for URL bar to be ready
-        await new Promise((resolve) => setTimeout(resolve, 10));
-
         gURLBar.search(this._lastSearch || '');
       } catch (e) {
         console.error('Error opening location in new tab:', e);
