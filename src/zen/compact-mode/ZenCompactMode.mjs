@@ -438,6 +438,10 @@ var gZenCompactModeManager = {
           return;
         }
 
+        if (event.target.matches(':hover')) {
+          return;
+        }
+
         if (
           this.hoverableElements[i].keepHoverDuration &&
           !event.target.querySelector('#urlbar[zen-floating-urlbar]') &&

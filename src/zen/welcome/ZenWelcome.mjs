@@ -302,7 +302,9 @@
     }
 
     getEngines() {
-      return this._engines.filter((engine) => !engine.name.toLowerCase().includes('wikipedia'));
+      return this._engines.filter(
+        (engine) => !(engine.name.toLowerCase().includes('wikipedia') || engine.name.toLowerCase().includes('ebay'))
+      );
     }
 
     initSpecificEngine(engines) {

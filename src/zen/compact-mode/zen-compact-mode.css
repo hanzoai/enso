@@ -267,9 +267,14 @@
             1.003674 99%,
             1.003423 100%
           );
+          --zen-compact-mode-time: 0.25s;
+          :root[zen-no-padding='true'] & {
+            --zen-compact-mode-func: ease-out;
+            --zen-compact-mode-time: 0.1s;
+          }
           transition:
-            left 0.25s var(--zen-compact-mode-func),
-            right 0.25s var(--zen-compact-mode-func);
+            left var(--zen-compact-mode-time) var(--zen-compact-mode-func),
+            right var(--zen-compact-mode-time) var(--zen-compact-mode-func);
 
           &:not([supress-primary-adjustment='true']) {
             opacity: 1;
