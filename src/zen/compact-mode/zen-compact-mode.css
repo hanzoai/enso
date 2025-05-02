@@ -55,10 +55,11 @@
           transition:
             left 0.15s ease,
             right 0.15s ease,
-            opacity 1.5s ease;
+            visibility 0.15s ease;
           top: 0;
           bottom: var(--zen-element-separation);
           padding: 0 var(--zen-compact-float) !important;
+          visibility: hidden;
 
           :root[zen-single-toolbar='true'] & {
             top: calc(var(--zen-element-separation) / 2);
@@ -76,7 +77,7 @@
       }
 
       &:not([zen-right-side='true']) #navigator-toolbox {
-        left: calc(-1 * var(--actual-zen-sidebar-width) + 0.1px);
+        left: calc(-1 * var(--actual-zen-sidebar-width) + 1px);
       }
 
       /* When we have multiple toolbars and the top-toolbar is NOT being hidden,
@@ -96,7 +97,7 @@
 
       &[zen-right-side='true'] {
         & #navigator-toolbox:not([animate='true']) {
-          right: calc(-1 * var(--actual-zen-sidebar-width) + 0.1px);
+          right: calc(-1 * var(--actual-zen-sidebar-width) + 1px);
         }
 
         & .browserSidebarContainer {
@@ -113,6 +114,7 @@
         outline: 1px solid var(--zen-colors-border-contrast);
         outline-offset: -1px;
         min-width: var(--zen-toolbox-min-width);
+        box-shadow: var(--zen-big-shadow);
 
         :root[zen-sidebar-expanded='true'] & {
           width: calc(var(--zen-sidebar-width) + var(--zen-toolbox-padding));
@@ -163,6 +165,8 @@
       #navigator-toolbox:has(
           *:is([panelopen='true'], [open='true'], #urlbar:focus-within):not(#urlbar[zen-floating-urlbar='true']):not(tab):not(.zen-compact-mode-ignore)
         ) {
+        visibility: visible;
+
         &:not([animate='true']) {
           --zen-compact-mode-func: linear(
             0 0%,
@@ -277,16 +281,11 @@
             right var(--zen-compact-mode-time) var(--zen-compact-mode-func);
 
           &:not([supress-primary-adjustment='true']) {
-            opacity: 1;
             left: calc(var(--zen-element-separation) / -2);
             :root[zen-right-side='true'] & {
               right: calc(var(--zen-element-separation) / -2);
               left: auto;
-            }
-
-            & #titlebar {
-              box-shadow: var(--zen-big-shadow);
-            }
+            }          
           }
         }
       }
