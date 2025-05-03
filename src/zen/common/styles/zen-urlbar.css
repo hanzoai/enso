@@ -461,6 +461,10 @@ button.popup-notification-dropmarker {
   #urlbar-container:has(&) {
     border-radius: 10px;
     background: var(--toolbarbutton-hover-background);
+    :root:not([zen-single-toolbar='true']) & {
+      max-height: 32px !important;
+      min-height: unset;
+    }
   }
 }
 
@@ -526,7 +530,7 @@ button.popup-notification-dropmarker {
   margin-right: 0 !important;
 }
 
-.urlbarView:not([action-override='true']) .urlbarView-row[type='switchtab'] .urlbarView-no-wrap {
+.urlbarView:not([action-override='true']) .urlbarView-row:is([type='switchtab'], [type='clipboard']) .urlbarView-no-wrap {
   width: 100%;
 }
 
