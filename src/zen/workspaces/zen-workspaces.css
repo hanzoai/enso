@@ -507,12 +507,6 @@
   }
 }
 
-@media not -moz-pref('zen.workspaces.show-workspace-indicator') {
-  #zen-current-workspace-indicator-container {
-    display: none !important;
-  }
-}
-
 #zen-current-workspace-indicator-container[hidden='true'] {
   display: none !important;
 }
