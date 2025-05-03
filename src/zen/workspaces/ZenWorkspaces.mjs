@@ -2775,7 +2775,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       (tab) =>
         tab.getAttribute('zen-workspace-id') !== tabWorkspaceId &&
         !tab.hasAttribute('zen-essential') &&
-        !(this.containerSpecificEssentials && tab.getAttribute('container') !== aTab.getAttribute('container'))
+        !(this.containerSpecificEssentials && tab.getAttribute('container') !== aTab.getAttribute('container')) &&
+        !tab.hasAttribute('zen-empty-tab')
     );
   }
 
