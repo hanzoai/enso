@@ -967,23 +967,23 @@ menuitem[id='placesContext_showAllBookmarks'],
 }
 
 #appMenuRecentlyClosedTabs {
-  --menu-image: url('container-tab.svg');
+  list-style-image: url('container-tab.svg') !important;
 }
 
 #appMenuClearRecentHistory {
-  --menu-image: url('edit-delete.svg');
+  list-style-image: url('edit-delete.svg') !important;
 }
 
 #appMenuRecentlyClosedWindows {
-  --menu-image: url('window.svg');
+  list-style-image: url('window.svg') !important;
 }
 
 #appMenuSearchHistory {
-  --menu-image: url('search-glass.svg');
+  list-style-image: url('search-glass.svg') !important;
 }
 
 #PanelUI-historyMore {
-  --menu-image: url('manage.svg');
+  list-style-image: url('manage.svg') !important;
 }
 
 menuitem[id='placesContext_new:bookmark'],
