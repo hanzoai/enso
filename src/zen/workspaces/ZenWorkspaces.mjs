@@ -799,10 +799,12 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     const currentTab = gBrowser.selectedTab;
     let showed = false;
     if (this._tabToRemoveForEmpty) {
-      this.selectEmptyTab();
-      gBrowser.removeTab(this._tabToRemoveForEmpty);
+      if (gZenVerticalTabsManager._canReplaceNewTab) {
+        this.selectEmptyTab();
+        gBrowser.removeTab(this._tabToRemoveForEmpty);
+        showed = true;
+      }
       delete this._tabToRemoveForEmpty;
-      showed = true;
     } else {
       const currentTabURL = currentTab.linkedBrowser?.currentURI?.spec;
       // Check for empty tab being restored
