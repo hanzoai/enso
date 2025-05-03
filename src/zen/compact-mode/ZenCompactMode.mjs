@@ -419,9 +419,10 @@ var gZenCompactModeManager = {
         // Dont register the hover if the urlbar is floating and we are hovering over it
         this.clearFlashTimeout('has-hover' + target.id);
         if (
-          event.target.closest('#urlbar[zen-floating-urlbar]') ||
+          event.explicitOriginalTarget.closest('#urlbar[zen-floating-urlbar]') ||
           this.sidebar.getAttribute('supress-primary-adjustment') === 'true'
         ) {
+          this._hasHoveredUrlbar = this.sidebar.getAttribute('supress-primary-adjustment') !== 'true';
           return;
         }
         window.requestAnimationFrame(() => target.setAttribute('zen-has-hover', 'true'));
@@ -452,10 +453,15 @@ var gZenCompactModeManager = {
         }
 
         if (
-          this.hoverableElements[i].keepHoverDuration &&
-          !event.target.querySelector('#urlbar[zen-floating-urlbar]') &&
-          !(this.sidebar.getAttribute('supress-primary-adjustment') === 'true')
+          event.explicitOriginalTarget.closest('#urlbar[zen-floating-urlbar]') ||
+          this.sidebar.getAttribute('supress-primary-adjustment') === 'true' ||
+          this._hasHoveredUrlbar
         ) {
+          delete this._hasHoveredUrlbar;
+          return;
+        }
+
+        if (this.hoverableElements[i].keepHoverDuration) {
           this.flashElement(target, this.hoverableElements[i].keepHoverDuration, 'has-hover' + target.id, 'zen-has-hover');
         } else {
           this._removeHoverFrames[target.id] = window.requestAnimationFrame(() => target.removeAttribute('zen-has-hover'));
