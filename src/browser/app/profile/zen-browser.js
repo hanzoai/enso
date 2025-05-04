@@ -292,6 +292,8 @@ pref('image.jxl.enabled', true, locked);
 pref("svg.context-properties.content.enabled", true);
 pref("image.avif.enabled", true, locked);
 
+pref("media.eme.enabled", true);
+
 // Smooth scrolling
 #ifndef XP_MACOSX
 pref("apz.overscroll.enabled", true);
