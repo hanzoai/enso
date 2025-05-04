@@ -423,8 +423,14 @@ var gZenCompactModeManager = {
           this.sidebar.getAttribute('supress-primary-adjustment') === 'true'
         ) {
           this._hasHoveredUrlbar = this.sidebar.getAttribute('supress-primary-adjustment') !== 'true';
+          if (event.explicitOriginalTarget.closest('#urlbar[zen-floating-urlbar]')) {
+            window.requestAnimationFrame(() => {
+              target.removeAttribute('zen-has-hover');
+            });
+          }
           return;
         }
+        delete this._hasHoveredUrlbar;
         window.requestAnimationFrame(() => target.setAttribute('zen-has-hover', 'true'));
       };
 
