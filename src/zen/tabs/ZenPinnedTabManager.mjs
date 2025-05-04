@@ -665,6 +665,8 @@
         } else {
           gBrowser.pinTab(tab);
         }
+        tab.setAttribute('zenDefaultUserContextId', true);
+        ZenWorkspaces.switchTabIfNeeded(tab);
         this._onTabMove(tab);
         this.onTabIconChanged(tab);
 
