@@ -219,7 +219,6 @@ pref('zen.watermark.enabled', false, sticky);
 
 // Privacy
 pref('dom.private-attribution.submission.enabled', false);
-pref('dom.security.https_only_mode', true);
 
 // Crash reports
 pref("breakpad.reportURL", "");

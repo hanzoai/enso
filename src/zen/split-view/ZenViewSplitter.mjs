@@ -839,6 +839,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       <menuseparator/>
       <menuitem id="context_zenSplitTabs"
                 data-lazy-l10n-id="tab-zen-split-tabs"
+                data-l10n-args='{"tabCount": 1}'
                 command="cmd_zenSplitViewContextMenu"/>
       <menuseparator/>
     `);

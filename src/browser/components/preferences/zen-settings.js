@@ -808,6 +808,8 @@ var zenMissingKeyboardShortcutL10n = {
   key_accessibility: 'zen-devtools-toggle-accessibility-shortcut',
 };
 
+var zenIgnoreKeyboardShortcutL10n = ['zen-full-zoom-reduce-shortcut-alt-b', 'zen-full-zoom-reduce-shortcut-alt-a'];
+
 var gZenCKSSettings = {
   async init() {
     await this._initializeCKS();
@@ -870,6 +872,10 @@ var gZenCKSSettings = {
       const keyInString = shortcut.toUserString();
 
       const labelValue = zenMissingKeyboardShortcutL10n[keyID] ?? l10nID;
+
+      if (zenIgnoreKeyboardShortcutL10n.includes(labelValue)) {
+        continue;
+      }
 
       let fragment = window.MozXULElement.parseXULToFragment(`
         <hbox class="${ZEN_CKS_CLASS_BASE}">

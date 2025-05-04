@@ -1062,7 +1062,11 @@
         }
 
         const button = browser.document.getElementById('PanelUI-zen-gradient-generator-color-toggle-algo');
-        document.l10n.setAttributes(button, `zen-panel-ui-gradient-generator-algo-${browser.gZenThemePicker.useAlgo}`);
+        if (browser.gZenThemePicker.useAlgo) {
+          document.l10n.setAttributes(button, `zen-panel-ui-gradient-generator-algo-${browser.gZenThemePicker.useAlgo}`);
+        } else {
+          button.removeAttribute('data-l10n-id');
+        }
 
         browser.gZenThemePicker.resetCustomColorList();
         if (!workspaceTheme || workspaceTheme.type !== 'gradient') {

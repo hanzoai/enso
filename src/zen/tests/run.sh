@@ -6,6 +6,8 @@ if [ ! -f "package.json" ]; then
   exit 1
 fi
 
+#npm run build:ui
+
 cd ./engine
 ./mach mochitest zen/tests/ $@
 cd ..
