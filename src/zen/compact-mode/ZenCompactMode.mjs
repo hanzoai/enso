@@ -246,30 +246,31 @@ var gZenCompactModeManager = {
               }
             )
             .then(() => {
-              if (gZenUIManager._hasSetSingleToolbar) {
-                gURLBar.textbox.style.visibility = 'visible';
-              }
               this.sidebar.style.transition = 'none';
+              this.sidebar.style.pointEvents = 'none';
               const titlebar = document.getElementById('titlebar');
               titlebar.style.visibility = 'hidden';
               titlebar.style.transition = 'none';
               this.sidebar.removeAttribute('animate');
               document.documentElement.removeAttribute('zen-compact-animating');
 
-              this.getAndApplySidebarWidth({});
-              this._ignoreNextResize = true;
-
               setTimeout(() => {
-                this.sidebar.style.removeProperty('margin-right');
-                this.sidebar.style.removeProperty('margin-left');
-                this.sidebar.style.removeProperty('transition');
-                this.sidebar.style.removeProperty('transform');
+                this.getAndApplySidebarWidth({});
+                this._ignoreNextResize = true;
 
-                titlebar.style.removeProperty('visibility');
-                titlebar.style.removeProperty('transition');
+                setTimeout(() => {
+                  this.sidebar.style.removeProperty('margin-right');
+                  this.sidebar.style.removeProperty('margin-left');
+                  this.sidebar.style.removeProperty('transition');
+                  this.sidebar.style.removeProperty('transform');
+                  this.sidebar.style.removeProperty('point-events');
 
-                gURLBar.textbox.style.removeProperty('visibility');
-                resolve();
+                  titlebar.style.removeProperty('visibility');
+                  titlebar.style.removeProperty('transition');
+
+                  gURLBar.textbox.style.removeProperty('visibility');
+                  resolve();
+                });
               });
             });
         } else if (canHideSidebar && !isCompactMode) {
