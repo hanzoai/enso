@@ -611,7 +611,7 @@ var gZenVerticalTabsManager = {
   },
 
   _updateEvent({ forCustomizableMode = false, dontRebuildAreas = false } = {}) {
-    if (this._isUpdating || gZenUIManager.testingEnabled) {
+    if (this._isUpdating) {
       return;
     }
     this._isUpdating = true;

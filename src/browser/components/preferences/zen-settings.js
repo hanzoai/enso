@@ -1127,11 +1127,6 @@ Preferences.addAll([
     default: true,
   },
   {
-    id: 'zen.essentials.enabled',
-    type: 'bool',
-    default: true,
-  },
-  {
     id: 'zen.workspaces.container-specific-essentials-enabled',
     type: 'bool',
     default: false,
