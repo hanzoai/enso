@@ -4,13 +4,16 @@ pref('zen.welcome-screen.seen', false, sticky);
 pref('zen.tabs.vertical', true);
 pref('zen.tabs.vertical.right-side', false);
 pref('zen.tabs.rename-tabs', true);
+pref('zen.tabs.show-newtab-vertical', true);
+
+pref('zen.ctrlTab.show-pending-tabs', true);
+
 pref('zen.theme.accent-color', "#ffb787");
 pref('zen.theme.content-element-separation', 8); // In pixels
 pref('zen.theme.gradient', true);
 pref('zen.theme.gradient.show-custom-colors', false);
 pref('zen.theme.essentials-favicon-bg', true);
 
-pref('zen.tabs.show-newtab-vertical', true);
 pref('zen.view.show-newtab-button-border-top', false);
 pref('zen.view.show-newtab-button-top', true);
 
