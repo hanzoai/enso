@@ -175,6 +175,10 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       return null;
     }
 
+    if (gZenUIManager.testingEnabled) {
+      return null;
+    }
+
     try {
       // Check if we have a valid empty tab and can replace new tab
       if (

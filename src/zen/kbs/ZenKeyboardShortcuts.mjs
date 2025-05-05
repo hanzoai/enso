@@ -399,7 +399,7 @@ class KeyShortcut {
     //  note that this l10n id is not used for actually translating the key's label, but rather to
     //  identify the default keybinds.
     if (this.#l10nId) {
-      key.setAttribute('data-l10n-id', this.#l10nId);
+      // key.setAttribute('data-l10n-id', this.#l10nId);
     }
     key.setAttribute('modifiers', this.#modifiers.toString());
     if (this.#action) {
