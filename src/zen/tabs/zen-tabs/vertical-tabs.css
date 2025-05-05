@@ -1316,7 +1316,7 @@
   }
 
   &:hover .tab-background {
-    background: var(--tab-hover-background-color);
+    background: light-dark(rgba(89, 89, 89, 0.15), var(--tab-selected-bgcolor));
   }
 
   /* Optional blurred favicon background effect (if pref `zen.theme.essentials-favicon-bg` is enabled) */
