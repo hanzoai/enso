@@ -550,7 +550,7 @@ button.popup-notification-dropmarker {
 
     & *,
     & .urlbarView-title-separator::before {
-      color: lgith-dark(black, white) !important;
+      color: light-dark(black, white) !important;
     }
 
     & .urlbarView-favicon {
