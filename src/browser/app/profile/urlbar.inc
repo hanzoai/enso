@@ -9,7 +9,9 @@ pref('browser.urlbar.suggest.calculator', true);
 pref("browser.urlbar.trimHttps", true);
 pref("browser.urlbar.untrimOnUserInteraction.featureGate", true);
 
-pref("browser.urlbar.maxRichResults", 8);
+// Keep in sync with browser/components/topsites/constants.mjs
+pref("browser.urlbar.maxRichResults", 7);
+
 pref("browser.urlbar.trimHttps", true);
 pref("browser.search.separatePrivateDefault.ui.enabled", true);
 pref("browser.urlbar.update2.engineAliasRefresh", true);

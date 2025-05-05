@@ -43,6 +43,10 @@ var gZenUIManager = {
   },
 
   updateTabsToolbar() {
+    gURLBar.textbox.style.setProperty(
+      '--zen-urlbar-top',
+      `${window.innerHeight / 2 - gURLBar.textbox.getBoundingClientRect().height / 2}px`
+    );
     gZenVerticalTabsManager.actualWindowButtons.removeAttribute('zen-has-hover');
     gZenVerticalTabsManager.recalculateURLBarHeight();
     if (!this._preventToolbarRebuild) {
