@@ -525,13 +525,56 @@ button.popup-notification-dropmarker {
   border-radius: 4px !important;
 }
 
-.urlbarView-row[has-action]:is([type='switchtab'], [type='remotetab'], [type='clipboard']) .urlbarView-action {
-  margin-left: auto !important;
-  margin-right: 0 !important;
+.urlbarView-row[has-action]:is([type='switchtab'], [type='remotetab'], [type='clipboard']) {
+  & .urlbarView-action {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+  }
+
+  &:is([type='switchtab'], [type='remotetab']) .urlbarView-action {
+    background: transparent !important;
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    font-weight: 600;
+    margin-right: 28px !important;
+    position: relative;
+    scale: 0.93;
+
+    &::after {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+
+      background-color: currentColor;
+      mask-image: url('chrome://browser/skin/zen-icons/urlbar-arrow.svg');
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      pointer-events: none;
+      position: absolute;
+
+      right: -28px;
+    }
+  }
+
+  & .urlbarView-no-wrap {
+    width: 100%;
+  }
 }
 
-.urlbarView:not([action-override='true']) .urlbarView-row:is([type='switchtab'], [type='clipboard']) .urlbarView-no-wrap {
-  width: 100%;
+.urlbarView-no-wrap {
+  align-items: center !important;
+}
+
+.urlbarView-row {
+  color: light-dark(rgba(0, 0, 0, 0.7), rgba(255, 255, 255, 0.7)) !important;
+}
+
+#urlbar-label-box {
+  background-color: color-mix(in srgb, var(--zen-primary-color) 50%, transparent 50%) !important;
+  border-radius: 6px !important;
 }
 
 .urlbarView-row {

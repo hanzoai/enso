@@ -6,7 +6,7 @@ pref('zen.tabs.vertical.right-side', false);
 pref('zen.tabs.rename-tabs', true);
 pref('zen.tabs.show-newtab-vertical', true);
 
-pref('zen.ctrlTab.show-pending-tabs', true);
+pref('zen.ctrlTab.show-pending-tabs', false);
 
 pref('zen.theme.accent-color', "#ffb787");
 pref('zen.theme.content-element-separation', 8); // In pixels
