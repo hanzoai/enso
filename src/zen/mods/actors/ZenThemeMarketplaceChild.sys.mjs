@@ -51,7 +51,7 @@ export class ZenThemeMarketplaceChild extends JSWindowActorChild {
   initiateThemeMarketplace() {
     this.contentWindow.setTimeout(() => {
       this.addInstallButtons();
-      this.injectMarkplaceAPI();
+      this.injectMarketplaceAPI();
     }, 0);
   }
 
@@ -105,7 +105,7 @@ export class ZenThemeMarketplaceChild extends JSWindowActorChild {
     }
   }
 
-  injectMarkplaceAPI() {
+  injectMarketplaceAPI() {
     Cu.exportFunction(this.installTheme.bind(this), this.contentWindow, {
       defineAs: 'ZenInstallTheme',
     });
