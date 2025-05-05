@@ -80,6 +80,12 @@ var gZenUIManager = {
     }
   },
 
+  onFloatingURLBarOpen() {
+    requestAnimationFrame(() => {
+      this.updateTabsToolbar();
+    });
+  },
+
   openAndChangeToTab(url, options) {
     if (window.ownerGlobal.parent) {
       const tab = window.ownerGlobal.parent.gBrowser.addTrustedTab(url, options);

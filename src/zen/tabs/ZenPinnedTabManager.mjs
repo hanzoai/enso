@@ -587,7 +587,7 @@
       const foundEntryIndex = state.entries?.findIndex((entry) => entry.url === pin.url);
       if (foundEntryIndex === -1) {
         state.entries = [
-          [state.entries[0]] ?? {
+          {
             url: pin.url,
             title: pin.title,
             triggeringPrincipal_base64: lazy.E10SUtils.SERIALIZED_SYSTEMPRINCIPAL,
@@ -597,7 +597,6 @@
         // Remove everything except the entry we want to keep
         state.entries = [state.entries[foundEntryIndex]];
       }
-
       state.image = pin.iconUrl || null;
       state.index = 0;
 
@@ -666,7 +665,9 @@
           gBrowser.pinTab(tab);
         }
         tab.setAttribute('zenDefaultUserContextId', true);
-        ZenWorkspaces.switchTabIfNeeded(tab);
+        if (tab.selected) {
+          ZenWorkspaces.switchTabIfNeeded(tab);
+        }
         this._onTabMove(tab);
         this.onTabIconChanged(tab);
 
