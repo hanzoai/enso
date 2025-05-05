@@ -278,7 +278,7 @@
             left var(--zen-compact-mode-time) var(--zen-compact-mode-func),
             right var(--zen-compact-mode-time) var(--zen-compact-mode-func);
 
-          &:not([supress-primary-adjustment='true']) {
+          :root:not([supress-primary-adjustment='true']) & {
             & #titlebar {
               transition: none;
               visibility: visible;

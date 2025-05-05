@@ -436,7 +436,7 @@ var gZenCompactModeManager = {
           if (event.type === 'mouseenter' && !event.target.matches(':hover')) return;
           // Dont register the hover if the urlbar is floating and we are hovering over it
           this.clearFlashTimeout('has-hover' + target.id);
-          if (this.sidebar.getAttribute('supress-primary-adjustment') === 'true' || this._hasHoveredUrlbar) {
+          if (document.documentElement.getAttribute('supress-primary-adjustment') === 'true' || this._hasHoveredUrlbar) {
             return;
           }
           window.requestAnimationFrame(() => target.setAttribute('zen-has-hover', 'true'));
@@ -469,7 +469,7 @@ var gZenCompactModeManager = {
 
         if (
           event.explicitOriginalTarget.closest('#urlbar[zen-floating-urlbar]') ||
-          this.sidebar.getAttribute('supress-primary-adjustment') === 'true' ||
+          document.documentElement.getAttribute('supress-primary-adjustment') === 'true' ||
           this._hasHoveredUrlbar
         ) {
           return;

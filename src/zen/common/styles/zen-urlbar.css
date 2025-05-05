@@ -60,7 +60,7 @@
 }
 
 #urlbar:not([breakout-extend='true']) {
-  & #urlbar-background {
+  :root:not([supress-primary-adjustment]) & #urlbar-background {
     transition: background-color 0.15s ease;
   }
 
@@ -186,8 +186,11 @@
   #identity-box:not([pageproxystate='invalid']) #identity-icon-box:not([open]) {
     margin-inline-start: calc(-8px - 2 * var(--urlbar-icon-padding));
     transform: translateX(100%);
-    transition: all 0.1s ease;
     opacity: 0;
+
+    :root:not([supress-primary-adjustment]) & {
+      transition: all 0.1s ease;
+    }
   }
 
   #identity-permission-box > *:not(#permissions-granted-icon) {

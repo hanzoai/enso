@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a05dfd9b28c0c082579a5b53386de9ffbfc5e737 100644
+index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2c9920252aad3ae1528fc8e92906c4f1ccc11c75 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -68,6 +68,13 @@ XPCOMUtils.defineLazyPreferenceGetter(
@@ -21,14 +21,14 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a05dfd9b28c0c082579a5b53386de9ff
      // event but does not set the primary selection.
      this._suppressPrimaryAdjustment = true;
 +    const zenToolbox = this.document.getElementById("navigator-toolbox");
-+    zenToolbox.setAttribute("supress-primary-adjustment", !(
++    this.window.document.documentElement.setAttribute("supress-primary-adjustment", !(
 +      zenToolbox.hasAttribute("zen-has-hover") ||
 +      zenToolbox.hasAttribute("zen-has-empty-tab") ||
 +      zenToolbox.hasAttribute("zen-user-show")
 +    ));
      this.inputField.select();
 +    this.document.ownerGlobal.setTimeout(() => {
-+      zenToolbox.removeAttribute("supress-primary-adjustment");
++      this.window.document.documentElement.removeAttribute("supress-primary-adjustment");
 +    }, 0);
      this._suppressPrimaryAdjustment = false;
    }
@@ -50,14 +50,14 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a05dfd9b28c0c082579a5b53386de9ff
      }
 -
 +    const zenToolbox = this.document.getElementById("navigator-toolbox");
-+    zenToolbox.setAttribute("supress-primary-adjustment", !(
++    this.window.document.documentElement.setAttribute("supress-primary-adjustment", !(
 +      zenToolbox.hasAttribute("zen-has-hover") ||
 +      zenToolbox.hasAttribute("zen-has-empty-tab") ||
 +      zenToolbox.hasAttribute("zen-user-show")
 +    ));
      this.handleNavigation({ event });
 +    this.document.ownerGlobal.setTimeout(() => {
-+      zenToolbox.removeAttribute("supress-primary-adjustment");
++      this.window.document.documentElement.removeAttribute("supress-primary-adjustment");
 +    }, 0);
    }
  
@@ -109,14 +109,14 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..a05dfd9b28c0c082579a5b53386de9ff
 +    
 +    // Arc like URLbar: Blur the input on exit
 +    const zenToolbox = this.document.getElementById("navigator-toolbox");
-+    zenToolbox.setAttribute("supress-primary-adjustment", !(
++    this.window.document.documentElement.setAttribute("supress-primary-adjustment", !(
 +      zenToolbox.hasAttribute("zen-has-hover") ||
 +      zenToolbox.hasAttribute("zen-has-empty-tab") ||
 +      zenToolbox.hasAttribute("zen-user-show")
 +    ));
 +    this.window.gBrowser.selectedBrowser.focus();
 +    this.document.ownerGlobal.setTimeout(() => {
-+      zenToolbox.removeAttribute("supress-primary-adjustment");
++      this.window.document.documentElement.removeAttribute("supress-primary-adjustment");
 +    }, 0);
 +    
 +    this.removeAttribute("zen-floating-urlbar");
