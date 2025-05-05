@@ -179,6 +179,9 @@
   --zen-big-shadow: 0 0 9.73px 0px light-dark(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.25));
   --zen-active-tab-scale: 0.98;
 
+  /* Define tab hover background color */
+  --tab-hover-background-color: color-mix(in srgb, var(--toolbarbutton-hover-background) 50%, transparent 50%);
+
   /* Nativity */
   --zen-native-content-radius: var(--zen-border-radius);
   @media (-moz-platform: linux) {

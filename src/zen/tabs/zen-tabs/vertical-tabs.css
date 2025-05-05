@@ -191,9 +191,6 @@
     --tab-border-radius: 10px;
   }
 
-  /* Define tab hover background color */
-  --tab-hover-background-color: color-mix(in srgb, var(--toolbarbutton-hover-background) 50%, transparent 50%);
-
   min-width: var(--zen-toolbox-min-width);
   margin-top: 0 !important; /* Fix potential issues in full screen mode */
   border: none; /* Remove default borders */
@@ -1319,7 +1316,7 @@
   }
 
   &:hover .tab-background {
-    background: var(--tab-selected-bgcolor);
+    background: var(--tab-hover-background-color);
   }
 
   /* Optional blurred favicon background effect (if pref `zen.theme.essentials-favicon-bg` is enabled) */
