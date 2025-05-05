@@ -113,9 +113,9 @@ export class ZenThemeMarketplaceChild extends JSWindowActorChild {
 
   async addInstallButtons() {
     const actionButton = this.actionButton;
-    const actionButtonUnnstall = this.actionButtonUninstall;
+    const actionButtonUninstall = this.actionButtonUninstall;
     const errorMessage = this.contentWindow.document.getElementById('install-theme-error');
-    if (!actionButton || !actionButtonUnnstall) {
+    if (!actionButton || !actionButtonUninstall) {
       return;
     }
 
@@ -123,13 +123,13 @@ export class ZenThemeMarketplaceChild extends JSWindowActorChild {
 
     const themeId = actionButton.getAttribute('zen-theme-id');
     if (await this.isThemeInstalled(themeId)) {
-      actionButtonUnnstall.classList.remove('hidden');
+      actionButtonUninstall.classList.remove('hidden');
     } else {
       actionButton.classList.remove('hidden');
     }
 
     actionButton.addEventListener('click', this.installTheme.bind(this));
-    actionButtonUnnstall.addEventListener('click', this.uninstallTheme.bind(this));
+    actionButtonUninstall.addEventListener('click', this.uninstallTheme.bind(this));
   }
 
   async isThemeInstalled(themeId) {
