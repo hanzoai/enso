@@ -1,6 +1,4 @@
 
-pref("browser.privateWindowSeparation.enabled", false);
-
 // Mica
 pref("widget.windows.mica", true);
 pref("widget.windows.mica.popups", true);

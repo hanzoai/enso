@@ -1,7 +1,7 @@
 
 pref('browser.urlbar.unitConversion.enabled', true);
 pref('browser.urlbar.trending.featureGate', false);
-pref('browser.urlbar.weather.featureGate', true);
+pref('browser.urlbar.weather.featureGate', false);
 pref('browser.urlbar.quickactions.enabled', true);
 pref('browser.urlbar.clipboard.featureGate', true);
 pref('browser.urlbar.suggest.calculator', true);
