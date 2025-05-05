@@ -119,6 +119,9 @@
 
     showSidebarButtons(animate = false) {
       if (this.sidebarButtons.hasAttribute('hidden') && animate) {
+        for (const button of this.sidebarButtons.querySelectorAll('toolbarbutton')) {
+          button.style.opacity = 0;
+        }
         gZenUIManager.motion.animate(
           this.sidebarButtons.querySelectorAll('toolbarbutton'),
           { x: [50, 0], opacity: [0, 1] },

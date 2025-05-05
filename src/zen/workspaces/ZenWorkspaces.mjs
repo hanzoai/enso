@@ -924,7 +924,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         this.onContextMenuClose(event);
       }
     });
-    contextMenu.addEventListener('onpopupshowing', this.updateContextMenu.bind(this));
+    contextMenu.addEventListener('popupshowing', this.updateContextMenu.bind(this));
     contextMenu.addEventListener('command', this.handleContextMenuCommand.bind(this));
 
     const submenu = document.querySelector('#context_zenWorkspacesOpenInContainerTab > menupopup');

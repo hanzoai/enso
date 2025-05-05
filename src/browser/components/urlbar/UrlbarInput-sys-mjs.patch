@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..f001ffe262b26389c5af68e29d0785500969c344 100644
+index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..ebeaf33206649069b5307c400ada234fbec468d5 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -68,6 +68,13 @@ XPCOMUtils.defineLazyPreferenceGetter(
@@ -29,7 +29,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..f001ffe262b26389c5af68e29d078550
      this.inputField.select();
 +    this.document.ownerGlobal.setTimeout(() => {
 +      zenToolbox.removeAttribute("supress-primary-adjustment");
-+    }, 1000);
++    }, 0);
      this._suppressPrimaryAdjustment = false;
    }
  
@@ -58,7 +58,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..f001ffe262b26389c5af68e29d078550
      this.handleNavigation({ event });
 +    this.document.ownerGlobal.setTimeout(() => {
 +      zenToolbox.removeAttribute("supress-primary-adjustment");
-+    }, 1000);
++    }, 0);
    }
  
    /**
@@ -118,7 +118,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..f001ffe262b26389c5af68e29d078550
 +    this.window.gBrowser.selectedBrowser.focus();
 +    this.document.ownerGlobal.setTimeout(() => {
 +      zenToolbox.removeAttribute("supress-primary-adjustment");
-+    }, 1000);
++    }, 0);
 +    
 +    this.removeAttribute("zen-floating-urlbar");
 +
