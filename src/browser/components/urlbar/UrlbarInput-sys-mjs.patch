@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2c9920252aad3ae1528fc8e92906c4f1ccc11c75 100644
+index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..8d94bc2b7f3469258cb1a24888c5890eb83047e1 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -68,6 +68,13 @@ XPCOMUtils.defineLazyPreferenceGetter(
@@ -133,7 +133,15 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2c9920252aad3ae1528fc8e92906c4f1
          );
          this.textbox.style.setProperty(
            "--urlbar-height",
-@@ -2998,7 +3058,7 @@ export class UrlbarInput {
+@@ -2900,6 +2960,7 @@ export class UrlbarInput {
+   }
+ 
+   _toggleActionOverride(event) {
++    if (!Services.prefs.getBoolPref("zen.urlbar.enable-overrides")) return;
+     if (
+       event.keyCode == KeyEvent.DOM_VK_SHIFT ||
+       event.keyCode == KeyEvent.DOM_VK_ALT ||
+@@ -2998,7 +3059,7 @@ export class UrlbarInput {
     */
    _trimValue(val) {
      let trimmedValue = lazy.UrlbarPrefs.get("trimURLs")
@@ -142,7 +150,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2c9920252aad3ae1528fc8e92906c4f1
        : val;
      // Only trim value if the directionality doesn't change to RTL and we're not
      // showing a strikeout https protocol.
-@@ -3368,6 +3428,10 @@ export class UrlbarInput {
+@@ -3368,6 +3429,10 @@ export class UrlbarInput {
        }
        reuseEmpty = true;
      }
@@ -153,7 +161,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2c9920252aad3ae1528fc8e92906c4f1
      if (
        where == "tab" &&
        reuseEmpty &&
-@@ -3375,6 +3439,9 @@ export class UrlbarInput {
+@@ -3375,6 +3440,9 @@ export class UrlbarInput {
      ) {
        where = "current";
      }
@@ -163,7 +171,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2c9920252aad3ae1528fc8e92906c4f1
      return where;
    }
  
-@@ -3632,6 +3699,7 @@ export class UrlbarInput {
+@@ -3632,6 +3700,7 @@ export class UrlbarInput {
        this.setResultForCurrentValue(null);
        this.handleCommand();
        this.controller.clearLastQueryContextCache();
@@ -171,7 +179,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2c9920252aad3ae1528fc8e92906c4f1
  
        this._suppressStartQuery = false;
      });
-@@ -3639,7 +3707,6 @@ export class UrlbarInput {
+@@ -3639,7 +3708,6 @@ export class UrlbarInput {
      contextMenu.addEventListener("popupshowing", () => {
        // Close the results pane when the input field contextual menu is open,
        // because paste and go doesn't want a result selection.
@@ -179,7 +187,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2c9920252aad3ae1528fc8e92906c4f1
  
        let controller =
          this.document.commandDispatcher.getControllerForCommand("cmd_paste");
-@@ -4053,6 +4120,11 @@ export class UrlbarInput {
+@@ -4053,6 +4121,11 @@ export class UrlbarInput {
    }
  
    _on_click(event) {
@@ -191,7 +199,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2c9920252aad3ae1528fc8e92906c4f1
      if (
        event.target == this.inputField ||
        event.target == this._inputContainer ||
-@@ -4124,7 +4196,7 @@ export class UrlbarInput {
+@@ -4124,7 +4197,7 @@ export class UrlbarInput {
        }
      }
  
@@ -200,7 +208,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2c9920252aad3ae1528fc8e92906c4f1
        this.view.autoOpen({ event });
      } else {
        if (this._untrimOnFocusAfterKeydown) {
-@@ -4164,9 +4236,12 @@ export class UrlbarInput {
+@@ -4164,9 +4237,12 @@ export class UrlbarInput {
    }
  
    _on_mousedown(event) {
@@ -214,7 +222,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2c9920252aad3ae1528fc8e92906c4f1
  
          if (
            event.target != this.inputField &&
-@@ -4176,8 +4251,8 @@ export class UrlbarInput {
+@@ -4176,8 +4252,8 @@ export class UrlbarInput {
            break;
          }
  
@@ -225,7 +233,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..2c9920252aad3ae1528fc8e92906c4f1
  
          // Keep the focus status, since the attribute may be changed
          // upon calling this.focus().
-@@ -4218,7 +4293,7 @@ export class UrlbarInput {
+@@ -4218,7 +4294,7 @@ export class UrlbarInput {
          }
          // Don't close the view when clicking on a tab; we may want to keep the
          // view open on tab switch, and the TabSelect event arrived earlier.

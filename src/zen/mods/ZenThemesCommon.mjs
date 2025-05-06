@@ -1,3 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 var ZenThemesCommon = {
   kZenColors: ['#aac7ff', '#74d7cb', '#a0d490', '#dec663', '#ffb787', '#dec1b1', '#ffb1c0', '#ddbfc3', '#f6b0ea', '#d4bbff'],
 

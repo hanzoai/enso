@@ -2356,6 +2356,11 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       for (const tab of this.allStoredTabs) {
         gBrowser.showTab(tab);
       }
+      for (const tab of gBrowser.tabs) {
+        if (!tab.hasAttribute('zen-workspace-id') && !tab.hasAttribute('zen-workspace-id')) {
+          tab.setAttribute('zen-workspace-id', workspace.uuid);
+        }
+      }
     }
   }
 
@@ -2996,6 +3001,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         }
         if (!workspaceToSwitch) {
           console.error('No workspace found for tab, cannot switch');
+          await this._safelySelectTab(tab);
           return;
         }
 
