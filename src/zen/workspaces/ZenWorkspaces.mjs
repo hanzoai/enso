@@ -2224,11 +2224,54 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     return !(aTab?.hasAttribute('zen-essential') || (aTab?.pinned && aTab?.hasAttribute('pending')));
   }
 
+  _shouldShowTab(tab, workspaceUuid, containerId, workspaces) {
+    const isEssential = tab.getAttribute('zen-essential') === 'true';
+    const tabWorkspaceId = tab.getAttribute('zen-workspace-id');
+    const tabContextId = tab.getAttribute('usercontextid');
+
+    if (tab.hasAttribute('zen-glance-tab')) {
+      return true; // Always show glance tabs
+    }
+
+    // Handle essential tabs
+    if (isEssential) {
+      if (!this.containerSpecificEssentials) {
+        return true; // Show all essential tabs when containerSpecificEssentials is false
+      }
+
+      if (containerId) {
+        // In workspaces with default container: Show essentials that match the container
+        return tabContextId === containerId;
+      } else {
+        // In workspaces without a default container: Show essentials that aren't in container-specific workspaces
+        // or have usercontextid="0" or no usercontextid
+        return (
+          !tabContextId ||
+          tabContextId === '0' ||
+          !workspaces.workspaces.some((workspace) => workspace.containerTabId === parseInt(tabContextId, 10))
+        );
+      }
+    }
+
+    // For non-essential tabs (both normal and pinned)
+    if (!tabWorkspaceId) {
+      // Assign workspace ID to tabs without one
+      this.moveTabToWorkspace(tab, workspaceUuid);
+      return true;
+    }
+
+    // Show if tab belongs to current workspace
+    return tabWorkspaceId === workspaceUuid;
+  }
+
   async _handleTabSelection(workspace, onInit, previousWorkspaceId) {
     const currentSelectedTab = gBrowser.selectedTab;
     const oldWorkspaceId = previousWorkspaceId;
     const lastSelectedTab = this._lastSelectedWorkspaceTabs[workspace.uuid];
 
+    const containerId = workspace.containerTabId?.toString();
+    const workspaces = await this._workspaces();
+    
     // Save current tab as last selected for old workspace if it shouldn't be visible in new workspace
     if (oldWorkspaceId && oldWorkspaceId !== workspace.uuid) {
       this._lastSelectedWorkspaceTabs[oldWorkspaceId] = gZenGlanceManager.getTabOrGlanceParent(currentSelectedTab);
@@ -2236,7 +2279,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     let tabToSelect = null;
     // Try last selected tab if it is visible
-    if (lastSelectedTab) {
+    if (lastSelectedTab && this._shouldShowTab(lastSelectedTab, workspace.uuid, containerId, workspaces)) {
       tabToSelect = lastSelectedTab;
     }
     // Find first suitable tab
