@@ -84,9 +84,6 @@ var gZenUIManager = {
   onFloatingURLBarOpen() {
     requestAnimationFrame(() => {
       this.updateTabsToolbar();
-      requestAnimationFrame(() => {
-        this.updateTabsToolbar();
-      });
     });
   },
 
