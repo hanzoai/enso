@@ -47,6 +47,8 @@
   }
 
   class ZenPinnedTabManager extends ZenDOMOperatedFeature {
+    MAX_ESSENTIALS_TABS = 12;
+
     async init() {
       if (!this.enabled) {
         return;
@@ -639,6 +641,10 @@
           : [TabContextMenu.contextTab];
       for (let i = 0; i < tabs.length; i++) {
         let tab = tabs[i];
+        const section = ZenWorkspaces.getEssentialsSection(tab);
+        if (section.children.length >= this.MAX_ESSENTIALS_TABS) {
+          continue;
+        }
         if (tab.hasAttribute('zen-essential')) {
           continue;
         }
@@ -658,7 +664,7 @@
             });
             tab.setAttribute('zen-essential', 'true');
           } else {
-            ZenWorkspaces.getEssentialsSection(tab).appendChild(tab);
+            section.appendChild(tab);
           }
           gBrowser.tabContainer._invalidateCachedTabs();
         } else {

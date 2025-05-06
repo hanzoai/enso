@@ -208,6 +208,10 @@
       Segoe UI Symbol,
       Noto Color Emoji;
   }
+
+  &:not([chromehidden~='toolbar']) {
+    min-height: 495px !important;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

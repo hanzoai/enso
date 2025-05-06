@@ -43,9 +43,10 @@ var gZenUIManager = {
   },
 
   updateTabsToolbar() {
+    const kUrlbarHeight = 440;
     gURLBar.textbox.style.setProperty(
       '--zen-urlbar-top',
-      `${window.innerHeight / 2 - gURLBar.textbox.getBoundingClientRect().height / 2}px`
+      `${window.innerHeight / 2 - Math.max(kUrlbarHeight, gURLBar.textbox.getBoundingClientRect().height) / 2}px`
     );
     gZenVerticalTabsManager.actualWindowButtons.removeAttribute('zen-has-hover');
     gZenVerticalTabsManager.recalculateURLBarHeight();
@@ -83,6 +84,9 @@ var gZenUIManager = {
   onFloatingURLBarOpen() {
     requestAnimationFrame(() => {
       this.updateTabsToolbar();
+      requestAnimationFrame(() => {
+        this.updateTabsToolbar();
+      });
     });
   },
 

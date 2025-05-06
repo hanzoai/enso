@@ -2271,7 +2271,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     const containerId = workspace.containerTabId?.toString();
     const workspaces = await this._workspaces();
-    
+
     // Save current tab as last selected for old workspace if it shouldn't be visible in new workspace
     if (oldWorkspaceId && oldWorkspaceId !== workspace.uuid) {
       this._lastSelectedWorkspaceTabs[oldWorkspaceId] = gZenGlanceManager.getTabOrGlanceParent(currentSelectedTab);
