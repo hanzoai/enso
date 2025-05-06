@@ -1,3 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 class SplitLeafNode {
   /**
    * The percentage of the size of the parent the node takes up, dependent on parent direction this is either

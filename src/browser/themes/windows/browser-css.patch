@@ -1,8 +1,16 @@
 diff --git a/browser/themes/windows/browser.css b/browser/themes/windows/browser.css
-index 3e75a5f366e76acf4b9457a510b58b0cb8af580f..4962151f34ff52e8d009b82a9a12da99c4745a7a 100644
+index 3e75a5f366e76acf4b9457a510b58b0cb8af580f..99b5712d533e99f3bb3f13c1485e771ab66731cd 100644
 --- a/browser/themes/windows/browser.css
 +++ b/browser/themes/windows/browser.css
-@@ -57,7 +57,7 @@
+@@ -34,7 +34,6 @@
+         /* stylelint-disable-next-line media-query-no-invalid */
+         @media -moz-pref("widget.windows.mica.toplevel-backdrop", 2) {
+           /* For acrylic, do the same we do for popups to guarantee some contrast */
+-          background-color: light-dark(rgba(255, 255, 255, .6), rgba(0, 0, 0, .6));
+         }
+       }
+     }
+@@ -57,7 +56,7 @@
        }
      }
  
