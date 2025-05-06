@@ -808,9 +808,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
           delete this._tabToSelect;
         } else {
           this.selectEmptyTab();
+          showed = true;
         }
         gBrowser.removeTab(this._tabToRemoveForEmpty);
-        showed = true;
       }
       delete this._tabToRemoveForEmpty;
     }
