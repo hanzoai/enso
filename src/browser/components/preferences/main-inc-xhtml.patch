@@ -1,8 +1,18 @@
 diff --git a/browser/components/preferences/main.inc.xhtml b/browser/components/preferences/main.inc.xhtml
-index cdcf50ec1bc4a54c69f5baf4a6d40ab0c63a8121..87603323c2b0b9ea0c847a8a06e293a16c1252b8 100644
+index f9129fb171362e81369056923bf25acbb87d2ad8..924bcd2cd66a5dfcf9c45aac0c63cd0257c21a2c 100644
 --- a/browser/components/preferences/main.inc.xhtml
 +++ b/browser/components/preferences/main.inc.xhtml
-@@ -183,6 +183,7 @@
+@@ -29,6 +29,9 @@
+   <vbox id="startupPageBox">
+     <checkbox id="browserRestoreSession"
+               data-l10n-id="startup-restore-windows-and-tabs"/>
++    <checkbox id="zenWorkspaceContinueWhereLeftOff"
++            data-l10n-id="zen-workspace-continue-where-left-off"
++            preference="zen.workspaces.continue-where-left-off"/>
+ #ifdef XP_WIN
+     <hbox id="windowsLaunchOnLoginBox" align="center" hidden="true">
+       <checkbox id="windowsLaunchOnLogin"
+@@ -186,6 +189,7 @@
  </groupbox>
  
  <!-- Browser layout -->
@@ -10,7 +20,7 @@ index cdcf50ec1bc4a54c69f5baf4a6d40ab0c63a8121..87603323c2b0b9ea0c847a8a06e293a1
  <groupbox data-category="paneGeneral"
            data-subcategory="layout"
            hidden="true">
-@@ -198,6 +199,7 @@
+@@ -201,6 +205,7 @@
              preference="sidebar.revamp"/>
    <description class="indent" data-l10n-id="browser-layout-show-sidebar-desc"></description>
  </groupbox>
@@ -18,7 +28,7 @@ index cdcf50ec1bc4a54c69f5baf4a6d40ab0c63a8121..87603323c2b0b9ea0c847a8a06e293a1
  
  <hbox id="languageAndAppearanceCategory"
        class="subcategory"
-@@ -411,6 +413,7 @@
+@@ -421,6 +426,7 @@
                languages-customize-add.label,
              " />
    </hbox>

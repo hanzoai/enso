@@ -1151,4 +1151,9 @@ Preferences.addAll([
     type: 'bool',
     default: true,
   },
+  {
+    id: 'zen.workspaces.continue-where-left-off',
+    type: 'bool',
+    default: false,
+  },
 ]);

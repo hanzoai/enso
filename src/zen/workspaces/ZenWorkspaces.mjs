@@ -800,28 +800,19 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       this._initialTab._possiblyEmpty = false;
       this._initialTab = null;
     }
-    const currentTab = gBrowser.selectedTab;
     let showed = false;
     if (this._tabToRemoveForEmpty) {
       if (gZenVerticalTabsManager._canReplaceNewTab) {
-        this.selectEmptyTab();
+        if (this._tabToSelect) {
+          gBrowser.selectedTab = this._tabToSelect;
+          delete this._tabToSelect;
+        } else {
+          this.selectEmptyTab();
+        }
         gBrowser.removeTab(this._tabToRemoveForEmpty);
         showed = true;
       }
       delete this._tabToRemoveForEmpty;
-    } else {
-      const currentTabURL = currentTab.linkedBrowser?.currentURI?.spec;
-      // Check for empty tab being restored
-      if (
-        (currentTab.isEmpty &&
-          (currentTab.getAttribute('image') === gPageIcons[currentTabURL] || !currentTab.hasAttribute('image'))) ||
-        currentTab._possiblyEmpty
-      ) {
-        this.selectEmptyTab();
-        this._removedByStartupPage = true;
-        gBrowser.removeTab(currentTab);
-        showed = true;
-      }
     }
     if (gZenVerticalTabsManager._canReplaceNewTab && showed) {
       BrowserCommands.openTab();

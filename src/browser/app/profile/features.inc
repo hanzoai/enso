@@ -109,6 +109,7 @@ pref('zen.watermark.enabled', false, sticky);
 pref('zen.startup.smooth-scroll-in-tabs', true);
 
 // Zen Workspaces
+pref('zen.workspaces.continue-where-left-off', false);
 pref('zen.workspaces.hide-default-container-indicator', true);
 pref('zen.workspaces.force-container-workspace', false);
 pref('zen.workspaces.open-new-tab-if-last-unpinned-tab-is-closed', false);

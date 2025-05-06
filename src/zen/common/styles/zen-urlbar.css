@@ -528,6 +528,10 @@ button.popup-notification-dropmarker {
   border-radius: 4px !important;
 }
 
+.urlbarView-userContext {
+  padding-top: 0px !important;
+}
+
 .urlbarView-row[has-action]:is([type='switchtab'], [type='remotetab'], [type='clipboard']) {
   & .urlbarView-action {
     margin-left: auto !important;
