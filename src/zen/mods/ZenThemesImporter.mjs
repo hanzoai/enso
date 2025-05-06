@@ -141,10 +141,6 @@ var gZenThemesImporter = new (class {
   }
 
   async rebuildThemeStylesheet() {
-    if (Services.focus.activeWindow !== window) {
-      return;
-    }
-
     ZenThemesCommon.themes = null;
 
     await this.removeStylesheet();
