@@ -795,10 +795,13 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
     let showed = false;
     if (this._initialTab) {
-      this.moveTabToWorkspace(this._initialTab, this.activeWorkspace);
-      gBrowser.selectedTab = this._initialTab;
-      gBrowser.moveTabTo(this._initialTab, { forceUngrouped: true, tabIndex: 0 });
-      this._initialTab._possiblyEmpty = false;
+      if (this._initialTab._shouldRemove && this._initialTab._veryPossiblyEmpty) {
+        gBrowser.removeTab(this._initialTab);
+      } else {
+        this.moveTabToWorkspace(this._initialTab, this.activeWorkspace);
+        gBrowser.selectedTab = this._initialTab;
+        gBrowser.moveTabTo(this._initialTab, { forceUngrouped: true, tabIndex: 0 });
+      }
       delete this._initialTab;
     } else if (this._tabToRemoveForEmpty) {
       if (gZenVerticalTabsManager._canReplaceNewTab) {
@@ -820,10 +823,12 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   handleInitialTab(tab, isEmpty) {
-    if (isEmpty) {
+    // note: We cant access `gZenVerticalTabsManager._canReplaceNewTab` this early
+    if (isEmpty && Services.prefs.getBoolPref('zen.urlbar.replace-newtab', true)) {
       this._tabToRemoveForEmpty = tab;
     } else {
       this._initialTab = tab;
+      this._initialTab._veryPossiblyEmpty = isEmpty;
     }
   }
 
