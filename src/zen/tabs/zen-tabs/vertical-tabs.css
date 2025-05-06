@@ -1281,7 +1281,7 @@
   display: grid;
 
   &[hidden='true'] {
-    --hidden-essentials-width: calc(var(--actual-zen-sidebar-width) - var(--zen-toolbox-padding) * 2);
+    --hidden-essentials-width: var(--actual-zen-sidebar-width);
     max-width: var(--hidden-essentials-width) !important; /* To still allow essentials to grid the tabs */
     min-width: var(--hidden-essentials-width) !important;
   }
