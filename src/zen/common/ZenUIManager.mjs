@@ -382,6 +382,12 @@ var gZenUIManager = {
 
   // Section: Notification messages
   _createToastElement(messageId, options) {
+    // Check if this message ID already exists
+    for (const child of this._toastContainer.children) {
+      if (child._messageId === messageId) {
+        return [child, true];
+      }
+    }
     const element = document.createXULElement('vbox');
     const label = document.createXULElement('label');
     document.l10n.setAttributes(label, messageId, options);
@@ -393,23 +399,34 @@ var gZenUIManager = {
       element.appendChild(description);
     }
     element.classList.add('zen-toast');
-    return element;
+    element._messageId = messageId;
+    return [element, false];
   },
 
   async showToast(messageId, options = {}) {
-    const toast = this._createToastElement(messageId, options);
+    const [toast, reused] = this._createToastElement(messageId, options);
     this._toastContainer.removeAttribute('hidden');
     this._toastContainer.appendChild(toast);
-    await this.motion.animate(toast, { opacity: [0, 1], scale: [0.8, 1] }, { type: 'spring', bounce: 0.5, duration: 0.7 });
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    await this.motion.animate(toast, { opacity: [1, 0], scale: [1, 0.9] }, { duration: 0.2, bounce: 0 });
-    const toastHeight = toast.getBoundingClientRect().height;
-    // 5 for the separation between toasts
-    await this.motion.animate(toast, { marginBottom: [0, `-${toastHeight + 5}px`] }, { duration: 0.2 });
-    toast.remove();
-    if (!this._toastContainer.hasChildNodes()) {
-      this._toastContainer.setAttribute('hidden', 'true');
+    if (reused) {
+      await this.motion.animate(toast, { scale: 0.2 }, { duration: 0.1, bounce: 0 });
+      toast._useCount++;
+    } else {
+      toast._useCount = 1;
     }
+    if (!toast.style.hasOwnProperty('transform')) {
+      toast.style.transform = 'scale(0)';
+    }
+    await this.motion.animate(toast, { scale: 1 }, { type: 'spring', bounce: 0.2, duration: 0.5 });
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    if (toast._useCount <= 1) {
+      await this.motion.animate(toast, { opacity: [1, 0], scale: [1, 0.5] }, { duration: 0.2, bounce: 0 });
+      toast.remove();
+      if (!this._toastContainer.hasChildNodes()) {
+        this._toastContainer.setAttribute('hidden', 'true');
+      }
+      return;
+    }
+    toast._useCount--;
   },
 
   get panelUIPosition() {

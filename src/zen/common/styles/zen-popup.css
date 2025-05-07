@@ -338,7 +338,6 @@ menuitem {
   position: fixed;
   top: calc(var(--zen-element-separation) * 2);
   z-index: 1000;
-  gap: 1rem;
   display: flex;
   align-items: end;
 
@@ -351,7 +350,7 @@ menuitem {
   }
 
   & .zen-toast {
-    padding: 0.5rem 0.6rem;
+    padding: 10px;
     border-radius: 12px;
     background: linear-gradient(
       170deg,
@@ -362,14 +361,16 @@ menuitem {
     box-shadow: 0 0 14px 3px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
-    font-weight: 500;
-    gap: 5px;
+    font-weight: 600;
     flex-direction: column;
-    gap: 2px;
-    width: fit-content;
+    width: max-content;
+    font-size: medium;
+    position: absolute;
+    transform-origin: top center;
 
     & .description {
       opacity: 0.6;
+      font-size: small;
     }
   }
 }

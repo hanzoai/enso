@@ -1,5 +1,5 @@
 diff --git a/browser/components/sessionstore/SessionStore.sys.mjs b/browser/components/sessionstore/SessionStore.sys.mjs
-index 5633e5032f5d50c70512187d27e045b579978927..724fe7ec3bb6058c006f25b1d9ee0ce10f7b2e36 100644
+index 5633e5032f5d50c70512187d27e045b579978927..6b9e56cb62a4812925ff812763ea9b0e6a478202 100644
 --- a/browser/components/sessionstore/SessionStore.sys.mjs
 +++ b/browser/components/sessionstore/SessionStore.sys.mjs
 @@ -2081,7 +2081,6 @@ var SessionStoreInternal = {
@@ -41,6 +41,15 @@ index 5633e5032f5d50c70512187d27e045b579978927..724fe7ec3bb6058c006f25b1d9ee0ce1
  
        if (inBackground === false) {
          aWindow.gBrowser.selectedTab = newTab;
+@@ -5225,7 +5225,7 @@ var SessionStoreInternal = {
+     }
+ 
+     let workspaceID = aWindow.getWorkspaceID();
+-    if (workspaceID) {
++    if (workspaceID && !(this.isLastRestorableWindow() && AppConstants.platform == "macosx")) {
+       winData.workspaceID = workspaceID;
+     }
+   },
 @@ -5416,14 +5416,15 @@ var SessionStoreInternal = {
      }
  
