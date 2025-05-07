@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 6dece2b9d0462d90a28e75350ce983d87816ef73..f61af937b348cc0afc29c1c6c4324ee005392282 100644
+index 6dece2b9d0462d90a28e75350ce983d87816ef73..f191c26b73be69880eb16a83006a9e2a5d0924e5 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -415,11 +415,45 @@
@@ -387,7 +387,7 @@ index 6dece2b9d0462d90a28e75350ce983d87816ef73..f61af937b348cc0afc29c1c6c4324ee0
          if (
            !bulkOrderedOpen &&
            ((openerTab &&
-@@ -3935,7 +4068,7 @@
+@@ -3935,7 +4055,7 @@
            ) {
              index = Infinity;
            } else if (previousTab.visible) {
@@ -396,7 +396,7 @@ index 6dece2b9d0462d90a28e75350ce983d87816ef73..f61af937b348cc0afc29c1c6c4324ee0
            } else if (previousTab == FirefoxViewHandler.tab) {
              index = 0;
            }
-@@ -3958,18 +4091,18 @@
+@@ -3958,18 +4078,18 @@
  
        // Ensure index is within bounds.
        if (tab.pinned) {
