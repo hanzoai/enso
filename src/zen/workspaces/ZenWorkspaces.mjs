@@ -2824,7 +2824,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     return this.allStoredTabs.filter(
       (tab) =>
         tab.getAttribute('zen-workspace-id') !== tabWorkspaceId &&
-        !tab.hasAttribute('zen-essential') &&
         !(this.containerSpecificEssentials && tab.getAttribute('container') !== aTab.getAttribute('container')) &&
         !tab.hasAttribute('zen-empty-tab')
     );
@@ -2973,8 +2972,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       const currentWorkspace = this.getActiveWorkspaceFromCache();
       // Check if we need to change workspace
       if (
-        tab.getAttribute('zen-workspace-id') !== this.activeWorkspace ||
-        tab.hasAttribute('zen-essential') ||
+        (tab.getAttribute('zen-workspace-id') !== this.activeWorkspace && !tab.hasAttribute('zen-essential')) ||
         (currentWorkspace.containerTabId !== parseInt(tab.parentNode.getAttribute('container')) &&
           this.containerSpecificEssentials)
       ) {

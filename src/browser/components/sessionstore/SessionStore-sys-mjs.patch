@@ -1,5 +1,5 @@
 diff --git a/browser/components/sessionstore/SessionStore.sys.mjs b/browser/components/sessionstore/SessionStore.sys.mjs
-index 5633e5032f5d50c70512187d27e045b579978927..1e34143a71eeda8a60724515176b6fde922d1034 100644
+index 5633e5032f5d50c70512187d27e045b579978927..856fabc3c4f12a8babc193b68d28fe373824e6f3 100644
 --- a/browser/components/sessionstore/SessionStore.sys.mjs
 +++ b/browser/components/sessionstore/SessionStore.sys.mjs
 @@ -2081,7 +2081,6 @@ var SessionStoreInternal = {
@@ -107,7 +107,7 @@ index 5633e5032f5d50c70512187d27e045b579978927..1e34143a71eeda8a60724515176b6fde
      var pinnedOnly =
 -      aState.windows &&
 -      aState.windows.every(win => win.tabs.every(tab => tab.pinned));
-+      aState.windows;
++      false;
  
      let hasFirstArgument = aWindow.arguments && aWindow.arguments[0];
      if (!pinnedOnly) {
