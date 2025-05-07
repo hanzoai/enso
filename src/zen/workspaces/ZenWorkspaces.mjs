@@ -798,7 +798,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       if (this._initialTab._shouldRemove && this._initialTab._veryPossiblyEmpty) {
         gBrowser.removeTab(this._initialTab, {
           skipSessionStore: true,
-          animate: false
+          animate: false,
         });
       } else {
         this.moveTabToWorkspace(this._initialTab, this.activeWorkspace);
@@ -816,7 +816,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         }
         gBrowser.removeTab(this._tabToRemoveForEmpty, {
           skipSessionStore: true,
-          animate: false
+          animate: false,
         });
       }
     }

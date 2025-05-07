@@ -529,7 +529,7 @@ button.popup-notification-dropmarker {
 }
 
 .urlbarView-userContext {
-  padding-top: 0px !important;
+  border-top: none !important;
 }
 
 .urlbarView-row[has-action]:is([type='switchtab'], [type='remotetab'], [type='clipboard']) {

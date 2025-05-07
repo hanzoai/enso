@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..2885d896c4026278dfcb309f12230d6f86275ada 100644
+index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..1a3aa415d08379b00960de398808e771c299f2ca 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -83,7 +83,7 @@
@@ -33,7 +33,7 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..2885d896c4026278dfcb309f12230d6f
          // In expanded vertical mode, the max number of pinned tabs per row is dynamic
          // Set this before adjusting dragged tab's position
 -        let pinnedTabs = this.visibleTabs.slice(0, gBrowser.pinnedTabCount);
-+        let pinnedTabs = this.visibleTabs.filter(tab => !tab.hasAttribute("zen-glance-tab")).slice(0, gBrowser._numZenVisibleEssentials);
++        let pinnedTabs = this.visibleTabs.filter(tab => !tab.hasAttribute("zen-glance-tab")).slice(0, gBrowser._numZenEssentials);
          let tabsPerRow = 0;
          let position = 0;
          for (let pinnedTab of pinnedTabs) {
@@ -87,8 +87,8 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..2885d896c4026278dfcb309f12230d6f
 +          let numPinned = gBrowser._numVisiblePinTabsWithoutCollapsed;
 +          let essential = draggedTab.hasAttribute("zen-essential");
 +          let tabs = this.ariaFocusableItems.filter(tab => !tab.hasAttribute("zen-glance-tab")).slice(
-+            isPinned ? (essential ? 0 : gBrowser._numZenVisibleEssentials) : numPinned,
-+            isPinned ? (essential ? gBrowser._numZenVisibleEssentials : numPinned) : undefined
++            isPinned ? (essential ? 0 : gBrowser._numZenEssentials) : numPinned,
++            isPinned ? (essential ? gBrowser._numZenEssentials : numPinned) : undefined
            );
            let size = this.verticalMode ? "height" : "width";
            let screenAxis = this.verticalMode ? "screenY" : "screenX";
@@ -349,7 +349,7 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..2885d896c4026278dfcb309f12230d6f
        }
  
 -      let tabs = this.visibleTabs.slice(0, gBrowser.pinnedTabCount);
-+      let tabs = this.visibleTabs.filter(tab => !tab.hasAttribute("zen-glance-tab")).slice(0, gBrowser._numZenVisibleEssentials);
++      let tabs = this.visibleTabs.filter(tab => !tab.hasAttribute("zen-glance-tab")).slice(0, gBrowser._numZenEssentials);
  
        let directionX = screenX > dragData.animLastScreenX;
        let directionY = screenY > dragData.animLastScreenY;
@@ -375,8 +375,8 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..2885d896c4026278dfcb309f12230d6f
 +      let numPinned = gBrowser._numVisiblePinTabsWithoutCollapsed;
 +      let essential = draggedTab.hasAttribute("zen-essential");
 +      let tabs = this.ariaFocusableItems.filter(tab => !tab.hasAttribute("zen-glance-tab")).slice(
-+        isPinned ? (essential ? 0 : gBrowser._numZenVisibleEssentials) : numPinned,
-+        isPinned ? (essential ? gBrowser._numZenVisibleEssentials : numPinned) : undefined
++        isPinned ? (essential ? 0 : gBrowser._numZenEssentials) : numPinned,
++        isPinned ? (essential ? gBrowser._numZenEssentials : numPinned) : undefined
        );
 +      if (draggedTab.group?.hasAttribute("split-view-group")) {
 +        draggedTab = draggedTab.group.labelElement;
