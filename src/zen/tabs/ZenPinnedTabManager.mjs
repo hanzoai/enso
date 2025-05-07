@@ -756,7 +756,8 @@
       const isVisible = contextTab.pinned && !contextTab.multiselected;
       document.getElementById('context_zen-reset-pinned-tab').hidden = !isVisible || !contextTab.getAttribute('zen-pin-id');
       document.getElementById('context_zen-replace-pinned-url-with-current').hidden = !isVisible;
-      document.getElementById('context_zen-add-essential').hidden = contextTab.getAttribute('zen-essential');
+      document.getElementById('context_zen-add-essential').hidden =
+        contextTab.getAttribute('zen-essential') || !!contextTab.group;
       document.getElementById('context_zen-remove-essential').hidden = !contextTab.getAttribute('zen-essential');
       document.getElementById('context_unpinTab').hidden =
         document.getElementById('context_unpinTab').hidden || contextTab.getAttribute('zen-essential');
