@@ -1506,6 +1506,8 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
         if (groupIndex >= 0) {
           this.removeTabFromGroup(tab, groupIndex, true);
         }
+        gBrowser.selectedTab = tab;
+        tab._selected = true;
       }
     }
   };

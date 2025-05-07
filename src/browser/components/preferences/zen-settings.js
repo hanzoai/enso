@@ -207,17 +207,9 @@ var gZenMarketplaceManager = {
       const content = await file.text();
 
       const themes = JSON.parse(content);
-      const existingThemes = await ZenThemesCommon.getThemes();
-      const uniqueThemes = { ...themes, ...existingThemes };
-
-      console.log(`[ZenThemeMarketplaceParent:settings]: Importing ${Object.keys(themes).length} themes`);
-      await IOUtils.writeJSON(ZenThemesCommon.themesDataFile, uniqueThemes);
-      this.triggerThemeUpdate();
-      successBox.hidden = false;
-
-      let buttonIndex = await confirmRestartPrompt(true, 1, true, true);
-      if (buttonIndex == CONFIRM_RESTART_PROMPT_RESTART_NOW) {
-        Services.startup.quit(Ci.nsIAppStartup.eAttemptQuit | Ci.nsIAppStartup.eRestart);
+      for (const theme of Object.values(themes)) {
+        theme.themeId = theme.id;
+        window.ZenInstallTheme(theme);
       }
     } catch (error) {
       console.error('[ZenThemeMarketplaceParent:settings]: Error while importing themes:', error);
@@ -558,7 +550,7 @@ var gZenMarketplaceManager = {
               }
 
               input.addEventListener(
-                'input',
+                'change',
                 ZenThemesCommon.debounce((event) => {
                   const value = event.target.value;
 

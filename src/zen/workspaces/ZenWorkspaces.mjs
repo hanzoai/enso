@@ -793,27 +793,29 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (gZenUIManager.testingEnabled) {
       return;
     }
-    if (this._initialTab) {
-      this.moveTabToWorkspace(this._initialTab, this.activeWorkspace);
-      gBrowser.selectedTab = this._initialTab;
-      gBrowser.moveTabTo(this._initialTab, { forceUngrouped: true, tabIndex: 0 });
-      this._initialTab._possiblyEmpty = false;
-      this._initialTab = null;
-    }
     let showed = false;
-    if (this._tabToRemoveForEmpty) {
+    if (this._initialTab) {
+      if (this._initialTab._shouldRemove && this._initialTab._veryPossiblyEmpty) {
+        gBrowser.removeTab(this._initialTab);
+      } else {
+        this.moveTabToWorkspace(this._initialTab, this.activeWorkspace);
+        gBrowser.selectedTab = this._initialTab;
+        gBrowser.moveTabTo(this._initialTab, { forceUngrouped: true, tabIndex: 0 });
+      }
+      delete this._initialTab;
+    } else if (this._tabToRemoveForEmpty) {
       if (gZenVerticalTabsManager._canReplaceNewTab) {
         if (this._tabToSelect) {
           gBrowser.selectedTab = this._tabToSelect;
-          delete this._tabToSelect;
         } else {
           this.selectEmptyTab();
           showed = true;
         }
         gBrowser.removeTab(this._tabToRemoveForEmpty);
       }
-      delete this._tabToRemoveForEmpty;
     }
+    delete this._tabToSelect;
+    delete this._tabToRemoveForEmpty;
     if (gZenVerticalTabsManager._canReplaceNewTab && showed) {
       BrowserCommands.openTab();
     }
@@ -821,10 +823,12 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   handleInitialTab(tab, isEmpty) {
-    if (isEmpty) {
-      tab._possiblyEmpty = true;
+    // note: We cant access `gZenVerticalTabsManager._canReplaceNewTab` this early
+    if (isEmpty && Services.prefs.getBoolPref('zen.urlbar.replace-newtab', true)) {
+      this._tabToRemoveForEmpty = tab;
     } else {
       this._initialTab = tab;
+      this._initialTab._veryPossiblyEmpty = isEmpty;
     }
   }
 
@@ -1988,7 +1992,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     newWorkspace,
     shouldAnimate,
     tabToSelect = null,
-    { previousWorkspaceIndex = null, previousWorkspace = null } = {}
+    { previousWorkspaceIndex = null, previousWorkspace = null, onInit = false } = {}
   ) {
     gZenUIManager.tabsWrapper.style.scrollbarWidth = 'none';
     const kGlobalAnimationDuration = 0.3;
@@ -2059,7 +2063,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       }
       if (offset === 0) {
         element.setAttribute('active', 'true');
-        if (tabToSelect != gBrowser.selectedTab) {
+        if (tabToSelect != gBrowser.selectedTab && !onInit) {
           gBrowser.selectedTab = tabToSelect;
         }
       } else {
@@ -2291,7 +2295,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       const newTab = this.selectEmptyTab();
       tabToSelect = newTab;
     }
-    if (tabToSelect) {
+    if (tabToSelect && !onInit) {
       tabToSelect._visuallySelected = true;
     }
 
@@ -2320,6 +2324,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     await this._animateTabs(workspace, !onInit && !this._animatingChange, tabToSelect, {
       previousWorkspaceIndex,
       previousWorkspace,
+      onInit,
     });
     await this._organizeWorkspaceStripLocations(workspace, true);
     gZenUIManager.tabsWrapper.style.scrollbarWidth = '';
@@ -2819,7 +2824,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     return this.allStoredTabs.filter(
       (tab) =>
         tab.getAttribute('zen-workspace-id') !== tabWorkspaceId &&
-        !tab.hasAttribute('zen-essential') &&
         !(this.containerSpecificEssentials && tab.getAttribute('container') !== aTab.getAttribute('container')) &&
         !tab.hasAttribute('zen-empty-tab')
     );
@@ -2968,8 +2972,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       const currentWorkspace = this.getActiveWorkspaceFromCache();
       // Check if we need to change workspace
       if (
-        tab.getAttribute('zen-workspace-id') !== this.activeWorkspace ||
-        tab.hasAttribute('zen-essential') ||
+        (tab.getAttribute('zen-workspace-id') !== this.activeWorkspace && !tab.hasAttribute('zen-essential')) ||
         (currentWorkspace.containerTabId !== parseInt(tab.parentNode.getAttribute('container')) &&
           this.containerSpecificEssentials)
       ) {

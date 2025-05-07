@@ -441,7 +441,7 @@
   scrollbar-color: color-mix(in srgb, currentColor 26%, transparent) transparent; /* Custom scrollbar */
 
   /* Negative margin hack for workspace transitions (only if workspaces are enabled) */
-  :root[zen-workspace-id] & {
+  :root[zen-workspace-id][zen-sidebar-expanded='true'] & {
     margin-left: calc(-1 * var(--zen-toolbox-padding));
     width: calc(100% + var(--zen-toolbox-padding) * 2);
   }
@@ -755,6 +755,13 @@
   & .zen-essentials-container {
     justify-content: center;
     grid-template-columns: 1fr !important;
+    padding: 0 !important;
+    max-width: var(--zen-sidebar-width) !important;
+    min-width: unset !important;
+  }
+
+  & #zen-essentials-wrapper {
+    margin-left: unset !important;
   }
 
   /* Style new tab button when collapsed */
@@ -1274,7 +1281,7 @@
   display: grid;
 
   &[hidden='true'] {
-    --hidden-essentials-width: calc(var(--actual-zen-sidebar-width) - var(--zen-toolbox-padding) * 2);
+    --hidden-essentials-width: var(--actual-zen-sidebar-width);
     max-width: var(--hidden-essentials-width) !important; /* To still allow essentials to grid the tabs */
     min-width: var(--hidden-essentials-width) !important;
   }
