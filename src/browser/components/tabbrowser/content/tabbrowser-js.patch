@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 6dece2b9d0462d90a28e75350ce983d87816ef73..642e34eb9f90f4c2581c217c8ca6e1e3f36a1e1a 100644
+index 6dece2b9d0462d90a28e75350ce983d87816ef73..fb26ba8cc858cc730c2fe7539f1d2354d2d307a9 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -415,11 +415,58 @@
@@ -376,7 +376,7 @@ index 6dece2b9d0462d90a28e75350ce983d87816ef73..642e34eb9f90f4c2581c217c8ca6e1e3
 +        if (gZenVerticalTabsManager._canReplaceNewTab) {
 +          ZenWorkspaces._tabToRemoveForEmpty = leftoverTab;
 +          if (Services.prefs.getBoolPref("zen.workspaces.continue-where-left-off")) {
-+            ZenWorkspaces._tabToSelect = tabToSelect;
++            ZenWorkspaces._tabToSelect = selectTab - 1;
 +          }
 +        } else {
          this.selectedTab = tabToSelect;

@@ -796,7 +796,10 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     let showed = false;
     if (this._initialTab) {
       if (this._initialTab._shouldRemove && this._initialTab._veryPossiblyEmpty) {
-        gBrowser.removeTab(this._initialTab);
+        gBrowser.removeTab(this._initialTab, {
+          skipSessionStore: true,
+          animate: false
+        });
       } else {
         this.moveTabToWorkspace(this._initialTab, this.activeWorkspace);
         gBrowser.selectedTab = this._initialTab;
@@ -806,12 +809,15 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     } else if (this._tabToRemoveForEmpty) {
       if (gZenVerticalTabsManager._canReplaceNewTab) {
         if (this._tabToSelect) {
-          gBrowser.selectedTab = this._tabToSelect;
+          gBrowser.tabbox.selectedIndex = this._tabToSelect;
         } else {
           this.selectEmptyTab();
           showed = true;
         }
-        gBrowser.removeTab(this._tabToRemoveForEmpty);
+        gBrowser.removeTab(this._tabToRemoveForEmpty, {
+          skipSessionStore: true,
+          animate: false
+        });
       }
     }
     delete this._tabToSelect;

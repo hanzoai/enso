@@ -561,7 +561,7 @@ var gZenCompactModeManager = {
   _onTabOpen(event) {
     const tab = event.target;
     if (!tab.selected && this.preference && !this.isSidebarPotentiallyOpen()) {
-      gZenUIManager.showToast('zen-background-tab-opened');
+      gZenUIManager.showToast('zen-background-tab-opened-toast');
     }
   },
 };
