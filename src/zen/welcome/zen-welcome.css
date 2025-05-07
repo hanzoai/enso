@@ -185,10 +185,14 @@
       aspect-ratio: 1 / 0.7;
       align-items: center;
       width: 60%;
-      height: 50%;
       justify-self: center;
       align-self: center;
       justify-content: space-around;
+    }
+
+    /* 3 or more engines */
+    &[select-engine='true']:has(label:nth-of-type(3)) {
+      height: 50%;
     }
 
     #zen-welcome-workspace-colors-anchor {
