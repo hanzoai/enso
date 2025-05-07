@@ -109,7 +109,7 @@ var ZenPinnedTabsStorage = {
             is_essential, is_group, parent_uuid, created_at, updated_at
           ) VALUES (
             :uuid, :title, :url, :container_id, :workspace_uuid, :position,
-            :is_essential, :is_group, :parent_uuid,
+            :is_essential, :is_group, :parent_uuid, :edited_title,
             COALESCE((SELECT created_at FROM zen_pins WHERE uuid = :uuid), :now),
             :now
           )
@@ -124,6 +124,7 @@ var ZenPinnedTabsStorage = {
             is_essential: pin.isEssential || false,
             is_group: pin.isGroup || false,
             parent_uuid: pin.parentUuid || null,
+            edited_title: pin.editedTitle || false,
             now,
           }
         );
