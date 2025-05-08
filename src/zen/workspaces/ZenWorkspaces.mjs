@@ -801,6 +801,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     if (this._initialTab) {
       if (this._initialTab._shouldRemove && this._initialTab._veryPossiblyEmpty) {
+        this._removedByStartupPage = true;
         gBrowser.removeTab(this._initialTab, {
           skipSessionStore: true,
           animate: false,
@@ -818,6 +819,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
           setTimeout(() => {
             const tabs = gBrowser.tabs.filter((tab) => !tab.collapsed && !tab.hasAttribute('zen-empty-tab'));
             gBrowser.selectedTab = tabs[this._tabToSelect];
+            this._removedByStartupPage = true;
             gBrowser.removeTab(this._tabToRemoveForEmpty, {
               skipSessionStore: true,
               animate: false,
@@ -827,6 +829,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         } else {
           this.selectEmptyTab();
           showed = true;
+          this._removedByStartupPage = true;
           gBrowser.removeTab(this._tabToRemoveForEmpty, {
             skipSessionStore: true,
             animate: false,
@@ -842,6 +845,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   handleInitialTab(tab, isEmpty) {
+    if (gZenUIManager.testingEnabled) {
+      return;
+    }
     // note: We cant access `gZenVerticalTabsManager._canReplaceNewTab` this early
     if (isEmpty && Services.prefs.getBoolPref('zen.urlbar.replace-newtab', true)) {
       this._tabToRemoveForEmpty = tab;
@@ -877,7 +883,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       ) {
         // Remove any tabs where their workspace doesn't exist anymore
         gBrowser.removeTab(tab, {
-          animate: false,
           skipSessionStore: true,
           closeWindowWithLastTab: false,
         });
@@ -885,7 +890,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
   }
 
-  handleTabBeforeClose(tab) {
+  handleTabBeforeClose(tab, closeWindowWithLastTab = false) {
     if (!this.workspaceEnabled || this.__contextIsDelete || this._removedByStartupPage) {
       return null;
     }
@@ -897,8 +902,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     let tabs = gBrowser.visibleTabs;
     let tabsPinned = tabs.filter((t) => !this.shouldOpenNewTabIfLastUnpinnedTabIsClosed || !t.pinned);
-
-    const shouldCloseWindow = this.shouldCloseWindow();
+    const shouldCloseWindow = this.shouldCloseWindow() && closeWindowWithLastTab;
     if (tabs.length === 1 && tabs[0] === tab) {
       if (shouldCloseWindow) {
         // We've already called beforeunload on all the relevant tabs if we get here,

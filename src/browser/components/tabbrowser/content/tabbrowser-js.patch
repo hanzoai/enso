@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 6dece2b9d0462d90a28e75350ce983d87816ef73..4042f332a9d991c31a1725a0f2b4fffebc0d11d8 100644
+index 6dece2b9d0462d90a28e75350ce983d87816ef73..fdcfd020326b45eb23cbe74d0ce53a06c17cde8a 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -415,11 +415,45 @@
@@ -461,7 +461,7 @@ index 6dece2b9d0462d90a28e75350ce983d87816ef73..4042f332a9d991c31a1725a0f2b4fffe
        }
  
 +      if (ZenWorkspaces.workspaceEnabled) {
-+        let newTab = ZenWorkspaces.handleTabBeforeClose(aTab);
++        let newTab = ZenWorkspaces.handleTabBeforeClose(aTab, closeWindowWithLastTab);
 +        if (newTab) {
 +          this.selectedTab = newTab;
 +        }
