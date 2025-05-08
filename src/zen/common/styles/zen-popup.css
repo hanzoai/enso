@@ -350,6 +350,10 @@ menuitem {
   }
 
   & .zen-toast {
+    :root[zen-right-side='true'] & {
+      translate: 100%;
+    }
+
     padding: 10px;
     border-radius: 12px;
     background: linear-gradient(
