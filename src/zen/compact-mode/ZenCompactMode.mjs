@@ -48,7 +48,6 @@ var gZenCompactModeManager = {
 
     // Clear hover states when window state changes (minimize, maximize, etc.)
     window.addEventListener('sizemodechange', () => this._clearAllHoverStates());
-    window.addEventListener('TabOpen', this._onTabOpen.bind(this));
 
     if (AppConstants.platform == 'macosx') {
       window.addEventListener('mouseover', (event) => {
@@ -558,9 +557,8 @@ var gZenCompactModeManager = {
     );
   },
 
-  _onTabOpen(event) {
-    const tab = event.target;
-    if (!tab.selected && this.preference && !this.isSidebarPotentiallyOpen()) {
+  async _onTabOpen(tab, inBackground) {
+    if (inBackground && this.preference && !this.isSidebarPotentiallyOpen()) {
       gZenUIManager.showToast('zen-background-tab-opened-toast');
     }
   },

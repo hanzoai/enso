@@ -12,6 +12,10 @@ pref("browser.urlbar.untrimOnUserInteraction.featureGate", true);
 // Keep in sync with browser/components/topsites/constants.mjs
 pref("browser.urlbar.maxRichResults", 7);
 
+// Enable private suggestions
+pref('browser.search.suggest.enabled', true);
+pref('browser.search.suggest.enabled.private', true);
+
 pref("browser.urlbar.trimHttps", true);
 pref("browser.search.separatePrivateDefault.ui.enabled", true);
 pref("browser.urlbar.update2.engineAliasRefresh", true);
