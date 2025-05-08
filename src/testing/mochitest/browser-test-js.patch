@@ -1,0 +1,23 @@
+diff --git a/testing/mochitest/browser-test.js b/testing/mochitest/browser-test.js
+index ef29179988bb37e7ea441aa051b692e3ccc90f21..7eade843ad62e47f90dc06a4a1fb88b6d1c1a583 100644
+--- a/testing/mochitest/browser-test.js
++++ b/testing/mochitest/browser-test.js
+@@ -483,12 +483,12 @@ Tester.prototype = {
+ 
+     // Replace the last tab with a fresh one
+     if (window.gBrowser && AppConstants.MOZ_APP_NAME != "thunderbird") {
+-      gBrowser.addTab("about:blank", {
+-        skipAnimation: true,
+-        triggeringPrincipal:
+-          Services.scriptSecurityManager.getSystemPrincipal(),
+-      });
+-      gBrowser.removeTab(gBrowser.selectedTab, { skipPermitUnload: true });
++      // gBrowser.addTab("about:blank", {
++      //   skipAnimation: true,
++      //   triggeringPrincipal:
++      //     Services.scriptSecurityManager.getSystemPrincipal(),
++      // });
++      // gBrowser.removeTab(gBrowser.selectedTab, { skipPermitUnload: true });
+       gBrowser.stop();
+     }
+ 
