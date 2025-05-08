@@ -1477,3 +1477,12 @@
     position: fixed; /* Fix position to prevent scrolling */
   }
 }
+
+/* ==========================================================================
+   Section: Workspaces disabled, due to private browsing mode
+    ========================================================================== */
+
+:root:not([zen-workspace-id]) #tabbrowser-arrowscrollbox {
+  width: 100%;
+  position: absolute;
+}
