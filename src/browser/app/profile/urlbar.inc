@@ -13,8 +13,8 @@ pref("browser.urlbar.untrimOnUserInteraction.featureGate", true);
 pref("browser.urlbar.maxRichResults", 7);
 
 // Enable private suggestions
-pref('browser.search.suggest.enabled', true);
-pref('browser.search.suggest.enabled.private', true);
+pref('browser.search.suggest.enabled', false);
+pref('browser.search.suggest.enabled.private', false);
 
 pref("browser.urlbar.trimHttps", true);
 pref("browser.search.separatePrivateDefault.ui.enabled", true);
