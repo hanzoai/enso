@@ -808,6 +808,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       delete this._initialTab;
     } else if (this._tabToRemoveForEmpty) {
       if (gZenVerticalTabsManager._canReplaceNewTab) {
+        console.log(this._tabToSelect)
         if (this._tabToSelect) {
           gBrowser.tabbox.selectedIndex = this._tabToSelect;
         } else {
