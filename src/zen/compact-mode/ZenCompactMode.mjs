@@ -49,6 +49,8 @@ var gZenCompactModeManager = {
     // Clear hover states when window state changes (minimize, maximize, etc.)
     window.addEventListener('sizemodechange', () => this._clearAllHoverStates());
 
+    this._canShowBackgroundTabToast = Services.prefs.getBoolPref('zen.view.compact.show-background-tab-toast', true);
+
     if (AppConstants.platform == 'macosx') {
       window.addEventListener('mouseover', (event) => {
         const buttons = gZenVerticalTabsManager.actualWindowButtons;
@@ -558,7 +560,7 @@ var gZenCompactModeManager = {
   },
 
   async _onTabOpen(tab, inBackground) {
-    if (inBackground && this.preference && !this.isSidebarPotentiallyOpen()) {
+    if (inBackground && this.preference && !this.isSidebarPotentiallyOpen() && this._canShowBackgroundTabToast) {
       gZenUIManager.showToast('zen-background-tab-opened-toast');
     }
   },

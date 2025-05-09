@@ -354,6 +354,7 @@ menuitem {
       translate: 100%;
     }
 
+    z-index: 1000;
     padding: 10px;
     border-radius: 12px;
     background: linear-gradient(
