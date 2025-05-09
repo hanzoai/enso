@@ -126,6 +126,12 @@ pref('zen.workspaces.scroll-modifier-key','ctrl'); // can be ctrl, alt, shift, o
 pref('services.sync.engine.workspaces', false);
 pref('zen.workspaces.container-specific-essentials-enabled', false);
 
+#ifdef MOZILLA_OFFICIAL
+pref('zen.workspaces.debug', false);
+#else
+pref('zen.workspaces.debug', true);
+#endif
+
 // Zen Split View
 pref('zen.splitView.enable-tab-drop', true);
 pref('zen.splitView.min-resize-width', 7);

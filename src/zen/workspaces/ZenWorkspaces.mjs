@@ -10,6 +10,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   _inChangingWorkspace = false;
   draggedElement = null;
 
+  #canDebug = Services.prefs.getBoolPref('zen.workspaces.debug', false);
+
   _swipeState = {
     isGestureActive: true,
     lastDelta: 0,
@@ -94,13 +96,19 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     this.addPopupListeners();
   }
 
+  log(...args) {
+    if (this.#canDebug) {
+      console.debug(`ZenWorkspaces:`, ...args);
+    }
+  }
+
   async afterLoadInit() {
     await SessionStore.promiseInitialized;
     if (!this._hasInitializedTabsStrip) {
       await this.delayedStartup();
     }
     await this.promiseSectionsInitialized;
-    console.info('ZenWorkspaces: ZenWorkspaces initialized');
+    this.log('ZenWorkspaces: ZenWorkspaces initialized');
 
     await this.initializeWorkspaces();
     if (Services.prefs.getBoolPref('zen.workspaces.swipe-actions', false) && this.workspaceEnabled) {
@@ -818,6 +826,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         if (typeof this._tabToSelect === 'number' && this._tabToSelect >= 0) {
           setTimeout(() => {
             const tabs = gBrowser.tabs.filter((tab) => !tab.collapsed && !tab.hasAttribute('zen-empty-tab'));
+            this.log(`Found tab to select: ${this._tabToSelect}, ${tabs.length}`);
             gBrowser.selectedTab = tabs[this._tabToSelect];
             this._removedByStartupPage = true;
             gBrowser.removeTab(this._tabToRemoveForEmpty, {
@@ -1145,7 +1154,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   async removeWorkspace(windowID) {
     let workspacesData = await this._workspaces();
-    console.info('ZenWorkspaces: Removing workspace', windowID);
     await this.changeWorkspace(workspacesData.workspaces.find((workspace) => workspace.uuid !== windowID));
     this._deleteAllTabsInWorkspace(windowID);
     delete this._lastSelectedWorkspaceTabs[windowID];
@@ -1817,6 +1825,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
     this._inChangingWorkspace = true;
     try {
+      this.log('Changing workspace to', window?.uuid);
       await this._performWorkspaceChange(window, ...args);
     } catch (e) {
       console.error('ZenWorkspaces: Error changing workspace', e);
@@ -2244,7 +2253,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   _shouldShowTab(tab, workspaceUuid, containerId, workspaces) {
     const isEssential = tab.getAttribute('zen-essential') === 'true';
     const tabWorkspaceId = tab.getAttribute('zen-workspace-id');
-    const tabContextId = tab.getAttribute('usercontextid');
+    const tabContextId = tab.getAttribute('usercontextid') ?? '0';
 
     if (tab.hasAttribute('zen-glance-tab')) {
       return true; // Always show glance tabs

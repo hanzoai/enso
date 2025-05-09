@@ -3,11 +3,26 @@
 
 'use strict';
 
-add_setup(async function () {
-  await ZenWorkspaces.createAndSaveWorkspace('Test Workspace 2');
-});
+add_setup(async function () {});
 
 add_task(async function test_Check_Creation() {
+  const currentWorkspaceUUID = ZenWorkspaces.activeWorkspace;
+  await ZenWorkspaces.createAndSaveWorkspace('Test Workspace 2');
   const workspaces = await ZenWorkspaces._workspaces();
-  ok(workspaces.workspaces.length, 2);
+  ok(workspaces.workspaces.length === 2, 'Two workspaces should exist.');
+  ok(currentWorkspaceUUID !== workspaces.workspaces[1].uuid, 'The new workspace should be different from the current one.');
+
+  let newTab = BrowserTestUtils.addTab(gBrowser, 'about:blank', {
+    skipAnimation: true,
+  });
+  ok(newTab, 'New tab should be opened.');
+  ok(gBrowser.tabs.length === 2, 'There should be two tabs.');
+  BrowserTestUtils.removeTab(newTab);
+
+  await ZenWorkspaces.removeWorkspace(ZenWorkspaces.activeWorkspace);
+  const workspacesAfterRemove = await ZenWorkspaces._workspaces();
+  ok(workspacesAfterRemove.workspaces.length, 1);
+  ok(workspacesAfterRemove.workspaces[0].uuid === currentWorkspaceUUID, 'The workspace should be the one we started with.');
+
+  ok(gBrowser.tabs.length, 1);
 });
