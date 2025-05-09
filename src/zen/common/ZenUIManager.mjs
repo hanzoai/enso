@@ -52,6 +52,7 @@ var gZenUIManager = {
     );
     gZenVerticalTabsManager.actualWindowButtons.removeAttribute('zen-has-hover');
     gZenVerticalTabsManager.recalculateURLBarHeight();
+    setTimeout(gURLBar.formatValue.bind(gURLBar), 0);
     if (!this._preventToolbarRebuild) {
       setTimeout(() => {
         ZenWorkspaces.updateTabsContainers();
