@@ -547,6 +547,7 @@ button.popup-notification-dropmarker {
     margin-right: 28px !important;
     position: relative;
     scale: 0.93;
+    transform-origin: right;
 
     &::after {
       content: '';
