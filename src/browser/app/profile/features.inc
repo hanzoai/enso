@@ -45,7 +45,7 @@ pref('zen.view.compact.color-toolbar', true);
 pref('zen.view.compact.color-sidebar', true);
 pref('zen.view.compact.animate-sidebar', true);
 pref('zen.view.compact.show-sidebar-and-toolbar-on-hover', true);
-pref('zen.view.compact.show-background-tab-toast', false);
+pref('zen.view.compact.show-background-tab-toast', true);
 
 pref('zen.urlbar.replace-newtab', true);
 pref('zen.urlbar.show-protections-icon', false);

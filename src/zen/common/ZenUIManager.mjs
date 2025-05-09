@@ -4,6 +4,8 @@ var gZenUIManager = {
   _hasLoadedDOM: false,
   testingEnabled: Services.prefs.getBoolPref('zen.testing.enabled', false),
 
+  _toastTimeouts: [],
+
   init() {
     document.addEventListener('popupshowing', this.onPopupShowing.bind(this));
     document.addEventListener('popuphidden', this.onPopupHidden.bind(this));
@@ -409,24 +411,24 @@ var gZenUIManager = {
     this._toastContainer.appendChild(toast);
     if (reused) {
       await this.motion.animate(toast, { scale: 0.2 }, { duration: 0.1, bounce: 0 });
-      toast._useCount++;
-    } else {
-      toast._useCount = 1;
     }
     if (!toast.style.hasOwnProperty('transform')) {
       toast.style.transform = 'scale(0)';
     }
     await this.motion.animate(toast, { scale: 1 }, { type: 'spring', bounce: 0.2, duration: 0.5 });
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    if (toast._useCount <= 1) {
-      await this.motion.animate(toast, { opacity: [1, 0], scale: [1, 0.5] }, { duration: 0.2, bounce: 0 });
-      toast.remove();
-      if (!this._toastContainer.hasChildNodes()) {
-        this._toastContainer.setAttribute('hidden', 'true');
-      }
-      return;
+    if (this._toastTimeouts[messageId]) {
+      clearTimeout(this._toastTimeouts[messageId]);
     }
-    toast._useCount--;
+    this._toastTimeouts[messageId] = setTimeout(() => {
+      this.motion
+        .animate(toast, { opacity: [1, 0], scale: [1, 0.5] }, { duration: 0.2, bounce: 0 })
+        .then(() => {
+          toast.remove();
+          if (this._toastContainer.children.length === 0) {
+            this._toastContainer.setAttribute('hidden', true);
+          }
+        });
+    }, options.timeout || 3000);
   },
 
   get panelUIPosition() {

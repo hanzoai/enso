@@ -369,13 +369,13 @@ menuitem {
     font-weight: 600;
     flex-direction: column;
     width: max-content;
-    font-size: medium;
+    font-size: small;
     position: absolute;
     transform-origin: top center;
 
     & .description {
       opacity: 0.6;
-      font-size: small;
+      font-size: smaller;
     }
   }
 }

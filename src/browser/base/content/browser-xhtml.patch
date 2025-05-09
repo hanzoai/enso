@@ -1,5 +1,5 @@
 diff --git a/browser/base/content/browser.xhtml b/browser/base/content/browser.xhtml
-index 51a25aaa5558e6e17246d54a7ed95d5ddf3ecdab..b49984c8711fc9f5f19f0cf6ecca07a8cca0d125 100644
+index 51a25aaa5558e6e17246d54a7ed95d5ddf3ecdab..08809c25c01d159a9903f1921936b178d51f9875 100644
 --- a/browser/base/content/browser.xhtml
 +++ b/browser/base/content/browser.xhtml
 @@ -26,6 +26,7 @@
@@ -22,12 +22,11 @@ index 51a25aaa5558e6e17246d54a7ed95d5ddf3ecdab..b49984c8711fc9f5f19f0cf6ecca07a8
  </head>
  <html:body xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
  # All sets except for popupsets (commands, keys, and stringbundles)
-@@ -127,9 +131,12 @@
+@@ -127,9 +131,11 @@
      </vbox>
    </html:template>
  
 +<hbox id="zen-main-app-wrapper" flex="1" persist="zen-compact-mode">
-+  <vbox id="zen-toast-container"></vbox>
  #include navigator-toolbox.inc.xhtml
  
  #include browser-box.inc.xhtml

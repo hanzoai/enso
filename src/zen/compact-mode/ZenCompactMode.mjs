@@ -560,7 +560,7 @@ var gZenCompactModeManager = {
   },
 
   async _onTabOpen(tab, inBackground) {
-    if (inBackground && this.preference && !this.isSidebarPotentiallyOpen() && this._canShowBackgroundTabToast) {
+    if (inBackground && this.preference && !this.isSidebarPotentiallyOpen() && this._canShowBackgroundTabToast  && !gZenGlanceManager._animating) {
       gZenUIManager.showToast('zen-background-tab-opened-toast');
     }
   },
