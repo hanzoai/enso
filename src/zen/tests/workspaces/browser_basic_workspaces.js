@@ -21,8 +21,8 @@ add_task(async function test_Check_Creation() {
 
   await ZenWorkspaces.removeWorkspace(ZenWorkspaces.activeWorkspace);
   const workspacesAfterRemove = await ZenWorkspaces._workspaces();
-  ok(workspacesAfterRemove.workspaces.length, 1);
+  ok(workspacesAfterRemove.workspaces.length === 1, 'One workspace should exist.');
   ok(workspacesAfterRemove.workspaces[0].uuid === currentWorkspaceUUID, 'The workspace should be the one we started with.');
-
-  ok(gBrowser.tabs.length, 1);
+  ok(gBrowser.tabs.length === 2, 'There should be one tab.');
+  BrowserTestUtils.removeTab(gBrowser.selectedTab);
 });

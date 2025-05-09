@@ -278,9 +278,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   _initializeEmptyTab() {
-    if (gZenUIManager.testingEnabled) {
-      return;
-    }
     this._emptyTab = gBrowser.addTrustedTab('about:blank', { inBackground: true, userContextId: 0, _forZenEmptyTab: true });
   }
 
@@ -1154,16 +1151,19 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   async removeWorkspace(windowID) {
     let workspacesData = await this._workspaces();
-    await this.changeWorkspace(workspacesData.workspaces.find((workspace) => workspace.uuid !== windowID));
     this._deleteAllTabsInWorkspace(windowID);
+    await this.changeWorkspace(workspacesData.workspaces.find((workspace) => workspace.uuid !== windowID));
     delete this._lastSelectedWorkspaceTabs[windowID];
     await ZenWorkspacesStorage.removeWorkspace(windowID);
+    // Remove the workspace from the cache
+    this._workspaceCache.workspaces = this._workspaceCache.workspaces.filter((workspace) => workspace.uuid !== windowID);
     await this._propagateWorkspaceData();
     await this._updateWorkspacesChangeContextMenu();
     this.onWindowResize();
     for (let container of document.querySelectorAll(`.zen-workspace-tabs-section[zen-workspace-id="${windowID}"]`)) {
       container.remove();
     }
+    this.registerPinnedResizeObserver();
   }
 
   isWorkspaceActive(workspace) {
