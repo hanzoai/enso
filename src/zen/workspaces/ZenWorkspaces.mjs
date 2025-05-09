@@ -2437,12 +2437,13 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
   }
 
-  _createWorkspaceData(name, icon, tabs, moveTabs = true) {
+  _createWorkspaceData(name, icon, tabs, moveTabs = true, containerTabId = 0) {
     let window = {
       uuid: gZenUIManager.generateUuidv4(),
       icon: icon,
       name: name,
       theme: ZenThemePicker.getTheme([]),
+      containerTabId,
     };
     if (moveTabs) {
       this._prepareNewWorkspace(window);
@@ -2454,15 +2455,19 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     return window;
   }
 
-  async createAndSaveWorkspace(name = 'Space', icon = undefined, dontChange = false) {
+  async createAndSaveWorkspace(name = 'Space', icon = undefined, dontChange = false, containerTabId = 0) {
     if (!this.workspaceEnabled) {
       return;
     }
     // get extra tabs remaning (e.g. on new profiles) and just move them to the new workspace
     const extraTabs = Array.from(gBrowser.tabContainer.arrowScrollbox.children).filter(
-      (child) => child.tagName === 'tab' && !child.hasAttribute('zen-workspace-id')
+      (child) =>
+        child.tagName === 'tab' &&
+        !child.hasAttribute('zen-workspace-id') &&
+        !child.hasAttribute('zen-empty-tab') &&
+        !child.hasAttribute('zen-essential')
     );
-    let workspaceData = this._createWorkspaceData(name, icon, extraTabs, !dontChange);
+    let workspaceData = this._createWorkspaceData(name, icon, extraTabs, !dontChange, containerTabId);
     await this.saveWorkspace(workspaceData, dontChange);
     if (!dontChange) {
       this.registerPinnedResizeObserver();
