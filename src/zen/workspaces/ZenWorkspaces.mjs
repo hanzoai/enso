@@ -580,7 +580,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   _handleSwipeMayStart(event) {
-    if (!this.workspaceEnabled) return;
+    if (!this.workspaceEnabled || this._inChangingWorkspace) return;
     if (event.target.closest('#zen-sidebar-bottom-buttons')) return;
 
     // Only handle horizontal swipes
