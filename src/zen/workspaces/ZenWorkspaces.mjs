@@ -98,7 +98,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   log(...args) {
     if (this.#canDebug) {
-      console.debug(`ZenWorkspaces:`, ...args);
+      console.debug(`[ZenWorkspaces]:`, ...args);
     }
   }
 
@@ -108,7 +108,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       await this.delayedStartup();
     }
     await this.promiseSectionsInitialized;
-    this.log('ZenWorkspaces: ZenWorkspaces initialized');
+    this.log('ZenWorkspaces initialized');
 
     await this.initializeWorkspaces();
     if (Services.prefs.getBoolPref('zen.workspaces.swipe-actions', false) && this.workspaceEnabled) {
@@ -800,6 +800,12 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
     let showed = false;
     const cleanup = () => {
+      if (this._initialTab?._veryPossiblyEmpty && !this._initialTab?.selected) {
+        gBrowser.removeTab(this._initialTab, {
+          skipSessionStore: true,
+          animate: false,
+        });
+      }
       delete this._tabToSelect;
       delete this._tabToRemoveForEmpty;
     };
@@ -817,32 +823,32 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         gBrowser.moveTabTo(this._initialTab, { forceUngrouped: true, tabIndex: 0 });
       }
       delete this._initialTab;
-      cleanup();
-    } else if (this._tabToRemoveForEmpty) {
-      if (gZenVerticalTabsManager._canReplaceNewTab) {
-        if (typeof this._tabToSelect === 'number' && this._tabToSelect >= 0) {
-          setTimeout(() => {
-            const tabs = gBrowser.tabs.filter((tab) => !tab.collapsed && !tab.hasAttribute('zen-empty-tab'));
-            this.log(`Found tab to select: ${this._tabToSelect}, ${tabs.length}`);
-            gBrowser.selectedTab = tabs[this._tabToSelect];
-            this._removedByStartupPage = true;
-            gBrowser.removeTab(this._tabToRemoveForEmpty, {
-              skipSessionStore: true,
-              animate: false,
-            });
-            cleanup();
-          }, 0);
-        } else {
-          this.selectEmptyTab();
-          showed = true;
+    }
+    if (this._tabToRemoveForEmpty) {
+      if (typeof this._tabToSelect === 'number' && this._tabToSelect >= 0) {
+        setTimeout(() => {
+          const tabs = gBrowser.tabs.filter((tab) => !tab.collapsed && !tab.hasAttribute('zen-empty-tab'));
+          this.log(`Found tab to select: ${this._tabToSelect}, ${tabs.length}`);
+          gBrowser.selectedTab = tabs[this._tabToSelect];
           this._removedByStartupPage = true;
           gBrowser.removeTab(this._tabToRemoveForEmpty, {
             skipSessionStore: true,
             animate: false,
           });
           cleanup();
-        }
+        }, 0);
+      } else {
+        this.selectEmptyTab();
+        showed = true;
+        this._removedByStartupPage = true;
+        gBrowser.removeTab(this._tabToRemoveForEmpty, {
+          skipSessionStore: true,
+          animate: false,
+        });
+        cleanup();
       }
+    } else {
+      cleanup();
     }
     if (gZenVerticalTabsManager._canReplaceNewTab && showed) {
       BrowserCommands.openTab();
