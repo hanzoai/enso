@@ -1097,7 +1097,7 @@ menuitem[id='placesContext_new:separator'] {
 }
 
 #alltabs-button {
-  list-style-image: url("chrome://browser/skin/tabs.svg") !important;
+  list-style-image: url('chrome://browser/skin/tabs.svg') !important;
 }
 
 :not(:not(menubar) > menu, #ContentSelectDropdown)

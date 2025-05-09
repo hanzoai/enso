@@ -95,10 +95,16 @@
   position: relative;
 }
 
-:root[zen-single-toolbar='true'] #urlbar:not([breakout-extend='true']) #identity-box {
-  margin-inline-end: 0 !important;
-  &.chromeUI:not([pageproxystate='invalid']) #identity-icon-box {
-    border-radius: 10px !important;
+:root[zen-single-toolbar='true'] #urlbar:not([breakout-extend='true']) {
+  & #urlbar-input {
+    cursor: default;
+  }
+
+  & #identity-box {
+    margin-inline-end: 0 !important;
+    &.chromeUI:not([pageproxystate='invalid']) #identity-icon-box {
+      border-radius: 10px !important;
+    }
   }
 }
 

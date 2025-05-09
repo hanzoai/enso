@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..8d94bc2b7f3469258cb1a24888c5890eb83047e1 100644
+index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..66ef8de0d2a767376740ca57d75b5372cc11ed40 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -68,6 +68,13 @@ XPCOMUtils.defineLazyPreferenceGetter(
@@ -208,7 +208,7 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..8d94bc2b7f3469258cb1a24888c5890e
        this.view.autoOpen({ event });
      } else {
        if (this._untrimOnFocusAfterKeydown) {
-@@ -4164,9 +4237,12 @@ export class UrlbarInput {
+@@ -4164,9 +4237,16 @@ export class UrlbarInput {
    }
  
    _on_mousedown(event) {
@@ -216,24 +216,28 @@ index 4b69136aa31bfef3a1d3b57ad0c75fe07fa26be0..8d94bc2b7f3469258cb1a24888c5890e
 +    switch (event.zenOriginalTarget || event.currentTarget) {
        case this.textbox: {
          this._mousedownOnUrlbarDescendant = true;
-+        if (event.type != "click") {
++        const isProbablyFloating =
++          (lazy.ZEN_URLBAR_BEHAVIOR == "floating-on-type" &&
++          this.hasAttribute("breakout-extend") && !this.focusedViaMousedown) ||
++          (lazy.ZEN_URLBAR_BEHAVIOR == "float") || this.window.gZenVerticalTabsManager._hasSetSingleToolbar;
++        if (event.type != "click" && isProbablyFloating || event.type == "click" && !isProbablyFloating) {
 +          return true;
 +        }
  
          if (
            event.target != this.inputField &&
-@@ -4176,8 +4252,8 @@ export class UrlbarInput {
-           break;
-         }
+@@ -4178,6 +4258,10 @@ export class UrlbarInput {
  
--        this.focusedViaMousedown = !this.focused;
--        this._preventClickSelectsAll = this.focused;
-+        this.focusedViaMousedown = !(lazy.ZEN_URLBAR_BEHAVIOR === 'default' ? this.focused : this.hasAttribute("breakout-extend"));
-+        this._preventClickSelectsAll = lazy.ZEN_URLBAR_BEHAVIOR === 'default' ? this.focused : this.hasAttribute("breakout-extend");
+         this.focusedViaMousedown = !this.focused;
+         this._preventClickSelectsAll = this.focused;
++        if (isProbablyFloating) {
++          this.focusedViaMousedown = !this.hasAttribute("breakout-extend");
++          this._preventClickSelectsAll = this.hasAttribute("breakout-extend");
++        }
  
          // Keep the focus status, since the attribute may be changed
          // upon calling this.focus().
-@@ -4218,7 +4294,7 @@ export class UrlbarInput {
+@@ -4218,7 +4302,7 @@ export class UrlbarInput {
          }
          // Don't close the view when clicking on a tab; we may want to keep the
          // view open on tab switch, and the TabSelect event arrived earlier.
