@@ -490,9 +490,6 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
 
-      - name: List
-        run: find .
-
       - name: Checkout updates repository
         uses: actions/checkout@v4
         with:
