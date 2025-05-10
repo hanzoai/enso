@@ -29,7 +29,7 @@ tab-group[split-view-group] {
     padding: 0 2px;
     --tab-min-height: 30px;
     --tab-collapsed-width: 38px;
-    margin: 0 4px;
+    margin: 2px 0;
     --tab-min-width: 34px;
   }
 

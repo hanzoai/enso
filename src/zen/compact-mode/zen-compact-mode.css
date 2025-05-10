@@ -114,6 +114,7 @@
         padding: var(--zen-toolbox-padding) !important;
         :root:not([zen-sidebar-expanded='true']) & {
           padding: var(--zen-toolbox-padding) 0 !important;
+          max-width: var(--zen-sidebar-width);
         }
         position: relative;
         background: var(--zen-dialog-background);
