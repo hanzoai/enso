@@ -2,10 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-var { Tracker, Store, SyncEngine } = ChromeUtils.importESModule('resource://services-sync/engines.sys.mjs');
+var { Tracker, Store, SyncEngine } = ChromeUtils.importESModule(
+  'resource://services-sync/engines.sys.mjs'
+);
 var { CryptoWrapper } = ChromeUtils.importESModule('resource://services-sync/record.sys.mjs');
 var { Utils } = ChromeUtils.importESModule('resource://services-sync/util.sys.mjs');
-var { SCORE_INCREMENT_XLARGE } = ChromeUtils.importESModule('resource://services-sync/constants.sys.mjs');
+var { SCORE_INCREMENT_XLARGE } = ChromeUtils.importESModule(
+  'resource://services-sync/constants.sys.mjs'
+);
 
 // Define ZenWorkspaceRecord
 function ZenWorkspaceRecord(collection, id) {

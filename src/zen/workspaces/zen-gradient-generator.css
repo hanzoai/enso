@@ -202,7 +202,10 @@
   margin-bottom: 20px;
 
   background: var(--zen-toolbar-element-bg);
-  background-image: radial-gradient(light-dark(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.4)) 1px, transparent 0);
+  background-image: radial-gradient(
+    light-dark(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.4)) 1px,
+    transparent 0
+  );
   background-position: -19px -19px;
   background-size: 5px 5px;
 
@@ -321,7 +324,11 @@
     border: 1px solid color-mix(in srgb, var(--zen-colors-border) 50%, transparent 50%);
     border-radius: 50%;
     /* 3d effect */
-    background: linear-gradient(-45deg, transparent -10%, light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1)) 110%);
+    background: linear-gradient(
+      -45deg,
+      transparent -10%,
+      light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1)) 110%
+    );
     z-index: 2;
     top: 50%;
     left: 50%;

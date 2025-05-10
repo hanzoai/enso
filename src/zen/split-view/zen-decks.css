@@ -141,7 +141,9 @@
   border-top-right-radius: 0;
 }
 
-:root:not([inDOMFullscreen='true']) .browserSidebarContainer:hover .zen-view-splitter-header-container,
+:root:not([inDOMFullscreen='true'])
+  .browserSidebarContainer:hover
+  .zen-view-splitter-header-container,
 .zen-view-splitter-header-container:hover {
   pointer-events: all;
   opacity: 1;

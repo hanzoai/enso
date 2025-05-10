@@ -84,8 +84,16 @@
 
   async function openInitialPinTab() {
     const tabs = [
-      ['https://reddit.com/r/zen_browser', 'Zen on Reddit', 'chrome://browser/content/zen-images/favicons/reddit.ico'],
-      ['https://x.com/zen_browser', 'Zen on Twitter', 'chrome://browser/content/zen-images/favicons/x.ico'],
+      [
+        'https://reddit.com/r/zen_browser',
+        'Zen on Reddit',
+        'chrome://browser/content/zen-images/favicons/reddit.ico',
+      ],
+      [
+        'https://x.com/zen_browser',
+        'Zen on Twitter',
+        'chrome://browser/content/zen-images/favicons/x.ico',
+      ],
     ];
 
     await PlacesUtils.history.insertMany(
@@ -307,7 +315,11 @@
 
     getEngines() {
       return this._engines.filter(
-        (engine) => !(engine.name.toLowerCase().includes('wikipedia') || engine.name.toLowerCase().includes('ebay'))
+        (engine) =>
+          !(
+            engine.name.toLowerCase().includes('wikipedia') ||
+            engine.name.toLowerCase().includes('ebay')
+          )
       );
     }
 
@@ -344,7 +356,10 @@
     }
 
     async setDefaultEngine(engine) {
-      await Services.search.setDefault(engine.originalEngine, Ci.nsISearchService.CHANGE_REASON_USER);
+      await Services.search.setDefault(
+        engine.originalEngine,
+        Ci.nsISearchService.CHANGE_REASON_USER
+      );
     }
   }
 
@@ -398,7 +413,9 @@
           document.getElementById('zen-welcome-page-content').appendChild(fragment);
         },
         async fadeOut() {
-          const shouldSetDefault = document.getElementById('zen-welcome-set-default-browser').checked;
+          const shouldSetDefault = document.getElementById(
+            'zen-welcome-set-default-browser'
+          ).checked;
           if (AppConstants.HAVE_SHELL_SERVICE && shouldSetDefault) {
             let shellSvc = getShellService();
             if (!shellSvc) {
@@ -728,7 +745,9 @@
       function () {
         window.resizeTo(875, 560);
         window.focus();
-        const appWin = window.docShell.treeOwner.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIAppWindow);
+        const appWin = window.docShell.treeOwner
+          .QueryInterface(Ci.nsIInterfaceRequestor)
+          .getInterface(Ci.nsIAppWindow);
         appWin.rollupAllPopups();
         window.moveTo(
           screen.availLeft + (screen.availWidth - outerWidth) / 2,

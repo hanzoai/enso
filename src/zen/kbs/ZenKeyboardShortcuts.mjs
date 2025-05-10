@@ -222,9 +222,11 @@ class KeyShortcutModifiers {
       this.#shift == other.#shift &&
       this.#control == other.#control &&
       (AppConstants.platform == 'macosx'
-        ? (this.#meta || this.#accel) == (other.#meta || other.#accel) && this.#control == other.#control
+        ? (this.#meta || this.#accel) == (other.#meta || other.#accel) &&
+          this.#control == other.#control
         : // In other platforms, we can have control and accel counting as the same thing
-          this.#meta == other.#meta && (this.#control || this.#accel) == (other.#control || other.#accel))
+          this.#meta == other.#meta &&
+          (this.#control || this.#accel) == (other.#control || other.#accel))
     );
   }
 
@@ -295,7 +297,18 @@ class KeyShortcut {
   #reserved = false;
   #internal = false;
 
-  constructor(id, key, keycode, group, modifiers, action, l10nId, disabled = false, reserved = false, internal = false) {
+  constructor(
+    id,
+    key,
+    keycode,
+    group,
+    modifiers,
+    action,
+    l10nId,
+    disabled = false,
+    reserved = false,
+    internal = false
+  ) {
     this.#id = id;
     this.#key = key?.toLowerCase();
     this.#keycode = keycode;
@@ -359,7 +372,10 @@ class KeyShortcut {
       key.getAttribute('key'),
       key.getAttribute('keycode'),
       group ??
-        KeyShortcut.getGroupFromL10nId(KeyShortcut.sanitizeL10nId(key.getAttribute('data-l10n-id')), key.getAttribute('id')),
+        KeyShortcut.getGroupFromL10nId(
+          KeyShortcut.sanitizeL10nId(key.getAttribute('data-l10n-id')),
+          key.getAttribute('id')
+        ),
       KeyShortcutModifiers.parseFromXHTMLAttribute(key.getAttribute('modifiers')),
       key.getAttribute('command'),
       key.getAttribute('data-l10n-id'),
@@ -986,7 +1002,10 @@ var gZenKeyboardShortcutsManager = {
     //  handled wont wait for the async function to finish.
     void this.getZenKeyset();
 
-    this._hasCleared = Services.prefs.getBoolPref('zen.keyboard.shortcuts.disable-mainkeyset-clear', false);
+    this._hasCleared = Services.prefs.getBoolPref(
+      'zen.keyboard.shortcuts.disable-mainkeyset-clear',
+      false
+    );
     window.addEventListener('zen-devtools-keyset-added', this._hasAddedDevtoolShortcuts.bind(this));
 
     this.init();
@@ -1225,7 +1244,10 @@ var gZenKeyboardShortcutsManager = {
         continue;
       }
 
-      if (targetShortcut.getModifiers().equals(modifiers) && targetShortcut.getKeyNameOrCode()?.toLowerCase() == realShortcut) {
+      if (
+        targetShortcut.getModifiers().equals(modifiers) &&
+        targetShortcut.getKeyNameOrCode()?.toLowerCase() == realShortcut
+      ) {
         return true;
       }
     }

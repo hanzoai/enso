@@ -23,7 +23,11 @@ tab-group[split-view-group] {
   outline-color: var(--tab-selected-outline-color);
   transition: scale 0.1s ease;
   align-items: center;
-  --zen-split-view-active-tab-bg: color-mix(in srgb, var(--zen-toolbar-element-bg), transparent 40%);
+  --zen-split-view-active-tab-bg: color-mix(
+    in srgb,
+    var(--zen-toolbar-element-bg),
+    transparent 40%
+  );
 
   :root:not([zen-sidebar-expanded='true']) & {
     padding: 0 2px;

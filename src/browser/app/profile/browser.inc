@@ -35,7 +35,9 @@ pref('browser.download.open_pdf_attachments_inline', true);
 pref('browser.download.alwaysOpenPanel', false);
 
 // Updates
+#ifdef MOZILLA_OFFICIAL
 pref("app.update.checkInstallTime.days", 6);
+#endif
 
 #include fullscreen.inc
 #include ai.inc

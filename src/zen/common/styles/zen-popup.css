@@ -11,7 +11,8 @@
 :root {
   --panel-subview-body-padding: 2px 0;
   --arrowpanel-menuitem-border-radius: 5px;
-  --arrowpanel-menuitem-margin: var(--uc-arrowpanel-menuitem-margin-block) var(--uc-arrowpanel-menuitem-margin-inline);
+  --arrowpanel-menuitem-margin: var(--uc-arrowpanel-menuitem-margin-block)
+    var(--uc-arrowpanel-menuitem-margin-inline);
   --arrowpanel-menuitem-padding-block: 8px;
   --arrowpanel-menuitem-padding-inline: 14px;
   --uc-arrowpanel-menuicon-margin-inline: 14px;
@@ -22,7 +23,9 @@
 
   --uc-panel-zoom-button-padding: 8px;
   --uc-panel-zoom-button-inline-padding: 9px;
-  --uc-panel-zoom-padding-block: calc(var(--panel-separator-margin-vertical) + var(--uc-arrowpanel-menuitem-margin-block));
+  --uc-panel-zoom-padding-block: calc(
+    var(--panel-separator-margin-vertical) + var(--uc-arrowpanel-menuitem-margin-block)
+  );
 
   --uc-autocomplete-panel-menuitem-margin: 4px;
   --uc-autocomplete-panel-menuicon-padding-inline: 14px;
@@ -62,7 +65,9 @@ panel {
 }
 
 .widget-overflow-list .toolbarbutton-1:not(.toolbarbutton-combined) > .toolbarbutton-text,
-.subviewbutton:not(#appMenu-zoom-controls > .subviewbutton) > .toolbarbutton-icon + .toolbarbutton-text,
+.subviewbutton:not(#appMenu-zoom-controls > .subviewbutton)
+  > .toolbarbutton-icon
+  + .toolbarbutton-text,
 #appMenu-fxa-label2 > vbox {
   padding-inline-start: var(--uc-arrowpanel-menuicon-margin-inline);
 }
@@ -101,7 +106,9 @@ panel {
 /* zoom controls */
 #appMenu-zoom-controls {
   border-top: 1px solid var(--panel-separator-color);
-  padding-inline: calc(var(--arrowpanel-menuitem-padding-inline) + var(--uc-arrowpanel-menuitem-margin-inline))
+  padding-inline: calc(
+      var(--arrowpanel-menuitem-padding-inline) + var(--uc-arrowpanel-menuitem-margin-inline)
+    )
     var(--uc-arrowpanel-menuitem-margin-inline);
   padding-block: var(--uc-panel-zoom-padding-block);
   margin: var(--panel-separator-margin-vertical) 0 calc(var(--panel-separator-margin-vertical) * -1);
@@ -118,7 +125,9 @@ panel {
 
 /* #appMenu-zoomReduce-button2, */
 #appMenu-zoom-controls > #appMenu-fullscreen-button2 {
-  margin-left: calc((var(--panel-separator-margin-vertical) + var(--uc-arrowpanel-menuitem-margin-block)) * 2 + 1px);
+  margin-left: calc(
+    (var(--panel-separator-margin-vertical) + var(--uc-arrowpanel-menuitem-margin-block)) * 2 + 1px
+  );
 }
 
 #appMenu-zoom-controls > #appMenu-fullscreen-button2::before {

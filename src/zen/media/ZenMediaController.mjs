@@ -152,11 +152,21 @@
       }
 
       if (linkedBrowser?.browsingContext?.mediaController) {
-        this.deinitMediaController(linkedBrowser.browsingContext.mediaController, true, isCurrentBrowser, true);
+        this.deinitMediaController(
+          linkedBrowser.browsingContext.mediaController,
+          true,
+          isCurrentBrowser,
+          true
+        );
       }
     }
 
-    async deinitMediaController(mediaController, shouldForget = true, shouldOverride = true, shouldHide = true) {
+    async deinitMediaController(
+      mediaController,
+      shouldForget = true,
+      shouldOverride = true,
+      shouldHide = true
+    ) {
       if (shouldForget && mediaController) {
         mediaController.removeEventListener('pictureinpicturemodechange', this.onPipModeChange);
         mediaController.removeEventListener('positionstatechange', this.onPositionstateChange);
@@ -230,7 +240,8 @@
 
       if (!this.isSharing) {
         if (!this._currentMediaController) return;
-        if (this._currentMediaController.isBeingUsedInPIPModeOrFullscreen) return this.hideMediaControls();
+        if (this._currentMediaController.isBeingUsedInPIPModeOrFullscreen)
+          return this.hideMediaControls();
 
         this.updatePipButton();
       }
@@ -280,11 +291,15 @@
     setupMediaControlUI(metadata, positionState) {
       this.updatePipButton();
 
-      if (!this.mediaControlBar.classList.contains('playing') && this._currentMediaController.isPlaying) {
+      if (
+        !this.mediaControlBar.classList.contains('playing') &&
+        this._currentMediaController.isPlaying
+      ) {
         this.mediaControlBar.classList.add('playing');
       }
 
-      const iconURL = this._currentBrowser.mIconURL || `page-icon:${this._currentBrowser.currentURI.spec}`;
+      const iconURL =
+        this._currentBrowser.mIconURL || `page-icon:${this._currentBrowser.currentURI.spec}`;
       this.mediaFocusButton.style.listStyleImage = `url(${iconURL})`;
 
       this.mediaTitle.textContent = metadata.title || '';
@@ -309,7 +324,8 @@
       this.updateMuteState();
       this.switchController();
 
-      if (!mediaController.isActive || this._currentBrowser?.browserId === browser.browserId) return;
+      if (!mediaController.isActive || this._currentBrowser?.browserId === browser.browserId)
+        return;
 
       const metadata = mediaController.getMetadata();
       const positionState = mediaController.getPositionState();
@@ -385,7 +401,12 @@
     }
 
     _onDeactivated(event) {
-      this.deinitMediaController(event.target, true, event.target.id === this._currentMediaController.id, true);
+      this.deinitMediaController(
+        event.target,
+        true,
+        event.target.id === this._currentMediaController.id,
+        true
+      );
       this.switchController();
     }
 
@@ -455,7 +476,8 @@
               const elapsedTime = Math.floor((Date.now() - nextController.lastUpdated) / 1000);
 
               this.setupMediaControlUI(nextController.controller.getMetadata(), {
-                position: nextController.position + (nextController.controller.isPlaying ? elapsedTime : 0),
+                position:
+                  nextController.position + (nextController.controller.isPlaying ? elapsedTime : 0),
                 duration: nextController.duration,
                 playbackRate: nextController.playbackRate,
               });
@@ -475,7 +497,8 @@
         this._mediaUpdateInterval = null;
       }
 
-      if (this._currentDuration >= 900_000) return this.mediaControlBar.setAttribute('media-position-hidden', 'true');
+      if (this._currentDuration >= 900_000)
+        return this.mediaControlBar.setAttribute('media-position-hidden', 'true');
       else this.mediaControlBar.removeAttribute('media-position-hidden');
 
       if (!this._currentDuration) return;
@@ -619,18 +642,26 @@
 
     onMicrophoneMuteToggle() {
       if (this._currentBrowser) {
-        const shouldMute = this.mediaControlBar.hasAttribute('mic-muted') ? 'webrtc:UnmuteMicrophone' : 'webrtc:MuteMicrophone';
+        const shouldMute = this.mediaControlBar.hasAttribute('mic-muted')
+          ? 'webrtc:UnmuteMicrophone'
+          : 'webrtc:MuteMicrophone';
 
-        this._currentBrowser.browsingContext.currentWindowGlobal.getActor('WebRTC').sendAsyncMessage(shouldMute);
+        this._currentBrowser.browsingContext.currentWindowGlobal
+          .getActor('WebRTC')
+          .sendAsyncMessage(shouldMute);
         this.mediaControlBar.toggleAttribute('mic-muted');
       }
     }
 
     onCameraMuteToggle() {
       if (this._currentBrowser) {
-        const shouldMute = this.mediaControlBar.hasAttribute('camera-muted') ? 'webrtc:UnmuteCamera' : 'webrtc:MuteCamera';
+        const shouldMute = this.mediaControlBar.hasAttribute('camera-muted')
+          ? 'webrtc:UnmuteCamera'
+          : 'webrtc:MuteCamera';
 
-        this._currentBrowser.browsingContext.currentWindowGlobal.getActor('WebRTC').sendAsyncMessage(shouldMute);
+        this._currentBrowser.browsingContext.currentWindowGlobal
+          .getActor('WebRTC')
+          .sendAsyncMessage(shouldMute);
         this.mediaControlBar.toggleAttribute('camera-muted');
       }
     }
@@ -644,7 +675,9 @@
       if (!this._currentBrowser) return;
       if (this.isSharing) return;
 
-      const { totalPipCount, totalPipDisabled } = PictureInPicture.getEligiblePipVideoCount(this._currentBrowser);
+      const { totalPipCount, totalPipDisabled } = PictureInPicture.getEligiblePipVideoCount(
+        this._currentBrowser
+      );
       const canPip = totalPipCount === 1 || (totalPipDisabled > 0 && lazy.RESPECT_PIP_DISABLED);
 
       this.mediaControlBar.toggleAttribute('can-pip', canPip);

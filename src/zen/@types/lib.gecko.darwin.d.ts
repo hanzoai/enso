@@ -52,7 +52,11 @@ declare global {
     setBadgeImage(aBadgeImage: imgIContainer, aPaintContext?: nsISVGPaintContext): void;
     readonly isAppInDock: boolean;
     ensureAppIsPinnedToDock(aAppPath?: string, aAppToReplacePath?: string): boolean;
-    launchAppBundle(aAppBundle: nsIFile, aArgs: string[], aLaunchOptions?: nsIAppBundleLaunchOptions): void;
+    launchAppBundle(
+      aAppBundle: nsIFile,
+      aArgs: string[],
+      aLaunchOptions?: nsIAppBundleLaunchOptions
+    ): void;
   }
 
   // https://searchfox.org/mozilla-central/source/widget/nsIMacFinderProgress.idl

@@ -19,7 +19,9 @@ add_task(async function test_Check_Creation() {
     'New tab should be marked as essential.'
   );
   ok(
-    gBrowser.tabs.find((t) => t.hasAttribute('zen-essential') && t.getAttribute('usercontextid') == 1),
+    gBrowser.tabs.find(
+      (t) => t.hasAttribute('zen-essential') && t.getAttribute('usercontextid') == 1
+    ),
     'New tab should be marked as essential.'
   );
   const newWorkspaceUUID = ZenWorkspaces.activeWorkspace;
@@ -27,7 +29,9 @@ add_task(async function test_Check_Creation() {
   // Change to the original workspace, there should be no essential tabs
   await ZenWorkspaces.changeWorkspace(workspaces.workspaces[0]);
   ok(
-    !gBrowser.tabs.find((t) => t.hasAttribute('zen-essential') && t.getAttribute('usercontextid') == 1),
+    !gBrowser.tabs.find(
+      (t) => t.hasAttribute('zen-essential') && t.getAttribute('usercontextid') == 1
+    ),
     'No essential tabs should be found in the original workspace.'
   );
 

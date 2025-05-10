@@ -164,7 +164,11 @@ declare namespace MockedExports {
     removeObserver: (aDomain: string, aObserver: PrefObserver) => void;
   };
 
-  type PrefObserverFunction = (aSubject: nsIPrefBranch, aTopic: 'nsPref:changed', aData: string) => unknown;
+  type PrefObserverFunction = (
+    aSubject: nsIPrefBranch,
+    aTopic: 'nsPref:changed',
+    aData: string
+  ) => unknown;
   type PrefObserver = PrefObserverFunction | { observe: PrefObserverFunction };
 
   interface nsIURI {}
@@ -216,7 +220,9 @@ declare namespace MockedExports {
       GetFeatures: () => string[];
       getProfileDataAsync: (sinceTime?: number) => Promise<object>;
       getProfileDataAsArrayBuffer: (sinceTime?: number) => Promise<ArrayBuffer>;
-      getProfileDataAsGzippedArrayBuffer: (sinceTime?: number) => Promise<ProfileAndAdditionalInformation>;
+      getProfileDataAsGzippedArrayBuffer: (
+        sinceTime?: number
+      ) => Promise<ProfileAndAdditionalInformation>;
       IsActive: () => boolean;
       sharedLibraries: SharedLibrary[];
     };
@@ -273,7 +279,10 @@ declare namespace MockedExports {
 
   const PlaceUtilsSYSMJS: {
     PlacesUtils: {
-      promiseFaviconData: (pageUrl: string | URL | nsIURI, preferredWidth?: number) => Promise<FaviconData>;
+      promiseFaviconData: (
+        pageUrl: string | URL | nsIURI,
+        preferredWidth?: number
+      ) => Promise<FaviconData>;
       // TS-TODO: Add the rest.
     };
   };
@@ -429,8 +438,16 @@ declare interface XULCommandEvent extends Event {
 }
 
 declare interface XULElementWithCommandHandler {
-  addEventListener: (type: 'command', handler: (event: XULCommandEvent) => void, isCapture?: boolean) => void;
-  removeEventListener: (type: 'command', handler: (event: XULCommandEvent) => void, isCapture?: boolean) => void;
+  addEventListener: (
+    type: 'command',
+    handler: (event: XULCommandEvent) => void,
+    isCapture?: boolean
+  ) => void;
+  removeEventListener: (
+    type: 'command',
+    handler: (event: XULCommandEvent) => void,
+    isCapture?: boolean
+  ) => void;
 }
 
 declare type nsIPrefBranch = MockedExports.nsIPrefBranch;

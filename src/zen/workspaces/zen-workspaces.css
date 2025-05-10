@@ -460,7 +460,8 @@
 }
 
 .zen-current-workspace-indicator {
-  padding: calc(15px + var(--zen-toolbox-padding)) calc(4px + var(--tab-inline-padding) + var(--zen-toolbox-padding));
+  padding: calc(15px + var(--zen-toolbox-padding))
+    calc(4px + var(--tab-inline-padding) + var(--zen-toolbox-padding));
   font-weight: 600;
   position: absolute;
   max-height: var(--zen-workspace-indicator-height);

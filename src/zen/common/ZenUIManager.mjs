@@ -9,22 +9,41 @@ var gZenUIManager = {
   init() {
     document.addEventListener('popupshowing', this.onPopupShowing.bind(this));
     document.addEventListener('popuphidden', this.onPopupHidden.bind(this));
-    XPCOMUtils.defineLazyPreferenceGetter(this, 'sidebarHeightThrottle', 'zen.view.sidebar-height-throttle', 500);
-    XPCOMUtils.defineLazyPreferenceGetter(this, 'contentElementSeparation', 'zen.theme.content-element-separation', 0);
+    XPCOMUtils.defineLazyPreferenceGetter(
+      this,
+      'sidebarHeightThrottle',
+      'zen.view.sidebar-height-throttle',
+      500
+    );
+    XPCOMUtils.defineLazyPreferenceGetter(
+      this,
+      'contentElementSeparation',
+      'zen.theme.content-element-separation',
+      0
+    );
     XPCOMUtils.defineLazyPreferenceGetter(this, 'urlbarWaitToClear', 'zen.urlbar.wait-to-clear', 0);
-    XPCOMUtils.defineLazyPreferenceGetter(this, 'urlbarShowDomainOnly', 'zen.urlbar.show-domain-only-in-sidebar', true);
+    XPCOMUtils.defineLazyPreferenceGetter(
+      this,
+      'urlbarShowDomainOnly',
+      'zen.urlbar.show-domain-only-in-sidebar',
+      true
+    );
 
     gURLBar._zenTrimURL = this.urlbarTrim.bind(this);
 
     ChromeUtils.defineLazyGetter(this, 'motion', () => {
-      return ChromeUtils.importESModule('chrome://browser/content/zen-vendor/motion.min.mjs', { global: 'current' });
+      return ChromeUtils.importESModule('chrome://browser/content/zen-vendor/motion.min.mjs', {
+        global: 'current',
+      });
     });
 
     ChromeUtils.defineLazyGetter(this, '_toastContainer', () => {
       return document.getElementById('zen-toast-container');
     });
 
-    new ResizeObserver(this.updateTabsToolbar.bind(this)).observe(document.getElementById('TabsToolbar'));
+    new ResizeObserver(this.updateTabsToolbar.bind(this)).observe(
+      document.getElementById('TabsToolbar')
+    );
 
     new ResizeObserver(
       gZenCommonActions.throttle(
@@ -132,7 +151,8 @@ var gZenUIManager = {
       // we also ignore menus inside panels
       if (
         !el.contains(showEvent.explicitOriginalTarget) ||
-        (showEvent.explicitOriginalTarget instanceof Element && showEvent.explicitOriginalTarget?.closest('panel'))
+        (showEvent.explicitOriginalTarget instanceof Element &&
+          showEvent.explicitOriginalTarget?.closest('panel'))
       ) {
         continue;
       }
@@ -202,7 +222,9 @@ var gZenUIManager = {
         const timeSinceLastSwitch = now - this._tabSwitchState.lastSwitchTime;
 
         if (timeSinceLastSwitch < this._tabSwitchState.debounceTime) {
-          await new Promise((resolve) => setTimeout(resolve, this._tabSwitchState.debounceTime - timeSinceLastSwitch));
+          await new Promise((resolve) =>
+            setTimeout(resolve, this._tabSwitchState.debounceTime - timeSinceLastSwitch)
+          );
         }
 
         // Execute operation
@@ -247,7 +269,11 @@ var gZenUIManager = {
       return false;
     }
 
-    const shouldOpenURLBar = gZenVerticalTabsManager._canReplaceNewTab && !werePassedURL && !searchClipboard && where === 'tab';
+    const shouldOpenURLBar =
+      gZenVerticalTabsManager._canReplaceNewTab &&
+      !werePassedURL &&
+      !searchClipboard &&
+      where === 'tab';
 
     if (!shouldOpenURLBar) {
       return false;
@@ -323,7 +349,12 @@ var gZenUIManager = {
       gURLBar.removeAttribute('zen-newtab');
 
       // Safely restore tab visual state with proper validation
-      if (this._lastTab && !this._lastTab.closing && this._lastTab.ownerGlobal && !this._lastTab.ownerGlobal.closed) {
+      if (
+        this._lastTab &&
+        !this._lastTab.closing &&
+        this._lastTab.ownerGlobal &&
+        !this._lastTab.ownerGlobal.closed
+      ) {
         this._lastTab._visuallySelected = true;
         this._lastTab = null;
       }
@@ -421,12 +452,14 @@ var gZenUIManager = {
       clearTimeout(this._toastTimeouts[messageId]);
     }
     this._toastTimeouts[messageId] = setTimeout(() => {
-      this.motion.animate(toast, { opacity: [1, 0], scale: [1, 0.5] }, { duration: 0.2, bounce: 0 }).then(() => {
-        toast.remove();
-        if (this._toastContainer.children.length === 0) {
-          this._toastContainer.setAttribute('hidden', true);
-        }
-      });
+      this.motion
+        .animate(toast, { opacity: [1, 0], scale: [1, 0.5] }, { duration: 0.2, bounce: 0 })
+        .then(() => {
+          toast.remove();
+          if (this._toastContainer.children.length === 0) {
+            this._toastContainer.setAttribute('hidden', true);
+          }
+        });
     }, options.timeout || 3000);
   },
 
@@ -457,7 +490,12 @@ var gZenVerticalTabsManager = {
       );
     });
 
-    XPCOMUtils.defineLazyPreferenceGetter(this, '_canReplaceNewTab', 'zen.urlbar.replace-newtab', true);
+    XPCOMUtils.defineLazyPreferenceGetter(
+      this,
+      '_canReplaceNewTab',
+      'zen.urlbar.replace-newtab',
+      true
+    );
     var updateEvent = this._updateEvent.bind(this);
     var onPrefChange = this._onPrefChange.bind(this);
 
@@ -506,7 +544,9 @@ var gZenVerticalTabsManager = {
     if (this.__topButtonsSeparatorElement) {
       return this.__topButtonsSeparatorElement;
     }
-    this.__topButtonsSeparatorElement = document.getElementById('zen-sidebar-top-buttons-separator');
+    this.__topButtonsSeparatorElement = document.getElementById(
+      'zen-sidebar-top-buttons-separator'
+    );
     return this.__topButtonsSeparatorElement;
   },
 
@@ -573,7 +613,10 @@ var gZenVerticalTabsManager = {
 
   async _preCustomize() {
     await this._multiWindowFeature.foreachWindowAsActive(async (browser) => {
-      browser.gZenVerticalTabsManager._updateEvent({ forCustomizableMode: true, dontRebuildAreas: true });
+      browser.gZenVerticalTabsManager._updateEvent({
+        forCustomizableMode: true,
+        dontRebuildAreas: true,
+      });
     });
     this.rebuildAreas();
     this.navigatorToolbox.setAttribute('zen-sidebar-expanded', 'true');
@@ -588,10 +631,34 @@ var gZenVerticalTabsManager = {
   },
 
   initializePreferences(updateEvent) {
-    XPCOMUtils.defineLazyPreferenceGetter(this, '_prefsVerticalTabs', 'zen.tabs.vertical', true, updateEvent);
-    XPCOMUtils.defineLazyPreferenceGetter(this, '_prefsRightSide', 'zen.tabs.vertical.right-side', false, updateEvent);
-    XPCOMUtils.defineLazyPreferenceGetter(this, '_prefsUseSingleToolbar', 'zen.view.use-single-toolbar', false, updateEvent);
-    XPCOMUtils.defineLazyPreferenceGetter(this, '_prefsSidebarExpanded', 'zen.view.sidebar-expanded', false, updateEvent);
+    XPCOMUtils.defineLazyPreferenceGetter(
+      this,
+      '_prefsVerticalTabs',
+      'zen.tabs.vertical',
+      true,
+      updateEvent
+    );
+    XPCOMUtils.defineLazyPreferenceGetter(
+      this,
+      '_prefsRightSide',
+      'zen.tabs.vertical.right-side',
+      false,
+      updateEvent
+    );
+    XPCOMUtils.defineLazyPreferenceGetter(
+      this,
+      '_prefsUseSingleToolbar',
+      'zen.view.use-single-toolbar',
+      false,
+      updateEvent
+    );
+    XPCOMUtils.defineLazyPreferenceGetter(
+      this,
+      '_prefsSidebarExpanded',
+      'zen.view.sidebar-expanded',
+      false,
+      updateEvent
+    );
     XPCOMUtils.defineLazyPreferenceGetter(
       this,
       '_prefsSidebarExpandedMaxWidth',
@@ -648,7 +715,10 @@ var gZenVerticalTabsManager = {
       this._updateMaxWidth();
 
       if (window.docShell) {
-        window.docShell.treeOwner.QueryInterface(Ci.nsIInterfaceRequestor).getInterface(Ci.nsIAppWindow).rollupAllPopups();
+        window.docShell.treeOwner
+          .QueryInterface(Ci.nsIInterfaceRequestor)
+          .getInterface(Ci.nsIAppWindow)
+          .rollupAllPopups();
       }
 
       const topButtons = document.getElementById('zen-sidebar-top-buttons');
@@ -663,7 +733,10 @@ var gZenVerticalTabsManager = {
       const titlebar = document.getElementById('titlebar');
 
       gBrowser.tabContainer.setAttribute('orient', isVerticalTabs ? 'vertical' : 'horizontal');
-      gBrowser.tabContainer.arrowScrollbox.setAttribute('orient', isVerticalTabs ? 'vertical' : 'horizontal');
+      gBrowser.tabContainer.arrowScrollbox.setAttribute(
+        'orient',
+        isVerticalTabs ? 'vertical' : 'horizontal'
+      );
       // on purpose, we set the orient to horizontal, because the arrowScrollbox is vertical
       gBrowser.tabContainer.arrowScrollbox.scrollbox.setAttribute(
         'orient',
@@ -775,7 +848,13 @@ var gZenVerticalTabsManager = {
       }
 
       // Case: single toolbar, not compact mode, not right side and macos styled buttons
-      if (!doNotChangeWindowButtons && isSingleToolbar && !isCompactMode && !isRightSide && !this.isWindowsStyledButtons) {
+      if (
+        !doNotChangeWindowButtons &&
+        isSingleToolbar &&
+        !isCompactMode &&
+        !isRightSide &&
+        !this.isWindowsStyledButtons
+      ) {
         topButtons.prepend(windowButtons);
       }
       // Case: single toolbar, compact mode, right side and windows styled buttons
@@ -890,7 +969,11 @@ var gZenVerticalTabsManager = {
       }
       if (this._tabEdited.getAttribute('zen-pin-id')) {
         // Update pin title in storage
-        await gZenPinnedTabManager.updatePinTitle(this._tabEdited, this._tabEdited.label, !!newName);
+        await gZenPinnedTabManager.updatePinTitle(
+          this._tabEdited,
+          this._tabEdited.label,
+          !!newName
+        );
       }
       document.documentElement.removeAttribute('zen-renaming-tab');
 
@@ -923,7 +1006,11 @@ var gZenVerticalTabsManager = {
     )
       return;
     this._tabEdited = event.target.closest('.tabbrowser-tab');
-    if (!this._tabEdited || !this._tabEdited.pinned || this._tabEdited.hasAttribute('zen-essential')) {
+    if (
+      !this._tabEdited ||
+      !this._tabEdited.pinned ||
+      this._tabEdited.hasAttribute('zen-essential')
+    ) {
       this._tabEdited = null;
       return;
     }

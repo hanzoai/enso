@@ -10,7 +10,11 @@
  * FOR ANY WEBSITE THAT WOULD NEED TO USE THE ACCENT COLOR, ETC
  */
 
-const kZenThemePrefsList = ['zen.theme.accent-color', 'zen.theme.border-radius', 'zen.theme.content-element-separation'];
+const kZenThemePrefsList = [
+  'zen.theme.accent-color',
+  'zen.theme.border-radius',
+  'zen.theme.content-element-separation',
+];
 const kZenMaxElementSeparation = 12;
 
 /**
@@ -79,7 +83,10 @@ var ZenThemeModifier = {
   },
 
   get elementSeparation() {
-    return Math.min(Services.prefs.getIntPref('zen.theme.content-element-separation'), kZenMaxElementSeparation);
+    return Math.min(
+      Services.prefs.getIntPref('zen.theme.content-element-separation'),
+      kZenMaxElementSeparation
+    );
   },
 
   /**

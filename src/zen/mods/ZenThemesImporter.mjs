@@ -55,7 +55,10 @@ var gZenThemesImporter = new (class {
   constructor() {
     try {
       window.SessionStore.promiseInitialized.then(async () => {
-        if (Services.prefs.getBoolPref('zen.themes.disable-all', false) || Services.appinfo.inSafeMode) {
+        if (
+          Services.prefs.getBoolPref('zen.themes.disable-all', false) ||
+          Services.appinfo.inSafeMode
+        ) {
           console.log('[ZenThemesImporter]: Disabling all themes.');
           return;
         }
@@ -83,13 +86,23 @@ var gZenThemesImporter = new (class {
       console.error('[ZenThemesImporter]: Error importing Zen Themes: ', e);
     }
 
-    Services.prefs.addObserver('zen.themes.updated-value-observer', this.rebuildThemeStylesheet.bind(this), false);
-    Services.prefs.addObserver('zen.themes.disable-all', this.handleDisableThemes.bind(this), false);
+    Services.prefs.addObserver(
+      'zen.themes.updated-value-observer',
+      this.rebuildThemeStylesheet.bind(this),
+      false
+    );
+    Services.prefs.addObserver(
+      'zen.themes.disable-all',
+      this.handleDisableThemes.bind(this),
+      false
+    );
   }
 
   get sss() {
     if (!this._sss) {
-      this._sss = Cc['@mozilla.org/content/style-sheet-service;1'].getService(Ci.nsIStyleSheetService);
+      this._sss = Cc['@mozilla.org/content/style-sheet-service;1'].getService(
+        Ci.nsIStyleSheetService
+      );
     }
     return this._sss;
   }
@@ -118,7 +131,9 @@ var gZenThemesImporter = new (class {
   }
 
   getStylesheetURIForTheme(theme) {
-    return Services.io.newFileURI(new FileUtils.File(PathUtils.join(ZenThemesCommon.getThemeFolder(theme.id), 'chrome.css')));
+    return Services.io.newFileURI(
+      new FileUtils.File(PathUtils.join(ZenThemesCommon.getThemeFolder(theme.id), 'chrome.css'))
+    );
   }
 
   async insertStylesheet() {
@@ -135,7 +150,10 @@ var gZenThemesImporter = new (class {
     await this.sss.unregisterSheet(this.styleSheetURI, this.sss.AGENT_SHEET);
     await IOUtils.remove(this.styleSheetPath, { ignoreAbsent: true });
 
-    if (!this.sss.sheetRegistered(this.styleSheetURI, this.sss.AGENT_SHEET) && !(await IOUtils.exists(this.styleSheetPath))) {
+    if (
+      !this.sss.sheetRegistered(this.styleSheetURI, this.sss.AGENT_SHEET) &&
+      !(await IOUtils.exists(this.styleSheetPath))
+    ) {
       console.debug('[ZenThemesImporter]: Sheet successfully unregistered');
     }
   }
@@ -169,7 +187,9 @@ var gZenThemesImporter = new (class {
 
   async getEnabledThemes() {
     const themeObject = await ZenThemesCommon.getThemes();
-    const themes = Object.values(themeObject).filter((theme) => theme.enabled === undefined || theme.enabled);
+    const themes = Object.values(themeObject).filter(
+      (theme) => theme.enabled === undefined || theme.enabled
+    );
 
     const themeList = themes.map(({ name }) => name).join(', ');
 
@@ -198,7 +218,9 @@ var gZenThemesImporter = new (class {
           case 'checkbox': {
             const value = Services.prefs.getBoolPref(property, false);
             if (typeof defaultValue !== 'boolean') {
-              console.log(`[ZenThemesImporter]: Warning, invalid data type received for expected type boolean, skipping.`);
+              console.log(
+                `[ZenThemesImporter]: Warning, invalid data type received for expected type boolean, skipping.`
+              );
               continue;
             }
 
@@ -212,7 +234,9 @@ var gZenThemesImporter = new (class {
             const value = Services.prefs.getStringPref(property, 'zen-property-no-saved');
 
             if (typeof defaultValue !== 'string' && typeof defaultValue !== 'number') {
-              console.log(`[ZenThemesImporter]: Warning, invalid data type received (${typeof defaultValue}), skipping.`);
+              console.log(
+                `[ZenThemesImporter]: Warning, invalid data type received (${typeof defaultValue}), skipping.`
+              );
               continue;
             }
 
@@ -271,9 +295,13 @@ var gZenThemesImporter = new (class {
 
             case 'string': {
               if (value === '') {
-                browser.document.querySelector(':root').style.removeProperty(`--${sanitizedProperty}`);
+                browser.document
+                  .querySelector(':root')
+                  .style.removeProperty(`--${sanitizedProperty}`);
               } else {
-                browser.document.querySelector(':root').style.setProperty(`--${sanitizedProperty}`, value);
+                browser.document
+                  .querySelector(':root')
+                  .style.setProperty(`--${sanitizedProperty}`, value);
               }
               break;
             }
@@ -309,5 +337,8 @@ gZenActorsManager.addJSWindowActor('ZenThemeMarketplace', {
       DOMContentLoaded: {},
     },
   },
-  matches: [...Services.prefs.getStringPref('zen.injections.match-urls').split(','), 'about:preferences'],
+  matches: [
+    ...Services.prefs.getStringPref('zen.injections.match-urls').split(','),
+    'about:preferences',
+  ],
 });

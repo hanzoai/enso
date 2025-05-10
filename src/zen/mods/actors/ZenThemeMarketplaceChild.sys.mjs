@@ -31,7 +31,10 @@ export class ZenThemeMarketplaceChild extends JSWindowActorChild {
     }
 
     this.initiateThemeMarketplace();
-    this.contentWindow.document.addEventListener('ZenCheckForThemeUpdates', this.checkForThemeUpdates.bind(this));
+    this.contentWindow.document.addEventListener(
+      'ZenCheckForThemeUpdates',
+      this.checkForThemeUpdates.bind(this)
+    );
   }
 
   collectRiceMetadata() {

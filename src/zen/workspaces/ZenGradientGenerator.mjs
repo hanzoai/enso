@@ -13,12 +13,17 @@
     useAlgo = '';
     constructor() {
       super();
-      if (!Services.prefs.getBoolPref('zen.theme.gradient', true) || !ZenWorkspaces.shouldHaveWorkspaces) {
+      if (
+        !Services.prefs.getBoolPref('zen.theme.gradient', true) ||
+        !ZenWorkspaces.shouldHaveWorkspaces
+      ) {
         return;
       }
       this.dragStartPosition = null;
 
-      ChromeUtils.defineLazyGetter(this, 'panel', () => document.getElementById('PanelUI-zen-gradient-generator'));
+      ChromeUtils.defineLazyGetter(this, 'panel', () =>
+        document.getElementById('PanelUI-zen-gradient-generator')
+      );
       ChromeUtils.defineLazyGetter(this, 'toolbox', () => document.getElementById('TabsToolbar'));
       ChromeUtils.defineLazyGetter(this, 'customColorInput', () =>
         document.getElementById('PanelUI-zen-gradient-generator-custom-input')
@@ -48,7 +53,9 @@
       this.initTextureInput();
       this.initRotationInput();
 
-      window.matchMedia('(prefers-color-scheme: dark)').addListener(this.onDarkModeChange.bind(this));
+      window
+        .matchMedia('(prefers-color-scheme: dark)')
+        .addListener(this.onDarkModeChange.bind(this));
     }
 
     get isDarkMode() {
@@ -110,50 +117,52 @@
     }
 
     initPredefinedColors() {
-      document.getElementById('PanelUI-zen-gradient-generator-predefined').addEventListener('click', async (event) => {
-        const target = event.target;
-        const rawPosition = target.getAttribute('data-position');
-        if (!rawPosition) {
-          return;
-        }
-        const algo = target.getAttribute('data-algo');
-        const numDots = parseInt(target.getAttribute('data-num-dots'));
-        if (algo == 'float') {
-          for (const dot of this.dots) {
-            dot.element.remove();
+      document
+        .getElementById('PanelUI-zen-gradient-generator-predefined')
+        .addEventListener('click', async (event) => {
+          const target = event.target;
+          const rawPosition = target.getAttribute('data-position');
+          if (!rawPosition) {
+            return;
           }
-          this.dots = [];
-        } else if (numDots < this.dots.length) {
-          for (let i = numDots; i < this.dots.length; i++) {
-            this.dots[i].element.remove();
+          const algo = target.getAttribute('data-algo');
+          const numDots = parseInt(target.getAttribute('data-num-dots'));
+          if (algo == 'float') {
+            for (const dot of this.dots) {
+              dot.element.remove();
+            }
+            this.dots = [];
+          } else if (numDots < this.dots.length) {
+            for (let i = numDots; i < this.dots.length; i++) {
+              this.dots[i].element.remove();
+            }
+            this.dots = this.dots.slice(0, numDots);
           }
-          this.dots = this.dots.slice(0, numDots);
-        }
-        // Generate new gradient from the single color given
-        const [x, y] = rawPosition.split(',').map((pos) => parseInt(pos));
-        let dots = [
-          {
-            ID: 0,
-            position: { x, y },
-          },
-        ];
-        for (let i = 1; i < numDots; i++) {
-          dots.push({
-            ID: i,
-            position: { x: 0, y: 0 },
-          });
-        }
-        this.useAlgo = algo;
-        dots = this.calculateCompliments(dots, 'update', this.useAlgo);
-        if (algo == 'float') {
-          for (const dot of dots) {
-            this.spawnDot(dot.position);
+          // Generate new gradient from the single color given
+          const [x, y] = rawPosition.split(',').map((pos) => parseInt(pos));
+          let dots = [
+            {
+              ID: 0,
+              position: { x, y },
+            },
+          ];
+          for (let i = 1; i < numDots; i++) {
+            dots.push({
+              ID: i,
+              position: { x: 0, y: 0 },
+            });
           }
-          this.dots[0].element.classList.add('primary');
-        }
-        this.handleColorPositions(dots);
-        this.updateCurrentWorkspace();
-      });
+          this.useAlgo = algo;
+          dots = this.calculateCompliments(dots, 'update', this.useAlgo);
+          if (algo == 'float') {
+            for (const dot of dots) {
+              this.spawnDot(dot.position);
+            }
+            this.dots[0].element.classList.add('primary');
+          }
+          this.handleColorPositions(dots);
+          this.updateCurrentWorkspace();
+        });
     }
 
     initCustomColorInput() {
@@ -383,8 +392,12 @@
           <toolbarbutton class="zen-theme-picker-custom-list-item-remove toolbarbutton-1"></toolbarbutton>
         </hbox>
       `);
-      listItems.querySelector('.zen-theme-picker-custom-list-item').setAttribute('data-color', color);
-      listItems.querySelector('.zen-theme-picker-dot').style.setProperty('--zen-theme-picker-dot-color', color);
+      listItems
+        .querySelector('.zen-theme-picker-custom-list-item')
+        .setAttribute('data-color', color);
+      listItems
+        .querySelector('.zen-theme-picker-dot')
+        .style.setProperty('--zen-theme-picker-dot-color', color);
       listItems.querySelector('.zen-theme-picker-custom-list-item-label').textContent = color;
       listItems
         .querySelector('.zen-theme-picker-custom-list-item-remove')
@@ -452,7 +465,10 @@
       }
 
       const colorFromPos = this.getColorFromPosition(relativePosition.x, relativePosition.y);
-      dot.style.setProperty('--zen-theme-picker-dot-color', `rgb(${colorFromPos[0]}, ${colorFromPos[1]}, ${colorFromPos[2]})`);
+      dot.style.setProperty(
+        '--zen-theme-picker-dot-color',
+        `rgb(${colorFromPos[0]}, ${colorFromPos[1]}, ${colorFromPos[2]})`
+      );
 
       this.dots.push({
         ID: id,
@@ -481,13 +497,17 @@
           if (selectedHarmony) {
             if (action === 'remove') {
               if (dots.length !== 0) {
-                return colorHarmonies.find((harmony) => harmony.angles.length === selectedHarmony.angles.length - 1);
+                return colorHarmonies.find(
+                  (harmony) => harmony.angles.length === selectedHarmony.angles.length - 1
+                );
               } else {
                 return { type: 'floating', angles: [] };
               }
             }
             if (action === 'add') {
-              return colorHarmonies.find((harmony) => harmony.angles.length === selectedHarmony.angles.length + 1);
+              return colorHarmonies.find(
+                (harmony) => harmony.angles.length === selectedHarmony.angles.length + 1
+              );
             }
             if (action === 'update') {
               return selectedHarmony;
@@ -526,7 +546,10 @@
       let updatedDots = [...dots];
       const centerPosition = { x: rect.width / 2, y: rect.height / 2 };
 
-      const harmonyAngles = getColorHarmonyType(dots.length + (action === 'add' ? 1 : action === 'remove' ? -1 : 0), this.dots);
+      const harmonyAngles = getColorHarmonyType(
+        dots.length + (action === 'add' ? 1 : action === 'remove' ? -1 : 0),
+        this.dots
+      );
       this.useAlgo = harmonyAngles.type;
       if (!harmonyAngles || harmonyAngles.angles.length === 0) return dots;
 
@@ -594,7 +617,10 @@
 
       if (existingPrimaryDot) {
         existingPrimaryDot.element.style.zIndex = 999;
-        const colorFromPos = this.getColorFromPosition(existingPrimaryDot.position.x, existingPrimaryDot.position.y);
+        const colorFromPos = this.getColorFromPosition(
+          existingPrimaryDot.position.x,
+          existingPrimaryDot.position.y
+        );
         existingPrimaryDot.element.style.setProperty(
           '--zen-theme-picker-dot-color',
           `rgb(${colorFromPos[0]}, ${colorFromPos[1]}, ${colorFromPos[2]})`
@@ -606,7 +632,10 @@
 
         if (existingDot) {
           existingDot.position = dotPosition.position;
-          const colorFromPos = this.getColorFromPosition(dotPosition.position.x, dotPosition.position.y);
+          const colorFromPos = this.getColorFromPosition(
+            dotPosition.position.x,
+            dotPosition.position.y
+          );
           existingDot.element.style.setProperty(
             '--zen-theme-picker-dot-color',
             `rgb(${colorFromPos[0]}, ${colorFromPos[1]}, ${colorFromPos[2]})`
@@ -681,7 +710,9 @@
           (harmony) => harmony.angles.length + 1 === this.dots.length || harmony.type === 'floating'
         );
 
-        let currentIndex = applicableHarmonies.findIndex((harmony) => harmony.type === this.useAlgo);
+        let currentIndex = applicableHarmonies.findIndex(
+          (harmony) => harmony.type === this.useAlgo
+        );
 
         let nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % applicableHarmonies.length;
         this.useAlgo = applicableHarmonies[nextIndex].type;
@@ -875,7 +906,11 @@
       return colors.map((color) => ({
         c: color.isCustom
           ? color.c
-          : [Math.min(255, color.c[0] * factor), Math.min(255, color.c[1] * factor), Math.min(255, color.c[2] * factor)],
+          : [
+              Math.min(255, color.c[0] * factor),
+              Math.min(255, color.c[1] * factor),
+              Math.min(255, color.c[2] * factor),
+            ],
         isCustom: color.isCustom,
         algorithm: color.algorithm,
       }));
@@ -908,7 +943,9 @@
       this.useAlgo = themedColors[0]?.algorithm ?? '';
 
       if (themedColors.length === 0) {
-        return forToolbar ? 'var(--zen-themed-toolbar-bg)' : 'var(--zen-themed-toolbar-bg-transparent)';
+        return forToolbar
+          ? 'var(--zen-themed-toolbar-bg)'
+          : 'var(--zen-themed-toolbar-bg-transparent)';
       } else if (themedColors.length === 1) {
         return this.getSingleRGBColor(themedColors[0], forToolbar);
       } else if (themedColors.length !== 3) {
@@ -945,7 +982,11 @@
           .map((char) => char + char)
           .join('');
       }
-      return [parseInt(hex.substring(0, 2), 16), parseInt(hex.substring(2, 4), 16), parseInt(hex.substring(4, 6), 16)];
+      return [
+        parseInt(hex.substring(0, 2), 16),
+        parseInt(hex.substring(2, 4), 16),
+        parseInt(hex.substring(4, 6), 16),
+      ];
     }
 
     pSBC = (p, c0, c1, l) => {
@@ -959,7 +1000,14 @@
         i = parseInt,
         m = Math.round,
         a = typeof c1 == 'string';
-      if (typeof p != 'number' || p < -1 || p > 1 || typeof c0 != 'string' || (c0[0] != 'r' && c0[0] != '#') || (c1 && !a))
+      if (
+        typeof p != 'number' ||
+        p < -1 ||
+        p > 1 ||
+        typeof c0 != 'string' ||
+        (c0[0] != 'r' && c0[0] != '#') ||
+        (c1 && !a)
+      )
         return null;
       if (!this.pSBCr)
         this.pSBCr = (d) => {
@@ -968,13 +1016,20 @@
           if (n > 9) {
             ([r, g, b, a] = d = d.split(',')), (n = d.length);
             if (n < 3 || n > 4) return null;
-            (x.r = i(r[3] == 'a' ? r.slice(5) : r.slice(4))), (x.g = i(g)), (x.b = i(b)), (x.a = a ? parseFloat(a) : -1);
+            (x.r = i(r[3] == 'a' ? r.slice(5) : r.slice(4))),
+              (x.g = i(g)),
+              (x.b = i(b)),
+              (x.a = a ? parseFloat(a) : -1);
           } else {
             if (n == 8 || n == 6 || n < 4) return null;
-            if (n < 6) d = '#' + d[1] + d[1] + d[2] + d[2] + d[3] + d[3] + (n > 4 ? d[4] + d[4] : '');
+            if (n < 6)
+              d = '#' + d[1] + d[1] + d[2] + d[2] + d[3] + d[3] + (n > 4 ? d[4] + d[4] : '');
             d = i(d.slice(1), 16);
             if (n == 9 || n == 5)
-              (x.r = (d >> 24) & 255), (x.g = (d >> 16) & 255), (x.b = (d >> 8) & 255), (x.a = m((d & 255) / 0.255) / 1000);
+              (x.r = (d >> 24) & 255),
+                (x.g = (d >> 16) & 255),
+                (x.b = (d >> 8) & 255),
+                (x.a = m((d & 255) / 0.255) / 1000);
             else (x.r = d >> 16), (x.g = (d >> 8) & 255), (x.b = d & 255), (x.a = -1);
           }
           return x;
@@ -983,7 +1038,12 @@
         (h = a ? (c1.length > 9 ? true : c1 == 'c' ? !h : false) : h),
         (f = this.pSBCr(c0)),
         (P = p < 0),
-        (t = c1 && c1 != 'c' ? this.pSBCr(c1) : P ? { r: 0, g: 0, b: 0, a: -1 } : { r: 255, g: 255, b: 255, a: -1 }),
+        (t =
+          c1 && c1 != 'c'
+            ? this.pSBCr(c1)
+            : P
+              ? { r: 0, g: 0, b: 0, a: -1 }
+              : { r: 255, g: 255, b: 255, a: -1 }),
         (p = P ? p * -1 : p),
         (P = 1 - p);
       if (!f || !t) return null;
@@ -992,12 +1052,28 @@
         (r = m((P * f.r ** 2 + p * t.r ** 2) ** 0.5)),
           (g = m((P * f.g ** 2 + p * t.g ** 2) ** 0.5)),
           (b = m((P * f.b ** 2 + p * t.b ** 2) ** 0.5));
-      (a = f.a), (t = t.a), (f = a >= 0 || t >= 0), (a = f ? (a < 0 ? t : t < 0 ? a : a * P + t * p) : 0);
-      if (h) return 'rgb' + (f ? 'a(' : '(') + r + ',' + g + ',' + b + (f ? ',' + m(a * 1000) / 1000 : '') + ')';
+      (a = f.a),
+        (t = t.a),
+        (f = a >= 0 || t >= 0),
+        (a = f ? (a < 0 ? t : t < 0 ? a : a * P + t * p) : 0);
+      if (h)
+        return (
+          'rgb' +
+          (f ? 'a(' : '(') +
+          r +
+          ',' +
+          g +
+          ',' +
+          b +
+          (f ? ',' + m(a * 1000) / 1000 : '') +
+          ')'
+        );
       else
         return (
           '#' +
-          (4294967296 + r * 16777216 + g * 65536 + b * 256 + (f ? m(a * 255) : 0)).toString(16).slice(1, f ? undefined : -2)
+          (4294967296 + r * 16777216 + g * 65536 + b * 256 + (f ? m(a * 255) : 0))
+            .toString(16)
+            .slice(1, f ? undefined : -2)
         );
     };
 
@@ -1033,7 +1109,9 @@
         workspaceTheme = this.fixTheme(theme || windowWorkspace.theme);
 
         if (!skipUpdate) {
-          for (const dot of browser.gZenThemePicker.panel.querySelectorAll('.zen-theme-picker-dot')) {
+          for (const dot of browser.gZenThemePicker.panel.querySelectorAll(
+            '.zen-theme-picker-dot'
+          )) {
             dot.remove();
           }
         }
@@ -1052,7 +1130,9 @@
               this._animatingBackground = false;
               appWrapper.removeAttribute('animating');
               appWrapper.setAttribute('post-animating', 'true');
-              browser.document.documentElement.style.removeProperty('--zen-main-browser-background-old');
+              browser.document.documentElement.style.removeProperty(
+                '--zen-main-browser-background-old'
+              );
               setTimeout(() => {
                 // Reactivate the transition after the animation
                 appWrapper.removeAttribute('post-animating');
@@ -1061,9 +1141,14 @@
           });
         }
 
-        const button = browser.document.getElementById('PanelUI-zen-gradient-generator-color-toggle-algo');
+        const button = browser.document.getElementById(
+          'PanelUI-zen-gradient-generator-color-toggle-algo'
+        );
         if (browser.gZenThemePicker.useAlgo) {
-          document.l10n.setAttributes(button, `zen-panel-ui-gradient-generator-algo-${browser.gZenThemePicker.useAlgo}`);
+          document.l10n.setAttributes(
+            button,
+            `zen-panel-ui-gradient-generator-algo-${browser.gZenThemePicker.useAlgo}`
+          );
         } else {
           button.removeAttribute('data-l10n-id');
         }
@@ -1072,10 +1157,19 @@
         if (!workspaceTheme || workspaceTheme.type !== 'gradient') {
           const gradient = browser.gZenThemePicker.getGradient([]);
           const gradientToolbar = browser.gZenThemePicker.getGradient([], true);
-          browser.document.documentElement.style.setProperty('--zen-main-browser-background', gradient);
-          browser.document.documentElement.style.setProperty('--zen-main-browser-background-toolbar', gradientToolbar);
+          browser.document.documentElement.style.setProperty(
+            '--zen-main-browser-background',
+            gradient
+          );
+          browser.document.documentElement.style.setProperty(
+            '--zen-main-browser-background-toolbar',
+            gradientToolbar
+          );
           browser.gZenThemePicker.updateNoise(0);
-          browser.document.documentElement.style.setProperty('--zen-primary-color', this.getNativeAccentColor());
+          browser.document.documentElement.style.setProperty(
+            '--zen-primary-color',
+            this.getNativeAccentColor()
+          );
           return;
         }
 
@@ -1083,7 +1177,9 @@
         browser.gZenThemePicker.currentRotation = workspaceTheme.rotation ?? -45;
         browser.gZenThemePicker.currentTexture = workspaceTheme.texture ?? 0;
 
-        for (const button of browser.document.querySelectorAll('#PanelUI-zen-gradient-generator-color-actions button')) {
+        for (const button of browser.document.querySelectorAll(
+          '#PanelUI-zen-gradient-generator-color-actions button'
+        )) {
           // disable if there are no buttons
           button.disabled =
             workspaceTheme.gradientColors.length === 0 ||
@@ -1097,7 +1193,9 @@
 
         browser.document.getElementById('PanelUI-zen-gradient-generator-opacity').value =
           browser.gZenThemePicker.currentOpacity;
-        const textureSelectWrapper = browser.document.getElementById('PanelUI-zen-gradient-generator-texture-wrapper');
+        const textureSelectWrapper = browser.document.getElementById(
+          'PanelUI-zen-gradient-generator-texture-wrapper'
+        );
         const textureWrapperWidth = textureSelectWrapper.getBoundingClientRect().width;
         // Dont show when hidden
         if (textureWrapperWidth) {
@@ -1125,8 +1223,12 @@
           }
 
           const numberOfColors = workspaceTheme.gradientColors?.length;
-          const rotationDot = browser.document.getElementById('PanelUI-zen-gradient-generator-rotation-dot');
-          const rotationLine = browser.document.getElementById('PanelUI-zen-gradient-generator-rotation-line');
+          const rotationDot = browser.document.getElementById(
+            'PanelUI-zen-gradient-generator-rotation-dot'
+          );
+          const rotationLine = browser.document.getElementById(
+            'PanelUI-zen-gradient-generator-rotation-line'
+          );
           if (numberOfColors > 1) {
             rotationDot.style.opacity = 1;
             rotationLine.style.opacity = 1;
@@ -1136,9 +1238,11 @@
             const rotationDotPosition = this.currentRotation;
             const rotationDotWidth = 30;
             const rotationDotX =
-              Math.cos((rotationDotPosition * Math.PI) / 180) * (rotationParentWidth / 2 - rotationDotWidth / 2);
+              Math.cos((rotationDotPosition * Math.PI) / 180) *
+              (rotationParentWidth / 2 - rotationDotWidth / 2);
             const rotationDotY =
-              Math.sin((rotationDotPosition * Math.PI) / 180) * (rotationParentWidth / 2 - rotationDotWidth / 2);
+              Math.sin((rotationDotPosition * Math.PI) / 180) *
+              (rotationParentWidth / 2 - rotationDotWidth / 2);
             rotationDot.style.left = `${rotationParentWidth / 2 + rotationDotX - rotationPadding + rotationDotWidth / 4}px`;
             rotationDot.style.top = `${rotationParentWidth / 2 + rotationDotY - rotationPadding + rotationDotWidth / 4}px`;
           } else {
@@ -1149,7 +1253,10 @@
         }
 
         const gradient = browser.gZenThemePicker.getGradient(workspaceTheme.gradientColors);
-        const gradientToolbar = browser.gZenThemePicker.getGradient(workspaceTheme.gradientColors, true);
+        const gradientToolbar = browser.gZenThemePicker.getGradient(
+          workspaceTheme.gradientColors,
+          true
+        );
         browser.gZenThemePicker.updateNoise(workspaceTheme.texture);
 
         for (const dot of workspaceTheme.gradientColors) {
@@ -1158,8 +1265,14 @@
           }
         }
 
-        browser.document.documentElement.style.setProperty('--zen-main-browser-background-toolbar', gradientToolbar);
-        browser.document.documentElement.style.setProperty('--zen-main-browser-background', gradient);
+        browser.document.documentElement.style.setProperty(
+          '--zen-main-browser-background-toolbar',
+          gradientToolbar
+        );
+        browser.document.documentElement.style.setProperty(
+          '--zen-main-browser-background',
+          gradient
+        );
 
         const dominantColor = this.getMostDominantColor(workspaceTheme.gradientColors);
         if (dominantColor) {
@@ -1180,7 +1293,10 @@
 
     fixTheme(theme) {
       // add a primary color if there isn't one
-      if (!theme.gradientColors.find((color) => color.isPrimary) && theme.gradientColors.length > 0) {
+      if (
+        !theme.gradientColors.find((color) => color.isPrimary) &&
+        theme.gradientColors.length > 0
+      ) {
         theme.gradientColors[(theme.gradientColors.length / 2) | 0].isPrimary = true;
       }
       return theme;
@@ -1252,9 +1368,19 @@
           }
           const isCustom = dot.classList.contains('custom');
           const algorithm = this.useAlgo;
-          return { c: isCustom ? color : color.match(/\d+/g).map(Number), isCustom, algorithm, isPrimary };
+          return {
+            c: isCustom ? color : color.match(/\d+/g).map(Number),
+            isCustom,
+            algorithm,
+            isPrimary,
+          };
         });
-      const gradient = ZenThemePicker.getTheme(colors, this.currentOpacity, this.currentRotation, this.currentTexture);
+      const gradient = ZenThemePicker.getTheme(
+        colors,
+        this.currentOpacity,
+        this.currentRotation,
+        this.currentTexture
+      );
       let currentWorkspace = await ZenWorkspaces.getActiveWorkspace();
 
       if (!skipSave) {

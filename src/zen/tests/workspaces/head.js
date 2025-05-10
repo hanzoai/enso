@@ -11,13 +11,25 @@ const ROOT = getRootDirectory(gTestPath);
 const HTTPROOT = ROOT.replace('chrome://mochitests/content/', 'http://example.com/');
 const HTTPSROOT = ROOT.replace('chrome://mochitests/content/', 'https://example.com/');
 
-const { SessionSaver } = ChromeUtils.importESModule('resource:///modules/sessionstore/SessionSaver.sys.mjs');
-const { SessionFile } = ChromeUtils.importESModule('resource:///modules/sessionstore/SessionFile.sys.mjs');
-const { TabState } = ChromeUtils.importESModule('resource:///modules/sessionstore/TabState.sys.mjs');
-const { TabStateFlusher } = ChromeUtils.importESModule('resource:///modules/sessionstore/TabStateFlusher.sys.mjs');
-const { SessionStoreTestUtils } = ChromeUtils.importESModule('resource://testing-common/SessionStoreTestUtils.sys.mjs');
+const { SessionSaver } = ChromeUtils.importESModule(
+  'resource:///modules/sessionstore/SessionSaver.sys.mjs'
+);
+const { SessionFile } = ChromeUtils.importESModule(
+  'resource:///modules/sessionstore/SessionFile.sys.mjs'
+);
+const { TabState } = ChromeUtils.importESModule(
+  'resource:///modules/sessionstore/TabState.sys.mjs'
+);
+const { TabStateFlusher } = ChromeUtils.importESModule(
+  'resource:///modules/sessionstore/TabStateFlusher.sys.mjs'
+);
+const { SessionStoreTestUtils } = ChromeUtils.importESModule(
+  'resource://testing-common/SessionStoreTestUtils.sys.mjs'
+);
 
-const { PageWireframes } = ChromeUtils.importESModule('resource:///modules/sessionstore/PageWireframes.sys.mjs');
+const { PageWireframes } = ChromeUtils.importESModule(
+  'resource:///modules/sessionstore/PageWireframes.sys.mjs'
+);
 
 const ss = SessionStore;
 SessionStoreTestUtils.init(this, window);
@@ -47,7 +59,12 @@ function provideWindow(aCallback, aURL, aFeatures) {
     });
   }
 
-  let win = openDialog(AppConstants.BROWSER_CHROME_URL, '', aFeatures || 'chrome,all,dialog=no', aURL || 'about:blank');
+  let win = openDialog(
+    AppConstants.BROWSER_CHROME_URL,
+    '',
+    aFeatures || 'chrome,all,dialog=no',
+    aURL || 'about:blank'
+  );
   whenWindowLoaded(win, function onWindowLoaded(aWin) {
     if (!aURL) {
       info('Loaded a blank window.');
@@ -85,11 +102,15 @@ function promiseTabState(tab, state) {
 }
 
 function promiseWindowRestoring(win) {
-  return new Promise((resolve) => win.addEventListener('SSWindowRestoring', resolve, { once: true }));
+  return new Promise((resolve) =>
+    win.addEventListener('SSWindowRestoring', resolve, { once: true })
+  );
 }
 
 function promiseWindowRestored(win) {
-  return new Promise((resolve) => win.addEventListener('SSWindowRestored', resolve, { once: true }));
+  return new Promise((resolve) =>
+    win.addEventListener('SSWindowRestored', resolve, { once: true })
+  );
 }
 
 async function setBrowserState(state, win = window) {
@@ -426,37 +447,45 @@ function modifySessionStorage(browser, storageData, storageOptions = {}) {
     browsingContext = browsingContext.children[storageOptions.frameIndex];
   }
 
-  return SpecialPowers.spawn(browsingContext, [[storageData, storageOptions]], async function ([data]) {
-    let frame = content;
-    let keys = new Set(Object.keys(data));
-    let isClearing = !keys.size;
-    let storage = frame.sessionStorage;
+  return SpecialPowers.spawn(
+    browsingContext,
+    [[storageData, storageOptions]],
+    async function ([data]) {
+      let frame = content;
+      let keys = new Set(Object.keys(data));
+      let isClearing = !keys.size;
+      let storage = frame.sessionStorage;
 
-    return new Promise((resolve) => {
-      docShell.chromeEventHandler.addEventListener(
-        'MozSessionStorageChanged',
-        function onStorageChanged(event) {
-          if (event.storageArea == storage) {
-            keys.delete(event.key);
+      return new Promise((resolve) => {
+        docShell.chromeEventHandler.addEventListener(
+          'MozSessionStorageChanged',
+          function onStorageChanged(event) {
+            if (event.storageArea == storage) {
+              keys.delete(event.key);
+            }
+
+            if (keys.size == 0) {
+              docShell.chromeEventHandler.removeEventListener(
+                'MozSessionStorageChanged',
+                onStorageChanged,
+                true
+              );
+              resolve();
+            }
+          },
+          true
+        );
+
+        if (isClearing) {
+          storage.clear();
+        } else {
+          for (let key of keys) {
+            frame.sessionStorage[key] = data[key];
           }
-
-          if (keys.size == 0) {
-            docShell.chromeEventHandler.removeEventListener('MozSessionStorageChanged', onStorageChanged, true);
-            resolve();
-          }
-        },
-        true
-      );
-
-      if (isClearing) {
-        storage.clear();
-      } else {
-        for (let key of keys) {
-          frame.sessionStorage[key] = data[key];
         }
-      }
-    });
-  });
+      });
+    }
+  );
 }
 
 function pushPrefs(...aPrefs) {
@@ -503,20 +532,28 @@ function whenDomWindowClosedHandled(aCallback) {
 }
 
 function getPropertyOfFormField(browserContext, selector, propName) {
-  return SpecialPowers.spawn(browserContext, [selector, propName], (selectorChild, propNameChild) => {
-    return content.document.querySelector(selectorChild)[propNameChild];
-  });
+  return SpecialPowers.spawn(
+    browserContext,
+    [selector, propName],
+    (selectorChild, propNameChild) => {
+      return content.document.querySelector(selectorChild)[propNameChild];
+    }
+  );
 }
 
 function setPropertyOfFormField(browserContext, selector, propName, newValue) {
-  return SpecialPowers.spawn(browserContext, [selector, propName, newValue], (selectorChild, propNameChild, newValueChild) => {
-    let node = content.document.querySelector(selectorChild);
-    node[propNameChild] = newValueChild;
+  return SpecialPowers.spawn(
+    browserContext,
+    [selector, propName, newValue],
+    (selectorChild, propNameChild, newValueChild) => {
+      let node = content.document.querySelector(selectorChild);
+      node[propNameChild] = newValueChild;
 
-    let event = node.ownerDocument.createEvent('UIEvents');
-    event.initUIEvent('input', true, true, node.ownerGlobal, 0);
-    node.dispatchEvent(event);
-  });
+      let event = node.ownerDocument.createEvent('UIEvents');
+      event.initUIEvent('input', true, true, node.ownerGlobal, 0);
+      node.dispatchEvent(event);
+    }
+  );
 }
 
 function promiseOnHistoryReplaceEntry(browser) {

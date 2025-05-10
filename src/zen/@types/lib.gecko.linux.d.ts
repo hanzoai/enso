@@ -27,7 +27,10 @@ declare global {
 
   interface nsIApplicationChooser extends nsISupports {
     init(parent: mozIDOMWindowProxy, title: string): void;
-    open(contentType: string, applicationChooserFinishedCallback: nsIApplicationChooserFinishedCallback): void;
+    open(
+      contentType: string,
+      applicationChooserFinishedCallback: nsIApplicationChooserFinishedCallback
+    ): void;
   }
 
   // https://searchfox.org/mozilla-central/source/widget/nsIGtkTaskbarProgress.idl

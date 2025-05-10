@@ -79,14 +79,24 @@ export class ZenThemeMarketplaceParent extends JSWindowActorParent {
 
     for (const theme of Object.values(await this.getThemes())) {
       try {
-        const themeInfo = await this.sendQuery('ZenThemeMarketplace:GetThemeInfo', { themeId: theme.id });
+        const themeInfo = await this.sendQuery('ZenThemeMarketplace:GetThemeInfo', {
+          themeId: theme.id,
+        });
 
         if (!themeInfo) {
           continue;
         }
 
-        if (!this.compareVersions(themeInfo.version, theme.version || '0.0.0') && themeInfo.version != theme.version) {
-          console.info('ZenThemeMarketplaceParent: Theme update found', theme.id, theme.version, themeInfo.version);
+        if (
+          !this.compareVersions(themeInfo.version, theme.version || '0.0.0') &&
+          themeInfo.version != theme.version
+        ) {
+          console.info(
+            'ZenThemeMarketplaceParent: Theme update found',
+            theme.id,
+            theme.version,
+            themeInfo.version
+          );
 
           themeInfo.enabled = theme.enabled;
           updates.push(themeInfo);
@@ -156,7 +166,10 @@ export class ZenThemeMarketplaceParent extends JSWindowActorParent {
     await this.downloadUrlToFile(theme.style, PathUtils.join(themePath, 'chrome.css'), true);
     await this.downloadUrlToFile(theme.readme, PathUtils.join(themePath, 'readme.md'));
     if (theme.preferences) {
-      await this.downloadUrlToFile(theme.preferences, PathUtils.join(themePath, 'preferences.json'));
+      await this.downloadUrlToFile(
+        theme.preferences,
+        PathUtils.join(themePath, 'preferences.json')
+      );
     }
   }
 

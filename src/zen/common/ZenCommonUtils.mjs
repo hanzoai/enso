@@ -65,7 +65,9 @@ var gZenCommonActions = {
     if (currentUrl) {
       let str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
       str.data = currentUrl;
-      let transferable = Cc['@mozilla.org/widget/transferable;1'].createInstance(Ci.nsITransferable);
+      let transferable = Cc['@mozilla.org/widget/transferable;1'].createInstance(
+        Ci.nsITransferable
+      );
       transferable.init(getLoadContext());
       transferable.addDataFlavor('text/plain');
       transferable.setTransferData('text/plain', str);
@@ -80,7 +82,9 @@ var gZenCommonActions = {
       const markdownLink = `[${tabTitle}](${currentUrl})`;
       let str = Cc['@mozilla.org/supports-string;1'].createInstance(Ci.nsISupportsString);
       str.data = markdownLink;
-      let transferable = Cc['@mozilla.org/widget/transferable;1'].createInstance(Ci.nsITransferable);
+      let transferable = Cc['@mozilla.org/widget/transferable;1'].createInstance(
+        Ci.nsITransferable
+      );
       transferable.init(getLoadContext());
       transferable.addDataFlavor('text/plain');
       transferable.setTransferData('text/plain', str);

@@ -36,7 +36,9 @@
           onDownloadAdded: this.#handleNewDownload.bind(this),
         });
       } catch (error) {
-        console.error(`[${ZenDownloadAnimation.name}] Failed to set up download animation listeners: ${error}`);
+        console.error(
+          `[${ZenDownloadAnimation.name}] Failed to set up download animation listeners: ${error}`
+        );
       }
     }
 
@@ -46,7 +48,9 @@
       }
 
       if (!this.#lastClickPosition) {
-        console.warn(`[${ZenDownloadAnimation.name}] No recent click position available for animation`);
+        console.warn(
+          `[${ZenDownloadAnimation.name}] No recent click position available for animation`
+        );
         return;
       }
 
@@ -80,7 +84,10 @@
       try {
         const link = document.createElement('link');
         link.setAttribute('rel', 'stylesheet');
-        link.setAttribute('href', 'chrome://browser/content/zen-styles/zen-download-arc-animation.css');
+        link.setAttribute(
+          'href',
+          'chrome://browser/content/zen-styles/zen-download-arc-animation.css'
+        );
         this.shadowRoot.appendChild(link);
       } catch (error) {
         console.error(`[${ZenDownloadAnimationElement.name}] Error loading arc styles: ${error}`);
@@ -89,7 +96,9 @@
 
     async initializeAnimation(startPosition) {
       if (!startPosition) {
-        console.warn(`[${ZenDownloadAnimationElement.name}] No start position provided, skipping animation`);
+        console.warn(
+          `[${ZenDownloadAnimationElement.name}] No start position provided, skipping animation`
+        );
         return;
       }
 
@@ -102,13 +111,27 @@
 
       // Calculate optimal arc parameters based on available space
       const distance = this.#calculateDistance(startPosition, endPosition);
-      const { arcHeight, shouldArcDownward } = this.#calculateOptimalArc(startPosition, endPosition, distance);
+      const { arcHeight, shouldArcDownward } = this.#calculateOptimalArc(
+        startPosition,
+        endPosition,
+        distance
+      );
       const distanceX = endPosition.clientX - startPosition.clientX;
       const distanceY = endPosition.clientY - startPosition.clientY;
-      const arcSequence = this.#createArcAnimationSequence(distanceX, distanceY, arcHeight, shouldArcDownward);
+      const arcSequence = this.#createArcAnimationSequence(
+        distanceX,
+        distanceY,
+        arcHeight,
+        shouldArcDownward
+      );
 
       // Start the download animation
-      await this.#startDownloadAnimation(areTabsPositionedRight, isDownloadButtonVisible, arcAnimationElement, arcSequence);
+      await this.#startDownloadAnimation(
+        areTabsPositionedRight,
+        isDownloadButtonVisible,
+        arcAnimationElement,
+        arcSequence
+      );
     }
 
     #areTabsOnRightSide() {
@@ -170,7 +193,8 @@
       // Calculate available space for the arc
       const availableTopSpace = Math.min(startPosition.clientY, endPosition.clientY);
       const viewportHeight = window.innerHeight;
-      const availableBottomSpace = viewportHeight - Math.max(startPosition.clientY, endPosition.clientY);
+      const availableBottomSpace =
+        viewportHeight - Math.max(startPosition.clientY, endPosition.clientY);
 
       // Determine if we should arc downward or upward based on available space
       const shouldArcDownward = availableBottomSpace > availableTopSpace;
@@ -194,7 +218,12 @@
       return Math.sqrt(distanceX * distanceX + distanceY * distanceY);
     }
 
-    async #startDownloadAnimation(areTabsPositionedRight, isDownloadButtonVisible, arcAnimationElement, sequence) {
+    async #startDownloadAnimation(
+      areTabsPositionedRight,
+      isDownloadButtonVisible,
+      arcAnimationElement,
+      sequence
+    ) {
       try {
         if (!isDownloadButtonVisible) {
           this.#startBoxAnimation(areTabsPositionedRight);
@@ -272,7 +301,9 @@
 
         sequence.offset.push(progress);
         sequence.opacity.push(opacity);
-        sequence.transform.push(`translate(calc(${x}px - 50%), calc(${y}px - 50%)) rotate(${rotation}deg) scale(${scale})`);
+        sequence.transform.push(
+          `translate(calc(${x}px - 50%), calc(${y}px - 50%)) rotate(${rotation}deg) scale(${scale})`
+        );
       }
 
       return sequence;
@@ -285,7 +316,9 @@
     async #startBoxAnimation(areTabsPositionedRight) {
       // If animation is already in progress, don't start a new one
       if (this.#isBoxAnimationRunning) {
-        console.warn(`[${ZenDownloadAnimationElement.name}] Box animation already running, skipping new request.`);
+        console.warn(
+          `[${ZenDownloadAnimationElement.name}] Box animation already running, skipping new request.`
+        );
         return;
       }
 
@@ -300,7 +333,9 @@
 
       const wrapper = document.getElementById('zen-main-app-wrapper');
       if (!wrapper) {
-        console.warn(`[${ZenDownloadAnimationElement.name}] Cannot start box animation, Wrapper element not found`);
+        console.warn(
+          `[${ZenDownloadAnimationElement.name}] Cannot start box animation, Wrapper element not found`
+        );
         return;
       }
 
@@ -357,7 +392,9 @@
           this.#getBoxAnimationDurationMs()
         );
       } catch (error) {
-        console.error(`[${ZenDownloadAnimationElement.name}] Error during box entry animation: ${error}`);
+        console.error(
+          `[${ZenDownloadAnimationElement.name}] Error during box entry animation: ${error}`
+        );
         this.#cleanBoxAnimation();
       } finally {
         this.#isBoxAnimationRunning = false;
@@ -406,7 +443,9 @@
           }
         ).finished;
       } catch (error) {
-        console.warn(`[${ZenDownloadAnimationElement.name}] Error during box exit animation: ${error}`);
+        console.warn(
+          `[${ZenDownloadAnimationElement.name}] Error during box exit animation: ${error}`
+        );
       } finally {
         this.#cleanBoxAnimation();
       }
@@ -426,7 +465,10 @@
         try {
           this.#boxAnimationElement.remove();
         } catch (error) {
-          console.error(`[${ZenDownloadAnimationElement.name}] Error removing box animation element: ${error}`, error);
+          console.error(
+            `[${ZenDownloadAnimationElement.name}] Error removing box animation element: ${error}`,
+            error
+          );
         }
       }
       this.#cleanBoxAnimationState();
@@ -441,7 +483,12 @@
       // Is 1 and no 0 because if you pin the download button in the overflow menu
       // the download button is in the viewport but in the position 0,0 so this
       // avoid this case
-      if (rect.bottom < 1 || rect.right < 1 || rect.top > window.innerHeight || rect.left > window.innerWidth) {
+      if (
+        rect.bottom < 1 ||
+        rect.right < 1 ||
+        rect.top > window.innerHeight ||
+        rect.left > window.innerWidth
+      ) {
         return false;
       }
 

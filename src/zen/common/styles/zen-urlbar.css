@@ -137,7 +137,9 @@
   margin-right: 0px !important;
 }
 
-#identity-box:has(#identity-permission-box:is([hasPermissions], [hasSharingIcon])):not([pageproxystate='invalid'])
+#identity-box:has(#identity-permission-box:is([hasPermissions], [hasSharingIcon])):not(
+    [pageproxystate='invalid']
+  )
   #identity-icon-box {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
@@ -208,9 +210,9 @@
   }
 
   #urlbar[open]
-    :is(#tracking-protection-icon-container, .urlbar-page-action, .identity-box-button):not([hidden='true']):not(
-      #identity-permission-box
-    ),
+    :is(#tracking-protection-icon-container, .urlbar-page-action, .identity-box-button):not(
+      [hidden='true']
+    ):not(#identity-permission-box),
   #urlbar:hover #identity-icon-box {
     opacity: 1 !important;
     margin-inline-start: 0 !important;
@@ -263,7 +265,9 @@
     border-radius: 999px;
     margin: 0 4px 0 0 !important;
     padding: 0 4px;
-    min-width: calc(var(--urlbar-min-height) - 4px - 4 * var(--urlbar-container-padding)) !important;
+    min-width: calc(
+      var(--urlbar-min-height) - 4px - 4 * var(--urlbar-container-padding)
+    ) !important;
     height: calc(var(--urlbar-min-height) - 4px - 4 * var(--urlbar-container-padding)) !important;
     justify-content: center;
     gap: 8px;
@@ -286,7 +290,8 @@ button.popup-notification-dropmarker {
   border-bottom-left-radius: 0 !important;
 }
 
-.panel-footer:has(button.popup-notification-dropmarker:not([hidden='true'])) button.popup-notification-secondary-button {
+.panel-footer:has(button.popup-notification-dropmarker:not([hidden='true']))
+  button.popup-notification-secondary-button {
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
@@ -361,7 +366,9 @@ button.popup-notification-dropmarker {
 /* Border radius on hover */
 #urlbar .urlbar-page-action,
 #urlbar #tracking-protection-icon-container,
-#urlbar:not([breakout-extend='true']) #identity-box:is(:not(.chromeUI), [pageproxystate='invalid']) #identity-icon-box {
+#urlbar:not([breakout-extend='true'])
+  #identity-box:is(:not(.chromeUI), [pageproxystate='invalid'])
+  #identity-icon-box {
   border-radius: var(--urlbar-icon-border-radius) !important;
 }
 
@@ -598,7 +605,11 @@ button.popup-notification-dropmarker {
   &:hover {
     .urlbarView-favicon,
     & {
-      background-color: color-mix(in srgb, var(--zen-branding-bg-reverse) 5%, transparent 95%) !important;
+      background-color: color-mix(
+        in srgb,
+        var(--zen-branding-bg-reverse) 5%,
+        transparent 95%
+      ) !important;
     }
   }
 

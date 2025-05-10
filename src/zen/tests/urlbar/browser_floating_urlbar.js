@@ -32,7 +32,10 @@ add_task(async function test_Click_Shoudnt_FLoat_Urlbar() {
     value: 'http://example.com/',
   });
 
-  ok(!gURLBar.textbox.hasAttribute('zen-floating-urlbar'), 'URL bar should not be in floating mode');
+  ok(
+    !gURLBar.textbox.hasAttribute('zen-floating-urlbar'),
+    'URL bar should not be in floating mode'
+  );
 });
 
 add_task(async function test_Floating_Highlight_Everything() {
@@ -44,5 +47,8 @@ add_task(async function test_Floating_Highlight_Everything() {
 
   // Selection range
   ok(gURLBar.selectionStart == 0, 'Selection start should be 0');
-  ok(gURLBar.selectionEnd == gURLBar.value.length, 'Selection end should be the length of the value');
+  ok(
+    gURLBar.selectionEnd == gURLBar.value.length,
+    'Selection end should be the length of the value'
+  );
 });

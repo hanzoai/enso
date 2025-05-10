@@ -17,9 +17,11 @@ var ZenWorkspacesStorage = {
   },
 
   async _ensureTable() {
-    await this.lazy.PlacesUtils.withConnectionWrapper('ZenWorkspacesStorage._ensureTable', async (db) => {
-      // Create the main workspaces table if it doesn't exist
-      await db.execute(`
+    await this.lazy.PlacesUtils.withConnectionWrapper(
+      'ZenWorkspacesStorage._ensureTable',
+      async (db) => {
+        // Create the main workspaces table if it doesn't exist
+        await db.execute(`
         CREATE TABLE IF NOT EXISTS zen_workspaces (
           id INTEGER PRIMARY KEY,
           uuid TEXT UNIQUE NOT NULL,
@@ -32,55 +34,60 @@ var ZenWorkspacesStorage = {
         )
       `);
 
-      // Add new columns if they don't exist
-      // SQLite doesn't have a direct "ADD COLUMN IF NOT EXISTS" syntax,
-      // so we need to check if the columns exist first
-      const columns = await db.execute(`PRAGMA table_info(zen_workspaces)`);
-      const columnNames = columns.map((row) => row.getResultByName('name'));
+        // Add new columns if they don't exist
+        // SQLite doesn't have a direct "ADD COLUMN IF NOT EXISTS" syntax,
+        // so we need to check if the columns exist first
+        const columns = await db.execute(`PRAGMA table_info(zen_workspaces)`);
+        const columnNames = columns.map((row) => row.getResultByName('name'));
 
-      // Helper function to add column if it doesn't exist
-      const addColumnIfNotExists = async (columnName, definition) => {
-        if (!columnNames.includes(columnName)) {
-          await db.execute(`ALTER TABLE zen_workspaces ADD COLUMN ${columnName} ${definition}`);
-        }
-      };
+        // Helper function to add column if it doesn't exist
+        const addColumnIfNotExists = async (columnName, definition) => {
+          if (!columnNames.includes(columnName)) {
+            await db.execute(`ALTER TABLE zen_workspaces ADD COLUMN ${columnName} ${definition}`);
+          }
+        };
 
-      // Add each new column if it doesn't exist
-      await addColumnIfNotExists('theme_type', 'TEXT');
-      await addColumnIfNotExists('theme_colors', 'TEXT');
-      await addColumnIfNotExists('theme_opacity', 'REAL');
-      await addColumnIfNotExists('theme_rotation', 'INTEGER');
-      await addColumnIfNotExists('theme_texture', 'REAL');
+        // Add each new column if it doesn't exist
+        await addColumnIfNotExists('theme_type', 'TEXT');
+        await addColumnIfNotExists('theme_colors', 'TEXT');
+        await addColumnIfNotExists('theme_opacity', 'REAL');
+        await addColumnIfNotExists('theme_rotation', 'INTEGER');
+        await addColumnIfNotExists('theme_texture', 'REAL');
 
-      // Create an index on the uuid column
-      await db.execute(`
+        // Create an index on the uuid column
+        await db.execute(`
         CREATE INDEX IF NOT EXISTS idx_zen_workspaces_uuid ON zen_workspaces(uuid)
       `);
 
-      // Create the changes tracking table if it doesn't exist
-      await db.execute(`
+        // Create the changes tracking table if it doesn't exist
+        await db.execute(`
         CREATE TABLE IF NOT EXISTS zen_workspaces_changes (
           uuid TEXT PRIMARY KEY,
           timestamp INTEGER NOT NULL
         )
       `);
 
-      // Create an index on the uuid column for changes tracking table
-      await db.execute(`
+        // Create an index on the uuid column for changes tracking table
+        await db.execute(`
         CREATE INDEX IF NOT EXISTS idx_zen_workspaces_changes_uuid ON zen_workspaces_changes(uuid)
       `);
 
-      if (!this.lazy.Weave.Service.engineManager.get('workspaces')) {
-        this.lazy.Weave.Service.engineManager.register(ZenWorkspacesEngine);
-        await ZenWorkspacesStorage.migrateWorkspacesFromJSON();
-      }
+        if (!this.lazy.Weave.Service.engineManager.get('workspaces')) {
+          this.lazy.Weave.Service.engineManager.register(ZenWorkspacesEngine);
+          await ZenWorkspacesStorage.migrateWorkspacesFromJSON();
+        }
 
-      ZenWorkspaces._resolveDBInitialized();
-    });
+        ZenWorkspaces._resolveDBInitialized();
+      }
+    );
   },
 
   async migrateWorkspacesFromJSON() {
-    const oldWorkspacesPath = PathUtils.join(PathUtils.profileDir, 'zen-workspaces', 'Workspaces.json');
+    const oldWorkspacesPath = PathUtils.join(
+      PathUtils.profileDir,
+      'zen-workspaces',
+      'Workspaces.json'
+    );
     if (await IOUtils.exists(oldWorkspacesPath)) {
       console.info('ZenWorkspacesStorage: Migrating workspaces from JSON...');
       const oldWorkspaces = await IOUtils.readJSON(oldWorkspacesPath);
@@ -110,23 +117,27 @@ var ZenWorkspacesStorage = {
   async saveWorkspace(workspace, notifyObservers = true) {
     const changedUUIDs = new Set();
 
-    await this.lazy.PlacesUtils.withConnectionWrapper('ZenWorkspacesStorage.saveWorkspace', async (db) => {
-      await db.executeTransaction(async () => {
-        const now = Date.now();
+    await this.lazy.PlacesUtils.withConnectionWrapper(
+      'ZenWorkspacesStorage.saveWorkspace',
+      async (db) => {
+        await db.executeTransaction(async () => {
+          const now = Date.now();
 
-        let newPosition;
-        if ('position' in workspace && Number.isFinite(workspace.position)) {
-          newPosition = workspace.position;
-        } else {
-          // Get the maximum position
-          const maxPositionResult = await db.execute(`SELECT MAX("position") as max_position FROM zen_workspaces`);
-          const maxPosition = maxPositionResult[0].getResultByName('max_position') || 0;
-          newPosition = maxPosition + 1000; // Add a large increment to avoid frequent reordering
-        }
+          let newPosition;
+          if ('position' in workspace && Number.isFinite(workspace.position)) {
+            newPosition = workspace.position;
+          } else {
+            // Get the maximum position
+            const maxPositionResult = await db.execute(
+              `SELECT MAX("position") as max_position FROM zen_workspaces`
+            );
+            const maxPosition = maxPositionResult[0].getResultByName('max_position') || 0;
+            newPosition = maxPosition + 1000; // Add a large increment to avoid frequent reordering
+          }
 
-        // Insert or replace the workspace
-        await db.executeCached(
-          `
+          // Insert or replace the workspace
+          await db.executeCached(
+            `
           INSERT OR REPLACE INTO zen_workspaces (
           uuid, name, icon, container_id, created_at, updated_at, "position",
           theme_type, theme_colors, theme_opacity, theme_rotation, theme_texture
@@ -138,38 +149,39 @@ var ZenWorkspacesStorage = {
           :theme_type, :theme_colors, :theme_opacity, :theme_rotation, :theme_texture
         )
         `,
-          {
-            uuid: workspace.uuid,
-            name: workspace.name,
-            icon: workspace.icon || null,
-            container_id: workspace.containerTabId || null,
-            now,
-            position: newPosition,
-            theme_type: workspace.theme?.type || null,
-            theme_colors: workspace.theme ? JSON.stringify(workspace.theme.gradientColors) : null,
-            theme_opacity: workspace.theme?.opacity || null,
-            theme_rotation: workspace.theme?.rotation || null,
-            theme_texture: workspace.theme?.texture || null,
-          }
-        );
+            {
+              uuid: workspace.uuid,
+              name: workspace.name,
+              icon: workspace.icon || null,
+              container_id: workspace.containerTabId || null,
+              now,
+              position: newPosition,
+              theme_type: workspace.theme?.type || null,
+              theme_colors: workspace.theme ? JSON.stringify(workspace.theme.gradientColors) : null,
+              theme_opacity: workspace.theme?.opacity || null,
+              theme_rotation: workspace.theme?.rotation || null,
+              theme_texture: workspace.theme?.texture || null,
+            }
+          );
 
-        // Record the change
-        await db.execute(
-          `
+          // Record the change
+          await db.execute(
+            `
           INSERT OR REPLACE INTO zen_workspaces_changes (uuid, timestamp)
         VALUES (:uuid, :timestamp)
         `,
-          {
-            uuid: workspace.uuid,
-            timestamp: Math.floor(now / 1000),
-          }
-        );
+            {
+              uuid: workspace.uuid,
+              timestamp: Math.floor(now / 1000),
+            }
+          );
 
-        changedUUIDs.add(workspace.uuid);
+          changedUUIDs.add(workspace.uuid);
 
-        await this.updateLastChangeTimestamp(db);
-      });
-    });
+          await this.updateLastChangeTimestamp(db);
+        });
+      }
+    );
 
     if (notifyObservers) {
       this._notifyWorkspacesChanged('zen-workspace-updated', Array.from(changedUUIDs));
@@ -202,29 +214,32 @@ var ZenWorkspacesStorage = {
   async removeWorkspace(uuid, notifyObservers = true) {
     const changedUUIDs = [uuid];
 
-    await this.lazy.PlacesUtils.withConnectionWrapper('ZenWorkspacesStorage.removeWorkspace', async (db) => {
-      await db.execute(
-        `
+    await this.lazy.PlacesUtils.withConnectionWrapper(
+      'ZenWorkspacesStorage.removeWorkspace',
+      async (db) => {
+        await db.execute(
+          `
             DELETE FROM zen_workspaces WHERE uuid = :uuid
           `,
-        { uuid }
-      );
+          { uuid }
+        );
 
-      // Record the removal as a change
-      const now = Date.now();
-      await db.execute(
-        `
+        // Record the removal as a change
+        const now = Date.now();
+        await db.execute(
+          `
         INSERT OR REPLACE INTO zen_workspaces_changes (uuid, timestamp)
         VALUES (:uuid, :timestamp)
       `,
-        {
-          uuid,
-          timestamp: Math.floor(now / 1000),
-        }
-      );
+          {
+            uuid,
+            timestamp: Math.floor(now / 1000),
+          }
+        );
 
-      await this.updateLastChangeTimestamp(db);
-    });
+        await this.updateLastChangeTimestamp(db);
+      }
+    );
 
     if (notifyObservers) {
       this._notifyWorkspacesChanged('zen-workspace-removed', changedUUIDs);
@@ -232,27 +247,33 @@ var ZenWorkspacesStorage = {
   },
 
   async wipeAllWorkspaces() {
-    await this.lazy.PlacesUtils.withConnectionWrapper('ZenWorkspacesStorage.wipeAllWorkspaces', async (db) => {
-      await db.execute(`DELETE FROM zen_workspaces`);
-      await db.execute(`DELETE FROM zen_workspaces_changes`);
-      await this.updateLastChangeTimestamp(db);
-    });
+    await this.lazy.PlacesUtils.withConnectionWrapper(
+      'ZenWorkspacesStorage.wipeAllWorkspaces',
+      async (db) => {
+        await db.execute(`DELETE FROM zen_workspaces`);
+        await db.execute(`DELETE FROM zen_workspaces_changes`);
+        await this.updateLastChangeTimestamp(db);
+      }
+    );
   },
 
   async markChanged(uuid) {
-    await this.lazy.PlacesUtils.withConnectionWrapper('ZenWorkspacesStorage.markChanged', async (db) => {
-      const now = Date.now();
-      await db.execute(
-        `
+    await this.lazy.PlacesUtils.withConnectionWrapper(
+      'ZenWorkspacesStorage.markChanged',
+      async (db) => {
+        const now = Date.now();
+        await db.execute(
+          `
         INSERT OR REPLACE INTO zen_workspaces_changes (uuid, timestamp)
         VALUES (:uuid, :timestamp)
       `,
-        {
-          uuid,
-          timestamp: Math.floor(now / 1000),
-        }
-      );
-    });
+          {
+            uuid,
+            timestamp: Math.floor(now / 1000),
+          }
+        );
+      }
+    );
   },
 
   async saveWorkspaceTheme(uuid, theme, notifyObservers = true) {
@@ -303,14 +324,19 @@ var ZenWorkspacesStorage = {
   },
 
   async clearChangedIDs() {
-    await this.lazy.PlacesUtils.withConnectionWrapper('ZenWorkspacesStorage.clearChangedIDs', async (db) => {
-      await db.execute(`DELETE FROM zen_workspaces_changes`);
-    });
+    await this.lazy.PlacesUtils.withConnectionWrapper(
+      'ZenWorkspacesStorage.clearChangedIDs',
+      async (db) => {
+        await db.execute(`DELETE FROM zen_workspaces_changes`);
+      }
+    );
   },
 
   shouldReorderWorkspaces(before, current, after) {
     const minGap = 1; // Minimum allowed gap between positions
-    return (before !== null && current - before < minGap) || (after !== null && after - current < minGap);
+    return (
+      (before !== null && current - before < minGap) || (after !== null && after - current < minGap)
+    );
   },
 
   async reorderAllWorkspaces(db, changedUUIDs) {
@@ -356,41 +382,44 @@ var ZenWorkspacesStorage = {
   async updateWorkspacePositions(workspaces) {
     const changedUUIDs = new Set();
 
-    await this.lazy.PlacesUtils.withConnectionWrapper('ZenWorkspacesStorage.updateWorkspacePositions', async (db) => {
-      await db.executeTransaction(async () => {
-        const now = Date.now();
+    await this.lazy.PlacesUtils.withConnectionWrapper(
+      'ZenWorkspacesStorage.updateWorkspacePositions',
+      async (db) => {
+        await db.executeTransaction(async () => {
+          const now = Date.now();
 
-        for (let i = 0; i < workspaces.length; i++) {
-          const workspace = workspaces[i];
-          const newPosition = (i + 1) * 1000;
+          for (let i = 0; i < workspaces.length; i++) {
+            const workspace = workspaces[i];
+            const newPosition = (i + 1) * 1000;
 
-          await db.execute(
-            `
+            await db.execute(
+              `
           UPDATE zen_workspaces
           SET "position" = :newPosition
           WHERE uuid = :uuid
         `,
-            { newPosition, uuid: workspace.uuid }
-          );
+              { newPosition, uuid: workspace.uuid }
+            );
 
-          changedUUIDs.add(workspace.uuid);
+            changedUUIDs.add(workspace.uuid);
 
-          // Record the change
-          await db.execute(
-            `
+            // Record the change
+            await db.execute(
+              `
           INSERT OR REPLACE INTO zen_workspaces_changes (uuid, timestamp)
           VALUES (:uuid, :timestamp)
         `,
-            {
-              uuid: workspace.uuid,
-              timestamp: Math.floor(now / 1000),
-            }
-          );
-        }
+              {
+                uuid: workspace.uuid,
+                timestamp: Math.floor(now / 1000),
+              }
+            );
+          }
 
-        await this.updateLastChangeTimestamp(db);
-      });
-    });
+          await this.updateLastChangeTimestamp(db);
+        });
+      }
+    );
 
     this._notifyWorkspacesChanged('zen-workspace-updated', Array.from(changedUUIDs));
   },
@@ -403,9 +432,11 @@ var ZenWorkspaceBookmarksStorage = {
   },
 
   async _ensureTable() {
-    await ZenWorkspacesStorage.lazy.PlacesUtils.withConnectionWrapper('ZenWorkspaceBookmarksStorage.init', async (db) => {
-      // Create table using GUIDs instead of IDs
-      await db.execute(`
+    await ZenWorkspacesStorage.lazy.PlacesUtils.withConnectionWrapper(
+      'ZenWorkspaceBookmarksStorage.init',
+      async (db) => {
+        // Create table using GUIDs instead of IDs
+        await db.execute(`
         CREATE TABLE IF NOT EXISTS zen_bookmarks_workspaces (
           id INTEGER PRIMARY KEY,
           bookmark_guid TEXT NOT NULL,
@@ -418,14 +449,14 @@ var ZenWorkspaceBookmarksStorage = {
           )
       `);
 
-      // Create index for fast lookups
-      await db.execute(`
+        // Create index for fast lookups
+        await db.execute(`
         CREATE INDEX IF NOT EXISTS idx_bookmarks_workspaces_lookup
           ON zen_bookmarks_workspaces(workspace_uuid, bookmark_guid)
       `);
 
-      // Add changes tracking table
-      await db.execute(`
+        // Add changes tracking table
+        await db.execute(`
         CREATE TABLE IF NOT EXISTS zen_bookmarks_workspaces_changes (
           id INTEGER PRIMARY KEY,
           bookmark_guid TEXT NOT NULL,
@@ -438,12 +469,13 @@ var ZenWorkspaceBookmarksStorage = {
           )
       `);
 
-      // Create index for changes tracking
-      await db.execute(`
+        // Create index for changes tracking
+        await db.execute(`
         CREATE INDEX IF NOT EXISTS idx_bookmarks_workspaces_changes
           ON zen_bookmarks_workspaces_changes(bookmark_guid, workspace_uuid)
       `);
-    });
+      }
+    );
   },
 
   /**

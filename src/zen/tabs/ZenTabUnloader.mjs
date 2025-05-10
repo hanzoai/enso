@@ -1,11 +1,26 @@
 {
   const lazy = {};
 
-  XPCOMUtils.defineLazyPreferenceGetter(lazy, 'zenTabUnloaderEnabled', 'zen.tab-unloader.enabled', false);
+  XPCOMUtils.defineLazyPreferenceGetter(
+    lazy,
+    'zenTabUnloaderEnabled',
+    'zen.tab-unloader.enabled',
+    false
+  );
 
-  XPCOMUtils.defineLazyPreferenceGetter(lazy, 'zenTabUnloaderTimeout', 'zen.tab-unloader.timeout-minutes', 20);
+  XPCOMUtils.defineLazyPreferenceGetter(
+    lazy,
+    'zenTabUnloaderTimeout',
+    'zen.tab-unloader.timeout-minutes',
+    20
+  );
 
-  XPCOMUtils.defineLazyPreferenceGetter(lazy, 'zenTabUnloaderExcludedUrls', 'zen.tab-unloader.excluded-urls', '');
+  XPCOMUtils.defineLazyPreferenceGetter(
+    lazy,
+    'zenTabUnloaderExcludedUrls',
+    'zen.tab-unloader.excluded-urls',
+    ''
+  );
 
   const ZEN_TAB_UNLOADER_DEFAULT_EXCLUDED_URLS = [
     '^about:',
@@ -68,7 +83,10 @@
 
     constructor(unloader) {
       this.unloader = unloader;
-      this.interval = setInterval(this.intervalListener.bind(this), ZenTabsIntervalUnloader.INTERVAL);
+      this.interval = setInterval(
+        this.intervalListener.bind(this),
+        ZenTabsIntervalUnloader.INTERVAL
+      );
     }
 
     intervalListener() {
@@ -218,7 +236,10 @@
     get excludedUrls() {
       // Check if excludedrls is the same as the pref value
       const excludedUrls = this.lazyExcludeUrls;
-      if (!this.arraysEqual(this.#excludedUrls, excludedUrls) || !this.#compiledExcludedUrls.length) {
+      if (
+        !this.arraysEqual(this.#excludedUrls, excludedUrls) ||
+        !this.#compiledExcludedUrls.length
+      ) {
         this.#excludedUrls = excludedUrls;
         this.#compiledExcludedUrls = excludedUrls.map((url) => new RegExp(url));
       }
@@ -231,7 +252,9 @@
     }
 
     unloadTab() {
-      const tabs = TabContextMenu.contextTab.multiselected ? gBrowser.selectedTabs : [TabContextMenu.contextTab];
+      const tabs = TabContextMenu.contextTab.multiselected
+        ? gBrowser.selectedTabs
+        : [TabContextMenu.contextTab];
       this.explicitUnloadTabs(tabs);
     }
 
@@ -244,7 +267,9 @@
     }
 
     preventUnloadTab() {
-      const tabs = TabContextMenu.contextTab.multiselected ? gBrowser.selectedTabs : [TabContextMenu.contextTab];
+      const tabs = TabContextMenu.contextTab.multiselected
+        ? gBrowser.selectedTabs
+        : [TabContextMenu.contextTab];
       for (let i = 0; i < tabs.length; i++) {
         const tab = tabs[i];
         tab.zenIgnoreUnload = true;
@@ -252,7 +277,9 @@
     }
 
     ignoreUnloadTab() {
-      const tabs = TabContextMenu.contextTab.multiselected ? gBrowser.selectedTabs : [TabContextMenu.contextTab];
+      const tabs = TabContextMenu.contextTab.multiselected
+        ? gBrowser.selectedTabs
+        : [TabContextMenu.contextTab];
       for (let i = 0; i < tabs.length; i++) {
         const tab = tabs[i];
         tab.zenIgnoreUnload = false;
@@ -288,7 +315,9 @@
       }
       const diff = currentTimestamp - lastActivity;
       // Check if the tab has been inactive for more than the timeout
-      return diff > lazy.zenTabUnloaderTimeout * 60 * 1000 && this._tabPermitsUnload(tab, extraArgs);
+      return (
+        diff > lazy.zenTabUnloaderTimeout * 60 * 1000 && this._tabPermitsUnload(tab, extraArgs)
+      );
     }
 
     _tabPermitsUnload(tab, extraArgs) {

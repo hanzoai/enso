@@ -37,7 +37,10 @@
 
         this._checkForWelcomePage();
 
-        document.l10n.setAttributes(document.getElementById('tabs-newtab-button'), 'tabs-toolbar-new-tab');
+        document.l10n.setAttributes(
+          document.getElementById('tabs-newtab-button'),
+          'tabs-toolbar-new-tab'
+        );
       } catch (e) {
         console.error('ZenThemeModifier: Error initializing browser layout', e);
       }
@@ -104,7 +107,9 @@
             }
           )
           .then(() => {
-            for (let elem of document.querySelectorAll('#browser > *, #urlbar, #tabbrowser-tabbox > *')) {
+            for (let elem of document.querySelectorAll(
+              '#browser > *, #urlbar, #tabbrowser-tabbox > *'
+            )) {
               elem.style.removeProperty('opacity');
             }
           });
@@ -141,7 +146,10 @@
 
     _initSidebarScrolling() {
       // Disable smooth scroll
-      const canSmoothScroll = Services.prefs.getBoolPref('zen.startup.smooth-scroll-in-tabs', false);
+      const canSmoothScroll = Services.prefs.getBoolPref(
+        'zen.startup.smooth-scroll-in-tabs',
+        false
+      );
       const tabsWrapper = document.getElementById('zen-tabs-wrapper');
       gBrowser.tabContainer.addEventListener('wheel', (event) => {
         if (canSmoothScroll) return;
@@ -162,7 +170,9 @@
 
         window.requestAnimationFrame(() => {
           tabContainer.arrowScrollbox.toggleAttribute('overflowing', overflowing);
-          tabContainer.arrowScrollbox.dispatchEvent(new CustomEvent(overflowing ? 'overflow' : 'underflow'));
+          tabContainer.arrowScrollbox.dispatchEvent(
+            new CustomEvent(overflowing ? 'overflow' : 'underflow')
+          );
         });
       });
       observer.observe(tabsWrapper);
@@ -180,7 +190,10 @@
     _checkForWelcomePage() {
       if (!Services.prefs.getBoolPref('zen.welcome-screen.seen', false)) {
         Services.prefs.setBoolPref('zen.welcome-screen.seen', true);
-        Services.scriptloader.loadSubScript('chrome://browser/content/zen-components/ZenWelcome.mjs', window);
+        Services.scriptloader.loadSubScript(
+          'chrome://browser/content/zen-components/ZenWelcome.mjs',
+          window
+        );
       }
     },
   };

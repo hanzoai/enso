@@ -103,7 +103,10 @@
     --zen-min-toolbox-padding: 0.35rem;
   }
   /* Actual padding used, ensuring it's at least min padding or based on element separation */
-  --zen-toolbox-padding: max(var(--zen-min-toolbox-padding), calc(var(--zen-element-separation) / 1.5));
+  --zen-toolbox-padding: max(
+    var(--zen-min-toolbox-padding),
+    calc(var(--zen-element-separation) / 1.5)
+  );
 }
 
 /* ==========================================================================
@@ -290,7 +293,9 @@
 
     /* Scale down tab slightly on active press (but not when dragging or clicking images) */
     #tabbrowser-tabs:not([movingtab]) &:active:not(:has(.tab-content > image:active)) {
-      scale: var(--zen-active-tab-scale); /* Requires --zen-active-tab-scale to be defined elsewhere */
+      scale: var(
+        --zen-active-tab-scale
+      ); /* Requires --zen-active-tab-scale to be defined elsewhere */
     }
 
     /* Scale down icon/image specifically on active press */
@@ -535,7 +540,9 @@
 
     /* Specific padding for URL bar input in single toolbar mode */
     :root[zen-single-toolbar='true'] & {
-      & #urlbar:not([breakout-extend='true']):not([pageproxystate='invalid']) .urlbar-input-container {
+      &
+        #urlbar:not([breakout-extend='true']):not([pageproxystate='invalid'])
+        .urlbar-input-container {
         padding-left: 8px;
         padding-right: 4px;
       }
@@ -660,7 +667,10 @@
 
       /* --- Pinned Tab Icon Repositioning & Reset Button --- */
       /* Reposition icon stack absolutely when tab is pinned (and not essential) */
-      &[zen-pinned-changed='true']:not([zen-essential]) > .tab-stack > .tab-content > .tab-icon-stack {
+      &[zen-pinned-changed='true']:not([zen-essential])
+        > .tab-stack
+        > .tab-content
+        > .tab-icon-stack {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
@@ -889,7 +899,9 @@
         :is(
             :root[uidensity='compact'],
             #tabbrowser-tabs[secondarytext-unsupported],
-            :root:not([uidensity='compact']) #tabbrowser-tabs:not([secondarytext-unsupported]) .tabbrowser-tab:hover
+            :root:not([uidensity='compact'])
+              #tabbrowser-tabs:not([secondarytext-unsupported])
+              .tabbrowser-tab:hover
           )
           .tab-icon-stack[indicator-replaces-favicon]
           > :not(&),
@@ -1024,7 +1036,9 @@
   display: flex; /* Use flex for alignment */
   position: relative; /* For pseudo-element positioning */
   height: calc(100% - var(--tab-block-margin) * 2); /* Adjust height based on margins */
-  margin-left: calc(-1 * var(--tab-inline-padding) + var(--tab-block-margin)); /* Overlap slightly */
+  margin-left: calc(
+    -1 * var(--tab-inline-padding) + var(--tab-block-margin)
+  ); /* Overlap slightly */
   margin-right: 8px;
   padding: 0 calc(var(--toolbarbutton-inner-padding) - 2px) 0
     calc(var(--toolbarbutton-inner-padding) / 4 + var(--tab-inline-padding) - 2px); /* Custom padding */
@@ -1118,7 +1132,9 @@
 
   /* Adjust inner padding based on sidebar state */
   :root[zen-sidebar-expanded='true'] & {
-    --toolbarbutton-inner-padding: var(--zen-toolbar-button-inner-padding) !important; /* Use theme variable */
+    --toolbarbutton-inner-padding: var(
+      --zen-toolbar-button-inner-padding
+    ) !important; /* Use theme variable */
   }
   :root[zen-single-toolbar='true'] & {
     --toolbarbutton-inner-padding: calc(
@@ -1153,7 +1169,9 @@
 
     /* Standardize height and padding for toolbar buttons (excluding titlebar buttons) */
     & toolbarbutton:not(.titlebar-button) {
-      height: calc(2 * var(--toolbarbutton-inner-padding) + 16px); /* Calculate height based on padding + icon */
+      height: calc(
+        2 * var(--toolbarbutton-inner-padding) + 16px
+      ); /* Calculate height based on padding + icon */
       padding: 0 var(--toolbarbutton-outer-padding) !important; /* Apply outer padding */
     }
 
@@ -1231,7 +1249,10 @@
           content: '';
           display: block;
           height: 1px;
-          background: light-dark(rgba(1, 1, 1, 0.075), rgba(255, 255, 255, 0.1)); /* Separator color */
+          background: light-dark(
+            rgba(1, 1, 1, 0.075),
+            rgba(255, 255, 255, 0.1)
+          ); /* Separator color */
           width: 98%; /* Near full width */
           position: absolute;
           top: -8px; /* Position above the button */
@@ -1269,7 +1290,10 @@
     grid-template-columns: repeat(auto-fit, minmax(max(30%, 48px), auto));
   }
   &[data-hack-type='2'] {
-    grid-template-columns: repeat(auto-fit, minmax(max(23%, 48px), 1fr) minmax(max(23%, 48px), 1fr));
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(max(23%, 48px), 1fr) minmax(max(23%, 48px), 1fr)
+    );
   }
   &[data-hack-type='3'] {
     grid-template-columns: repeat(auto-fit, minmax(max(25%, 48px), 1fr));
@@ -1282,7 +1306,9 @@
 
   &[hidden='true'] {
     --hidden-essentials-width: var(--zen-sidebar-width);
-    max-width: var(--hidden-essentials-width) !important; /* To still allow essentials to grid the tabs */
+    max-width: var(
+      --hidden-essentials-width
+    ) !important; /* To still allow essentials to grid the tabs */
     min-width: var(--hidden-essentials-width) !important;
   }
 }
@@ -1351,7 +1377,9 @@
       &::before {
         background: light-dark(rgba(255, 255, 255, 0.85), rgba(68, 64, 64, 0.85));
         margin: var(--zen-essential-bg-margin); /* Apply margin */
-        border-radius: calc(var(--border-radius-medium) - var(--zen-essential-bg-margin)); /* Adjust radius */
+        border-radius: calc(
+          var(--border-radius-medium) - var(--zen-essential-bg-margin)
+        ); /* Adjust radius */
         position: absolute;
         inset: 0;
         z-index: 0; /* Position above ::after, below content */

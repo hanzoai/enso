@@ -94,8 +94,16 @@
 
 #appMenu-passwords-button,
 #password-notification-icon,
-#PopupAutoComplete > richlistbox > richlistitem[originaltype='generatedPassword'] > .two-line-wrapper > .ac-site-icon,
-#PopupAutoComplete > richlistbox > richlistitem[originaltype='loginWithOrigin'] > .two-line-wrapper > .ac-site-icon,
+#PopupAutoComplete
+  > richlistbox
+  > richlistitem[originaltype='generatedPassword']
+  > .two-line-wrapper
+  > .ac-site-icon,
+#PopupAutoComplete
+  > richlistbox
+  > richlistitem[originaltype='loginWithOrigin']
+  > .two-line-wrapper
+  > .ac-site-icon,
 #PopupAutoComplete > richlistbox > richlistitem[originaltype='login'] > .ac-site-icon {
   list-style-image: url('passwords.svg') !important;
 }
@@ -125,13 +133,19 @@
 }
 
 #history-panelmenu,
-.urlbarView-row[source='history'] > .urlbarView-row-inner > .urlbarView-no-wrap > .urlbarView-favicon,
+.urlbarView-row[source='history']
+  > .urlbarView-row-inner
+  > .urlbarView-no-wrap
+  > .urlbarView-favicon,
 #urlbar-engine-one-off-item-history,
 #appMenu-history-button,
 #appMenu-library-history-button,
 #sidebar-switcher-history,
 #zen-history-button,
-#sidebar-box[sidebarcommand='viewHistorySidebar'] > #sidebar-header > #sidebar-switcher-target > #sidebar-icon {
+#sidebar-box[sidebarcommand='viewHistorySidebar']
+  > #sidebar-header
+  > #sidebar-switcher-target
+  > #sidebar-icon {
   list-style-image: url('history.svg') !important;
 }
 
@@ -276,7 +290,10 @@
 #appMenu-bookmarks-button,
 #sidebar-switcher-bookmarks,
 #appMenu-library-bookmarks-button,
-#sidebar-box[sidebarcommand='viewBookmarksSidebar'] > #sidebar-header > #sidebar-switcher-target > #sidebar-icon {
+#sidebar-box[sidebarcommand='viewBookmarksSidebar']
+  > #sidebar-header
+  > #sidebar-switcher-target
+  > #sidebar-icon {
   list-style-image: url('bookmark-star-on-tray.svg') !important;
 }
 
@@ -302,7 +319,10 @@
   list-style-image: url('page-portrait.svg') !important;
 }
 
-#urlbar:not(.searchButton) > #urlbar-input-container > #identity-box[pageproxystate='invalid'] #identity-icon {
+#urlbar:not(.searchButton)
+  > #urlbar-input-container
+  > #identity-box[pageproxystate='invalid']
+  #identity-icon {
   list-style-image: url('search-glass.svg') !important;
 }
 
@@ -428,7 +448,10 @@
   list-style-image: url('split.svg');
 }
 
-#sidebar-box[sidebarcommand='viewTabsSidebar'] > #sidebar-header > #sidebar-switcher-target > #sidebar-icon,
+#sidebar-box[sidebarcommand='viewTabsSidebar']
+  > #sidebar-header
+  > #sidebar-switcher-target
+  > #sidebar-icon,
 #sidebar-switcher-tabs {
   list-style-image: url('send-to-device.svg') !important;
 }
@@ -592,7 +615,10 @@
   background-image: url('reload-to-stop.svg') !important;
 }
 
-#stop-reload-button[animate] > #reload-button > .toolbarbutton-animatable-box > .toolbarbutton-animatable-image,
+#stop-reload-button[animate]
+  > #reload-button
+  > .toolbarbutton-animatable-box
+  > .toolbarbutton-animatable-image,
 #zen-sidebar-web-panel-reload[animate]
   > #zen-sidebar-web-panel-reload-button
   > .toolbarbutton-animatable-box
@@ -630,7 +656,14 @@
   ),
 :not(:not(menubar) > menu, #ContentSelectDropdown)
   > menupopup
-  > menu:not(.menu-iconic, [type='checkbox'], [type='radio'], .in-menulist, .in-menulist menu, .unified-nav-current),
+  > menu:not(
+    .menu-iconic,
+    [type='checkbox'],
+    [type='radio'],
+    .in-menulist,
+    .in-menulist menu,
+    .unified-nav-current
+  ),
 #toggle_toolbar-menubar,
 #PanelUI-history toolbarbutton,
 #unified-extensions-context-menu menuitem {
@@ -1112,10 +1145,18 @@ menuitem[id='placesContext_new:separator'] {
   ),
 :not(:not(menubar) > menu, #ContentSelectDropdown)
   > menupopup
-  > menu:not(.menu-iconic, [type='checkbox'], [type='radio'], .in-menulist, .in-menulist menu, .unified-nav-current),
+  > menu:not(
+    .menu-iconic,
+    [type='checkbox'],
+    [type='radio'],
+    .in-menulist,
+    .in-menulist menu,
+    .unified-nav-current
+  ),
 :not(:not(menubar) > menu, #ContentSelectDropdown) > menupopup > menucaption {
   padding-inline-start: calc(
-    var(--fp-contextmenu-menuitem-padding-inline) + 16px + var(--fp-contextmenu-menuicon-margin-inline)
+    var(--fp-contextmenu-menuitem-padding-inline) + 16px +
+      var(--fp-contextmenu-menuicon-margin-inline)
   ) !important;
 }
 

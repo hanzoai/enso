@@ -19,7 +19,9 @@
         'zen.pinned-tab-manager.close-shortcut-behavior',
         'switch'
       );
-      ChromeUtils.defineESModuleGetters(lazy, { E10SUtils: 'resource://gre/modules/E10SUtils.sys.mjs' });
+      ChromeUtils.defineESModuleGetters(lazy, {
+        E10SUtils: 'resource://gre/modules/E10SUtils.sys.mjs',
+      });
       this.#listenPinnedTabEvents();
     }
 
@@ -100,7 +102,9 @@
         } catch {}
       } else {
         if (tab.hasAttribute('zen-essential')) {
-          tab.querySelector('.tab-background').style.setProperty('--zen-tab-icon', `url(${iconUrl})`);
+          tab
+            .querySelector('.tab-background')
+            .style.setProperty('--zen-tab-icon', `url(${iconUrl})`);
         }
       }
       // TODO: work on this
@@ -354,8 +358,13 @@
       tab.position = tab._tPos;
 
       for (let otherTab of gBrowser.tabs) {
-        if (otherTab.pinned && otherTab.getAttribute('zen-pin-id') !== tab.getAttribute('zen-pin-id')) {
-          const actualPin = this._pinsCache.find((pin) => pin.uuid === otherTab.getAttribute('zen-pin-id'));
+        if (
+          otherTab.pinned &&
+          otherTab.getAttribute('zen-pin-id') !== tab.getAttribute('zen-pin-id')
+        ) {
+          const actualPin = this._pinsCache.find(
+            (pin) => pin.uuid === otherTab.getAttribute('zen-pin-id')
+          );
           if (!actualPin) {
             continue;
           }
@@ -507,7 +516,11 @@
       }
     }
 
-    _onCloseTabShortcut(event, selectedTab = gBrowser.selectedTab, behavior = lazy.zenPinnedTabCloseShortcutBehavior) {
+    _onCloseTabShortcut(
+      event,
+      selectedTab = gBrowser.selectedTab,
+      behavior = lazy.zenPinnedTabCloseShortcutBehavior
+    ) {
       if (!selectedTab?.pinned) {
         return;
       }
@@ -687,7 +700,11 @@
     }
 
     removeEssentials(tab, unpin = true) {
-      const tabs = tab ? [tab] : TabContextMenu.contextTab.multiselected ? gBrowser.selectedTabs : [TabContextMenu.contextTab];
+      const tabs = tab
+        ? [tab]
+        : TabContextMenu.contextTab.multiselected
+          ? gBrowser.selectedTabs
+          : [TabContextMenu.contextTab];
       for (let i = 0; i < tabs.length; i++) {
         const tab = tabs[i];
         tab.removeAttribute('zen-essential');
@@ -742,7 +759,11 @@
 
     // TODO: remove this as it's not possible to know the base pinned url any more as it's now stored in tab state
     resetPinnedTabData(tabData) {
-      if (lazy.zenPinnedTabRestorePinnedTabsToPinnedUrl && tabData.pinned && tabData.zenPinnedEntry) {
+      if (
+        lazy.zenPinnedTabRestorePinnedTabsToPinnedUrl &&
+        tabData.pinned &&
+        tabData.zenPinnedEntry
+      ) {
         tabData.entries = [JSON.parse(tabData.zenPinnedEntry)];
         tabData.image = tabData.zenPinnedIcon;
         tabData.index = 0;
@@ -754,22 +775,27 @@
         return;
       }
       const isVisible = contextTab.pinned && !contextTab.multiselected;
-      document.getElementById('context_zen-reset-pinned-tab').hidden = !isVisible || !contextTab.getAttribute('zen-pin-id');
+      document.getElementById('context_zen-reset-pinned-tab').hidden =
+        !isVisible || !contextTab.getAttribute('zen-pin-id');
       document.getElementById('context_zen-replace-pinned-url-with-current').hidden = !isVisible;
       document.getElementById('context_zen-add-essential').hidden =
         contextTab.getAttribute('zen-essential') || !!contextTab.group;
-      document.getElementById('context_zen-remove-essential').hidden = !contextTab.getAttribute('zen-essential');
+      document.getElementById('context_zen-remove-essential').hidden =
+        !contextTab.getAttribute('zen-essential');
       document.getElementById('context_unpinTab').hidden =
-        document.getElementById('context_unpinTab').hidden || contextTab.getAttribute('zen-essential');
+        document.getElementById('context_unpinTab').hidden ||
+        contextTab.getAttribute('zen-essential');
       document.getElementById('context_unpinSelectedTabs').hidden =
-        document.getElementById('context_unpinSelectedTabs').hidden || contextTab.getAttribute('zen-essential');
+        document.getElementById('context_unpinSelectedTabs').hidden ||
+        contextTab.getAttribute('zen-essential');
       document.getElementById('context_zen-pinned-tab-separator').hidden = !isVisible;
     }
 
     moveToAnotherTabContainerIfNecessary(event, movingTabs) {
       try {
         const pinnedTabsTarget =
-          event.target.closest('#vertical-pinned-tabs-container') || event.target.closest('.zen-current-workspace-indicator');
+          event.target.closest('#vertical-pinned-tabs-container') ||
+          event.target.closest('.zen-current-workspace-indicator');
         const essentialTabsTarget = event.target.closest('.zen-essentials-container');
         const tabsTarget = event.target.closest('#tabbrowser-arrowscrollbox');
         // Remove group labels from the moving tabs and replace it
@@ -801,7 +827,10 @@
           }
           // Check for essentials container
           else if (essentialTabsTarget) {
-            if (!draggedTab.hasAttribute('zen-essential') && !draggedTab?.group?.hasAttribute('split-view-group')) {
+            if (
+              !draggedTab.hasAttribute('zen-essential') &&
+              !draggedTab?.group?.hasAttribute('split-view-group')
+            ) {
               this.addToEssentials(draggedTab);
               moved = true;
               isVertical = false;
@@ -958,7 +987,9 @@
       const tabsTarget = event.target.closest('#tabbrowser-arrowscrollbox');
       let targetTab = event.target.closest('.tabbrowser-tab');
       targetTab = targetTab?.group || targetTab;
-      draggedTab = draggedTab?.group?.hasAttribute('split-view-group') ? draggedTab.group : draggedTab;
+      draggedTab = draggedTab?.group?.hasAttribute('split-view-group')
+        ? draggedTab.group
+        : draggedTab;
       if (event.target.closest('.zen-current-workspace-indicator')) {
         this.removeTabContainersDragoverClass();
         ZenWorkspaces.activeWorkspaceIndicator?.setAttribute('open', true);

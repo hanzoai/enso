@@ -103,8 +103,13 @@ export var ZenCustomizableUI = new (class {
 
   _moveWindowButtons(window) {
     const windowControls = window.document.getElementsByClassName('titlebar-buttonbox-container');
-    const toolboxIcons = window.document.getElementById('zen-sidebar-top-buttons-customization-target');
-    if (window.AppConstants.platform === 'macosx' || window.matchMedia('(-moz-gtk-csd-reversed-placement)').matches) {
+    const toolboxIcons = window.document.getElementById(
+      'zen-sidebar-top-buttons-customization-target'
+    );
+    if (
+      window.AppConstants.platform === 'macosx' ||
+      window.matchMedia('(-moz-gtk-csd-reversed-placement)').matches
+    ) {
       for (let i = 0; i < windowControls.length; i++) {
         if (i === 0) {
           toolboxIcons.prepend(windowControls[i]);
@@ -131,7 +136,11 @@ export var ZenCustomizableUI = new (class {
   }
 
   registerToolbarNodes(window) {
-    window.CustomizableUI.registerToolbarNode(window.document.getElementById('zen-sidebar-top-buttons'));
-    window.CustomizableUI.registerToolbarNode(window.document.getElementById('zen-sidebar-bottom-buttons'));
+    window.CustomizableUI.registerToolbarNode(
+      window.document.getElementById('zen-sidebar-top-buttons')
+    );
+    window.CustomizableUI.registerToolbarNode(
+      window.document.getElementById('zen-sidebar-bottom-buttons')
+    );
   }
 })();

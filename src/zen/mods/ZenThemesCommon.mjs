@@ -3,7 +3,18 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 var ZenThemesCommon = {
-  kZenColors: ['#aac7ff', '#74d7cb', '#a0d490', '#dec663', '#ffb787', '#dec1b1', '#ffb1c0', '#ddbfc3', '#f6b0ea', '#d4bbff'],
+  kZenColors: [
+    '#aac7ff',
+    '#74d7cb',
+    '#a0d490',
+    '#dec663',
+    '#ffb787',
+    '#dec1b1',
+    '#ffb1c0',
+    '#ddbfc3',
+    '#f6b0ea',
+    '#d4bbff',
+  ],
 
   get browsers() {
     return Services.wm.getEnumerator('navigator:browser');
@@ -72,7 +83,8 @@ var ZenThemesCommon = {
       const newThemePreferences = [];
 
       for (let [entry, label] of Object.entries(preferences)) {
-        const [_, negation = '', os = '', property] = /(!?)(?:(macos|windows|linux):)?([A-z0-9-_.]+)/g.exec(entry);
+        const [_, negation = '', os = '', property] =
+          /(!?)(?:(macos|windows|linux):)?([A-z0-9-_.]+)/g.exec(entry);
         const isNegation = negation === '!';
 
         if (
@@ -94,7 +106,8 @@ var ZenThemesCommon = {
     }
 
     return preferences.filter(
-      ({ disabledOn = [] }) => !disabledOn.includes(gZenOperatingSystemCommonUtils.currentOperatingSystem)
+      ({ disabledOn = [] }) =>
+        !disabledOn.includes(gZenOperatingSystemCommonUtils.currentOperatingSystem)
     );
   },
 
