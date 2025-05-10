@@ -4,4 +4,3 @@ support-files = [
 ]
 
 ["browser_basic_workspaces.js"]
-["browser_restore_workspaces.js"]

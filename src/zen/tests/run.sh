@@ -13,5 +13,6 @@ cd ./engine
   zen/tests/workspaces \
   zen/tests/container_essentials \
   zen/tests/urlbar \
-  zen/tests/pinned
+  zen/tests/pinned \
+  zen/tests/compact_mode
 cd ..

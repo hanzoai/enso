@@ -171,6 +171,13 @@ var gZenCompactModeManager = {
     this._evenListeners.push(callback);
   },
 
+  removeEventListener(callback) {
+    const index = this._evenListeners.indexOf(callback);
+    if (index !== -1) {
+      this._evenListeners.splice(index, 1);
+    }
+  },
+
   async _updateEvent() {
     // IF we are animating IN, call the callbacks first so we can calculate the width
     // once the window buttons are shown
