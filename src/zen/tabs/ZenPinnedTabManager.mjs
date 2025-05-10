@@ -388,6 +388,11 @@
         actualPin.title = tab.label;
       }
       await this.savePin(actualPin);
+      tab.dispatchEvent(
+        new CustomEvent('ZenPinnedTabMoved', {
+          detail: { tab },
+        })
+      );
     }
 
     _onTabClick(e) {
@@ -463,6 +468,11 @@
       });
 
       tab.setAttribute('zen-pin-id', uuid);
+      tab.dispatchEvent(
+        new CustomEvent('ZenPinnedTabCreated', {
+          detail: { tab },
+        })
+      );
 
       // This is used while migrating old pins to new system - we don't want to refresh when migrating
       if (tab.getAttribute('zen-pinned-entry')) {
@@ -497,6 +507,11 @@
         }
       }
       await this._refreshPinnedTabs();
+      tab.dispatchEvent(
+        new CustomEvent('ZenPinnedTabRemoved', {
+          detail: { tab },
+        })
+      );
     }
 
     _initClosePinnedTabShortcut() {
