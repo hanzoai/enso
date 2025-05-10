@@ -815,7 +815,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         this._removedByStartupPage = true;
         gBrowser.removeTab(this._initialTab, {
           skipSessionStore: true,
-          animate: false,
         });
       } else {
         this.moveTabToWorkspace(this._initialTab, this.activeWorkspace);
@@ -826,14 +825,19 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
     if (this._tabToRemoveForEmpty) {
       const tabs = gBrowser.tabs.filter((tab) => !tab.collapsed && !tab.hasAttribute('zen-empty-tab'));
-      if (typeof this._tabToSelect === 'number' && this._tabToSelect >= 0 && tabs[this._tabToSelect]) {
+      if (
+        typeof this._tabToSelect === 'number' &&
+        this._tabToSelect >= 0 &&
+        tabs[this._tabToSelect] &&
+        this._shouldShowTab(tabs[this._tabToSelect]) &&
+        tabs[this._tabToSelect] !== this._tabToRemoveForEmpty
+      ) {
         setTimeout(() => {
           this.log(`Found tab to select: ${this._tabToSelect}, ${tabs.length}`);
           gBrowser.selectedTab = tabs[this._tabToSelect];
           this._removedByStartupPage = true;
           gBrowser.removeTab(this._tabToRemoveForEmpty, {
             skipSessionStore: true,
-            animate: false,
           });
           cleanup();
         }, 0);
@@ -843,7 +847,6 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         this._removedByStartupPage = true;
         gBrowser.removeTab(this._tabToRemoveForEmpty, {
           skipSessionStore: true,
-          animate: false,
         });
         cleanup();
       }
