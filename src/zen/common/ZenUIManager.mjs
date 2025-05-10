@@ -460,7 +460,7 @@ var gZenUIManager = {
             this._toastContainer.setAttribute('hidden', true);
           }
         });
-    }, options.timeout || 3000);
+    }, options.timeout || 2000);
   },
 
   get panelUIPosition() {
