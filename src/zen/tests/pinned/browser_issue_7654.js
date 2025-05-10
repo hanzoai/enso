@@ -40,7 +40,7 @@ add_task(async function test_Create_Pinned() {
         const total = UrlbarTestUtils.getResultCount(window);
         info(`Found ${total} matches`);
 
-        const result = await UrlbarTestUtils.getDetailsOfResultAt(window, 0);
+        const result = await UrlbarTestUtils.getDetailsOfResultAt(window, 1);
 
         const url = result?.url;
         Assert.equal(
