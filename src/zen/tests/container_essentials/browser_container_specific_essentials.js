@@ -3,10 +3,6 @@
 
 'use strict';
 
-add_setup(async function () {
-  ZenWorkspaces.containerSpecificEssentials = true;
-});
-
 add_task(async function test_Check_Creation() {
   await ZenWorkspaces.createAndSaveWorkspace('Container Profile 1', undefined, false, 1);
   const workspaces = await ZenWorkspaces._workspaces();
@@ -18,6 +14,10 @@ add_task(async function test_Check_Creation() {
   });
   ok(newTab, 'New tab should be opened.');
   gZenPinnedTabManager.addToEssentials(newTab);
+  ok(
+    newTab.hasAttribute('zen-essential') && newTab.parentNode.getAttribute('container') == '1',
+    'New tab should be marked as essential.'
+  );
   ok(
     gBrowser.tabs.find((t) => t.hasAttribute('zen-essential') && t.getAttribute('usercontextid') == 1),
     'New tab should be marked as essential.'

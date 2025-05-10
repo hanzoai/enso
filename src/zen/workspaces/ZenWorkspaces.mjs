@@ -825,9 +825,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
       delete this._initialTab;
     }
     if (this._tabToRemoveForEmpty) {
-      if (typeof this._tabToSelect === 'number' && this._tabToSelect >= 0) {
+      const tabs = gBrowser.tabs.filter((tab) => !tab.collapsed && !tab.hasAttribute('zen-empty-tab'));
+      if (typeof this._tabToSelect === 'number' && this._tabToSelect >= 0 && tabs[this._tabToSelect]) {
         setTimeout(() => {
-          const tabs = gBrowser.tabs.filter((tab) => !tab.collapsed && !tab.hasAttribute('zen-empty-tab'));
           this.log(`Found tab to select: ${this._tabToSelect}, ${tabs.length}`);
           gBrowser.selectedTab = tabs[this._tabToSelect];
           this._removedByStartupPage = true;

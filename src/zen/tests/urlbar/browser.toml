@@ -1,0 +1,7 @@
+[DEFAULT]
+support-files = [
+  "head.js",
+  "!/browser/components/urlbar/tests/browser/head.js",
+]
+
+["browser_floating_urlbar.js"]
