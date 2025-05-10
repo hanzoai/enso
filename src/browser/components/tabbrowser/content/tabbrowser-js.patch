@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 6dece2b9d0462d90a28e75350ce983d87816ef73..1d179c969f2fc29f8664ddae4a1536a9b95e7327 100644
+index 6dece2b9d0462d90a28e75350ce983d87816ef73..a2fd09d94746bbb8ba16c5e234c6e99c2eb25c4c 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -415,11 +415,45 @@
@@ -383,7 +383,7 @@ index 6dece2b9d0462d90a28e75350ce983d87816ef73..1d179c969f2fc29f8664ddae4a1536a9
        if (typeof index != "number") {
          // Move the new tab after another tab if needed, to the end otherwise.
 -        index = Infinity;
-+        index = Services.prefs.getBoolPref("zen.view.show-newtab-button-top") ? this.pinnedTabCount : Infinity;
++        index = Services.prefs.getBoolPref("zen.view.show-newtab-button-top") ? this._numVisiblePinTabsWithoutCollapsed : Infinity;
          if (
            !bulkOrderedOpen &&
            ((openerTab &&
@@ -403,9 +403,10 @@ index 6dece2b9d0462d90a28e75350ce983d87816ef73..1d179c969f2fc29f8664ddae4a1536a9
 -        index = Math.max(index, 0);
 -        index = Math.min(index, this.pinnedTabCount);
 +        index = Math.max(index, tab.hasAttribute("zen-essential") ? 0 : this._numZenEssentials);
-+        index = Math.min(index, tab.hasAttribute("zen-essential") ? this._numZenEssentials : this.pinnedTabCount);
++        index = Math.min(index, tab.hasAttribute("zen-essential") ? this._numZenEssentials : this._numVisiblePinTabsWithoutCollapsed);
        } else {
-         index = Math.max(index, this.pinnedTabCount);
+-        index = Math.max(index, this.pinnedTabCount);
++        index = Math.max(index, this._numVisiblePinTabsWithoutCollapsed);
          index = Math.min(index, this.tabContainer.ariaFocusableItems.length);
        }
  
