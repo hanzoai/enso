@@ -1,6 +1,7 @@
 
 BROWSER_CHROME_MANIFESTS += [
     "container_essentials/browser.toml",
+    "pinned/browser.toml",
     "urlbar/browser.toml",
     "workspaces/browser.toml",
 ]

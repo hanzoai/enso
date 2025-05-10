@@ -12,5 +12,6 @@ cd ./engine
 ./mach mochitest $@ \
   zen/tests/workspaces \
   zen/tests/container_essentials \
-  zen/tests/urlbar
+  zen/tests/urlbar \
+  zen/tests/pinned
 cd ..
