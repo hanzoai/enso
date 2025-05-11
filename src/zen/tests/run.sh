@@ -8,11 +8,22 @@ if [ ! -f "package.json" ]; then
   exit 1
 fi
 
+path="$1"
+other_args=""
+for arg in "$@"; do
+  if [ "$arg" != "$path" ]; then
+    other_args="$other_args $arg"
+  fi
+done
 cd ./engine
-./mach mochitest $@ \
-  zen/tests/workspaces \
-  zen/tests/container_essentials \
-  zen/tests/urlbar \
-  zen/tests/pinned \
-  zen/tests/compact_mode
+if [ "$path" = "all" ] || [ "$path" = "" ]; then
+  all_tests=$(find zen/tests -type d)
+  all_paths=""
+  for test in $all_tests; do
+    all_paths="$all_paths zen/tests/$(basename $test)"
+  done
+  ./mach mochitest $other_args $all_paths
+else
+  ./mach mochitest $other_args zen/tests/$path
+fi
 cd ..

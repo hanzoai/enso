@@ -649,3 +649,89 @@ async function openTabMenuFor(tab) {
 
   return tabMenu;
 }
+
+var withBookmarksDialog = async function (autoCancel, openFn, taskFn, closeFn) {
+  let dialogUrl = 'chrome://browser/content/places/bookmarkProperties.xhtml';
+  let closed = false;
+  // We can't show the in-window prompt for windows which don't have
+  // gDialogBox, like the library (Places:Organizer) window.
+  let hasDialogBox = !!Services.wm.getMostRecentWindow('').gDialogBox;
+  let dialogPromise;
+  if (hasDialogBox) {
+    dialogPromise = BrowserTestUtils.promiseAlertDialogOpen(null, dialogUrl, {
+      isSubDialog: true,
+    });
+  } else {
+    dialogPromise = BrowserTestUtils.domWindowOpenedAndLoaded(null, (win) => {
+      return win.document.documentURI.startsWith(dialogUrl);
+    }).then((win) => {
+      ok(
+        win.location.href.startsWith(dialogUrl),
+        'The bookmark properties dialog is open: ' + win.location.href
+      );
+      // This is needed for the overlay.
+      return SimpleTest.promiseFocus(win).then(() => win);
+    });
+  }
+  let dialogClosePromise = dialogPromise.then((win) => {
+    if (!hasDialogBox) {
+      return BrowserTestUtils.domWindowClosed(win);
+    }
+    let container = win.top.document.getElementById('window-modal-dialog');
+    return BrowserTestUtils.waitForEvent(container, 'close').then(() => {
+      return BrowserTestUtils.waitForMutationCondition(
+        container,
+        { childList: true, attributes: true },
+        () => !container.hasChildNodes() && !container.open
+      );
+    });
+  });
+  dialogClosePromise.then(() => {
+    closed = true;
+  });
+
+  info('withBookmarksDialog: opening the dialog');
+  // The dialog might be modal and could block our events loop, so executeSoon.
+  executeSoon(openFn);
+
+  info('withBookmarksDialog: waiting for the dialog');
+  let dialogWin = await dialogPromise;
+
+  // Ensure overlay is loaded
+  info('waiting for the overlay to be loaded');
+  await dialogWin.document.mozSubdialogReady;
+
+  // Check the first input is focused.
+  let doc = dialogWin.document;
+  let elt = doc.querySelector('input:not([hidden="true"])');
+  ok(elt, 'There should be an input to focus.');
+
+  if (elt) {
+    info('waiting for focus on the first textfield');
+    await TestUtils.waitForCondition(
+      () => doc.activeElement == elt,
+      'The first non collapsed input should have been focused'
+    );
+  }
+
+  info('withBookmarksDialog: executing the task');
+
+  let closePromise = () => Promise.resolve();
+  if (closeFn) {
+    closePromise = closeFn(dialogWin);
+  }
+  let guid;
+  try {
+    await taskFn(dialogWin);
+  } finally {
+    if (!closed && autoCancel) {
+      info('withBookmarksDialog: canceling the dialog');
+      doc.getElementById('bookmarkpropertiesdialog').cancelDialog();
+      await closePromise;
+    }
+    guid = await PlacesUIUtils.lastBookmarkDialogDeferred.promise;
+    // Give the dialog a little time to close itself.
+    await dialogClosePromise;
+  }
+  return guid;
+};
