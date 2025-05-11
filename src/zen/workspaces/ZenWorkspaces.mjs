@@ -880,8 +880,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
         (await this.#shouldShowTabInCurrentWorkspace(tabs[this._tabToSelect])) &&
         tabs[this._tabToSelect] !== this._tabToRemoveForEmpty
       ) {
+        this.log(`Found tab to select: ${this._tabToSelect}, ${tabs.length}`);
         setTimeout(() => {
-          this.log(`Found tab to select: ${this._tabToSelect}, ${tabs.length}`);
           gBrowser.selectedTab = tabs[this._tabToSelect];
           this._removedByStartupPage = true;
           gBrowser.removeTab(this._tabToRemoveForEmpty, {
@@ -2440,7 +2440,7 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
       if (containerId) {
         // In workspaces with default container: Show essentials that match the container
-        return tabContextId === containerId;
+        return tabContextId == containerId;
       } else {
         // In workspaces without a default container: Show essentials that aren't in container-specific workspaces
         // or have usercontextid="0" or no usercontextid
