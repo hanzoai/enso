@@ -3205,7 +3205,17 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (!this._hasInitializedTabsStrip) {
       return gBrowser.browsers;
     }
-    return Array.from(gBrowser.tabpanels.querySelectorAll('browser'));
+    const browsers = Array.from(gBrowser.tabpanels.querySelectorAll('browser'));
+    // Sort browsers by making the current workspace first
+    const currentWorkspace = this.activeWorkspace;
+    const sortedBrowsers = browsers.sort((a, b) => {
+      const aTab = gBrowser.getTabForBrowser(a);
+      const bTab = gBrowser.getTabForBrowser(b);
+      const aWorkspaceId = aTab.getAttribute('zen-workspace-id');
+      const bWorkspaceId = bTab.getAttribute('zen-workspace-id');
+      return aWorkspaceId === currentWorkspace ? -1 : bWorkspaceId === currentWorkspace ? 1 : 0;
+    });
+    return sortedBrowsers;
   }
 
   get pinnedTabCount() {
