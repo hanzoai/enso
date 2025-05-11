@@ -12,10 +12,7 @@
     dots = [];
     useAlgo = '';
 
-    #allowTransparencyOnSidebar = Services.prefs.getBoolPref(
-      'zen.view.experimental-rounded-view',
-      false
-    );
+    #allowTransparencyOnSidebar = Services.prefs.getBoolPref('zen.theme.acrylic-elements', false);
 
     constructor() {
       super();

@@ -34,6 +34,12 @@ pref('zen.theme.border-radius', 10); // In pixels
 pref('zen.theme.border-radius', 8); // In pixels
 #endif
 
+#ifdef XP_MACOSX
+pref('zen.theme.acrylic-elements', false);
+#else
+pref('zen.theme.acrylic-elements', true);
+#endif
+
 pref('zen.theme.color-prefs.use-workspace-colors', true);
 
 pref('zen.view.compact.hide-tabbar', true);
