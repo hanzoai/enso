@@ -164,18 +164,26 @@
   }
 
   & #urlbar-background {
-    /* We cant have a transparent background with a backdrop-filter because on normal websites,
-      the backdrop woudn't work, we would need to apply a clip-path to the site and that's not recommended
-      due to performance issues */
-    background-color: light-dark(
+    --zen-urlbar-background-base: light-dark(
       hsl(0, 0%, 100%),
       color-mix(in srgb, hsl(0, 0%, 5%) 70%, var(--zen-colors-primary) 30%)
-    ) !important;
+    );
+    @media -moz-pref('zen.view.experimental-rounded-view') {
+      --zen-urlbar-background: color-mix(
+        in srgb,
+        var(--zen-urlbar-background-base) 70%,
+        transparent 30%
+      );
+    }
+    background-color: var(--zen-urlbar-background, var(--zen-urlbar-background-base)) !important;
     box-shadow: 0px 0px 90px -10px rgba(0, 0, 0, 0.6) !important;
     backdrop-filter: none !important;
     border-radius: 12px !important;
     outline: 0.5px solid light-dark(rgba(0, 0, 0, 0.15), rgba(255, 255, 255, 0.15)) !important;
     outline-offset: -2px;
+    @media -moz-pref('zen.view.experimental-rounded-view') {
+      backdrop-filter: blur(42px) saturate(110%) brightness(0.25) contrast(100%) !important;
+    }
   }
 }
 

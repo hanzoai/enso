@@ -55,12 +55,9 @@ pref('zen.urlbar.show-domain-only-in-sidebar', true);
 pref('zen.urlbar.hide-one-offs', true);
 pref('zen.urlbar.enable-overrides', false);
 
-#ifdef XP_MACOSX
-// Disable for macos in the meantime until @HarryHeres finds a solution for hight DPI screens
-pref('zen.view.experimental-rounded-view', false);
-#else
+// Exoerimental: Apply a blend mode to the websites so they can render rounded corners
+// IMPORTANT: Remove once firefox 139 is released
 pref('zen.view.experimental-rounded-view', true);
-#endif
 
 // Glance
 pref('zen.glance.enabled', true);

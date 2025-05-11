@@ -110,18 +110,13 @@
       }
 
       #navigator-toolbox:not([animate='true']) #titlebar {
-        border-radius: calc(var(--zen-native-inner-radius) + var(--zen-element-separation) / 4);
         padding: var(--zen-toolbox-padding) !important;
         :root:not([zen-sidebar-expanded='true']) & {
           padding: var(--zen-toolbox-padding) 0 !important;
           max-width: var(--zen-sidebar-width);
         }
         position: relative;
-        background: var(--zen-dialog-background);
-        outline: 1px solid var(--zen-colors-border-contrast);
-        outline-offset: -1px;
         min-width: var(--zen-toolbox-min-width);
-        box-shadow: var(--zen-big-shadow);
         transition: visibility 0.15s; /* Same as the toolbox */
         visibility: hidden;
 
@@ -134,16 +129,31 @@
           margin-left: 0 !important;
         }
 
-        @media -moz-pref('zen.view.compact.color-sidebar') {
-          background: var(--zen-main-browser-background-toolbar) !important;
-          background-attachment: fixed !important;
-          background-size: 2000px !important; /* Dont ask me why */
-          /* NOTE: We MUST not add a backdrop-filter if we want the URL
-          * bar to be floating correctly:
-          * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_display/Containing_block#identifying_the_containing_block */
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: var(--zen-dialog-background);
+          outline: 1px solid var(--zen-colors-border-contrast);
+          outline-offset: -1px;
+          box-shadow: var(--zen-big-shadow);
+          pointer-events: none;
+          z-index: -1;
+          border-radius: calc(var(--zen-native-inner-radius) + var(--zen-element-separation) / 4);
+          @media -moz-pref('zen.view.compact.color-sidebar') {
+            background: var(--zen-main-browser-background-toolbar) !important;
+            background-attachment: fixed !important;
+            background-size: 2000px !important;
+            @media -moz-pref('zen.view.experimental-rounded-view') {
+              backdrop-filter: blur(42px) saturate(110%) brightness(0.25) contrast(100%) !important;
+            }
+          }
         }
 
-        &::before {
+        &::after {
           content: '';
           position: absolute;
           top: 0;
