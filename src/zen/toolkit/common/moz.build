@@ -1,0 +1,17 @@
+
+XPIDL_MODULE = "zen"
+XPIDL_SOURCES += [
+    "nsIZenCommonUtils.idl",
+]
+
+EXPORTS.mozilla += [
+    "ZenCommonUtils.h",
+]
+
+UNIFIED_SOURCES += [
+    "ZenCommonUtils.cpp",
+]
+
+XPCOM_MANIFESTS += [
+    "components.conf",
+]
