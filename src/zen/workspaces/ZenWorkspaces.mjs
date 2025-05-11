@@ -3211,6 +3211,9 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
     const sortedBrowsers = browsers.sort((a, b) => {
       const aTab = gBrowser.getTabForBrowser(a);
       const bTab = gBrowser.getTabForBrowser(b);
+      if (!bTab || !aTab) {
+        return 0;
+      }
       const aWorkspaceId = aTab.getAttribute('zen-workspace-id');
       const bWorkspaceId = bTab.getAttribute('zen-workspace-id');
       return aWorkspaceId === currentWorkspace ? -1 : bWorkspaceId === currentWorkspace ? 1 : 0;

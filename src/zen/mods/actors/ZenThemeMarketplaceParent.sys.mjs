@@ -120,13 +120,7 @@ export class ZenThemeMarketplaceParent extends JSWindowActorParent {
   }
 
   async getThemes() {
-    if (!this._themes) {
-      if (!(await IOUtils.exists(this.themesDataFile))) {
-        await IOUtils.writeJSON(this.themesDataFile, {});
-      }
-      this._themes = await IOUtils.readJSON(this.themesDataFile);
-    }
-    return this._themes;
+    return await IOUtils.readJSON(this.themesDataFile);
   }
 
   async updateThemes(themes) {

@@ -57,7 +57,11 @@ pref('zen.urlbar.enable-overrides', false);
 
 // Exoerimental: Apply a blend mode to the websites so they can render rounded corners
 // IMPORTANT: Remove once firefox 139 is released
+#ifdef XP_MACOSX
+pref('zen.view.experimental-rounded-view', false);
+#else 
 pref('zen.view.experimental-rounded-view', true);
+#endif
 
 // Glance
 pref('zen.glance.enabled', true);
