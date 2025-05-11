@@ -176,7 +176,7 @@
       );
     }
     background-color: var(--zen-urlbar-background, var(--zen-urlbar-background-base)) !important;
-    box-shadow: 0px 0px 90px -10px rgba(0, 0, 0, 0.6) !important;
+    box-shadow: 0px 0px 10rem -2px rgba(0, 0, 0, .9) !important;
     backdrop-filter: none !important;
     border-radius: 12px !important;
     outline: 0.5px solid light-dark(rgba(0, 0, 0, 0.15), rgba(255, 255, 255, 0.15)) !important;
