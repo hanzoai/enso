@@ -37,7 +37,7 @@ pref('zen.theme.border-radius', 8); // In pixels
 #ifdef XP_MACOSX
 pref('zen.theme.acrylic-elements', false);
 #else
-pref('zen.theme.acrylic-elements', true);
+pref('zen.theme.acrylic-elements', false);
 #endif
 
 pref('zen.theme.color-prefs.use-workspace-colors', true);
