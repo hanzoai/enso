@@ -75,8 +75,7 @@ export class ZenThemeMarketplaceParent extends JSWindowActorParent {
     console.info('ZenThemeMarketplaceParent: Checking for theme updates');
 
     let updates = [];
-    this._themes = null;
-
+    const themes = await this.getThemes();
     for (const theme of Object.values(await this.getThemes())) {
       try {
         const themeInfo = await this.sendQuery('ZenThemeMarketplace:GetThemeInfo', {
@@ -102,15 +101,14 @@ export class ZenThemeMarketplaceParent extends JSWindowActorParent {
           updates.push(themeInfo);
 
           await this.removeTheme(theme.id, false);
-
-          this._themes[themeInfo.id] = themeInfo;
+          themes[themeInfo.id] = themeInfo;
         }
       } catch (e) {
         console.error('ZenThemeMarketplaceParent: Error checking for theme updates', e);
       }
     }
 
-    await this.updateThemes(this._themes);
+    await this.updateThemes(themes);
 
     this.sendAsyncMessage('ZenThemeMarketplace:CheckForUpdatesFinished', { updates });
   }
@@ -123,8 +121,10 @@ export class ZenThemeMarketplaceParent extends JSWindowActorParent {
     return await IOUtils.readJSON(this.themesDataFile);
   }
 
-  async updateThemes(themes) {
-    this._themes = themes;
+  async updateThemes(themes = undefined) {
+    if (!themes) {
+      themes = await this.getThemes();
+    }
     await IOUtils.writeJSON(this.themesDataFile, themes);
     await this.checkForThemeChanges();
   }
