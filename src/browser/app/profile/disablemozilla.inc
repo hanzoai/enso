@@ -8,3 +8,4 @@ pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons", false);
 pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features", false);
 pref("browser.preferences.moreFromMozilla", false, locked);
 pref("browser.aboutwelcome.enabled", false);
+pref("browser.contentblocking.report.show_mobile_app", false, locked);

@@ -63,6 +63,7 @@ var gZenThemesImporter = new (class {
           return;
         }
 
+        await ZenThemesCommon.getThemes(); // Check for any errors in the themes data file
         const themes = await this.getEnabledThemes();
 
         const themesWithPreferences = await Promise.all(
@@ -159,8 +160,6 @@ var gZenThemesImporter = new (class {
   }
 
   async rebuildThemeStylesheet() {
-    ZenThemesCommon.themes = null;
-
     await this.removeStylesheet();
 
     const themes = await this.getEnabledThemes();
@@ -316,7 +315,6 @@ var gZenThemesImporter = new (class {
 
   async writeStylesheet(themeList = []) {
     const themes = [];
-    ZenThemesCommon.themes = null;
 
     for (let theme of themeList) {
       theme._chromeURL = this.getStylesheetURIForTheme(theme).spec;

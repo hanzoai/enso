@@ -108,7 +108,6 @@ var gZenMarketplaceManager = {
   },
 
   async observe() {
-    ZenThemesCommon.resetThemesCache();
     await this._buildThemesList();
   },
 

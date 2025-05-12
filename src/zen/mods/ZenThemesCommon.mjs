@@ -36,35 +36,27 @@ var ZenThemesCommon = {
     return PathUtils.join(this.themesRootPath, themeId);
   },
 
-  resetThemesCache() {
-    this.themes = null;
-  },
-
   async getThemes() {
-    if (!this.themes) {
-      if (!(await IOUtils.exists(this.themesDataFile))) {
-        await IOUtils.writeJSON(this.themesDataFile, {});
-      }
-
-      try {
-        this.themes = await IOUtils.readJSON(this.themesDataFile);
-      } catch (e) {
-        // If we have a corrupted file, reset it
-        await IOUtils.writeJSON(this.themesDataFile, {});
-        this.themes = {};
-        gNotificationBox.appendNotification(
-          'zen-themes-corrupted',
-          {
-            label: { 'l10n-id': 'zen-themes-corrupted' },
-            image: 'chrome://browser/skin/notification-icons/persistent-storage-blocked.svg',
-            priority: gNotificationBox.PRIORITY_WARNING_HIGH,
-          },
-          []
-        );
-      }
+    if (!(await IOUtils.exists(this.themesDataFile))) {
+      await IOUtils.writeJSON(this.themesDataFile, {});
     }
 
-    return this.themes;
+    let themes = {};
+    try {
+      themes = await IOUtils.readJSON(this.themesDataFile);
+      if (themes === null || typeof themes !== 'object') {
+        throw new Error('Themes data file is null');
+      }
+    } catch (e) {
+      // If we have a corrupted file, reset it
+      await IOUtils.writeJSON(this.themesDataFile, {});
+      Services.wm
+        .getMostRecentWindow('navigator:browser')
+        .gZenUIManager.showToast('zen-themes-corrupted', {
+          timeout: 8000,
+        });
+    }
+    return themes;
   },
 
   async getThemePreferences(theme) {
