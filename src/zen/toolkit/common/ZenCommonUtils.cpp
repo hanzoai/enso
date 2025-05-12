@@ -3,13 +3,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include "ZenCommonUtils.h"
+#include "ZenShareInternal.h"
+
 #include "nsGlobalWindowOuter.h"
 #include "nsQueryObject.h"
 #include "nsIWindowMediator.h"
 #include "nsServiceManagerUtils.h"
 #include "nsISharePicker.h"
 
-#include "mozilla/dom/Promise.h"
 #if defined(XP_WIN)
 #  include "mozilla/WindowsVersion.h"
 #endif
@@ -51,7 +52,6 @@ static nsCOMPtr<mozIDOMWindowProxy> GetMostRecentWindow() {
 }
 
 using mozilla::dom::WindowGlobalChild;
-using Promise = mozilla::dom::Promise;
 
 #define NS_ZEN_CAN_SHARE_FAILURE() \
   *canShare = false; \
@@ -74,7 +74,7 @@ ZenCommonUtils::CanShare(bool* canShare) {
 
 NS_IMETHODIMP
 ZenCommonUtils::Share(nsIURI* url, const nsACString& title, 
-    const nsACString& text, mozilla::dom::Promise** _retval) {
+    const nsACString& text, uint32_t aX, uint32_t aY) {
   auto aWindow = GetMostRecentWindow();
   if (!aWindow) {
     return NS_ERROR_NOT_AVAILABLE;
@@ -82,37 +82,25 @@ ZenCommonUtils::Share(nsIURI* url, const nsACString& title,
   if (!IsSharingSupported()) {
     return NS_OK; // We don't want to throw an error here
   }
-  if (!IsSharingSupported()) {
-    return NS_ERROR_NOT_AVAILABLE;
-  }
-  *_retval = ShareInternal(aWindow, url, title, text);
+  *_retval = ShareInternal(aWindow, url, title, text, aX, aY);
   return NS_OK;
 }
 
-mozilla::dom::Promise* ZenCommonUtils::ShareInternal(nsCOMPtr<mozIDOMWindowProxy>& aWindow, nsIURI* url,
-    const nsACString& title, const nsACString& text)  {
+void ZenCommonUtils::ShareInternal(nsCOMPtr<mozIDOMWindowProxy>& aWindow, nsIURI* url,
+    const nsACString& title, const nsACString& text, uint32_t aX, uint32_t aY) {
   // We shoud've had done pointer checks before, so we can assume
   // aWindow is valid.
-  nsCOMPtr<nsISharePicker> sharePicker =
-    do_GetService("@mozilla.org/sharepicker;1");
-  if (!sharePicker) {
-    return nullptr;
-  }
-  sharePicker->Init(aWindow);
-  RefPtr<Promise> promise;
-  nsresult rv = sharePicker->Share(title, text, url, getter_AddRefs(promise));
-  if (NS_FAILED(rv)) {
-    return nullptr;
-  }
-  return promise;
+#ifdef ZEN_CAN_SHARE_NATIVE
+  ::nsZenNativeShareInternal(aWindow, url, title, text, aX, aY);
+#else
 }
 
 auto ZenCommonUtils::IsSharingSupported() -> bool {
-#if defined(XP_UNIX) && !defined(XP_MACOSX)
-  return true;
-#elif defined(XP_WIN) && !defined(__MINGW32__)
+#if defined(XP_WIN) && !defined(__MINGW32__)
   // The first public build that supports ShareCanceled API
   return IsWindows10BuildOrLater(18956);
+#elif defined(NS_ZEN_CAN_SHARE_NATIVE)
+  return NS_ZEN_CAN_SHARE_NATIVE;
 #else
   return true;
 #endif

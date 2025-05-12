@@ -1,0 +1,9 @@
+
+FINAL_LIBRARY = "xul"
+SOURCES += [
+    "ZenShareInternal.mm",
+]
+
+LOCAL_INCLUDES += [
+    "../",
+]
