@@ -160,7 +160,10 @@
 
 #urlbar[breakout-extend='true'] {
   z-index: 2;
-  --urlbar-container-padding: 0px;
+
+  .urlbar-input-container {
+    --urlbar-container-padding: 0px;
+  }
 
   & #identity-box {
     margin-right: calc(var(--urlbar-margin-inline) - 1px);
@@ -172,13 +175,16 @@
       color-mix(in srgb, hsl(0, 0%, 5%) 80%, var(--zen-colors-primary) 20%)
     );
     @media -moz-pref('zen.theme.acrylic-elements') {
-      --zen-urlbar-background: color-mix(
+      --zen-urlbar-background-transparent: color-mix(
         in srgb,
         var(--zen-urlbar-background-base) 70%,
         transparent 30%
       );
     }
-    background-color: var(--zen-urlbar-background, var(--zen-urlbar-background-base)) !important;
+    background-color: var(
+      --zen-urlbar-background-transparent,
+      var(--zen-urlbar-background-base)
+    ) !important;
     box-shadow: 0px 0px 10rem -2px rgba(0, 0, 0, 0.9) !important;
     backdrop-filter: none !important;
     border-radius: 12px !important;

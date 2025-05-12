@@ -3299,6 +3299,8 @@ var ZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
         this._workspaceChangeInProgress = true;
         try {
+          this._lastSelectedWorkspaceTabs[workspaceToSwitch.uuid] =
+            gZenGlanceManager.getTabOrGlanceParent(tab);
           await this.changeWorkspace(workspaceToSwitch);
         } finally {
           this._workspaceChangeInProgress = false;
