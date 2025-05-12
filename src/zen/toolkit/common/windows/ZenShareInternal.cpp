@@ -9,7 +9,7 @@ auto nsZenNativeShareInternal::ShowNativeDialog(
       nsCOMPtr<mozIDOMWindowProxy>& aWindow, nsIURI* aUrl,
       const nsACString& aTitle, const nsACString& aText,
       uint32_t aX, uint32_t aY) const
-    -> void {
+    -> nsresult {
   nsAutoCString urlString;
   if (aUrl) {
     nsresult rv = aUrl->GetSpec(urlString);
@@ -21,4 +21,5 @@ auto nsZenNativeShareInternal::ShowNativeDialog(
   (void)WindowsUIUtils::Share(NS_ConvertUTF8toUTF16_MaybeVoid(aTitle),
                               NS_ConvertUTF8toUTF16_MaybeVoid(aText),
                               NS_ConvertUTF8toUTF16_MaybeVoid(urlString));
+  return NS_OK;
 }

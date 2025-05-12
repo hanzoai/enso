@@ -363,6 +363,7 @@ menuitem {
       translate: 100%;
     }
 
+    gap: 10px;
     z-index: 1000;
     padding: 10px;
     border-radius: 12px;
@@ -387,10 +388,16 @@ menuitem {
       font-size: smaller;
     }
 
+    & label {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
     & button {
       width: min-content;
       padding: 0 12px !important;
       min-width: unset !important;
+      margin: 0px !important;
     }
   }
 }

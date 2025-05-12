@@ -6,4 +6,7 @@ SOURCES += [
 
 LOCAL_INCLUDES += [
     "../",
+    "/widget",
+    "/widget/cocoa",
+    "/xpcom/base",
 ]

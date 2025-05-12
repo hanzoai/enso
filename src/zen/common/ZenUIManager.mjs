@@ -451,17 +451,7 @@ var gZenUIManager = {
     const [toast, reused] = this._createToastElement(messageId, options);
     this._toastContainer.removeAttribute('hidden');
     this._toastContainer.appendChild(toast);
-    if (reused) {
-      await this.motion.animate(toast, { scale: 0.2 }, { duration: 0.1, bounce: 0 });
-    }
-    if (!toast.style.hasOwnProperty('transform')) {
-      toast.style.transform = 'scale(0)';
-    }
-    await this.motion.animate(toast, { scale: 1 }, { type: 'spring', bounce: 0.2, duration: 0.5 });
-    if (this._toastTimeouts[messageId]) {
-      clearTimeout(this._toastTimeouts[messageId]);
-    }
-    this._toastTimeouts[messageId] = setTimeout(() => {
+    const timeoutFunction = () => {
       this.motion
         .animate(toast, { opacity: [1, 0], scale: [1, 0.5] }, { duration: 0.2, bounce: 0 })
         .then(() => {
@@ -470,7 +460,30 @@ var gZenUIManager = {
             this._toastContainer.setAttribute('hidden', true);
           }
         });
-    }, options.timeout || 2000);
+    };
+    if (reused) {
+      await this.motion.animate(toast, { scale: 0.2 }, { duration: 0.1, bounce: 0 });
+    } else {
+      toast.addEventListener('mouseover', () => {
+        if (this._toastTimeouts[messageId]) {
+          clearTimeout(this._toastTimeouts[messageId]);
+        }
+      });
+      toast.addEventListener('mouseout', () => {
+        if (this._toastTimeouts[messageId]) {
+          clearTimeout(this._toastTimeouts[messageId]);
+        }
+        this._toastTimeouts[messageId] = setTimeout(timeoutFunction, options.timeout || 2000);
+      });
+    }
+    if (!toast.style.hasOwnProperty('transform')) {
+      toast.style.transform = 'scale(0)';
+    }
+    await this.motion.animate(toast, { scale: 1 }, { type: 'spring', bounce: 0.2, duration: 0.5 });
+    if (this._toastTimeouts[messageId]) {
+      clearTimeout(this._toastTimeouts[messageId]);
+    }
+    this._toastTimeouts[messageId] = setTimeout(timeoutFunction, options.timeout || 2000);
   },
 
   get panelUIPosition() {

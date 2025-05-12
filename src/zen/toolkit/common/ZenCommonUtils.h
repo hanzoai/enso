@@ -41,7 +41,7 @@ class ZenCommonUtils final : public nsIZenCommonUtils {
     */
   static auto ShareInternal(nsCOMPtr<mozIDOMWindowProxy>& aWindow, nsIURI* url,
       const nsACString& title, const nsACString& text, uint32_t aX, uint32_t aY)
-    -> void;
+    -> nsresult;
 };
 
 } // namespace zen
