@@ -927,8 +927,8 @@
     getToolbarModifiedBase() {
       const opacity = this.#allowTransparencyOnSidebar ? 0.6 : 1;
       return this.isDarkMode
-        ? `color-mix(in srgb, var(--zen-themed-toolbar-bg) 80%, rgba(255,255,255,${opacity}) 4%)`
-        : `color-mix(in srgb, var(--zen-themed-toolbar-bg) 95%, rgba(0,0,0,${opacity}) 4%)`;
+        ? `color-mix(in srgb, var(--zen-themed-toolbar-bg) 96%, rgba(255,255,255,${opacity}) 4%)`
+        : `color-mix(in srgb, var(--zen-themed-toolbar-bg) 96%, rgba(0,0,0,${opacity}) 4%)`;
     }
 
     getSingleRGBColor(color, forToolbar = false) {
