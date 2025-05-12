@@ -366,6 +366,9 @@ menuitem {
     gap: 10px;
     z-index: 1000;
     padding: 10px;
+    @media (-moz-platform: windows) {
+      padding: 6px;
+    }
     border-radius: 12px;
     background: linear-gradient(
       170deg,
@@ -398,6 +401,7 @@ menuitem {
       padding: 0 12px !important;
       min-width: unset !important;
       margin: 0px !important;
+      border-radius: 8px !important;
     }
   }
 }

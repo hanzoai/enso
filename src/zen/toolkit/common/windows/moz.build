@@ -6,4 +6,6 @@ SOURCES += [
 
 LOCAL_INCLUDES += [
     "../",
+    "/widget",
+    "/widget/windows",
 ]
