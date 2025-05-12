@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include "nsISupports.idl"
-#include "nsIDOMWindow.idl"
+#include "nsIURI.idl"
 
 /**
  * @brief Common utility functions for Zen.
@@ -18,13 +18,12 @@ interface nsIZenCommonUtils : nsISupports {
    * @param text The text to share.
    * @returns A promise that resolves when the share is complete.
    */
-  Promise share(in nsIDOMWindow window, in AString url, 
-                in AString title,  in AString text);
+  Promise share(in nsIURI url, in ACString title, in ACString text);
   /*
    * @brief Check if the current context can share data.
    * @param window The window to check.
    * @returns True if the current context can share data, false otherwise.
    */
-  boolean canShare(in nsIDOMWindow window);
+  boolean canShare();
 };
 

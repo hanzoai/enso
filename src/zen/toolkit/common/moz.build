@@ -1,5 +1,4 @@
 
-XPIDL_MODULE = "zen"
 XPIDL_SOURCES += [
     "nsIZenCommonUtils.idl",
 ]
@@ -8,10 +7,28 @@ EXPORTS.mozilla += [
     "ZenCommonUtils.h",
 ]
 
-UNIFIED_SOURCES += [
+SOURCES += [
     "ZenCommonUtils.cpp",
 ]
 
 XPCOM_MANIFESTS += [
     "components.conf",
 ]
+
+LOCAL_INCLUDES += [
+    "/dom/base",
+    "/dom/ipc",
+    "/gfx/2d",
+    "/layout/base",
+    "/layout/forms",
+    "/layout/generic",
+    "/layout/painting",
+    "/layout/xul",
+    "/layout/xul/tree/",
+    "/view",
+    "/widget",
+    "/widget/headless",
+]
+
+FINAL_LIBRARY = "xul"
+XPIDL_MODULE = "zen"

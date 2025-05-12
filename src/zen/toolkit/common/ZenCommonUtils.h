@@ -5,8 +5,11 @@
 #ifndef mozilla_nsZenCommonUtils_h__
 #define mozilla_nsZenCommonUtils_h__
 
-#include "nsIDOMWindow.h"
 #include "nsIZenCommonUtils.h"
+
+#include "nsIDOMWindow.h"
+#include "nsGlobalWindowOuter.h"
+#include "nsIURI.h"
 
 namespace zen {
 
@@ -22,15 +25,23 @@ class ZenCommonUtils final : public nsIZenCommonUtils {
 
  private:
   ~ZenCommonUtils() = default;
-
-  RefPtr<mozilla::dom::Promise> mSharePromise;  // Web Share API related
-
   /**
    * @brief Check if the current context can share data.
    * @param data The data to share.
    * @returns True if the current context can share data, false otherwise.
    */
   static auto IsSharingSupported() -> bool;
+  /**
+    * @brief Helper function to share data via the native dialogs.
+    * @param aWindow The window to use for the share dialog.
+    * @param url The URL to share.
+    * @param title The title of the share.
+    * @param text The text to share.
+    * @returns A promise that resolves when the share is complete.
+    */
+  static auto ShareInternal(nsCOMPtr<mozIDOMWindowProxy>& aWindow, nsIURI* url,
+                    const nsACString& title, const nsACString& text)
+      -> mozilla::dom::Promise*;
 };
 
 }  // namespace zen
