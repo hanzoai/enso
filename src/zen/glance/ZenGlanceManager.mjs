@@ -50,10 +50,6 @@
       });
     }
 
-    #areTabsOnRightSide() {
-      return Services.prefs.getBoolPref('zen.tabs.vertical.right-side');
-    }
-
     get #currentBrowser() {
       return this.#glances.get(this.#currentGlanceID)?.browser;
     }
@@ -128,7 +124,7 @@
 
     showSidebarButtons(animate = false) {
       if (this.sidebarButtons.hasAttribute('hidden') && animate) {
-        if (this.#areTabsOnRightSide()) {
+        if (gZenVerticalTabsManager._prefsRightSide) {
           this.sidebarButtons.setAttribute('right', true);
         } else {
           this.sidebarButtons.removeAttribute('right');
