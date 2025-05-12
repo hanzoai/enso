@@ -27,6 +27,9 @@
   :root:not([zen-single-toolbar='true']) &[zen-floating-urlbar='true'] {
     --urlbar-container-padding: 2px !important;
   }
+
+  --urlbar-margin-inline: 5px;
+  --urlbar-container-padding: 5px;
 }
 
 :root:not([zen-single-toolbar='true']) #urlbar:not([zen-floating-urlbar='true']) {
@@ -157,16 +160,16 @@
 
 #urlbar[breakout-extend='true'] {
   z-index: 2;
-  --urlbar-margin-inline: 5px;
+  --urlbar-container-padding: 0px;
 
   & #identity-box {
-    margin-right: var(--urlbar-margin-inline);
+    margin-right: calc(var(--urlbar-margin-inline) - 1px);
   }
 
   & #urlbar-background {
     --zen-urlbar-background-base: light-dark(
       hsl(0, 0%, 100%),
-      color-mix(in srgb, hsl(0, 0%, 5%) 70%, var(--zen-colors-primary) 30%)
+      color-mix(in srgb, hsl(0, 0%, 5%) 80%, var(--zen-colors-primary) 20%)
     );
     @media -moz-pref('zen.theme.acrylic-elements') {
       --zen-urlbar-background: color-mix(
