@@ -191,7 +191,7 @@
     }
 
     /* 3 or more engines */
-    &[select-engine='true']:has(label:nth-of-type(3)) {
+    &[select-engine='true']:has(label:nth-of-type(3)) > label {
       height: 50%;
     }
 
