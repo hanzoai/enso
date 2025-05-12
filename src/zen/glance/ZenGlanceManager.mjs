@@ -50,6 +50,10 @@
       });
     }
 
+    #areTabsOnRightSide() {
+      return Services.prefs.getBoolPref('zen.tabs.vertical.right-side');
+    }
+
     get #currentBrowser() {
       return this.#glances.get(this.#currentGlanceID)?.browser;
     }
@@ -124,6 +128,11 @@
 
     showSidebarButtons(animate = false) {
       if (this.sidebarButtons.hasAttribute('hidden') && animate) {
+        if (this.#areTabsOnRightSide()) {
+          this.sidebarButtons.setAttribute('right', true);
+        } else {
+          this.sidebarButtons.removeAttribute('right');
+        }
         for (const button of this.sidebarButtons.querySelectorAll('toolbarbutton')) {
           button.style.opacity = 0;
         }

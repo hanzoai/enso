@@ -18,7 +18,13 @@
 
   padding: 5px;
   gap: 12px;
-  left: 2%;
+
+  &[right='true'] {
+    right: 2%;
+  }
+  &[right='false'] {
+    left: 2%;
+  }
 
   & toolbarbutton {
     width: 32px;
