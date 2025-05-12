@@ -985,7 +985,7 @@ var gZenCKSSettings = {
           target.label = 'Not set';
         }
       });
-      
+
       const groupElem = wrapper.querySelector(`[data-group="${ZEN_CKS_GROUP_PREFIX}-${group}"]`);
       groupElem.after(fragment);
     }
@@ -1071,7 +1071,7 @@ var gZenCKSSettings = {
         this._editDone(this._latestValidKey, this._latestModifier);
         if (this.name == 'Not set') {
           input.classList.add(`${ZEN_CKS_INPUT_FIELD_CLASS}-not-set`);
-        } 
+        }
         this._latestValidKey = null;
         this._latestModifier = null;
         input.classList.remove(`${ZEN_CKS_INPUT_FIELD_CLASS}-invalid`);
