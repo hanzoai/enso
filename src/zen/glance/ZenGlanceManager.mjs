@@ -124,6 +124,11 @@
 
     showSidebarButtons(animate = false) {
       if (this.sidebarButtons.hasAttribute('hidden') && animate) {
+        if (gZenVerticalTabsManager._prefsRightSide) {
+          this.sidebarButtons.setAttribute('right', true);
+        } else {
+          this.sidebarButtons.removeAttribute('right');
+        }
         for (const button of this.sidebarButtons.querySelectorAll('toolbarbutton')) {
           button.style.opacity = 0;
         }
