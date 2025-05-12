@@ -1,16 +1,7 @@
 diff --git a/browser/app/profile/firefox.js b/browser/app/profile/firefox.js
-index 89b8b830e8..e5ceb32299 100644
+index 89b8b830e8f53582dd9910b0172098d31a8d8967..51bdc847823cb95f811b7e9d2d864b9aacf0e364 100644
 --- a/browser/app/profile/firefox.js
 +++ b/browser/app/profile/firefox.js
-@@ -2399,7 +2399,7 @@ pref("browser.contentblocking.report.monitor.enabled", false);
- pref("browser.contentblocking.report.proxy.enabled", false);
- 
- // Disable the mobile promotion by default.
--pref("browser.contentblocking.report.show_mobile_app", true);
-+pref("browser.contentblocking.report.show_mobile_app", false, locked);
- 
- // Locales in which Send to Device emails are supported
- // The most recent list of supported locales can be found at https://github.com/mozilla/bedrock/blob/6a08c876f65924651554decc57b849c00874b4e7/bedrock/settings/base.py#L963
 @@ -3375,3 +3375,5 @@ pref("toolkit.contentRelevancy.enabled", false);
  pref("toolkit.contentRelevancy.ingestEnabled", false);
  // Pref to enable extra logging for the content relevancy feature
