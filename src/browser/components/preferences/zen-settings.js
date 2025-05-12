@@ -980,6 +980,9 @@ var gZenCKSSettings = {
             sibling.remove();
           }
         }
+        if (target.classList.contains(`${ZEN_CKS_INPUT_FIELD_CLASS}-not-set`)) {
+          target.label = 'Not set';
+        }
       });
 
       const groupElem = wrapper.querySelector(`[data-group="${ZEN_CKS_GROUP_PREFIX}-${group}"]`);
@@ -1037,6 +1040,7 @@ var gZenCKSSettings = {
     shortcut = shortcut.replace(/Ctrl|Control|Shift|Alt|Option|Cmd|Meta/, ''); // Remove all modifiers
 
     if (shortcut == 'Tab' && !modifiersActive) {
+      input.classList.remove(`${ZEN_CKS_INPUT_FIELD_CLASS}-not-set`);
       input.classList.remove(`${ZEN_CKS_INPUT_FIELD_CLASS}-editing`);
       this._latestValidKey = null;
       return;
@@ -1064,6 +1068,9 @@ var gZenCKSSettings = {
         input.classList.remove(`${ZEN_CKS_INPUT_FIELD_CLASS}-editing`);
 
         this._editDone(this._latestValidKey, this._latestModifier);
+        if (this.name == 'Not set') {
+          input.classList.add(`${ZEN_CKS_INPUT_FIELD_CLASS}-not-set`);
+        }
         this._latestValidKey = null;
         this._latestModifier = null;
         input.classList.remove(`${ZEN_CKS_INPUT_FIELD_CLASS}-invalid`);
@@ -1085,6 +1092,10 @@ var gZenCKSSettings = {
       this._latestValidKey = null;
       this._latestModifier = null;
       this._hasSafed = true;
+      const sibling = input.nextElementSibling;
+      if (sibling && sibling.classList.contains(`${ZEN_CKS_CLASS_BASE}-conflict`)) {
+        sibling.remove();
+      }
       return;
     }
 
