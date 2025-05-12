@@ -7,7 +7,7 @@ ChromeUtils.defineESModuleGetters(this, {
   UrlbarTestUtils: 'resource://testing-common/UrlbarTestUtils.sys.mjs',
 });
 
-add_task(async function test_Create_Pinned() {
+add_task(async function test_Search_Pinned_Title() {
   let resolvePromise;
   const promise = new Promise((resolve) => {
     resolvePromise = resolve;

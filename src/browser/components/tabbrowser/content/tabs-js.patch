@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..1a3aa415d08379b00960de398808e771c299f2ca 100644
+index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..3001dd54fccfcac3b96288dd769fbaa16cb76ffb 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -83,7 +83,7 @@
@@ -229,7 +229,7 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..1a3aa415d08379b00960de398808e771
          }
 +        let glanceTab = child.querySelector("tab[zen-glance-tab]");
 +        if (isTab(child) && glanceTab) {
-+          glanceTab.elementIndex = elementIndex++;
++          glanceTab.elementIndex = elementIndex - 1;
 +          focusableItems.push(glanceTab);
 +        }
        }
