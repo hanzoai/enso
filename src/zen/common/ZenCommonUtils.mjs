@@ -72,7 +72,19 @@ var gZenCommonActions = {
       transferable.addDataFlavor('text/plain');
       transferable.setTransferData('text/plain', str);
       Services.clipboard.setData(transferable, null, Ci.nsIClipboard.kGlobalClipboard);
-      gZenUIManager.showToast('zen-copy-current-url-confirmation');
+      let button;
+      if (Services.zen.canShare()) {
+        button = {
+          id: 'zen-copy-current-url-button',
+          command: () =>
+            Services.zen.share(
+              Services.io.newURI(currentUrl),
+              "",
+              ""
+            )
+        }
+      }
+      gZenUIManager.showToast('zen-copy-current-url-confirmation', { button });
     }
   },
   copyCurrentURLAsMarkdownToClipboard() {

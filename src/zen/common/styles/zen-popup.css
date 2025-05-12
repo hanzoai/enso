@@ -376,7 +376,7 @@ menuitem {
     border: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
     font-weight: 600;
-    flex-direction: column;
+    align-items: center;
     width: max-content;
     font-size: small;
     position: absolute;
@@ -385,6 +385,12 @@ menuitem {
     & .description {
       opacity: 0.6;
       font-size: smaller;
+    }
+
+    & button {
+      width: min-content;
+      padding: 0 12px !important;
+      min-width: unset !important;
     }
   }
 }

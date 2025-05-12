@@ -422,6 +422,7 @@ var gZenUIManager = {
         return [child, true];
       }
     }
+    const wrapper = document.createXULElement('hbox');
     const element = document.createXULElement('vbox');
     const label = document.createXULElement('label');
     document.l10n.setAttributes(label, messageId, options);
@@ -432,9 +433,18 @@ var gZenUIManager = {
       document.l10n.setAttributes(description, options.descriptionId, options);
       element.appendChild(description);
     }
-    element.classList.add('zen-toast');
-    element._messageId = messageId;
-    return [element, false];
+    wrapper.appendChild(element);
+    if (options.button) {
+      const button = document.createXULElement('button');
+      button.id = options.button.id;
+      button.classList.add('footer-button');
+      button.classList.add('primary');
+      button.addEventListener('command', options.button.command);
+      wrapper.appendChild(button);
+    }
+    wrapper.classList.add('zen-toast');
+    wrapper._messageId = messageId;
+    return [wrapper, false];
   },
 
   async showToast(messageId, options = {}) {
