@@ -5,7 +5,7 @@ XPIDL_SOURCES += [
 
 EXPORTS.mozilla += [
     "ZenCommonUtils.h",
-    "ZenShareInternal.h
+    "ZenShareInternal.h",
 ]
 
 SOURCES += [

@@ -76,13 +76,17 @@ var gZenCommonActions = {
       if (Services.zen.canShare()) {
         button = {
           id: 'zen-copy-current-url-button',
-          command: () =>
+          command: (event) => {
+            const buttonRect = event.target.getBoundingClientRect();
             Services.zen.share(
               Services.io.newURI(currentUrl),
-              "",
-              ""
-            )
-        }
+              '',
+              '',
+              buttonRect.left - buttonRect.width / 2,
+              buttonRect.top + buttonRect.height
+            );
+          },
+        };
       }
       gZenUIManager.showToast('zen-copy-current-url-confirmation', { button });
     }

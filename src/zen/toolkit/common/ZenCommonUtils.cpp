@@ -82,7 +82,7 @@ ZenCommonUtils::Share(nsIURI* url, const nsACString& title,
   if (!IsSharingSupported()) {
     return NS_OK; // We don't want to throw an error here
   }
-  *_retval = ShareInternal(aWindow, url, title, text, aX, aY);
+  ShareInternal(aWindow, url, title, text, aX, aY);
   return NS_OK;
 }
 
@@ -92,7 +92,7 @@ void ZenCommonUtils::ShareInternal(nsCOMPtr<mozIDOMWindowProxy>& aWindow, nsIURI
   // aWindow is valid.
 #ifdef ZEN_CAN_SHARE_NATIVE
   ::nsZenNativeShareInternal(aWindow, url, title, text, aX, aY);
-#else
+#endif
 }
 
 auto ZenCommonUtils::IsSharingSupported() -> bool {
