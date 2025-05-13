@@ -57,14 +57,12 @@ using mozilla::dom::WindowGlobalChild;
   *canShare = false; \
   return NS_OK;
 
-#ifdef XP_MACOSX
 NS_IMETHODIMP
 ZenCommonUtils::PlayHapticFeedback(uint32_t type) {
   // We don't have any haptic feedback on non-macOS platforms
   // so we can just return.
   return PlayHapticFeedbackInternal(type);
 }
-#endif
 
 NS_IMETHODIMP
 ZenCommonUtils::CanShare(bool* canShare) {
@@ -107,7 +105,7 @@ nsresult ZenCommonUtils::ShareInternal(nsCOMPtr<mozIDOMWindowProxy>& aWindow, ns
 auto ZenCommonUtils::IsSharingSupported() -> bool {
 #if defined(XP_WIN) && !defined(__MINGW32__)
   // The first public build that supports ShareCanceled API
-  return IsWindows10BuildOrLater(18956);
+  return mozilla::IsWindows10BuildOrLater(18956);
 #elif defined(NS_ZEN_CAN_SHARE_NATIVE)
   return NS_ZEN_CAN_SHARE_NATIVE;
 #else
