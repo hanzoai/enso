@@ -363,8 +363,12 @@ menuitem {
       translate: 100%;
     }
 
+    gap: 10px;
     z-index: 1000;
     padding: 10px;
+    @media (-moz-platform: windows) {
+      padding: 6px;
+    }
     border-radius: 12px;
     background: linear-gradient(
       170deg,
@@ -376,7 +380,7 @@ menuitem {
     border: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
     font-weight: 600;
-    flex-direction: column;
+    align-items: center;
     width: max-content;
     font-size: small;
     position: absolute;
@@ -385,6 +389,19 @@ menuitem {
     & .description {
       opacity: 0.6;
       font-size: smaller;
+    }
+
+    & label {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    & button {
+      width: min-content;
+      padding: 0 12px !important;
+      min-width: unset !important;
+      margin: 0px !important;
+      border-radius: 8px !important;
     }
   }
 }

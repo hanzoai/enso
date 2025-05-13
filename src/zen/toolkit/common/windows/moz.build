@@ -1,0 +1,11 @@
+
+FINAL_LIBRARY = "xul"
+SOURCES += [
+    "ZenShareInternal.cpp",
+]
+
+LOCAL_INCLUDES += [
+    "../",
+    "/widget",
+    "/widget/windows",
+]

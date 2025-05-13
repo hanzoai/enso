@@ -72,7 +72,25 @@ var gZenCommonActions = {
       transferable.addDataFlavor('text/plain');
       transferable.setTransferData('text/plain', str);
       Services.clipboard.setData(transferable, null, Ci.nsIClipboard.kGlobalClipboard);
-      gZenUIManager.showToast('zen-copy-current-url-confirmation');
+      let button;
+      if (Services.zen.canShare()) {
+        button = {
+          id: 'zen-copy-current-url-button',
+          command: (event) => {
+            const buttonRect = event.target.getBoundingClientRect();
+            Services.zen.share(
+              Services.io.newURI(currentUrl),
+              '',
+              '',
+              buttonRect.left,
+              window.innerHeight - buttonRect.bottom,
+              buttonRect.width,
+              buttonRect.height
+            );
+          },
+        };
+      }
+      gZenUIManager.showToast('zen-copy-current-url-confirmation', { button, timeout: 3000 });
     }
   },
   copyCurrentURLAsMarkdownToClipboard() {

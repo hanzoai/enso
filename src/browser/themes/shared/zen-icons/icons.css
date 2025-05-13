@@ -5,7 +5,8 @@
  */
 
 .subviewbutton,
-#zen-welcome-start-button {
+#zen-welcome-start-button,
+.zen-toast button {
   -moz-context-properties: fill, fill-opacity !important;
   fill: currentColor !important;
 }
@@ -425,7 +426,8 @@
   list-style-image: url('customize.svg') !important;
 }
 
-#appmenu-zen-share-rice {
+#appmenu-zen-share-rice,
+#zen-copy-current-url-button {
   list-style-image: url('share.svg');
 }
 
