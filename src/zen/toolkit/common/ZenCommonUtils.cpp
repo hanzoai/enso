@@ -57,11 +57,15 @@ using mozilla::dom::WindowGlobalChild;
   *canShare = false; \
   return NS_OK;
 
-/*
-  * @brief Check if the current context can share data.
-  * @param data The data to share.
-  * @returns True if the current context can share data, false otherwise.
-  */
+#ifdef XP_MACOSX
+NS_IMETHODIMP
+ZenCommonUtils::PlayHapticFeedback(uint32_t type) {
+  // We don't have any haptic feedback on non-macOS platforms
+  // so we can just return.
+  return PlayHapticFeedbackInternal(type);
+}
+#endif
+
 NS_IMETHODIMP
 ZenCommonUtils::CanShare(bool* canShare) {
   auto aWindow = GetMostRecentWindow();

@@ -2,6 +2,7 @@
 FINAL_LIBRARY = "xul"
 SOURCES += [
     "ZenShareInternal.mm",
+    "ZenHapticFeedback.mm",
 ]
 
 LOCAL_INCLUDES += [
