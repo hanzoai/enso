@@ -267,6 +267,7 @@
       margin-bottom: auto;
       height: 24px; /* double 12px */
       width: 24px;
+      padding: 4px !important;
 
       &:hover {
         background: var(--toolbarbutton-hover-background);
@@ -279,20 +280,15 @@
 
 :root:not([zen-single-toolbar='true']) {
   #notification-popup-box {
-    border-radius: 999px;
     margin: 0 4px 0 0 !important;
-    padding: 0 4px;
-    min-width: calc(
-      var(--urlbar-min-height) - 4px - 4 * var(--urlbar-container-padding)
-    ) !important;
-    height: calc(var(--urlbar-min-height) - 4px - 4 * var(--urlbar-container-padding)) !important;
     justify-content: center;
     gap: 8px;
+    background: transparent;
 
     & > image {
-      padding: 0;
       margin-top: auto;
       margin-bottom: auto;
+      padding: 0;
     }
   }
 }
