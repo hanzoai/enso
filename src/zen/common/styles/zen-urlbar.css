@@ -507,6 +507,10 @@ button.popup-notification-dropmarker {
   }
 }
 
+#urlbar-search-mode-indicator {
+  background-color: color-mix(in srgb, var(--zen-primary-color) 50%, transparent 50%) !important;
+}
+
 /* Code ~~stolen~~ taken inspiration from https://github.com/greeeen-dev/zen-arc-cmd-bar
  *
  * MIT License
