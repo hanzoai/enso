@@ -33,7 +33,7 @@ inline UIImpactFeedbackStyle GetNativeHapticFeedbackType(uint32_t type) {
 nsresult ZenCommonUtils::PlayHapticFeedbackInternal(uint32_t type) {
   NS_OBJC_BEGIN_TRY_BLOCK_RETURN;
   auto style = GetNativeHapticFeedbackType(type);
-  if (@available(iOS 10.0, macOS 10.14, *)) {
+  if (@available(macOS 10.14, *)) {
     UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:style];
     [generator prepare];
     [generator impactOccurred];
