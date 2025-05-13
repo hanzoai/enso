@@ -49,7 +49,7 @@ class ZenCommonUtils final : public nsIZenCommonUtils {
 #if !defined(XP_MACOSX)
   static auto PlayHapticFeedbackInternal() -> nsresult {
     // No-op on non-macOS platforms
-    return NS_ERROR_NOT_IMPLEMENTED;
+    return NS_OK;
   }
 #else
   static auto PlayHapticFeedbackInternal() -> nsresult;
