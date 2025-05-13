@@ -419,6 +419,12 @@ var gZenUIManager = {
     // Check if this message ID already exists
     for (const child of this._toastContainer.children) {
       if (child._messageId === messageId) {
+        if (options.button && child.querySelector('button')) {
+          const button = child.querySelector('button');
+          const clone = button.cloneNode(true);
+          button.replaceWith(clone);
+          clone.addEventListener('command', options.button.command);
+        }
         return [child, true];
       }
     }
@@ -441,6 +447,7 @@ var gZenUIManager = {
       button.classList.add('primary');
       button.addEventListener('command', options.button.command);
       wrapper.appendChild(button);
+      wrapper.setAttribute('button', true);
     }
     wrapper.classList.add('zen-toast');
     wrapper._messageId = messageId;
