@@ -98,6 +98,10 @@
   position: relative;
 }
 
+#identity-icon-box {
+  outline: none !important;
+}
+
 :root[zen-single-toolbar='true'] #urlbar:not([breakout-extend='true']) {
   & #urlbar-input {
     cursor: default;
