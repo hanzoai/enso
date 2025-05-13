@@ -149,12 +149,10 @@ var gZenThemesImporter = new (class {
 
   async removeStylesheet() {
     await this.sss.unregisterSheet(this.styleSheetURI, this.sss.AGENT_SHEET);
+    const rv = this.sss.sheetRegistered(this.styleSheetURI, this.sss.AGENT_SHEET);
     await IOUtils.remove(this.styleSheetPath, { ignoreAbsent: true });
 
-    if (
-      !this.sss.sheetRegistered(this.styleSheetURI, this.sss.AGENT_SHEET) &&
-      !(await IOUtils.exists(this.styleSheetPath))
-    ) {
+    if (!rv && !(await IOUtils.exists(this.styleSheetPath))) {
       console.debug('[ZenThemesImporter]: Sheet successfully unregistered');
     }
   }
