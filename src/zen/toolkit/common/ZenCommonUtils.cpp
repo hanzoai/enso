@@ -73,8 +73,8 @@ ZenCommonUtils::CanShare(bool* canShare) {
 }
 
 NS_IMETHODIMP
-ZenCommonUtils::Share(nsIURI* url, const nsACString& title, 
-    const nsACString& text, uint32_t aX, uint32_t aY) {
+ZenCommonUtils::Share(nsIURI* url, const nsACString& title, const nsACString& text, 
+    uint32_t aX, uint32_t aY, uint32_t aWidth, uint32_t aHeight) {
   auto aWindow = GetMostRecentWindow();
   if (!aWindow) {
     return NS_ERROR_NOT_AVAILABLE;
@@ -82,15 +82,19 @@ ZenCommonUtils::Share(nsIURI* url, const nsACString& title,
   if (!IsSharingSupported()) {
     return NS_OK; // We don't want to throw an error here
   }
-  return ShareInternal(aWindow, url, title, text, aX, aY);
+  return ShareInternal(aWindow, url, title, text, aX, aY, aWidth, aHeight);
 }
 
 nsresult ZenCommonUtils::ShareInternal(nsCOMPtr<mozIDOMWindowProxy>& aWindow, nsIURI* url,
-    const nsACString& title, const nsACString& text, uint32_t aX, uint32_t aY) {
+    const nsACString& title, const nsACString& text, uint32_t aX, uint32_t aY,
+    uint32_t aWidth, uint32_t aHeight) {
   // We shoud've had done pointer checks before, so we can assume
   // aWindow is valid.
 #ifdef NS_ZEN_CAN_SHARE_NATIVE
-  return ::nsZenNativeShareInternal::ShowNativeDialog(aWindow, url, title, text, aX, aY);
+  return ::nsZenNativeShareInternal::ShowNativeDialog(
+    aWindow, url, title, text, 
+    aX, aY, aWidth, aHeight
+  );
 #else
   return NS_ERROR_NOT_IMPLEMENTED;
 #endif

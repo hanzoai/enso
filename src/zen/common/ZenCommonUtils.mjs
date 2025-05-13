@@ -82,13 +82,15 @@ var gZenCommonActions = {
               Services.io.newURI(currentUrl),
               '',
               '',
-              buttonRect.left - buttonRect.width / 2,
-              buttonRect.top + buttonRect.height
+              buttonRect.left,
+              window.innerHeight - buttonRect.bottom,
+              buttonRect.width,
+              buttonRect.height
             );
           },
         };
       }
-      gZenUIManager.showToast('zen-copy-current-url-confirmation', { button });
+      gZenUIManager.showToast('zen-copy-current-url-confirmation', { button, timeout: 3000 });
     }
   },
   copyCurrentURLAsMarkdownToClipboard() {

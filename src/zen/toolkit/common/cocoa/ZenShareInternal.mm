@@ -41,7 +41,8 @@ static nsresult GetNativeWindowPointerFromDOMWindow(mozIDOMWindowProxy* a_window
 }
 
 auto nsZenNativeShareInternal::ShowNativeDialog(nsCOMPtr<mozIDOMWindowProxy>& aWindow, 
-      nsIURI* aUrl, const nsACString& aTitle, const nsACString& aText, uint32_t aX, uint32_t aY)
+      nsIURI* aUrl, const nsACString& aTitle, const nsACString& aText, uint32_t aX, uint32_t aY,
+      uint32_t aWidth, uint32_t aHeight)
     -> nsresult {
   // Just use the URL since apple doesn't support sharing text
   // and title in the share dialog
@@ -69,9 +70,9 @@ auto nsZenNativeShareInternal::ShowNativeDialog(nsCOMPtr<mozIDOMWindowProxy>& aW
     return NS_ERROR_FAILURE;
   }
   // Create a rect for the sharing picker
-  NSRect rect = NSMakeRect(aX, aY, 0, 0);
+  NSRect rect = NSMakeRect(aX, aY, aWidth, aHeight);
   [sharingPicker showRelativeToRect:rect
                              ofView:cocoaMru.contentView
-                      preferredEdge:NSMinYEdge];
+                      preferredEdge:NSMaxYEdge];
   return NS_OK;
 }

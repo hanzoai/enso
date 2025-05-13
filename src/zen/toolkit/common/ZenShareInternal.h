@@ -29,7 +29,8 @@ class nsZenNativeShareInternal final {
   * @returns void
   */
   static auto ShowNativeDialog(nsCOMPtr<mozIDOMWindowProxy>& aWindow, nsIURI* aUrl,
-      const nsACString& aTitle, const nsACString& aText, uint32_t aX = 0, uint32_t aY = 0) 
+      const nsACString& aTitle, const nsACString& aText, uint32_t aX = 0, uint32_t aY = 0,
+      uint32_t aWidth = 0, uint32_t aHeight = 0)
     -> nsresult;
 
   nsZenNativeShareInternal() = default;
