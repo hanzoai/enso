@@ -1075,6 +1075,7 @@
         indicator.style.left = left;
         indicator.style.removeProperty('top');
       }
+      Services.zen.playHapticFeedback(/*soft*/3);
     }
 
     async onTabLabelChanged(tab) {

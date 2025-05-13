@@ -107,7 +107,7 @@ nsresult ZenCommonUtils::ShareInternal(nsCOMPtr<mozIDOMWindowProxy>& aWindow, ns
 auto ZenCommonUtils::IsSharingSupported() -> bool {
 #if defined(XP_WIN) && !defined(__MINGW32__)
   // The first public build that supports ShareCanceled API
-  return IsWindows10BuildOrLater(18956);
+  return mozilla::IsWindows10BuildOrLater(18956);
 #elif defined(NS_ZEN_CAN_SHARE_NATIVE)
   return NS_ZEN_CAN_SHARE_NATIVE;
 #else
