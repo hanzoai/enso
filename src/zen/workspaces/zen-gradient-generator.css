@@ -356,13 +356,13 @@
     height: 4px;
     width: 4px;
     border-radius: 50%;
-    background: light-dark(rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.2));
+    background: light-dark(rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.3));
     position: absolute;
     transition: opacity 0.2s;
     transform: translate(-50%, -50%);
     pointer-events: none;
     &:not(.active) {
-      opacity: 0.2;
+      opacity: 0.4;
     }
   }
 

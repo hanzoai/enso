@@ -17,32 +17,19 @@ extern mozilla::LazyLogModule gCocoaUtilsLog;
 #import <AppKit/AppKit.h>
 
 namespace zen {
-using ::mozilla::widget::WidgetUtils;
-namespace {
-/**
- * Get the native haptic feedback type from the uint32_t.
- *
- * @param type The uint32_t to convert.
- * @return The native haptic feedback type.
- */
-inline UIImpactFeedbackStyle GetNativeHapticFeedbackType(uint32_t type) {
-  return static_cast<UIImpactFeedbackStyle>(type);
-}
-}
 
-nsresult ZenCommonUtils::PlayHapticFeedbackInternal(uint32_t type) {
+nsresult ZenCommonUtils::PlayHapticFeedbackInternal() {
   NS_OBJC_BEGIN_TRY_BLOCK_RETURN;
-  auto style = GetNativeHapticFeedbackType(type);
   if (@available(macOS 10.14, *)) {
-    UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:style];
-    [generator prepare];
-    [generator impactOccurred];
-    generator = nil;
+    id<NSHapticFeedbackPerformer> performer = [NSHapticFeedbackManager defaultPerformer];
+    [performer performFeedbackPattern:NSHapticFeedbackPatternAlignment
+                performanceTime:NSHapticFeedbackPerformanceTimeDefault];
   } else {
     // Fallback on earlier versions
     // Note: This is a no-op on older versions of iOS/macOS
   }
-  NS_OBJC_END_TRY_BLOCK_RETURN(nil);
-}
+  return NS_OK;
+  NS_OBJC_END_TRY_BLOCK_RETURN(NS_OK);
 }
 
+}

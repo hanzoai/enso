@@ -942,6 +942,9 @@
     }
 
     removeTabContainersDragoverClass() {
+      if (this._dragIndicator) {
+        Services.zen.playHapticFeedback();
+      }
       this.dragIndicator.remove();
       this._dragIndicator = null;
       ZenWorkspaces.activeWorkspaceIndicator?.removeAttribute('open');
@@ -1043,16 +1046,19 @@
 
       // Calculate middle to decide 'before' or 'after'
       const rect = targetTab.getBoundingClientRect();
-
+      let shouldPlayHapticFeedback = false;
       if (isVertical) {
         const separation = 8;
         const middleY = targetTab.screenY + rect.height / 2;
         const indicator = this.dragIndicator;
         let top = 0;
         if (event.screenY > middleY) {
-          top = rect.top + rect.height + 'px';
+          top = Math.round(rect.top + rect.height) + 'px';
         } else {
-          top = rect.top + 'px';
+          top = Math.round(rect.top) + 'px';
+        }
+        if (indicator.style.top !== top) {
+          shouldPlayHapticFeedback = true;
         }
         indicator.setAttribute('orientation', 'horizontal');
         indicator.style.setProperty('--indicator-left', rect.left + separation / 2 + 'px');
@@ -1065,9 +1071,12 @@
         const indicator = this.dragIndicator;
         let left = 0;
         if (event.screenX > middleX) {
-          left = rect.left + rect.width + 1 + 'px';
+          left = Math.round(rect.left + rect.width + 1) + 'px';
         } else {
-          left = rect.left - 2 + 'px';
+          left = Math.round(rect.left - 2) + 'px';
+        }
+        if (indicator.style.left !== left) {
+          shouldPlayHapticFeedback = true;
         }
         indicator.setAttribute('orientation', 'vertical');
         indicator.style.setProperty('--indicator-top', rect.top + separation / 2 + 'px');
@@ -1075,7 +1084,9 @@
         indicator.style.left = left;
         indicator.style.removeProperty('top');
       }
-      Services.zen.playHapticFeedback(/*soft*/3);
+      if (shouldPlayHapticFeedback) {
+        Services.zen.playHapticFeedback();
+      }
     }
 
     async onTabLabelChanged(tab) {

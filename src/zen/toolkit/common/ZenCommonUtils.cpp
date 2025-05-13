@@ -11,6 +11,8 @@
 #include "nsServiceManagerUtils.h"
 #include "nsISharePicker.h"
 
+#include "mozilla/StaticPrefs_zen.h"
+
 #if defined(XP_WIN)
 #  include "mozilla/WindowsVersion.h"
 #endif
@@ -58,10 +60,13 @@ using mozilla::dom::WindowGlobalChild;
   return NS_OK;
 
 NS_IMETHODIMP
-ZenCommonUtils::PlayHapticFeedback(uint32_t type) {
+ZenCommonUtils::PlayHapticFeedback() {
   // We don't have any haptic feedback on non-macOS platforms
   // so we can just return.
-  return PlayHapticFeedbackInternal(type);
+  if (!mozilla::StaticPrefs::zen_haptic_feedback_enabled()) {
+    return NS_OK;
+  }
+  return PlayHapticFeedbackInternal();
 }
 
 NS_IMETHODIMP

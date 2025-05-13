@@ -267,6 +267,7 @@
       }
       if (previousTexture !== this.currentTexture) {
         this.updateCurrentWorkspace();
+        Services.zen.playHapticFeedback();
       }
     }
 

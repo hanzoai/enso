@@ -45,15 +45,14 @@ class ZenCommonUtils final : public nsIZenCommonUtils {
     -> nsresult;
   /**
    * @brief Helper function to play haptic feedback.
-   * @param type The type of haptic feedback to play.
    */
 #if !defined(XP_MACOSX)
-  static auto PlayHapticFeedbackInternal(uint32_t type) -> nsresult {
+  static auto PlayHapticFeedbackInternal() -> nsresult {
     // No-op on non-macOS platforms
     return NS_ERROR_NOT_IMPLEMENTED;
   }
 #else
-  static auto PlayHapticFeedbackInternal(uint32_t type) -> nsresult;
+  static auto PlayHapticFeedbackInternal() -> nsresult;
 #endif
 };
 
