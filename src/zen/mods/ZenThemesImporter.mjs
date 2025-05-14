@@ -249,7 +249,7 @@ var gZenThemesImporter = new (class {
   writeToDom(themesWithPreferences) {
     for (const browser of ZenMultiWindowFeature.browsers) {
       for (const { enabled, preferences, name } of themesWithPreferences) {
-        const sanitizedName = `theme-${name?.replaceAll(/\s/g, '-')?.replaceAll(/[^A-z_-]+/g, '')}`;
+        const sanitizedName = `theme-${name?.replaceAll(/\s/g, '-')?.replaceAll(/[^A-Za-z_-]+/g, '')}`;
 
         if (enabled !== undefined && !enabled) {
           const element = browser.document.getElementById(sanitizedName);
