@@ -363,11 +363,11 @@ menuitem {
       translate: 100%;
     }
 
-    --zen-toast-padding: 10px;
-    --zen-toast-max-height: 52px;
-    @media (-moz-platform: windows) {
-      --zen-toast-padding: 6px;
-      --zen-toast-max-height: 46px;
+    --zen-toast-padding: 6px;
+    --zen-toast-max-height: 46px;
+    @media (-moz-platform: macos) {
+      --zen-toast-padding: 10px;
+      --zen-toast-max-height: 52px;
     }
 
     gap: 10px;
