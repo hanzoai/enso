@@ -194,8 +194,6 @@ jobs:
           commit_user_email: zen-browser-auto@users.noreply.github.com
 
   lint:
-    permissions:
-      contents: read
     uses: ./.github/workflows/code-linter.yml
     needs: [build-data]
     name: Lint
