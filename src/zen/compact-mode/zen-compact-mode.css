@@ -299,9 +299,9 @@
               visibility: visible;
             }
 
-            left: calc(var(--zen-element-separation) / -2);
+            left: calc(var(--zen-element-separation) / -2 - 1px);
             :root[zen-right-side='true'] & {
-              right: calc(var(--zen-element-separation) / -2);
+              right: calc(var(--zen-element-separation) / -2 - 1px);
               left: auto;
             }          
           }

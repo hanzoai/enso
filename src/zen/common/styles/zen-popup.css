@@ -373,7 +373,7 @@ menuitem {
     gap: 10px;
     z-index: 1000;
     padding: var(--zen-toast-padding);
-    border-radius: 14px;
+    border-radius: calc(var(--zen-native-inner-radius) + 6px);
     background: linear-gradient(
       170deg,
       var(--zen-primary-color) -40%,
@@ -381,7 +381,7 @@ menuitem {
     );
     color: var(--button-primary-color);
     box-shadow: 0 0 14px 3px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid light-dark(rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.2));
     display: flex;
     font-weight: 600;
     align-items: center;
@@ -408,7 +408,7 @@ menuitem {
       padding: 0 12px !important;
       min-width: unset !important;
       margin: 0px !important;
-      border-radius: 8px !important;
+      border-radius: var(--zen-native-inner-radius) !important;
 
       :root[zen-right-side='true'] & {
         order: -1;

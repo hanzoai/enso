@@ -416,14 +416,27 @@ var gZenUIManager = {
 
   // Section: Notification messages
   _createToastElement(messageId, options) {
+    const createButton = () => {
+      const button = document.createXULElement('button');
+      button.id = options.button.id;
+      button.classList.add('footer-button');
+      button.classList.add('primary');
+      button.addEventListener('command', options.button.command);
+      return button;
+    };
+
     // Check if this message ID already exists
     for (const child of this._toastContainer.children) {
       if (child._messageId === messageId) {
-        if (options.button && child.querySelector('button')) {
-          const button = child.querySelector('button');
-          const clone = button.cloneNode(true);
-          button.replaceWith(clone);
-          clone.addEventListener('command', options.button.command);
+        child.removeAttribute('button');
+        if (options.button) {
+          const button = createButton();
+          const existingButton = child.querySelector('button');
+          if (existingButton) {
+            existingButton.remove();
+          }
+          child.appendChild(button);
+          child.setAttribute('button', true);
         }
         return [child, true];
       }
@@ -441,11 +454,7 @@ var gZenUIManager = {
     }
     wrapper.appendChild(element);
     if (options.button) {
-      const button = document.createXULElement('button');
-      button.id = options.button.id;
-      button.classList.add('footer-button');
-      button.classList.add('primary');
-      button.addEventListener('command', options.button.command);
+      const button = createButton();
       wrapper.appendChild(button);
       wrapper.setAttribute('button', true);
     }
