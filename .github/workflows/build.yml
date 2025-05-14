@@ -201,8 +201,6 @@ jobs:
     name: Lint
 
   check-release:
-    permissions:
-      contents: read
     runs-on: ubuntu-latest
     needs: [build-data, lint]
     steps:
