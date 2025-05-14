@@ -1,11 +1,5 @@
 name: macOS Release Build
 
-permissions:
-  contents: read
-  actions: read
-  packages: read
-  id-token: write
-
 on:
   workflow_call:
     inputs:
