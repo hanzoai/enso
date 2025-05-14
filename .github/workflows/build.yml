@@ -449,6 +449,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [windows-step-3, linux]
     if: always()
+    permissions:
+      contents: read
     steps:
       - name: Download aws-cli
         if: ${{ inputs.create_release && inputs.update_branch == 'release' }}
