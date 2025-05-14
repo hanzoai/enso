@@ -27,6 +27,8 @@ jobs:
     name: Post Build
     runs-on: ubuntu-latest
     needs: twilight-release-schedule
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
