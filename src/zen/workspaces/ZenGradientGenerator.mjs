@@ -1307,18 +1307,6 @@
       return theme;
     }
 
-    get riceManager() {
-      if (!this._riceManager) {
-        this._riceManager = new window.ZenRiceManager();
-      }
-      return this._riceManager;
-    }
-
-    shareTheme() {
-      const manager = this.riceManager;
-      manager.openShareDialog();
-    }
-
     getNativeAccentColor() {
       return Services.prefs.getStringPref('zen.theme.accent-color');
     }
