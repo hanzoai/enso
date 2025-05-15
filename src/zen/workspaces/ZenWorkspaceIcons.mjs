@@ -17,9 +17,9 @@
       button.setAttribute('class', 'subviewbutton');
       button.setAttribute('tooltiptext', workspace.name);
       button.setAttribute('zen-workspace-id', workspace.uuid);
-      const icon = document.createXULElement('div');
+      const icon = document.createXULElement('label');
       icon.setAttribute('class', 'zen-workspace-icon');
-      if (ZenWorkspaces.workspaceHasIcon(workspace)) {
+      if (gZenWorkspaces.workspaceHasIcon(workspace)) {
         icon.textContent = workspace.icon;
       } else {
         icon.setAttribute('no-icon', true);
@@ -30,7 +30,7 @@
     }
 
     async #updateIcons() {
-      const workspaces = await ZenWorkspaces._workspaces();
+      const workspaces = await gZenWorkspaces._workspaces();
       this.innerHTML = '';
       for (const workspace of workspaces.workspaces) {
         const button = this.#createWorkspaceIcon(workspace);
@@ -47,7 +47,7 @@
       const button = event.target;
       const uuid = button.getAttribute('zen-workspace-id');
       if (uuid) {
-        ZenWorkspaces.changeWorkspaceWithID(uuid);
+        gZenWorkspaces.changeWorkspaceWithID(uuid);
       }
     }
 

@@ -74,7 +74,7 @@ var gZenUIManager = {
     setTimeout(gURLBar.formatValue.bind(gURLBar), 350);
     if (!this._preventToolbarRebuild) {
       setTimeout(() => {
-        ZenWorkspaces.updateTabsContainers();
+        gZenWorkspaces.updateTabsContainers();
       }, 0);
     }
     delete this._preventToolbarRebuild;
@@ -779,7 +779,7 @@ var gZenVerticalTabsManager = {
       // on purpose, we set the orient to horizontal, because the arrowScrollbox is vertical
       gBrowser.tabContainer.arrowScrollbox.scrollbox.setAttribute(
         'orient',
-        isVerticalTabs && ZenWorkspaces.workspaceEnabled ? 'horizontal' : 'vertical'
+        isVerticalTabs && gZenWorkspaces.workspaceEnabled ? 'horizontal' : 'vertical'
       );
 
       const buttonsTarget = document.getElementById('zen-sidebar-top-buttons-customization-target');
