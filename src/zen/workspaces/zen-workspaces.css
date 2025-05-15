@@ -454,16 +454,11 @@
 }
 
 /* Mark workspaces indicator */
-#zen-current-workspace-indicator-container {
-  position: relative;
-  margin-bottom: var(--zen-workspace-indicator-height);
-}
-
 .zen-current-workspace-indicator {
   padding: calc(15px + var(--zen-toolbox-padding))
     calc(4px + var(--tab-inline-padding) + var(--zen-toolbox-padding));
   font-weight: 600;
-  position: absolute;
+  position: relative;
   max-height: var(--zen-workspace-indicator-height);
   min-height: var(--zen-workspace-indicator-height);
   gap: var(--tab-icon-end-margin);
@@ -508,6 +503,27 @@
   }
 }
 
-#zen-current-workspace-indicator-container[hidden='true'] {
-  display: none !important;
+/* mark: workspace element */
+zen-workspace {
+  flex-direction: column;
+  width: calc(100% + var(--zen-toolbox-padding) * 2);
+  position: absolute;
+  height: 100%;
+  overflow: hidden;
+
+  & > arrowscrollbox {
+    max-height: 100%;
+    overflow: hidden;
+
+    &::part(scrollbutton-up),
+    &::part(scrollbutton-down) {
+      display: none;
+    }
+
+    &::part(scrollbox) {
+      scrollbar-width: thin;
+      scrollbar-color: var(--vertical-tabs-scrollbar-color);
+      overflow-y: auto;
+    }
+  }
 }

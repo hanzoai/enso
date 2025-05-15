@@ -304,9 +304,9 @@
           this.log(`Created new pinned tab for pin ${pin.uuid} (isEssential: ${pin.isEssential})`);
           gBrowser.pinTab(newTab);
           if (!pin.isEssential) {
-            const container = document.querySelector(
-              `#vertical-pinned-tabs-container .zen-workspace-tabs-section[zen-workspace-id="${pin.workspaceUuid}"]`
-            );
+            const container = ZenWorkspaces.workspaceElement(
+              pin.workspaceUuid
+            )?.pinnedTabsContainer;
             if (container) {
               container.insertBefore(newTab, container.lastChild);
             }
@@ -809,7 +809,7 @@
     moveToAnotherTabContainerIfNecessary(event, movingTabs) {
       try {
         const pinnedTabsTarget =
-          event.target.closest('#vertical-pinned-tabs-container') ||
+          event.target.closest('.zen-workspace-pinned-tabs-section') ||
           event.target.closest('.zen-current-workspace-indicator');
         const essentialTabsTarget = event.target.closest('.zen-essentials-container');
         const tabsTarget = event.target.closest('#tabbrowser-arrowscrollbox');
