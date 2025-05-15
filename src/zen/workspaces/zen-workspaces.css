@@ -61,7 +61,7 @@
     }
   }
 
-  &[overflow] {
+  &[icons-overflow] {
     gap: 0 !important;
 
     & toolbarbutton {
@@ -526,4 +526,9 @@ zen-workspace {
       overflow-y: auto;
     }
   }
+}
+
+/** Customiable UI, this is an auto generated ID */
+#wrapper-zen-workspaces-button {
+  width: 100%;
 }

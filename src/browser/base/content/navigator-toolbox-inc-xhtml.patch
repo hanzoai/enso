@@ -1,5 +1,5 @@
 diff --git a/browser/base/content/navigator-toolbox.inc.xhtml b/browser/base/content/navigator-toolbox.inc.xhtml
-index 00c8976d3e258c0875d7da2f3ec823d8907a84c9..191598ed701514ca7207cd64c3da46960a5d0e82 100644
+index 00c8976d3e258c0875d7da2f3ec823d8907a84c9..cc61d5a845b5ce22a61f5a1aab8b280b2bcdf101 100644
 --- a/browser/base/content/navigator-toolbox.inc.xhtml
 +++ b/browser/base/content/navigator-toolbox.inc.xhtml
 @@ -2,7 +2,7 @@
@@ -26,7 +26,7 @@ index 00c8976d3e258c0875d7da2f3ec823d8907a84c9..191598ed701514ca7207cd64c3da4696
                tooltip="tabbrowser-tab-tooltip"
                orient="horizontal"
                stopwatchid="tabClick">
-+<html:div id="zen-essentials-wrapper" skipintoolbarset="true"></html:div>
++<html:div id="zen-essentials" skipintoolbarset="true"></html:div>
 +<html:div id="zen-tabs-wrapper">
            <hbox class="tab-drop-indicator" hidden="true"/>
            <html:span id="tab-drag-empty-feedback" role="presentation"/>
