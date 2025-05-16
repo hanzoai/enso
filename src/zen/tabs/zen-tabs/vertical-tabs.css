@@ -1459,7 +1459,14 @@
 .zen-workspace-tabs-section {
   &:not(.zen-essentials-container) {
     display: flex;
-    min-width: calc(100% - var(--zen-toolbox-padding) * 2); /* Set width based on padding */
+
+    :root[zen-sidebar-expanded='true'] & {
+      min-width: calc(100% - var(--zen-toolbox-padding) * 2); /* Set width based on padding */
+    }
+
+    :root:not([zen-sidebar-expanded='true']) & {
+      max-width: var(--zen-sidebar-width);
+    }
   }
 
   &:not(.zen-current-workspace-indicator):not(.zen-essentials-container) {

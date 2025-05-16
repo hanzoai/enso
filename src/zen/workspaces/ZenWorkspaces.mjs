@@ -465,7 +465,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       tabs.splice(tabs.indexOf(tab), 1);
       tab = tab.group ?? tab;
       if (tab.pinned) {
-        pinnedSection.nextSibling.before(tab);
+        pinnedSection.insertBefore(tab, pinnedSection.lastChild);
       } else {
         if (!firstNormalTab) {
           firstNormalTab = tab;
