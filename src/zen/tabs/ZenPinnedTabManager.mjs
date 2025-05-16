@@ -798,7 +798,9 @@
         !isVisible || !contextTab.getAttribute('zen-pin-id');
       document.getElementById('context_zen-replace-pinned-url-with-current').hidden = !isVisible;
       document.getElementById('context_zen-add-essential').hidden =
-        contextTab.getAttribute('zen-essential') || !!contextTab.group;
+        contextTab.getAttribute('zen-essential') ||
+        !!contextTab.group ||
+        gBrowser._numZenEssentials >= this.MAX_ESSENTIALS_TABS;
       document.getElementById('context_zen-remove-essential').hidden =
         !contextTab.getAttribute('zen-essential');
       document.getElementById('context_unpinTab').hidden =
@@ -816,7 +818,7 @@
           event.target.closest('.zen-workspace-pinned-tabs-section') ||
           event.target.closest('.zen-current-workspace-indicator');
         const essentialTabsTarget = event.target.closest('.zen-essentials-container');
-        const tabsTarget = event.target.closest('#tabbrowser-arrowscrollbox');
+        const tabsTarget = event.target.closest('.zen-workspace-normal-tabs-section');
         // Remove group labels from the moving tabs and replace it
         // with the sub tabs
         for (let i = 0; i < movingTabs.length; i++) {
@@ -1004,9 +1006,9 @@
     }
 
     applyDragoverClass(event, draggedTab) {
-      const pinnedTabsTarget = event.target.closest('#vertical-pinned-tabs-container');
+      const pinnedTabsTarget = event.target.closest('.zen-workspace-pinned-tabs-section');
       const essentialTabsTarget = event.target.closest('.zen-essentials-container');
-      const tabsTarget = event.target.closest('#tabbrowser-arrowscrollbox');
+      const tabsTarget = event.target.closest('.zen-workspace-normal-tabs-section');
       let targetTab = event.target.closest('.tabbrowser-tab');
       targetTab = targetTab?.group || targetTab;
       draggedTab = draggedTab?.group?.hasAttribute('split-view-group')
@@ -1033,7 +1035,10 @@
           shouldAddDragOverElement = true;
         }
       } else if (essentialTabsTarget) {
-        if (!draggedTab.hasAttribute('zen-essential')) {
+        if (
+          !draggedTab.hasAttribute('zen-essential') &&
+          gBrowser._numZenEssentials < this.MAX_ESSENTIALS_TABS
+        ) {
           shouldAddDragOverElement = true;
           isVertical = false;
         }
