@@ -373,7 +373,7 @@ menuitem {
     gap: 10px;
     z-index: 1000;
     padding: var(--zen-toast-padding);
-    border-radius: calc(var(--zen-native-inner-radius) + 6px);
+    border-radius: calc(var(--zen-native-inner-radius) + 8px);
     background: linear-gradient(
       170deg,
       var(--zen-primary-color) -40%,
@@ -408,7 +408,7 @@ menuitem {
       padding: 0 12px !important;
       min-width: unset !important;
       margin: 0px !important;
-      border-radius: var(--zen-native-inner-radius) !important;
+      border-radius: calc(var(--zen-native-inner-radius) + 4px) !important;
 
       :root[zen-right-side='true'] & {
         order: -1;
