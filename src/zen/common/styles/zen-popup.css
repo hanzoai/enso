@@ -34,8 +34,6 @@
   --uc-permission-itemcontainer-padding-block: 8px;
   --uc-permission-item-margin-block: 4px;
   --uc-permission-item-padding-inline: 16px;
-
-  --panel-separator-color: var(--zen-colors-border);
   --zen-panel-separator-width: 1px;
 }
 
@@ -281,15 +279,6 @@ menuseparator {
 #identity-popup-multiView toolbarseparator,
 #editBookmarkHeaderSeparator {
   display: none;
-}
-
-/* Context menu */
-menu,
-menuitem {
-  &:where([_moz-menuactive]:not([disabled='true'])) {
-    background-color: var(--button-hover-bgcolor);
-    color: var(--button-hover-color);
-  }
 }
 
 /*Bookmark workspace selector styles*/
