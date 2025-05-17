@@ -2539,13 +2539,15 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async updateTabsContainers(target = undefined, forAnimation = false) {
-    if (target && !target.parentNode) {
+    if (target && !target.target?.parentNode) {
       target = null;
     }
     // Only animate if it's from an event
-    const animateContainer = target && target instanceof EventTarget;
+    const animateContainer = target && target.target instanceof EventTarget;
     await this.onPinnedTabsResize(
-      [{ target: target ?? this.pinnedTabsContainer }],
+      // This is what happens when we join a resize observer, an event listener
+      // while using it as a method.
+      [{ target: (target?.target ? target.target : target) ?? this.pinnedTabsContainer }],
       forAnimation,
       animateContainer
     );

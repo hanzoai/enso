@@ -527,6 +527,11 @@ zen-workspace {
       scrollbar-color: var(--vertical-tabs-scrollbar-color);
       overflow-y: auto;
     }
+
+    &,
+    & .zen-workspace-normal-tabs-section {
+      height: 100%;
+    }
   }
 }
 
