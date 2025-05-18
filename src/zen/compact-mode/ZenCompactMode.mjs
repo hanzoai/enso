@@ -221,6 +221,13 @@ var gZenCompactModeManager = {
     return sidebarWidth;
   },
 
+  get canHideSidebar() {
+    return (
+      Services.prefs.getBoolPref('zen.view.compact.hide-tabbar') ||
+      gZenVerticalTabsManager._hasSetSingleToolbar
+    );
+  },
+
   animateCompactMode() {
     return new Promise((resolve) => {
       // Get the splitter width before hiding it (we need to hide it before animating on right)
@@ -230,9 +237,7 @@ var gZenCompactModeManager = {
         .getElementById('zen-sidebar-splitter')
         .getBoundingClientRect().width;
       const isCompactMode = this.preference;
-      const canHideSidebar =
-        Services.prefs.getBoolPref('zen.view.compact.hide-tabbar') ||
-        gZenVerticalTabsManager._hasSetSingleToolbar;
+      const canHideSidebar = this.canHideSidebar;
       let canAnimate =
         lazyCompactMode.COMPACT_MODE_CAN_ANIMATE_SIDEBAR && !this.isSidebarPotentiallyOpen();
       if (typeof this._wasInCompactMode !== 'undefined') {
@@ -624,7 +629,8 @@ var gZenCompactModeManager = {
       !this.isSidebarPotentiallyOpen() &&
       this._canShowBackgroundTabToast &&
       !gZenGlanceManager._animating &&
-      !this._nextTimeWillBeActive
+      !this._nextTimeWillBeActive &&
+      this.canHideSidebar
     ) {
       gZenUIManager.showToast('zen-background-tab-opened-toast');
     }
