@@ -2591,6 +2591,9 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       }
       for (const workspaceId of workspacesIds) {
         const workspaceElement = this.workspaceElement(workspaceId);
+        if (!workspaceElement) {
+          continue;
+        }
         const arrowScrollbox = workspaceElement.tabsContainer;
         const pinnedContainer = workspaceElement.pinnedTabsContainer;
         const workspaceObject = this.getWorkspaceFromId(workspaceId);

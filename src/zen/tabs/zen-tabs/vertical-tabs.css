@@ -447,7 +447,6 @@
   min-height: fit-content;
   overflow-y: auto; /* Allow vertical scrolling */
   height: 100%; /* Take full available height */
-  scrollbar-color: color-mix(in srgb, currentColor 26%, transparent) transparent; /* Custom scrollbar */
 
   /* Negative margin hack for workspace transitions (only if workspaces are enabled) */
   :root[zen-workspace-id][zen-sidebar-expanded='true'] & {
@@ -734,6 +733,7 @@
     padding: 0 !important;
     max-width: var(--zen-sidebar-width) !important;
     min-width: unset !important;
+    width: 100% !important;
   }
 
   & #zen-essentials {
