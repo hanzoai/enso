@@ -72,32 +72,14 @@
       margin: 0;
     }
 
-    & toolbarbutton:not([active='true']),
+    /* Inlcude separately since ther'es a bug in the 
+     * rendering of XUL in firefox */
+    & toolbarbutton:not([active='true']) {
+%include overflow-icons.inc.css
+    }
+
     &:has(toolbarbutton:hover) toolbarbutton[active='true'] {
-      &:not(:hover) {
-        width: min(var(--zen-overflowed-workspace-button-width), 25px);
-
-        &::after {
-          content: '';
-          position: absolute;
-          width: 4px;
-          border-radius: 99px;
-          height: 4px;
-          background: color-mix(
-            in srgb,
-            var(--zen-primary-color) 10%,
-            light-dark(rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.4)) 90%
-          );
-          left: 50%;
-          top: 50%;
-          filter: saturate(140%) brightness(110%) !important;
-          transform: translate(-50%, -50%);
-        }
-
-        & .zen-workspace-icon {
-          display: none;
-        }
-      }
+%include overflow-icons.inc.css 
     }
   }
 }
