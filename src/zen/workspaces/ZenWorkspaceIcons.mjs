@@ -51,22 +51,25 @@
       }
     }
 
-    on_ZenWorkspacesUIUpdate(event) {
-      this.#updateIcons();
+    async on_ZenWorkspacesUIUpdate(event) {
+      await this.#updateIcons();
       this.activeIndex = event.detail.activeIndex;
     }
 
     set activeIndex(uuid) {
       const buttons = this.querySelectorAll('toolbarbutton');
+      if (!buttons.length) {
+        return;
+      }
       let i = 0;
-      let selected = 0;
+      let selected = -1;
       for (const button of buttons) {
         if (button.getAttribute('zen-workspace-id') == uuid) {
           selected = i;
         } else {
           button.removeAttribute('active');
         }
-        selected++;
+        i++;
       }
       buttons[selected].setAttribute('active', true);
       this.setAttribute('selected', selected);

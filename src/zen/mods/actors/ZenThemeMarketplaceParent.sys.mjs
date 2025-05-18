@@ -181,7 +181,11 @@ export class ZenThemeMarketplaceParent extends JSWindowActorParent {
   }
 
   async installTheme(theme) {
-    await this.downloadThemeFileContents(theme);
+    try {
+      await this.downloadThemeFileContents(theme);
+    } catch (e) {
+      console.error('ZenThemeMarketplaceParent: Error installing theme', theme.id, e);
+    }
   }
 
   async checkForThemeChanges() {

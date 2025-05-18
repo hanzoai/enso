@@ -1594,12 +1594,14 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
         browser.gZenWorkspaces._workspaceBookmarksCache = null;
       }
       let workspaces = await browser.gZenWorkspaces._workspaces();
-      browser.dispatchEvent(
-        new CustomEvent('ZenWorkspacesUIUpdate', {
-          bubbles: true,
-          detail: { workspaces, activeIndex: browser.gZenWorkspaces.activeWorkspace },
-        })
-      );
+      if (clearCache) {
+        browser.dispatchEvent(
+          new CustomEvent('ZenWorkspacesUIUpdate', {
+            bubbles: true,
+            detail: { activeIndex: browser.gZenWorkspaces.activeWorkspace },
+          })
+        );
+      }
       await browser.gZenWorkspaces.workspaceBookmarks();
       workspaceList.innerHTML = '';
       workspaceList.parentNode.style.display = 'flex';
@@ -2102,7 +2104,9 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
             element,
             {
               transform: existingTransform ? [existingTransform, newTransform] : newTransform,
-              paddingTop: existingTransform ? [existingPaddingTop, existingPaddingTop] : existingPaddingTop,
+              paddingTop: existingTransform
+                ? [existingPaddingTop, existingPaddingTop]
+                : existingPaddingTop,
             },
             {
               type: 'spring',
@@ -2441,7 +2445,15 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
           tab.setAttribute('zen-workspace-id', workspace.uuid);
         }
       }
+      window.dispatchEvent(
+        new CustomEvent('ZenWorkspacesUIUpdate', {
+          bubbles: true,
+          detail: { activeIndex: workspace.uuid },
+        })
+      );
     }
+
+    this.workspaceIcons.activeIndex = workspace.uuid;
 
     setTimeout(gURLBar.formatValue.bind(gURLBar), 0);
   }
