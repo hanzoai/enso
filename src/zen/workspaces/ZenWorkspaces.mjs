@@ -2096,11 +2096,13 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       const offset = -(newWorkspaceIndex - elementWorkspaceIndex) * 100;
       const newTransform = `translateX(${offset}%)`;
       if (shouldAnimate) {
+        const existingPaddingTop = element.style.paddingTop;
         animations.push(
           gZenUIManager.motion.animate(
             element,
             {
               transform: existingTransform ? [existingTransform, newTransform] : newTransform,
+              paddingTop: existingTransform ? [existingPaddingTop, existingPaddingTop] : existingPaddingTop,
             },
             {
               type: 'spring',
