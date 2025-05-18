@@ -367,6 +367,8 @@
               this.#currentParentTab._visuallySelected = false;
             }
 
+            this.#currentParentTab.linkedBrowser.zenModeActive = false;
+
             // reset everything
             this.browserWrapper = null;
             this.overlay = null;
