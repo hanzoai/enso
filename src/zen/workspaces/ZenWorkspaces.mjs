@@ -2410,7 +2410,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     });
     await this._organizeWorkspaceStripLocations(workspace, true);
     gZenUIManager.tabsWrapper.style.scrollbarWidth = '';
-    this.workspaceIcons.activeIndex = workspace.uuid;
 
     // Notify listeners
     if (this._changeListeners?.length) {
