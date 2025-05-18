@@ -809,13 +809,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       this._initializeWorkspaceTabContextMenus();
       await this.workspaceBookmarks();
       window.addEventListener('TabBrowserInserted', this.onTabBrowserInserted.bind(this));
-      const tabUpdateListener = this.updateTabsContainers.bind(this);
-      window.addEventListener('TabOpen', tabUpdateListener);
-      window.addEventListener('TabClose', tabUpdateListener);
-      window.addEventListener('TabAddedToEssentials', tabUpdateListener);
-      window.addEventListener('TabRemovedFromEssentials', tabUpdateListener);
-      window.addEventListener('TabPinned', tabUpdateListener);
-      window.addEventListener('TabUnpinned', tabUpdateListener);
       let activeWorkspace = await this.getActiveWorkspace();
       this.activeWorkspace = activeWorkspace?.uuid;
       try {
@@ -832,6 +825,14 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       this._fixTabPositions();
       this._resolveInitialized();
       this._clearAnyZombieTabs(); // Dont call with await
+
+      const tabUpdateListener = this.updateTabsContainers.bind(this);
+      window.addEventListener('TabOpen', tabUpdateListener);
+      window.addEventListener('TabClose', tabUpdateListener);
+      window.addEventListener('TabAddedToEssentials', tabUpdateListener);
+      window.addEventListener('TabRemovedFromEssentials', tabUpdateListener);
+      window.addEventListener('TabPinned', tabUpdateListener);
+      window.addEventListener('TabUnpinned', tabUpdateListener);
     }
   }
 

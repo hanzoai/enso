@@ -102,9 +102,13 @@
       // height. For tab group labels, the number won't exactly match, but
       // that shouldn't be a problem in practice since the arrowscrollbox
       // stops at element bounds when finishing scrolling.
-      Object.defineProperty(this.scrollbox, 'lineScrollAmount', {
-        get: () => 36,
-      });
+      try {
+        Object.defineProperty(this.scrollbox, 'lineScrollAmount', {
+          get: () => 36,
+        });
+      } catch (e) {
+        console.warn('Failed to set lineScrollAmount', e);
+      }
 
       // Add them manually since attribute inheritance doesn't work
       // for multiple layers of shadow DOM.
