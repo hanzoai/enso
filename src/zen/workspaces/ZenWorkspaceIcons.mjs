@@ -58,21 +58,29 @@
 
     set activeIndex(uuid) {
       const buttons = this.querySelectorAll('toolbarbutton');
+      let i = 0;
+      let selected = 0;
       for (const button of buttons) {
         if (button.getAttribute('zen-workspace-id') == uuid) {
-          button.setAttribute('active', 'true');
+          selected = i;
         } else {
           button.removeAttribute('active');
         }
+        selected++;
       }
+      buttons[selected].setAttribute('active', true);
+      this.setAttribute('selected', selected);
     }
 
     get activeIndex() {
+      const selected = this.getAttribute('selected');
       const buttons = this.querySelectorAll('toolbarbutton');
+      let i = 0;
       for (const button of buttons) {
-        if (button.hasAttribute('active')) {
+        if (i == selected) {
           return button.getAttribute('zen-workspace-id');
         }
+        i++;
       }
       return null;
     }

@@ -236,8 +236,8 @@
           continue;
         }
 
-        if (pin.title && (pin.editedTitle || tab.hasAttribute('zen-has-static-label'))) {
-          tab.removeAttribute('zen-has-static-label'); // So we can set it again
+        tab.removeAttribute('zen-has-static-label'); // So we can set it again
+        if (pin.title && pin.editedTitle) {
           gBrowser._setTabLabel(tab, pin.title, { beforeTabOpen: true });
           tab.setAttribute('zen-has-static-label', 'true');
         }
