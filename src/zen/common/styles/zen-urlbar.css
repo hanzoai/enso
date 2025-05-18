@@ -24,10 +24,6 @@
   border-radius: calc(var(--toolbarbutton-border-radius) - 2px);
   --urlbarView-results-padding: 10px !important;
 
-  :root:not([zen-single-toolbar='true']) &[zen-floating-urlbar='true'] {
-    --urlbar-container-padding: 2px !important;
-  }
-
   --urlbar-margin-inline: 5px;
   --urlbar-container-padding: 5px;
   :root[zen-single-toolbar='true'] {

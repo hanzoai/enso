@@ -711,7 +711,8 @@
   padding-bottom: var(--zen-toolbox-padding); /* Apply bottom padding */
 
   /* Hide text labels */
-  & .zen-current-workspace-indicator-name {
+  & .zen-current-workspace-indicator-name,
+  & zen-workspace .toolbarbutton-text {
     display: none !important;
   }
 
@@ -761,6 +762,7 @@
   & #titlebar {
     display: grid;
     grid-template-rows: auto 1fr; /* Allow content below button box */
+    overflow: hidden;
   }
 
   /* Style top buttons customization target */
