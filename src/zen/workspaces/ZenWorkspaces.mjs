@@ -346,6 +346,13 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     return document.querySelector(`zen-workspace[active]`)?.indicator;
   }
 
+  get activeScrollbox() {
+    return (
+      document.querySelector(`zen-workspace[active]`)?.scrollbox ??
+      gBrowser.tabContainer.arrowScrollbox
+    );
+  }
+
   get tabboxChildren() {
     return Array.from(this.activeWorkspaceStrip?.children || []);
   }
@@ -2393,6 +2400,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     gZenThemePicker.onWorkspaceChange(workspace);
 
     gZenUIManager.tabsWrapper.scrollbarWidth = 'none';
+    this.workspaceIcons.activeIndex = workspace.uuid;
     await this._animateTabs(workspace, !onInit && !this._animatingChange, tabToSelect, {
       previousWorkspaceIndex,
       previousWorkspace,
@@ -2436,8 +2444,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
         })
       );
     }
-
-    this.workspaceIcons.activeIndex = workspace.uuid;
 
     setTimeout(gURLBar.formatValue.bind(gURLBar), 0);
   }
