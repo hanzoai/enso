@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..f326895a66dcbd4961cb1a4e8310ae80a181b60e 100644
+index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..de050862141ea4b127bedd34add8d515806d766b 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -83,7 +83,7 @@
@@ -393,7 +393,7 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..f326895a66dcbd4961cb1a4e8310ae80
        let translateX = event.screenX - dragData.screenX;
        let translateY = event.screenY - dragData.screenY;
  
-@@ -2407,14 +2450,23 @@
+@@ -2407,12 +2450,21 @@
        let lastTab = tabs.at(-1);
        let lastMovingTab = movingTabs.at(-1);
        let firstMovingTab = movingTabs[0];
@@ -414,11 +414,8 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..f326895a66dcbd4961cb1a4e8310ae80
 -      if (!isPinned) {
 +      if (true) {
          translate +=
--          this.arrowScrollbox.scrollbox[scrollDirection] - dragData.scrollPos;
-+          gZenWorkspaces.activeScrollbox.scrollbox[scrollDirection] - dragData.scrollPos;
+           this.arrowScrollbox.scrollbox[scrollDirection] - dragData.scrollPos;
        } else if (isPinned && this.verticalMode) {
-         translate +=
-           this.verticalPinnedTabsContainer.scrollTop - dragData.scrollPos;
 @@ -2431,6 +2483,9 @@
            // Shift the `.tab-group-label-container` to shift the label element.
            item = item.parentElement;

@@ -54,6 +54,10 @@
         false
       );
 
+      this.scrollbox.addEventListener('wheel', gBrowser.tabContainer, true);
+      this.scrollbox.addEventListener('underflow', gBrowser.tabContainer);
+      this.scrollbox.addEventListener('overflow', gBrowser.tabContainer);
+
       this.scrollbox._getScrollableElements = () => {
         const children = [...this.pinnedTabsContainer.children, ...this.tabsContainer.children];
         if (Services.prefs.getBoolPref('zen.view.show-newtab-button-top', false)) {

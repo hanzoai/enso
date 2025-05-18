@@ -2392,6 +2392,8 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     // Recalculate new tab observers
     gBrowser.tabContainer.observe(null, 'nsPref:changed', 'privacy.userContext.enabled');
 
+    gBrowser.tabContainer.arrowScrollbox = this.activeScrollbox;
+
     // Update workspace UI
     await this._updateWorkspacesChangeContextMenu();
     // gZenUIManager.updateTabsToolbar();
