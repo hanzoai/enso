@@ -55,13 +55,31 @@
       );
 
       this.scrollbox._getScrollableElements = () => {
-        return gBrowser.tabContainer.ariaFocusableItems.filter(this.scrollbox._canScrollToElement);
-      };
-      this.scrollbox._canScrollToElement = (element) => {
-        if (gBrowser.isTab(element)) {
-          return !element.hasAttribute('zen-essential') && !this.hasAttribute('positionpinnedtabs');
+        const children = [...this.pinnedTabsContainer.children, ...this.tabsContainer.children];
+        if (Services.prefs.getBoolPref('zen.view.show-newtab-button-top', false)) {
+          // Move the perifery to the first non-pinned tab
+          const periphery = this.tabsContainer.querySelector(
+            '#tabbrowser-arrowscrollbox-periphery'
+          );
+          if (periphery) {
+            const firstNonPinnedTabIndex = children.findIndex(
+              (child) => gBrowser.isTab(child) && !child.pinned
+            );
+            if (firstNonPinnedTabIndex > -1) {
+              // Change to new location and remove from the old one on the list
+              const peripheryIndex = children.indexOf(periphery);
+              if (peripheryIndex > -1) {
+                children.splice(peripheryIndex, 1);
+              }
+              children.splice(firstNonPinnedTabIndex, 0, periphery);
+            }
+          }
         }
-        return true;
+        return Array.prototype.filter.call(
+          children,
+          this.scrollbox._canScrollToElement,
+          this.scrollbox
+        );
       };
 
       // Override for performance reasons. This is the size of a single element
