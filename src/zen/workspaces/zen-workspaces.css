@@ -513,9 +513,14 @@ zen-workspace {
   height: 100%;
   overflow: hidden;
 
+  :root:not([zen-sidebar-expanded='true']) & {
+    width: 100%;
+  }
+
   & > arrowscrollbox {
     max-height: 100%;
     overflow: hidden;
+    position: relative;
 
     &::part(scrollbutton-up),
     &::part(scrollbutton-down) {
@@ -524,8 +529,45 @@ zen-workspace {
 
     &::part(scrollbox) {
       scrollbar-width: thin;
-      scrollbar-color: var(--vertical-tabs-scrollbar-color);
+      scrollbar-color: color-mix(in srgb, currentColor 35%, transparent 65%) transparent; /* Custom scrollbar */
       overflow-y: auto;
+    }
+
+    &[overflowing] {
+      --zen-scrollbar-overflow-background: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.1s;
+        background-color: var(--zen-scrollbar-overflow-background);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.1s;
+        background-color: var(--zen-scrollbar-overflow-background);
+      }
+
+      &:not([scrolledtostart])::before {
+        opacity: 1;
+      }
+
+      &:not([scrolledtoend])::after {
+        opacity: 1;
+      }
     }
 
     &,

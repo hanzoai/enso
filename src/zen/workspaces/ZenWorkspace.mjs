@@ -49,6 +49,33 @@
       this.initializeAttributeInheritance();
 
       this.scrollbox = this.querySelector('arrowscrollbox');
+      this.scrollbox.smoothScroll = Services.prefs.getBoolPref(
+        'zen.startup.smooth-scroll-in-tabs',
+        false
+      );
+
+      this.scrollbox._getScrollableElements = () => {
+        return gBrowser.tabContainer.ariaFocusableItems.filter(this.scrollbox._canScrollToElement);
+      };
+      this.scrollbox._canScrollToElement = (element) => {
+        if (gBrowser.isTab(element)) {
+          return !element.hasAttribute('zen-essential') && !this.hasAttribute('positionpinnedtabs');
+        }
+        return true;
+      };
+
+      // Override for performance reasons. This is the size of a single element
+      // that can be scrolled when using mouse wheel scrolling. If we don't do
+      // this then arrowscrollbox computes this value by calling
+      // _getScrollableElements and dividing the box size by that number.
+      // However in the tabstrip case we already know the answer to this as,
+      // when we're overflowing, it is always the same as the tab min width or
+      // height. For tab group labels, the number won't exactly match, but
+      // that shouldn't be a problem in practice since the arrowscrollbox
+      // stops at element bounds when finishing scrolling.
+      Object.defineProperty(this.scrollbox, 'lineScrollAmount', {
+        get: () => 36,
+      });
 
       // Add them manually since attribute inheritance doesn't work
       // for multiple layers of shadow DOM.

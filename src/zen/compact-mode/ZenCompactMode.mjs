@@ -201,13 +201,21 @@ var gZenCompactModeManager = {
     }
     let sidebarWidth = this.sidebar.getBoundingClientRect().width;
     if (sidebarWidth > 1) {
-      gZenUIManager.restoreScrollbarState();
+      if (this.preference && gZenVerticalTabsManager._prefsSidebarExpanded) {
+        sidebarWidth = Math.max(sidebarWidth, 150);
+      }
       // Second variable to get the genuine width of the sidebar
       this.sidebar.style.setProperty('--actual-zen-sidebar-width', `${sidebarWidth}px`);
       window.dispatchEvent(new window.Event('resize')); // To recalculate the layout
-      if (event && this.preference) {
+      if (
+        event &&
+        this.preference &&
+        gZenVerticalTabsManager._prefsSidebarExpanded &&
+        !gZenVerticalTabsManager._hadSidebarCollapse
+      ) {
         return;
       }
+      delete gZenVerticalTabsManager._hadSidebarCollapse;
       this.sidebar.style.setProperty('--zen-sidebar-width', `${sidebarWidth}px`);
     }
     return sidebarWidth;

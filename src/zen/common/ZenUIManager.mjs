@@ -88,18 +88,9 @@ var gZenUIManager = {
     return this._tabsWrapper;
   },
 
-  saveScrollbarState() {
-    this._scrollbarState = this.tabsWrapper.scrollTop;
-  },
-
-  restoreScrollbarState() {
-    this.tabsWrapper.scrollTop = this._scrollbarState;
-  },
-
   onTabClose(event = undefined) {
     if (!event?.target?._closedInMultiselection) {
       this.updateTabsToolbar();
-      this.restoreScrollbarState();
     }
   },
 
@@ -791,7 +782,9 @@ var gZenVerticalTabsManager = {
         document.documentElement.removeAttribute('zen-right-side');
       }
 
+      delete this._hadSidebarCollapse;
       if (isSidebarExpanded) {
+        this._hadSidebarCollapse = !document.documentElement.hasAttribute('zen-sidebar-expanded');
         this.navigatorToolbox.setAttribute('zen-sidebar-expanded', 'true');
         document.documentElement.setAttribute('zen-sidebar-expanded', 'true');
         gBrowser.tabContainer.setAttribute('expanded', 'true');

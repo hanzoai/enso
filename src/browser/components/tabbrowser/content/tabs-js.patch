@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..97e2a505892a82084ade7d2b1c5b690444f65254 100644
+index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..62fcba41ec1976e24343a54f8dd146a430a6640e 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -83,7 +83,7 @@
@@ -11,7 +11,15 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..97e2a505892a82084ade7d2b1c5b6904
          }
          return true;
        };
-@@ -342,7 +342,7 @@
+@@ -286,6 +286,7 @@
+     on_TabGroupCollapse(event) {
+       this._invalidateCachedVisibleTabs();
+       this._unlockTabSizing();
++      return;
+ 
+       // If the user's selected tab is in the collapsing group, kick them off
+       // the tab. If no tabs exist outside the group, create a new one and
+@@ -342,7 +343,7 @@
        // and we're not hitting the scroll buttons.
        if (
          event.button != 0 ||
@@ -20,14 +28,6 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..97e2a505892a82084ade7d2b1c5b6904
          event.composedTarget.localName == "toolbarbutton"
        ) {
          return;
-@@ -391,6 +391,7 @@
-             // Reset the "ignored click" flag
-             target._ignoredCloseButtonClicks = false;
-           }
-+          gZenUIManager.saveScrollbarState();
-         }
- 
-         /* Protects from close-tab-button errant doubleclick:
 @@ -692,7 +693,7 @@
        if (this.#isContainerVerticalPinnedGrid(tab)) {
          // In expanded vertical mode, the max number of pinned tabs per row is dynamic
