@@ -711,8 +711,7 @@
   padding-bottom: var(--zen-toolbox-padding); /* Apply bottom padding */
 
   /* Hide text labels */
-  & .zen-current-workspace-indicator-name,
-  & .toolbarbutton-text {
+  & .zen-current-workspace-indicator-name {
     display: none !important;
   }
 
