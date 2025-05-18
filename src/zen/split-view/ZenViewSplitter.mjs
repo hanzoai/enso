@@ -923,7 +923,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       window.gContextMenu.mediaURL ||
       window.gContextMenu.contentData.docLocation ||
       window.gContextMenu.target.ownerDocument.location.href;
-    const currentTab = window.gBrowser.selectedTab;
+    const currentTab = gZenGlanceManager.getTabOrGlanceParent(window.gBrowser.selectedTab);
     const newTab = this.openAndSwitchToTab(url);
     this.splitTabs([currentTab, newTab]);
   }
