@@ -95,13 +95,6 @@
         get: () => 36,
       });
 
-      if (
-        Services.prefs.getBoolPref('zen.workspaces.swipe-actions', false) &&
-        gZenWorkspaces.workspaceEnabled
-      ) {
-        gZenWorkspaces.attachGestureHandlers(this);
-      }
-
       // Add them manually since attribute inheritance doesn't work
       // for multiple layers of shadow DOM.
       this.tabsContainer.setAttribute('zen-workspace-id', this.id);
