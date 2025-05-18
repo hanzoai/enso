@@ -512,7 +512,7 @@ zen-workspace {
     }
 
     &::part(scrollbox) {
-      scrollbar-width: thin;
+      scrollbar-width: auto;
       scrollbar-color: color-mix(in srgb, currentColor 35%, transparent 65%) transparent; /* Custom scrollbar */
       overflow-y: auto;
     }
