@@ -271,6 +271,8 @@ var gZenCompactModeManager = {
               // Subtract from the splitter width to end up with the correct element separation
               sidebarWidth += 1.5 * splitterWidth - elementSeparation;
             }
+          } else {
+            sidebarWidth -= elementSeparation;
           }
           gZenUIManager.motion
             .animate(
