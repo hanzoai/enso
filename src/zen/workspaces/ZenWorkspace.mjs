@@ -6,7 +6,7 @@
           <hbox class="zen-current-workspace-indicator-icon"></hbox>
           <hbox class="zen-current-workspace-indicator-name"></hbox>
         </vbox>
-        <arrowscrollbox orient="vertical" tabindex="-1">
+        <arrowscrollbox orient="vertical" tabindex="-1" class="workspace-arrowscrollbox">
           <vbox class="zen-workspace-tabs-section zen-workspace-pinned-tabs-section">
             <html:div class="vertical-pinned-tabs-container-separator"></html:div>
           </vbox>
@@ -76,6 +76,13 @@
       Object.defineProperty(this.scrollbox, 'lineScrollAmount', {
         get: () => 36,
       });
+
+      if (
+        Services.prefs.getBoolPref('zen.workspaces.swipe-actions', false) &&
+        gZenWorkspaces.workspaceEnabled
+      ) {
+        gZenWorkspaces.attachGestureHandlers(this);
+      }
 
       // Add them manually since attribute inheritance doesn't work
       // for multiple layers of shadow DOM.

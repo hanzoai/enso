@@ -138,7 +138,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       Services.prefs.getBoolPref('zen.workspaces.swipe-actions', false) &&
       this.workspaceEnabled
     ) {
-      this.initializeGestureHandlers();
       this.initializeWorkspaceNavigation();
     }
 
@@ -574,21 +573,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       },
       { passive: true }
     );
-  }
-
-  initializeGestureHandlers() {
-    const elements = [
-      gNavToolbox,
-      // event handlers do not work on elements inside shadow DOM so we need to attach them directly
-      document.getElementById('tabbrowser-arrowscrollbox').shadowRoot.querySelector('scrollbox'),
-    ];
-
-    // Attach gesture handlers to each element
-    for (const element of elements) {
-      if (!element) continue;
-
-      this.attachGestureHandlers(element);
-    }
   }
 
   attachGestureHandlers(element) {
