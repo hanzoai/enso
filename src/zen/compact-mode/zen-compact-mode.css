@@ -345,7 +345,7 @@
         border-top-right-radius: env(-moz-gtk-csd-titlebar-radius);
         transition: all 0.15s ease;
         width: 100%;
-        opacity: 0;
+        visibility: hidden;
         background: var(--zen-dialog-background);
 
         max-height: var(--zen-toolbar-height);
@@ -373,7 +373,7 @@
       & #zen-appcontent-navbar-container:has(
           *:is([panelopen='true'], [open='true'], #urlbar:focus-within, [breakout-extend='true']):not(#urlbar[zen-floating-urlbar='true']):not(.zen-compact-mode-ignore)
         ) {
-        opacity: 1;
+        visibility: visible !important;
         border-top-width: 1px;
 
         top: -1px;

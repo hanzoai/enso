@@ -86,6 +86,13 @@
         );
       };
 
+      this.scrollbox._canScrollToElement = (element) => {
+        if (gBrowser.isTab(element)) {
+          return !element.hasAttribute('zen-essential') || !this.hasAttribute('positionpinnedtabs');
+        }
+        return true;
+      };
+
       // Override for performance reasons. This is the size of a single element
       // that can be scrolled when using mouse wheel scrolling. If we don't do
       // this then arrowscrollbox computes this value by calling

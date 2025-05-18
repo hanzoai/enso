@@ -769,7 +769,7 @@ var gZenVerticalTabsManager = {
       // on purpose, we set the orient to horizontal, because the arrowScrollbox is vertical
       gBrowser.tabContainer.arrowScrollbox.scrollbox.setAttribute(
         'orient',
-        isVerticalTabs && gZenWorkspaces.workspaceEnabled ? 'horizontal' : 'vertical'
+        isVerticalTabs ? 'vertical' : 'horizontal'
       );
 
       const buttonsTarget = document.getElementById('zen-sidebar-top-buttons-customization-target');
