@@ -517,6 +517,10 @@ zen-workspace {
       overflow-y: auto;
     }
 
+    &[swipe-gesture]::part(scrollbox) {
+      scrollbar-width: none;
+    }
+
     &[overflowing] {
       --zen-scrollbar-overflow-background: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
       &::before {

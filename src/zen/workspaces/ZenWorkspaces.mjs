@@ -138,6 +138,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       Services.prefs.getBoolPref('zen.workspaces.swipe-actions', false) &&
       this.workspaceEnabled
     ) {
+      this.initializeGestureHandlers();
       this.initializeWorkspaceNavigation();
     }
 
@@ -582,6 +583,20 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     );
   }
 
+  initializeGestureHandlers() {
+    const elements = [
+      gNavToolbox,
+      // event handlers do not work on elements inside shadow DOM so we need to attach them directly
+      document.getElementById('tabbrowser-arrowscrollbox').shadowRoot.querySelector('scrollbox'),
+    ];
+
+    // Attach gesture handlers to each element
+    for (const element of elements) {
+      if (!element) continue;
+      this.attachGestureHandlers(element);
+    }
+  }
+
   attachGestureHandlers(element) {
     element.addEventListener('MozSwipeGestureMayStart', this._handleSwipeMayStart.bind(this), true);
     element.addEventListener('MozSwipeGestureStart', this._handleSwipeStart.bind(this), true);
@@ -617,6 +632,8 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   _handleSwipeStart(event) {
     if (!this.workspaceEnabled) return;
+
+    this.activeScrollbox.setAttribute('swipe-gesture', 'true');
 
     event.preventDefault();
     event.stopPropagation();
@@ -663,7 +680,9 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     const rawDirection = moveForward ? 1 : -1;
     const direction = this.naturalScroll ? -1 : 1;
-    this.changeWorkspaceShortcut(rawDirection * direction, true);
+    await this.changeWorkspaceShortcut(rawDirection * direction, true);
+
+    this.activeScrollbox.removeAttribute('swipe-gesture');
 
     // Reset swipe state
     this._swipeState = {
