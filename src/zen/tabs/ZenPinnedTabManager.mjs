@@ -837,6 +837,7 @@
 
         let isVertical = this.expandedSidebarMode;
         let moved = false;
+        let hasActuallyMoved;
         for (const draggedTab of movingTabs) {
           let isRegularTabs = false;
           // Check for pinned tabs container
@@ -855,8 +856,9 @@
               !draggedTab.hasAttribute('zen-essential') &&
               !draggedTab?.group?.hasAttribute('split-view-group')
             ) {
-              moved = this.addToEssentials(draggedTab);
+              moved = true;
               isVertical = false;
+              hasActuallyMoved = this.addToEssentials(draggedTab);
             }
           }
           // Check for normal tabs container
@@ -872,8 +874,12 @@
             }
           }
 
+          if (typeof hasActuallyMoved === 'undefined') {
+            hasActuallyMoved = moved;
+          }
+
           // If the tab was moved, adjust its position relative to the target tab
-          if (moved) {
+          if (hasActuallyMoved) {
             const targetTab = event.target.closest('.tabbrowser-tab');
             if (targetTab) {
               const rect = targetTab.getBoundingClientRect();
