@@ -609,6 +609,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     element.addEventListener(
       'MozSwipeGestureEnd',
       (event) => {
+        this.activeScrollbox.removeAttribute('swipe-gesture');
         gZenUIManager.tabsWrapper.style.removeProperty('scrollbar-width');
         this.updateTabsContainers();
       },
@@ -681,8 +682,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     const rawDirection = moveForward ? 1 : -1;
     const direction = this.naturalScroll ? -1 : 1;
     await this.changeWorkspaceShortcut(rawDirection * direction, true);
-
-    this.activeScrollbox.removeAttribute('swipe-gesture');
 
     // Reset swipe state
     this._swipeState = {
