@@ -86,6 +86,13 @@
         );
       };
 
+      this.scrollbox._canScrollToElement = (element) => {
+        if (gBrowser.isTab(element)) {
+          return !element.hasAttribute('zen-essential') || !this.hasAttribute('positionpinnedtabs');
+        }
+        return true;
+      };
+
       // Override for performance reasons. This is the size of a single element
       // that can be scrolled when using mouse wheel scrolling. If we don't do
       // this then arrowscrollbox computes this value by calling
@@ -95,9 +102,13 @@
       // height. For tab group labels, the number won't exactly match, but
       // that shouldn't be a problem in practice since the arrowscrollbox
       // stops at element bounds when finishing scrolling.
-      Object.defineProperty(this.scrollbox, 'lineScrollAmount', {
-        get: () => 36,
-      });
+      try {
+        Object.defineProperty(this.scrollbox, 'lineScrollAmount', {
+          get: () => 36,
+        });
+      } catch (e) {
+        console.warn('Failed to set lineScrollAmount', e);
+      }
 
       // Add them manually since attribute inheritance doesn't work
       // for multiple layers of shadow DOM.

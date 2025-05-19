@@ -64,10 +64,14 @@
           top: 0;
           bottom: var(--zen-element-separation);
           padding: 0 var(--zen-compact-float) !important;
-
+          :root[zen-single-toolbar='true'] & {
             top: calc(var(--zen-element-separation) / 2);
             height: calc(100% - var(--zen-element-separation));
-
+          }
+          :root:not([zen-single-toolbar='true']) & {
+            height: calc(100% + var(--zen-element-separation) * 2);
+            top: calc(var(--zen-element-separation) / -2);
+          }
           & #zen-sidebar-top-buttons {
             margin: 0 0 calc(var(--zen-toolbox-padding) / 2) 0;
           }
@@ -345,7 +349,7 @@
         border-top-right-radius: env(-moz-gtk-csd-titlebar-radius);
         transition: all 0.15s ease;
         width: 100%;
-        opacity: 0;
+        visibility: hidden;
         background: var(--zen-dialog-background);
 
         max-height: var(--zen-toolbar-height);
@@ -373,7 +377,7 @@
       & #zen-appcontent-navbar-container:has(
           *:is([panelopen='true'], [open='true'], #urlbar:focus-within, [breakout-extend='true']):not(#urlbar[zen-floating-urlbar='true']):not(.zen-compact-mode-ignore)
         ) {
-        opacity: 1;
+        visibility: visible !important;
         border-top-width: 1px;
 
         top: -1px;
