@@ -228,7 +228,7 @@ index ef9c0389ec926e6bc01c0dc3b883beceaf1f7d43..043c39f1bc7452e145ba325ffafb6a03
            }
 +          for (let tab of child.tabs) {
 +            let glanceTab = tab.querySelector("tab[zen-glance-tab]");
-+            if (isTab(child) && glanceTab) {
++            if (isTab(glanceTab)) {
 +              glanceTab.elementIndex = elementIndex - 1;
 +              focusableItems.push(glanceTab);
 +            }
