@@ -609,7 +609,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     element.addEventListener(
       'MozSwipeGestureEnd',
       (event) => {
-        this.activeScrollbox.removeAttribute('swipe-gesture');
+        document.documentElement.removeAttribute('swipe-gesture');
         gZenUIManager.tabsWrapper.style.removeProperty('scrollbar-width');
         this.updateTabsContainers();
       },
@@ -634,7 +634,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   _handleSwipeStart(event) {
     if (!this.workspaceEnabled) return;
 
-    this.activeScrollbox.setAttribute('swipe-gesture', 'true');
+    document.documentElement.setAttribute('swipe-gesture', 'true');
 
     event.preventDefault();
     event.stopPropagation();

@@ -517,7 +517,7 @@ zen-workspace {
       overflow-y: auto;
     }
 
-    &[swipe-gesture]::part(scrollbox) {
+    :root[swipe-gesture] &::part(scrollbox) {
       scrollbar-width: none;
     }
 
