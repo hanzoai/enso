@@ -259,3 +259,13 @@
 :root:not([customizing]) #TabsToolbar-customization-target > #alltabs-button {
   display: none;
 }
+
+:root[customizing] #TabsToolbar-customization-target {
+  visibility: collapse;
+}
+
+:root[customizing] #zen-sidebar-top-buttons-customization-target {
+  border: 1px dashed;
+  border-radius: 2px;
+  margin: 10px 2px 0 0;
+}

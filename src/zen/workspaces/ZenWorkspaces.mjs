@@ -832,6 +832,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       window.addEventListener('TabRemovedFromEssentials', tabUpdateListener);
       window.addEventListener('TabPinned', tabUpdateListener);
       window.addEventListener('TabUnpinned', tabUpdateListener);
+      window.addEventListener('aftercustomization', tabUpdateListener);
     }
   }
 
@@ -2567,7 +2568,10 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       target = null;
     }
     // Only animate if it's from an event
-    const animateContainer = target && target.target instanceof EventTarget;
+    let animateContainer = target && target.target instanceof EventTarget;
+    if (target?.type === 'TabClose') {
+      animateContainer = target.target.pinned;
+    }
     await this.onPinnedTabsResize(
       // This is what happens when we join a resize observer, an event listener
       // while using it as a method.
@@ -2595,6 +2599,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (!this._hasInitializedTabsStrip || (this._organizingWorkspaceStrip && !forAnimation)) {
       return;
     }
+    if (document.documentElement.hasAttribute('customizing')) return;
     // forAnimation may be of type "ResizeObserver" if it's not a boolean, just ignore it
     if (typeof forAnimation !== 'boolean') {
       forAnimation = false;
