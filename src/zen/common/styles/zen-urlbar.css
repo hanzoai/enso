@@ -101,6 +101,10 @@
   outline: none !important;
 }
 
+#urlbar .urlbar-input {
+  border-radius: 0 !important;
+}
+
 :root[zen-single-toolbar='true'] #urlbar:not([breakout-extend='true']) {
   & #urlbar-input {
     cursor: default;

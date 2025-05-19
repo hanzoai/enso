@@ -397,7 +397,11 @@ var gZenUIManager = {
   },
 
   urlbarTrim(aURL) {
-    if (gZenVerticalTabsManager._hasSetSingleToolbar && this.urlbarShowDomainOnly) {
+    if (
+      gZenVerticalTabsManager._hasSetSingleToolbar &&
+      this.urlbarShowDomainOnly &&
+      !gURLBar.hasAttribute('breakout-extend')
+    ) {
       let url = BrowserUIUtils.removeSingleTrailingSlashFromURL(aURL);
       return url.startsWith('https://') ? url.split('/')[2] : url;
     }
