@@ -88,7 +88,11 @@
 
       this.scrollbox._canScrollToElement = (element) => {
         if (gBrowser.isTab(element)) {
-          return !element.hasAttribute('zen-essential') || !this.hasAttribute('positionpinnedtabs');
+          return (
+            !element.hasAttribute('zen-essential') &&
+            !this.hasAttribute('positionpinnedtabs') &&
+            !element.hasAttribute('zen-empty-tab')
+          );
         }
         return true;
       };

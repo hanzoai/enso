@@ -2600,7 +2600,10 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       forAnimation = false;
     }
     for (const entry of entries) {
-      const originalWorkspaceId = entry.target.getAttribute('zen-workspace-id');
+      let originalWorkspaceId = entry.target.getAttribute('zen-workspace-id');
+      if (!originalWorkspaceId) {
+        originalWorkspaceId = entry.target.closest('zen-workspace')?.id;
+      }
       const workspacesIds = [];
       if (entry.target.closest('#zen-essentials')) {
         // Get all workspaces that have the same userContextId
