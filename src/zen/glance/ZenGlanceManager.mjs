@@ -367,7 +367,9 @@
               this.#currentParentTab._visuallySelected = false;
             }
 
-            this.#currentParentTab.linkedBrowser.zenModeActive = false;
+            if (this.#currentParentTab.linkedBrowser) {
+              this.#currentParentTab.linkedBrowser.zenModeActive = false;
+            }
 
             // reset everything
             this.browserWrapper = null;
@@ -447,7 +449,7 @@
           .classList.remove('zen-glance-background');
       }
       if (!justAnimateParent && this.overlay) {
-        if (parentHasBrowser) {
+        if (parentHasBrowser && !this.#currentParentTab.hasAttribute('split-view')) {
           if (closeParentTab) {
             this.#currentParentTab.linkedBrowser
               .closest('.browserSidebarContainer')
