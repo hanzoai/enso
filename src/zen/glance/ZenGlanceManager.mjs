@@ -367,7 +367,10 @@
               this.#currentParentTab._visuallySelected = false;
             }
 
-            if (this.#currentParentTab.linkedBrowser) {
+            if (
+              this.#currentParentTab.linkedBrowser &&
+              !this.#currentParentTab.hasAttribute('split-view')
+            ) {
               this.#currentParentTab.linkedBrowser.zenModeActive = false;
             }
 
