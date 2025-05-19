@@ -671,10 +671,12 @@
         : TabContextMenu.contextTab.multiselected
           ? gBrowser.selectedTabs
           : [TabContextMenu.contextTab];
+      let movedAll = true;
       for (let i = 0; i < tabs.length; i++) {
         let tab = tabs[i];
         const section = gZenWorkspaces.getEssentialsSection(tab);
         if (section.children.length >= this.MAX_ESSENTIALS_TABS) {
+          movedAll = false;
           continue;
         }
         if (tab.hasAttribute('zen-essential')) {
@@ -716,6 +718,7 @@
         tab.dispatchEvent(event);
       }
       gZenUIManager.updateTabsToolbar();
+      return movedAll;
     }
 
     removeEssentials(tab, unpin = true) {
@@ -852,8 +855,7 @@
               !draggedTab.hasAttribute('zen-essential') &&
               !draggedTab?.group?.hasAttribute('split-view-group')
             ) {
-              this.addToEssentials(draggedTab);
-              moved = true;
+              moved = this.addToEssentials(draggedTab);
               isVertical = false;
             }
           }

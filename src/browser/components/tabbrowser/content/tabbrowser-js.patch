@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index dacf52070348a205a56ef42eb8320602f98e5daa..3337362a6c9115fd5207ebe548b43706a762f3d4 100644
+index dacf52070348a205a56ef42eb8320602f98e5daa..b5c05dfba338b1252b23d2d47336237adbec83dd 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -415,11 +415,45 @@
@@ -584,16 +584,15 @@ index dacf52070348a205a56ef42eb8320602f98e5daa..3337362a6c9115fd5207ebe548b43706
        // Don't allow mixing pinned and unpinned tabs.
        if (this.isTab(element) && element.pinned) {
 -        tabIndex = Math.min(tabIndex, this.pinnedTabCount - 1);
-+        tabIndex = element.hasAttribute('zen-essential') ? Math.min(tabIndex, this._numZenEssentials - 1) : Math.min(tabIndex, this.pinnedTabCount - 1);
++        tabIndex = element.hasAttribute('zen-essential') ? Math.min(tabIndex, this._numZenEssentials - 1) : Math.min(Math.max(tabIndex, this._numZenEssentials), this.pinnedTabCount - 1);
        } else {
          tabIndex = Math.max(tabIndex, this.pinnedTabCount);
        }
-@@ -6029,9 +6162,16 @@
+@@ -6029,9 +6162,15 @@
          element,
          () => {
            let neighbor = this.tabs[tabIndex];
 -          if (forceUngrouped && neighbor.group) {
-+          const _tPos = element._tPos;
 +          if ((forceUngrouped && neighbor?.group) || neighbor?.group?.hasAttribute("split-view-group")) {
              neighbor = neighbor.group;
            }
@@ -606,7 +605,7 @@ index dacf52070348a205a56ef42eb8320602f98e5daa..3337362a6c9115fd5207ebe548b43706
            if (neighbor && this.isTab(element) && tabIndex > element._tPos) {
              neighbor.after(element);
            } else {
-@@ -6100,7 +6240,9 @@
+@@ -6100,7 +6239,9 @@
            targetElement = targetElement.group;
          }
        }
@@ -617,7 +616,7 @@ index dacf52070348a205a56ef42eb8320602f98e5daa..3337362a6c9115fd5207ebe548b43706
        // Don't allow mixing pinned and unpinned tabs.
        if (element.pinned && !targetElement?.pinned) {
          targetElement = this.tabs[this.pinnedTabCount - 1];
-@@ -6110,7 +6252,13 @@
+@@ -6110,7 +6251,13 @@
          moveBefore = true;
        }
  
@@ -631,7 +630,7 @@ index dacf52070348a205a56ef42eb8320602f98e5daa..3337362a6c9115fd5207ebe548b43706
          if (element.pinned && this.tabContainer.verticalMode) {
            return this.tabContainer.verticalPinnedTabsContainer;
          }
-@@ -6170,7 +6318,7 @@
+@@ -6170,7 +6317,7 @@
        if (!this.isTab(aTab)) {
          throw new Error("Can only move a tab into a tab group");
        }
@@ -640,7 +639,7 @@ index dacf52070348a205a56ef42eb8320602f98e5daa..3337362a6c9115fd5207ebe548b43706
          return;
        }
        if (aTab.group && aTab.group.id === aGroup.id) {
-@@ -6264,6 +6412,10 @@
+@@ -6264,6 +6411,10 @@
  
        moveActionCallback();
  
@@ -651,7 +650,7 @@ index dacf52070348a205a56ef42eb8320602f98e5daa..3337362a6c9115fd5207ebe548b43706
        // Clear tabs cache after moving nodes because the order of tabs may have
        // changed.
        this.tabContainer._invalidateCachedTabs();
-@@ -7081,7 +7233,7 @@
+@@ -7081,7 +7232,7 @@
              // preventDefault(). It will still raise the window if appropriate.
              break;
            }
@@ -660,7 +659,7 @@ index dacf52070348a205a56ef42eb8320602f98e5daa..3337362a6c9115fd5207ebe548b43706
            window.focus();
            aEvent.preventDefault();
            break;
-@@ -7982,6 +8134,7 @@
+@@ -7982,6 +8133,7 @@
              aWebProgress.isTopLevel
            ) {
              this.mTab.setAttribute("busy", "true");
@@ -668,7 +667,7 @@ index dacf52070348a205a56ef42eb8320602f98e5daa..3337362a6c9115fd5207ebe548b43706
              gBrowser._tabAttrModified(this.mTab, ["busy"]);
              this.mTab._notselectedsinceload = !this.mTab.selected;
            }
-@@ -8955,7 +9108,7 @@ var TabContextMenu = {
+@@ -8955,7 +9107,7 @@ var TabContextMenu = {
      );
      contextUnpinSelectedTabs.hidden =
        !this.contextTab.pinned || !this.multiselected;
@@ -677,7 +676,7 @@ index dacf52070348a205a56ef42eb8320602f98e5daa..3337362a6c9115fd5207ebe548b43706
      // Move Tab items
      let contextMoveTabOptions = document.getElementById(
        "context_moveTabOptions"
-@@ -9224,6 +9377,7 @@ var TabContextMenu = {
+@@ -9224,6 +9376,7 @@ var TabContextMenu = {
          telemetrySource: gBrowser.TabMetrics.METRIC_SOURCE.TAB_STRIP,
        });
      } else {
