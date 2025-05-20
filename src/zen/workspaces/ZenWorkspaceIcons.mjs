@@ -5,10 +5,11 @@
     }
 
     connectedCallback() {
-      if (this.delayConnectedCallback()) {
+      if (this.delayConnectedCallback() || this._hasConnected) {
         return;
       }
 
+      this._hasConnected = true;
       window.addEventListener('ZenWorkspacesUIUpdate', this, true);
     }
 

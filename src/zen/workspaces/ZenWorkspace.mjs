@@ -37,10 +37,13 @@
     }
 
     connectedCallback() {
-      if (this.delayConnectedCallback()) {
+      if (this.delayConnectedCallback() || this._hasConnected) {
+        // If we are not ready yet, or if we have already connected, we
+        // don't need to do anything.
         return;
       }
 
+      this._hasConnected = true;
       this.appendChild(this.constructor.fragment);
 
       this.tabsContainer = this.querySelector('.zen-workspace-normal-tabs-section');
