@@ -69,8 +69,11 @@
             height: calc(100% - var(--zen-element-separation));
           }
           :root:not([zen-single-toolbar='true']) & {
-            height: calc(100% - var(--zen-toolbar-height));
             top: calc(var(--zen-element-separation) / -2);
+            height: calc(100% - var(--zen-toolbar-height));
+            @media -moz-pref('zen.view.compact.hide-toolbar') {
+              height: 100%;
+            }
           }
           & #zen-sidebar-top-buttons {
             margin: 0 0 calc(var(--zen-toolbox-padding) / 2) 0;
