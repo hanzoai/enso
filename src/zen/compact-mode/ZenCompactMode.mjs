@@ -76,7 +76,14 @@ var gZenCompactModeManager = {
     return lazyCompactMode.mainAppWrapper.getAttribute('zen-compact-mode') === 'true';
   },
 
+  get shouldBeCompact() {
+    return !document.documentElement.getAttribute('chromehidden').includes('toolbar');
+  },
+
   set preference(value) {
+    if (!this.shouldBeCompact) {
+      value = false;
+    }
     if (
       this.preference === value ||
       document.documentElement.hasAttribute('zen-compact-animating')
