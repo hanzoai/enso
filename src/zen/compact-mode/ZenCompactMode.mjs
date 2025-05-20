@@ -51,7 +51,7 @@ var gZenCompactModeManager = {
 
     gZenUIManager.addPopupTrackingAttribute(this.sidebar);
     gZenUIManager.addPopupTrackingAttribute(
-      document.getElementById('zen-appcontent-navbar-container')
+      document.getElementById('zen-appcontent-navbar-wrapper')
     );
 
     // Clear hover states when window state changes (minimize, maximize, etc.)
@@ -428,7 +428,7 @@ var gZenCompactModeManager = {
               keepHoverDuration: 100,
             },
             {
-              element: document.getElementById('zen-appcontent-navbar-container'),
+              element: document.getElementById('zen-appcontent-navbar-wrapper'),
               screenEdge: 'top',
             },
           ]),
@@ -608,7 +608,7 @@ var gZenCompactModeManager = {
   },
 
   toggleToolbar() {
-    let toolbar = document.getElementById('zen-appcontent-navbar-container');
+    let toolbar = document.getElementById('zen-appcontent-navbar-wrapper');
     toolbar.toggleAttribute('zen-user-show');
   },
 

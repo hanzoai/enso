@@ -2273,15 +2273,17 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (shouldAnimate) {
       gZenUIManager._preventToolbarRebuild = true;
       gZenUIManager.updateTabsToolbar();
-
+      let previousBackgroundOpacity = document.documentElement.style.getPropertyValue(
+        '--zen-background-opacity'
+      );
+      if (previousBackgroundOpacity === '1') {
+        previousBackgroundOpacity = '0';
+      }
       animations.push(
         gZenUIManager.motion.animate(
           document.documentElement,
           {
-            '--zen-background-opacity': [
-              document.documentElement.style.getPropertyValue('--zen-background-opacity'),
-              '1',
-            ],
+            '--zen-background-opacity': [previousBackgroundOpacity, '1'],
           },
           {
             type: 'spring',

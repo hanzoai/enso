@@ -798,6 +798,7 @@ var gZenVerticalTabsManager = {
       }
 
       const appContentNavbarContaienr = document.getElementById('zen-appcontent-navbar-container');
+      const appContentNavbarWrapper = document.getElementById('zen-appcontent-navbar-wrapper');
       let shouldHide = false;
       if (
         ((!isRightSide && this.isWindowsStyledButtons) ||
@@ -805,10 +806,10 @@ var gZenVerticalTabsManager = {
           (isCompactMode && isSingleToolbar && this.isWindowsStyledButtons)) &&
         isSingleToolbar
       ) {
-        appContentNavbarContaienr.setAttribute('should-hide', 'true');
+        appContentNavbarWrapper.setAttribute('should-hide', 'true');
         shouldHide = true;
       } else {
-        appContentNavbarContaienr.removeAttribute('should-hide');
+        appContentNavbarWrapper.removeAttribute('should-hide');
       }
 
       // Check if the sidebar is in hover mode

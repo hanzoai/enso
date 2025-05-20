@@ -17,12 +17,16 @@
   height: 100%; /* Make sure they take up full height */
 }
 
+#zen-appcontent-navbar-container {
+  width: 100%;
+}
+
 /* ==========================================================================
    Single Toolbar Mode Specific Styles (`zen-single-toolbar='true'`)
    ========================================================================== */
 :root[zen-single-toolbar='true'] {
   /* Define and apply a smaller toolbar height for single toolbar mode */
-  & #zen-appcontent-navbar-container,
+  & #zen-appcontent-navbar-wrapper,
   & #zen-sidebar-top-buttons {
     --zen-toolbar-height: 32px;
     height: var(--zen-toolbar-height);
