@@ -281,7 +281,7 @@ var gZenCompactModeManager = {
                 ],
                 {
                   transform: [
-                    `translateY(${(isCompactMode ? -1 : 1) * elementSeparation / 2}px) translateX(${
+                    `translateY(${((isCompactMode ? -1 : 1) * elementSeparation) / 2}px) translateX(${
                       isCompactMode
                         ? (this.sidebarIsOnRight ? elementSeparation : -elementSeparation) / 2
                         : (this.sidebarIsOnRight ? -elementSeparation : elementSeparation) / 2
