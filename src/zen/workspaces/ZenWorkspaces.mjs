@@ -2276,14 +2276,19 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       let previousBackgroundOpacity = document.documentElement.style.getPropertyValue(
         '--zen-background-opacity'
       );
-      if (previousBackgroundOpacity === '1') {
-        previousBackgroundOpacity = '0';
+      try {
+        previousBackgroundOpacity = parseFloat(previousBackgroundOpacity);
+      } catch (e) {
+        previousBackgroundOpacity = 1;
+      }
+      if (previousBackgroundOpacity == 1) {
+        previousBackgroundOpacity = 0;
       }
       animations.push(
         gZenUIManager.motion.animate(
           document.documentElement,
           {
-            '--zen-background-opacity': [previousBackgroundOpacity, '1'],
+            '--zen-background-opacity': [previousBackgroundOpacity, 1],
           },
           {
             type: 'spring',
