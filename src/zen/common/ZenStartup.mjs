@@ -2,9 +2,19 @@
   var ZenStartup = {
     init() {
       this.openWatermark();
+      this._initBrowserBackground();
       this._changeSidebarLocation();
       this._zenInitBrowserLayout();
       this._initSearchBar();
+    },
+
+    _initBrowserBackground() {
+      const background = document.createXULElement('box');
+      background.id = 'zen-browser-background';
+      const grain = document.createXULElement('box');
+      grain.id = 'zen-browser-grain';
+      background.appendChild(grain);
+      document.getElementById('browser').prepend(background);
     },
 
     _zenInitBrowserLayout() {
