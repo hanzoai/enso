@@ -2614,7 +2614,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
     if (this.isPrivateWindow) {
       name = 'Private ' + name;
-      icon = '🥸';
     }
     // get extra tabs remaning (e.g. on new profiles) and just move them to the new workspace
     const extraTabs = Array.from(gBrowser.tabContainer.arrowScrollbox.children).filter(
