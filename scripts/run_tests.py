@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 def main():
-  project_root = Path(__file__).resolve().parent
+  project_root = Path(__file__).resolve().parent.parent
   package_json = project_root / 'package.json'
 
   # Ensure script is run from project root
@@ -14,10 +14,11 @@ def main():
     sys.exit(1)
 
   args = sys.argv[1:]
-  if not args:
-    path = ""
-  else:
-    path = args[0]
+  path = ""
+  for arg in args:
+    if not arg.startswith("--"):
+      path = arg
+      break
 
   # Collect any additional arguments
   other_args = [arg for arg in args if arg != path]

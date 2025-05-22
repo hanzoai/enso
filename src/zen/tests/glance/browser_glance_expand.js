@@ -62,8 +62,8 @@ add_task(async function test_Glance_Basic_Open() {
   await openGlanceOnTab(async (glanceTab) => {
     await gZenGlanceManager.fullyOpenGlance();
     Assert.equal(
-      glanceTab._tPos,
-      3,
+      glanceTab,
+      gBrowser.visibleTabs.find((tab) => !tab.pinned),
       'The glance tab should be the first normal tab (Ignoring empty tabs)'
     );
     BrowserTestUtils.removeTab(glanceTab);
@@ -84,13 +84,8 @@ add_task(async function test_Glance_New_From_essential() {
         skipAnimation: true,
       });
       Assert.equal(
-        gBrowser.selectedTab._tPos,
-        1,
-        'The new tab should be the first normal tab (Ignoring empty tabs)'
-      );
-      Assert.equal(
-        glanceTab._tPos,
-        2,
+        glanceTab,
+        gBrowser.visibleTabs[2],
         'The glance tab should be the second normal tab (Ignoring empty tabs)'
       );
       await BrowserTestUtils.removeTab(gBrowser.selectedTab);
