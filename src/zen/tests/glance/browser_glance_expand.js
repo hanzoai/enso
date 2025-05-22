@@ -80,13 +80,10 @@ add_task(async function test_Glance_New_From_essential() {
     gZenPinnedTabManager.addToEssentials(selectedTab);
     await openGlanceOnTab(async (glanceTab) => {
       await gZenGlanceManager.fullyOpenGlance();
-      await BrowserTestUtils.openNewForegroundTab(window.gBrowser, 'https://example.com/', true, {
-        skipAnimation: true,
-      });
-      Assert.equal(
-        glanceTab,
-        gBrowser.visibleTabs[2],
-        'The glance tab should be the second normal tab (Ignoring empty tabs)'
+      ok(!glanceTab.pinned, 'The glance tab should not be pinned');
+      ok(
+        !glanceTab.parentNode.hasAttribute('container'),
+        'The glance tab should not be in an essentials container'
       );
       await BrowserTestUtils.removeTab(gBrowser.selectedTab);
       BrowserTestUtils.removeTab(glanceTab);

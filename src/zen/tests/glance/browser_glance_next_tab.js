@@ -12,11 +12,7 @@ add_task(async function test_Glance_Next_Tab() {
   gBrowser.selectedTab = selectedTab;
   await openGlanceOnTab(async (glanceTab) => {
     const next = gBrowser.tabContainer.findNextTab(glanceTab, { direction: 1 });
-    Assert.equal(
-      next,
-      tabToCheck,
-      'The glance tab should be the second normal tab (Ignoring empty tabs)'
-    );
+    Assert.equal(next, tabToCheck, 'Next glance tab should equal');
   });
   await BrowserTestUtils.removeTab(gBrowser.selectedTab);
 });

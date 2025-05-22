@@ -3,19 +3,15 @@
 
 'use strict';
 
-add_task(async function test_Glance_Next_Tab() {
-  await BrowserTestUtils.withNewTab({ gBrowser, url: 'https://example.com/' }, async (browser) => {
-    const tabToCheck = gBrowser.selectedTab;
-    await openGlanceOnTab(async (glanceTab) => {
-      await BrowserTestUtils.openNewForegroundTab(window.gBrowser, 'https://example.com/', true, {
-        skipAnimation: true,
-      });
-      const next = gBrowser.tabContainer.findNextTab(glanceTab, { direction: -1 });
-      Assert.equal(
-        next,
-        tabToCheck,
-        'The glance tab should be the second normal tab (Ignoring empty tabs)'
-      );
+add_task(async function test_Glance_Prev_Tab() {
+  await openGlanceOnTab(async (glanceTab) => {
+    await BrowserTestUtils.openNewForegroundTab(window.gBrowser, 'https://example.com/', true, {
+      skipAnimation: true,
     });
+    const tabToCheck = gBrowser.selectedTab;
+    gBrowser.selectedTab = glanceTab;
+    const next = gBrowser.tabContainer.findNextTab(glanceTab, { direction: -1 });
+    Assert.equal(next, tabToCheck, 'Previous glance tab should equal');
+    await BrowserTestUtils.removeTab(tabToCheck);
   });
 });
