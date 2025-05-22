@@ -23,7 +23,8 @@
     "lint": "npx prettier . --check && autopep8 --diff scripts/ src/",
     "prepare": "husky",
     "reset-ff": "surfer reset",
-    "surfer": "surfer"
+    "surfer": "surfer",
+    "test": "python3 scripts/run_tests.py"
   },
   "repository": {
     "type": "git",

@@ -639,6 +639,10 @@
     async getFaviconAsBase64(pageUrl) {
       try {
         const faviconData = await PlacesUtils.favicons.getFaviconForPage(pageUrl);
+        if (!faviconData) {
+          // empty favicon
+          return 'data:image/png;base64,';
+        }
         return faviconData.dataURI;
       } catch (ex) {
         console.error('Failed to get favicon:', ex);

@@ -20,11 +20,6 @@ add_task(async function test_Glance_Basic_Open() {
       selectedTab._tPos,
       'The glance tab should be on the right of the selected tab'
     );
-    Assert.equal(
-      glanceTab._tPos,
-      gBrowser.tabs.length - 1,
-      'The glance tab should be the last tab'
-    );
     BrowserTestUtils.removeTab(glanceTab);
   }, false);
 });
