@@ -149,7 +149,7 @@
           document.documentElement.getAttribute('chromehidden')?.includes('menubar')
         );
       }
-      return this._enabled;
+      return this._enabled && !gZenWorkspaces.privateWindowOrDisabled;
     }
 
     async _refreshPinnedTabs({ init = false } = {}) {
@@ -741,6 +741,9 @@
     }
 
     _insertItemsIntoTabContextMenu() {
+      if (!this.enabled) {
+        return;
+      }
       const elements = window.MozXULElement.parseXULToFragment(`
             <menuseparator id="context_zen-pinned-tab-separator" hidden="true"/>
             <menuitem id="context_zen-replace-pinned-url-with-current"
@@ -783,6 +786,7 @@
 
     updatePinnedTabContextMenu(contextTab) {
       if (!this.enabled) {
+        document.getElementById('context_pinTab').hidden = true;
         return;
       }
       const isVisible = contextTab.pinned && !contextTab.multiselected;
@@ -805,6 +809,9 @@
     }
 
     moveToAnotherTabContainerIfNecessary(event, movingTabs) {
+      if (!this.enabled) {
+        return false;
+      }
       try {
         const pinnedTabsTarget =
           event.target.closest('.zen-workspace-pinned-tabs-section') ||
@@ -1003,6 +1010,9 @@
     }
 
     applyDragoverClass(event, draggedTab) {
+      if (!this.enabled) {
+        return;
+      }
       const pinnedTabsTarget = event.target.closest('.zen-workspace-pinned-tabs-section');
       const essentialTabsTarget = event.target.closest('.zen-essentials-container');
       const tabsTarget = event.target.closest('.zen-workspace-normal-tabs-section');
