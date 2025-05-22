@@ -423,6 +423,15 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       essentialsContainer.setAttribute('flex', '1');
       essentialsContainer.setAttribute('container', container);
       document.getElementById('zen-essentials').appendChild(essentialsContainer);
+
+      // Set an initial hidden state if the essentials section is not supposed
+      // to be shown on the current workspace
+      if (
+        this.containerSpecificEssentials &&
+        this.getActiveWorkspaceFromCache()?.containerTabId != container
+      ) {
+        essentialsContainer.setAttribute('hidden', 'true');
+      }
     }
     return essentialsContainer;
   }
