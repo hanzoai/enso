@@ -125,7 +125,6 @@
       if (!lazy.zenTabUnloaderEnabled) {
         return;
       }
-      this.insertIntoContextMenu();
       this.observer = new ZenTabsObserver();
       this.observer.addTabsListener(this.onTabEvent.bind(this));
     }
@@ -182,26 +181,6 @@
     updateTabActivity(tab) {
       const currentTimestamp = Date.now();
       tab.lastActivity = currentTimestamp;
-    }
-
-    insertIntoContextMenu() {
-      const element = window.MozXULElement.parseXULToFragment(`
-        <menuseparator/>
-        <menuitem id="context_zenUnloadTab"
-                  data-lazy-l10n-id="tab-zen-unload"
-                  command="cmd_zenUnloadTab"/>
-        <menu data-lazy-l10n-id="zen-tabs-unloader-tab-actions" id="context_zenTabActions">
-          <menupopup>
-            <menuitem id="context_zenPreventUnloadTab"
-                      data-lazy-l10n-id="tab-zen-prevent-unload"
-                      command="cmd_zenPreventUnloadTab"/>
-            <menuitem id="context_zenIgnoreUnloadTab"
-                      data-lazy-l10n-id="tab-zen-ignore-unload"
-                      command="cmd_zenIgnoreUnloadTab"/>
-          </menupopup>
-        </menu>
-      `);
-      document.getElementById('context_closeDuplicateTabs').parentNode.appendChild(element);
     }
 
     get lazyExcludeUrls() {

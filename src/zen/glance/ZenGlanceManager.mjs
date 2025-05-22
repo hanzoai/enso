@@ -295,7 +295,7 @@
       this._animating = true;
 
       gBrowser.zenInsertTabAtIndex(this.#currentTab, {
-        index: this.getTabPosition(this.#currentParentTab),
+        tabIndex: this.getTabPosition(this.#currentParentTab),
       });
 
       let quikcCloseZen = false;
@@ -629,7 +629,9 @@
       this.animatingFullOpen = true;
       this.#currentTab.setAttribute('zen-dont-split-glance', true);
 
-      gBrowser.zenInsertTabAtIndex(this.#currentTab, this.getTabPosition(this.#currentTab));
+      gBrowser.zenInsertTabAtIndex(this.#currentTab, {
+        tabIndex: this.getTabPosition(this.#currentTab),
+      });
 
       this.#currentTab.removeAttribute('zen-glance-tab');
       this._clearContainerStyles(this.browserWrapper);
