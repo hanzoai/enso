@@ -3,7 +3,11 @@
 
 'use strict';
 
-add_task(async function test_Changed_Pinned() {
+add_task(async function test_Unload_Changed_Pinned() {
+  await SpecialPowers.pushPrefEnv({
+    set: [['zen.pinned-tab-manager.close-shortcut-behavior', 'reset-unload-switch']],
+  });
+
   let resolvePromise;
   const promise = new Promise((resolve) => {
     resolvePromise = resolve;
@@ -14,8 +18,6 @@ add_task(async function test_Changed_Pinned() {
     tab.addEventListener(
       'ZenPinnedTabCreated',
       async function (event) {
-        ok(tab.pinned, 'The tab should be pinned after calling gBrowser.pinTab()');
-
         const pinTabID = tab.getAttribute('zen-pin-id');
         ok(pinTabID, 'The tab should have a zen-pin-id attribute after being pinned');
 
@@ -26,7 +28,17 @@ add_task(async function test_Changed_Pinned() {
             tab.hasAttribute('zen-pinned-changed'),
             'The tab should have a zen-pinned-changed attribute after being pinned'
           );
-          resolvePromise();
+          document.getElementById('cmd_close').doCommand();
+          setTimeout(() => {
+            ok(
+              !tab.hasAttribute('zen-pinned-changed'),
+              'The tab should not have a zen-pinned-changed attribute after being closed'
+            );
+
+            ok(tab.hasAttribute('discarded'), 'The tab should not be discarded after being closed');
+            ok(tab != gBrowser.selectedTab, 'The tab should not be selected after being closed');
+            resolvePromise();
+          }, 100);
         }, 0);
       },
       { once: true }

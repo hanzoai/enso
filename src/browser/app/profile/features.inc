@@ -97,10 +97,6 @@ pref('zen.keyboard.shortcuts.disable-mainkeyset-clear', false); // for debugging
 
 pref('zen.themes.updated-value-observer', false);
 
-pref('zen.tab-unloader.enabled', true);
-pref('zen.tab-unloader.timeout-minutes', 40);
-pref('zen.tab-unloader.excluded-urls', "example.com,example.org");
-
 pref('zen.pinned-tab-manager.debug', false);
 pref('zen.pinned-tab-manager.restore-pinned-tabs-to-pinned-url', false);
 pref('zen.pinned-tab-manager.close-shortcut-behavior', 'reset-unload-switch');

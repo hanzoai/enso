@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index d5aa64842a35c6697263c63fd3a0571b64b01344..bcae8a44593d7b3e5efdd999b4c2f5bcac221632 100644
+index d5aa64842a35c6697263c63fd3a0571b64b01344..6943dc7f1d3d95ab1da315cbdbda0b032cf200f1 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -413,11 +413,41 @@
@@ -491,17 +491,6 @@ index d5aa64842a35c6697263c63fd3a0571b64b01344..bcae8a44593d7b3e5efdd999b4c2f5bc
        if (!this._windowIsClosing) {
          if (wasPinned) {
            this.tabContainer._positionPinnedTabs();
-@@ -5141,8 +5266,8 @@
-       return closedCount;
-     }
- 
--    async explicitUnloadTabs(tabs) {
--      let unloadBlocked = await this.runBeforeUnloadForTabs(tabs);
-+    async explicitUnloadTabs(tabs, skipPermitUnload = false) {
-+      let unloadBlocked = skipPermitUnload ? false : await this.runBeforeUnloadForTabs(tabs);
-       if (unloadBlocked) {
-         return;
-       }
 @@ -5230,6 +5355,7 @@
        }
  

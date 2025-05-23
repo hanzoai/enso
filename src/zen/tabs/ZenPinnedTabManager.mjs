@@ -397,10 +397,10 @@
       );
     }
 
-    _onTabClick(e) {
+    async _onTabClick(e) {
       const tab = e.target?.closest('tab');
       if (e.button === 1 && tab) {
-        this._onCloseTabShortcut(e, tab);
+        await this._onCloseTabShortcut(e, tab);
       }
     }
 
@@ -533,7 +533,7 @@
       }
     }
 
-    _onCloseTabShortcut(
+    async _onCloseTabShortcut(
       event,
       selectedTab = gBrowser.selectedTab,
       behavior = lazy.zenPinnedTabCloseShortcutBehavior
@@ -554,22 +554,17 @@
         case 'unload-switch':
         case 'reset-switch':
         case 'switch':
-          let { permitUnload } = selectedTab.linkedBrowser?.permitUnload();
-          if (!permitUnload) {
-            return;
-          }
-          this._handleTabSwitch(selectedTab);
-          if (behavior.includes('reset')) {
-            this._resetTabToStoredState(selectedTab);
-          }
           if (behavior.includes('unload')) {
             if (selectedTab.hasAttribute('glance-id')) {
               break;
             }
-            // Do not unload about:* pages
-            if (!selectedTab.linkedBrowser?.currentURI.spec.startsWith('about:')) {
-              gZenTabUnloader.explicitUnloadTabs([selectedTab], { permitUnload });
-            }
+            await gBrowser.explicitUnloadTabs([selectedTab]);
+          }
+          if (selectedTab.selected) {
+            this._handleTabSwitch(selectedTab);
+          }
+          if (behavior.includes('reset')) {
+            this._resetTabToStoredState(selectedTab);
           }
           break;
         case 'reset':
