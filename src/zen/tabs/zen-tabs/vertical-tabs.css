@@ -709,6 +709,7 @@
 
   /* Hide text labels */
   & .zen-current-workspace-indicator-name,
+  & .zen-workspace-actions,
   & zen-workspace .toolbarbutton-text {
     display: none !important;
   }

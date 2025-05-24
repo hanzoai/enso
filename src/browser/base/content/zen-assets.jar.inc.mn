@@ -39,6 +39,9 @@
         content/browser/zen-components/actors/ZenThemeMarketplaceParent.sys.mjs (../../zen/mods/actors/ZenThemeMarketplaceParent.sys.mjs)
         content/browser/zen-components/actors/ZenThemeMarketplaceChild.sys.mjs  (../../zen/mods/actors/ZenThemeMarketplaceChild.sys.mjs)
 
+        content/browser/zen-components/ZenLibrary.mjs                           (../../zen/library/ZenLibrary.mjs)
+        content/browser/zen-styles/zen-library.css                              (../../zen/library/zen-library.css)
+
         content/browser/zen-components/ZenWorkspaceIcons.mjs                    (../../zen/workspaces/ZenWorkspaceIcons.mjs)
         content/browser/zen-components/ZenWorkspace.mjs                         (../../zen/workspaces/ZenWorkspace.mjs)
         content/browser/zen-components/ZenWorkspaces.mjs                        (../../zen/workspaces/ZenWorkspaces.mjs)

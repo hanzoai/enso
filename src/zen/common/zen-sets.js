@@ -73,6 +73,9 @@ document.addEventListener(
               event.sourceEvent.target.getAttribute('zen-workspace-id')
             );
             break;
+          case 'cmd_zenToggleLibrary':
+            gZenLibrary.toggle();
+            break;
           case 'cmd_zenToggleTabsOnRight':
             gZenVerticalTabsManager.toggleTabsOnRight();
             break;
@@ -87,6 +90,12 @@ document.addEventListener(
             break;
           case 'cmd_zenRemoveFromEssentials':
             gZenPinnedTabManager.removeEssentials();
+            break;
+          case 'cmd_zenCtxDeleteWorkspace':
+            gZenWorkspaces.contextDeleteWorkspace(event);
+            break;
+          case 'cmd_zenChangeWorkspaceName':
+            gZenVerticalTabsManager.renameTabStart(event);
             break;
           default:
             if (event.target.id.startsWith('cmd_zenWorkspaceSwitch')) {

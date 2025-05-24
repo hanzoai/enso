@@ -1,8 +1,16 @@
 diff --git a/browser/base/content/browser-box.inc.xhtml b/browser/base/content/browser-box.inc.xhtml
-index 7d7e8697f02f90d4f336c9ab0a73a89848e0c21c..64e950106dd05b443ce72107613ac9cc405d56ea 100644
+index 7d7e8697f02f90d4f336c9ab0a73a89848e0c21c..3819ae72f97900b6d212f8a54550ae569d497741 100644
 --- a/browser/base/content/browser-box.inc.xhtml
 +++ b/browser/base/content/browser-box.inc.xhtml
-@@ -23,7 +23,15 @@
+@@ -3,6 +3,7 @@
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+ <hbox flex="1" id="browser">
++  <zen-library/>
+   <box context="sidebar-context-menu" id="sidebar-main" hidden="true">
+     <html:sidebar-main flex="1">
+       <box id="vertical-tabs" slot="tabstrip" customizable="true" contextmenu="toolbar-context-menu"></box>
+@@ -23,7 +24,15 @@
      <browser id="sidebar" autoscroll="false" disablehistory="true" disablefullscreen="true" tooltip="aHTMLTooltip"/>
    </vbox>
    <splitter id="sidebar-splitter" class="chromeclass-extrachrome sidebar-splitter" resizebefore="sibling" resizeafter="none" hidden="true"/>

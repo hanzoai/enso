@@ -73,7 +73,7 @@
 
     initContextMenu() {
       const menu = window.MozXULElement.parseXULToFragment(`
-        <menuitem id="zenToolbarThemePicker"
+        <menuitem class="zenToolbarThemePicker"
                   data-lazy-l10n-id="zen-workspaces-change-gradient"
                   command="cmd_zenOpenZenThemePicker"/>
       `);
@@ -944,7 +944,10 @@
       return `rgba(${color.c[0]}, ${color.c[1]}, ${color.c[2]}, ${this.currentOpacity})`;
     }
 
-    getGradient(colors, forToolbar = false) {
+    getGradient(colors, forToolbar = false, rotation = undefined) {
+      if (typeof rotation === 'undefined') {
+        rotation = this.currentRotation;
+      }
       const themedColors = this.themedColors(colors);
       this.useAlgo = themedColors[0]?.algorithm ?? '';
 
@@ -955,12 +958,12 @@
       } else if (themedColors.length === 1) {
         return this.getSingleRGBColor(themedColors[0], forToolbar);
       } else if (themedColors.length !== 3) {
-        return `linear-gradient(${this.currentRotation}deg, ${themedColors.map((color) => this.getSingleRGBColor(color, forToolbar)).join(', ')})`;
+        return `linear-gradient(${rotation}deg, ${themedColors.map((color) => this.getSingleRGBColor(color, forToolbar)).join(', ')})`;
       } else {
         let color1 = this.getSingleRGBColor(themedColors[2], forToolbar);
         let color2 = this.getSingleRGBColor(themedColors[0], forToolbar);
         let color3 = this.getSingleRGBColor(themedColors[1], forToolbar);
-        return `linear-gradient(${this.currentRotation}deg, ${color1}, ${color2}, ${color3})`;
+        return `linear-gradient(${rotation}deg, ${color1}, ${color2}, ${color3})`;
       }
     }
 
@@ -1122,7 +1125,6 @@
           }
         }
 
-        const appBackground = browser.document.getElementById('zen-browser-background');
         if (!skipUpdate) {
           browser.document.documentElement.style.setProperty(
             '--zen-main-browser-background-old',
