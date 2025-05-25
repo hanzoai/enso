@@ -1,13 +1,12 @@
 diff --git a/toolkit/themes/shared/menu.css b/toolkit/themes/shared/menu.css
-index ecf66f30b2dd18765af467913bb0bc66a8d36a41..6b58db0c1590b0151a3e169b75d4d2ee19db912c 100644
+index ecf66f30b2dd18765af467913bb0bc66a8d36a41..8ecb03f8f09100dc76e8e4dabd13c366717268b4 100644
 --- a/toolkit/themes/shared/menu.css
 +++ b/toolkit/themes/shared/menu.css
-@@ -345,7 +345,7 @@ menuitem[highlightable] > .menu-text {
+@@ -345,7 +345,6 @@ menuitem[highlightable] > .menu-text {
      /* On macOS and Windows, empty icons shouldn't take up any space */
      menuitem:not(.menuitem-iconic, [image]) > &,
      menu:not(.menu-iconic) > & {
 -      display: none;
-+      
      }
    }
  }

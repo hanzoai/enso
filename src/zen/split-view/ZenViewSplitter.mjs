@@ -104,6 +104,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
     );
 
     window.addEventListener('TabClose', this.handleTabClose.bind(this));
+    window.addEventListener('TabBrowserDiscarded', this.handleTabBrowserDiscarded.bind(this));
     window.addEventListener('TabSelect', this.onTabSelect.bind(this));
     this.initializeContextMenu();
     this.insertIntoContextMenu();
@@ -148,6 +149,17 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       return;
     }
     this.removeTabFromGroup(tab, groupIndex, true);
+  }
+
+  /**
+   * @param {Event} event - The event that triggered the tab browser discard.
+   * @description Handles the tab browser discard event.
+   */
+  async handleTabBrowserDiscarded(event) {
+    const tab = event.target;
+    if (tab.group?.hasAttribute('split-view-group')) {
+      gBrowser.explicitUnloadTabs(tab.group.tabs);
+    }
   }
 
   /**

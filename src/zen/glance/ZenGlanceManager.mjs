@@ -705,8 +705,8 @@
     }
 
     getTabOrGlanceParent(tab) {
-      if (tab?.hasAttribute('glance-id')) {
-        const parentTab = this.#glances.get(tab.getAttribute('glance-id')).parentTab;
+      if (tab?.hasAttribute('glance-id') && this.#glances) {
+        const parentTab = this.#glances.get(tab.getAttribute('glance-id'))?.parentTab;
         if (parentTab) {
           return parentTab;
         }

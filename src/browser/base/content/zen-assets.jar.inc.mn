@@ -9,6 +9,7 @@
         content/browser/ZenCustomizableUI.sys.mjs                               (../../zen/common/ZenCustomizableUI.sys.mjs)
         content/browser/zen-components/ZenUIMigration.mjs                       (../../zen/common/ZenUIMigration.mjs)
         content/browser/zen-components/ZenCommonUtils.mjs                       (../../zen/common/ZenCommonUtils.mjs)
+        content/browser/zen-components/ZenSessionStore.mjs                      (../../zen/common/ZenSessionStore.mjs)
 
         content/browser/zen-styles/zen-theme.css                                (../../zen/common/styles/zen-theme.css)
         content/browser/zen-styles/zen-buttons.css                              (../../zen/common/styles/zen-buttons.css)

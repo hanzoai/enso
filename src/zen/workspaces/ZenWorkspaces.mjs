@@ -42,11 +42,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     this._resolveInitialized = resolve;
   });
 
-  workspaceIndicatorXUL = `
-    <hbox class="zen-current-workspace-indicator-icon"></hbox>
-    <hbox class="zen-current-workspace-indicator-name"></hbox>
-  `;
-
   async waitForPromises() {
     if (this.privateWindowOrDisabled) {
       return;
@@ -858,6 +853,9 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
         console.error('gZenWorkspaces: Error initializing theme picker', e);
       }
       this.onWindowResize();
+      if (window.gZenSessionStore) {
+        await gZenSessionStore.promiseInitialized;
+      }
       await this._selectStartPage();
       this._fixTabPositions();
       this._resolveInitialized();
@@ -915,7 +913,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       ) {
         this.log(`Found tab to select: ${this._tabToSelect}, ${tabs.length}`);
         setTimeout(() => {
-          gBrowser.selectedTab = tabs[this._tabToSelect];
+          gBrowser.selectedTab = gZenGlanceManager.getTabOrGlanceParent(tabs[this._tabToSelect]);
           this._removedByStartupPage = true;
           gBrowser.removeTab(this._tabToRemoveForEmpty, {
             skipSessionStore: true,
@@ -2941,6 +2939,9 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   _initializeWorkspaceTabContextMenus() {
+    if (this.privateWindowOrDisabled) {
+      return;
+    }
     const menu = document.createXULElement('menu');
     menu.setAttribute('id', 'context-zen-change-workspace-tab');
     menu.setAttribute('data-l10n-id', 'context-zen-change-workspace-tab');
