@@ -2540,8 +2540,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
         })
       );
     }
-
-    setTimeout(gURLBar.formatValue.bind(gURLBar), 0);
   }
 
   async _fixCtrlTabBehavior() {
