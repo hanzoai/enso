@@ -286,7 +286,8 @@
   list-style-image: url('home.svg') !important;
 }
 
-#toggle_toolbar-menubar {
+#toggle_toolbar-menubar,
+#appMenu_menu_openHelp {
   display: none;
 }
 
