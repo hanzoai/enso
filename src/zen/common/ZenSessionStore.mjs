@@ -75,8 +75,8 @@
         await gZenGlanceManager.openGlance(
           {
             url: undefined,
-            x: browserRect.width / 2,
-            y: browserRect.height / 2,
+            clientX: browserRect.width / 2,
+            clientY: browserRect.height / 2,
             width: 0,
             height: 0,
           },

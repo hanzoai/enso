@@ -159,6 +159,11 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
     const tab = event.target;
     if (tab.group?.hasAttribute('split-view-group')) {
       gBrowser.explicitUnloadTabs(tab.group.tabs);
+      for (const t of tab.group.tabs) {
+        if (t.glanceTab) {
+          gBrowser.explicitUnloadTabs([t.glanceTab]);
+        }
+      }
     }
   }
 

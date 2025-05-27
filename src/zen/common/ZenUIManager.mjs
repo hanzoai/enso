@@ -7,6 +7,8 @@ var gZenUIManager = {
   _hasLoadedDOM: false,
   testingEnabled: Services.prefs.getBoolPref('zen.testing.enabled', false),
 
+  _lastClickPosition: null,
+
   _toastTimeouts: [],
 
   init() {
@@ -33,6 +35,8 @@ var gZenUIManager = {
     );
 
     gURLBar._zenTrimURL = this.urlbarTrim.bind(this);
+
+    document.addEventListener('mousedown', this.handleMouseDown.bind(this), true);
 
     ChromeUtils.defineLazyGetter(this, 'motion', () => {
       return ChromeUtils.importESModule('chrome://browser/content/zen-vendor/motion.min.mjs', {
@@ -63,6 +67,13 @@ var gZenUIManager = {
     window.addEventListener('TabClose', this.onTabClose.bind(this));
 
     gZenMediaController.init();
+  },
+
+  handleMouseDown(event) {
+    this._lastClickPosition = {
+      clientX: event.clientX,
+      clientY: event.clientY,
+    };
   },
 
   updateTabsToolbar() {

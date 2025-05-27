@@ -154,8 +154,8 @@
       this.animatingOpen = true;
       this._animating = true;
 
-      const initialX = data.x;
-      const initialY = data.y;
+      const initialX = data.clientX;
+      const initialY = data.clientY;
       const initialWidth = data.width;
       const initialHeight = data.height;
 
@@ -597,8 +597,10 @@
           this.openGlance(
             {
               url: undefined,
-              x: browserRect.width / 2,
-              y: browserRect.height / 2,
+              ...(gZenUIManager._lastClickPosition || {
+                clientX: browserRect.width / 2,
+                clientY: browserRect.height / 2,
+              }),
               width: 0,
               height: 0,
             },
@@ -639,7 +641,12 @@
         .classList.remove('zen-glance-background');
       this.#currentParentTab._visuallySelected = false;
       this.hideSidebarButtons();
+      if (forSplit) {
+        this.finishOpeningGlance();
+        return;
+      }
       if (gReduceMotion || forSplit) {
+        gZenViewSplitter.deactivateCurrentSplitView();
         this.finishOpeningGlance();
         return;
       }
@@ -654,6 +661,7 @@
           type: 'spring',
         }
       );
+      gZenViewSplitter.deactivateCurrentSplitView();
       this.finishOpeningGlance();
     }
 
@@ -678,8 +686,8 @@
       const rect = event.target.getBoundingClientRect();
       const data = {
         url: event.target._placesNode.uri,
-        x: rect.left,
-        y: rect.top,
+        clientX: rect.left,
+        clientY: rect.top,
         width: rect.width,
         height: rect.height,
       };
@@ -736,6 +744,32 @@
         }
       }
       return false;
+    }
+
+    onSearchSelectCommand(where) {
+      if (where !== 'tab') {
+        return;
+      }
+      const currentTab = gBrowser.selectedTab;
+      const parentTab = currentTab.owner;
+      if (!parentTab) {
+        return;
+      }
+      // Open a new glance if the current tab is a glance tab
+      const browserRect = gBrowser.tabbox.getBoundingClientRect();
+      this.openGlance(
+        {
+          url: undefined,
+          ...(gZenUIManager._lastClickPosition || {
+            clientX: browserRect.width / 2,
+            clientY: browserRect.height / 2,
+          }),
+          width: 0,
+          height: 0,
+        },
+        currentTab,
+        parentTab
+      );
     }
   }
 

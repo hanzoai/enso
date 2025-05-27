@@ -74,8 +74,8 @@ export class ZenGlanceChild extends JSWindowActorChild {
     const rect = target.getBoundingClientRect();
     this.sendAsyncMessage('ZenGlance:OpenGlance', {
       url,
-      x: rect.left,
-      y: rect.top,
+      clientX: rect.left,
+      clientY: rect.top,
       width: rect.width,
       height: rect.height,
     });

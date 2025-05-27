@@ -14,22 +14,8 @@
   });
 
   class ZenDownloadAnimation extends ZenDOMOperatedFeature {
-    #lastClickPosition = null;
-
     async init() {
-      this.#setupClickListener();
       await this.#setupDownloadListeners();
-    }
-
-    #setupClickListener() {
-      document.addEventListener('mousedown', this.#handleClick.bind(this), true);
-    }
-
-    #handleClick(event) {
-      this.#lastClickPosition = {
-        clientX: event.clientX,
-        clientY: event.clientY,
-      };
     }
 
     async #setupDownloadListeners() {
@@ -53,14 +39,14 @@
         return;
       }
 
-      if (!this.#lastClickPosition) {
+      if (!gZenUIManager._lastClickPosition) {
         console.warn(
           `[${ZenDownloadAnimation.name}] No recent click position available for animation`
         );
         return;
       }
 
-      this.#animateDownload(this.#lastClickPosition);
+      this.#animateDownload(gZenUIManager._lastClickPosition);
     }
 
     #animateDownload(startPosition) {
