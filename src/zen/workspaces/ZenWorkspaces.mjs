@@ -2323,7 +2323,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
           existingTransform = container.style.transform;
         }
         if (shouldAnimate) {
-          container.style.transform = newTransform;
+          container.style.transform = existingTransform;
           animations.push(
             gZenUIManager.motion.animate(
               container,

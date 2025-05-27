@@ -94,6 +94,9 @@
         try {
           setTimeout(async () => {
             try {
+              const pin = this._pinsCache?.find(
+                (pin) => pin.uuid === tab.getAttribute('zen-pin-id')
+              );
               let favicon = await PlacesUtils.favicons.getFaviconForPage(
                 Services.io.newURI(pin.url)
               );
