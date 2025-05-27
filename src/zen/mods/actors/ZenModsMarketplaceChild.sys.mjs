@@ -133,7 +133,8 @@ export class ZenModsMarketplaceChild extends JSWindowActorChild {
 
       modId = button.getAttribute('zen-theme-id');
     } else {
-      modId = event.themeId;
+      // Backwards compatibility is... Interesting
+      modId = event.themeId ?? event.modId ?? event.id;
     }
 
     this.sendAsyncMessage('ZenModsMarketplace:InstallMod', { modId });

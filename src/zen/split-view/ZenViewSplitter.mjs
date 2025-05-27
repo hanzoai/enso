@@ -1674,6 +1674,15 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
           if (splitGroup && (!draggedTab.group || draggedTab.group !== splitGroup)) {
             this._moveTabsToContainer([draggedTab], droppedOnTab);
             gBrowser.moveTabToGroup(draggedTab, splitGroup);
+            if (hoverSide === 'left' || hoverSide === 'top') {
+              try {
+                splitGroup.tabs[0].before(draggedTab);
+              } catch (e) {
+                console.warn(
+                  `Failed to move tab ${draggedTab.id} before ${splitGroup.tabs[0].id}: ${e}`
+                );
+              }
+            }
           }
 
           const droppedOnSplitNode = this.getSplitNodeFromTab(droppedOnTab);
