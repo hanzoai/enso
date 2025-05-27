@@ -87,7 +87,7 @@
     }
 
     async #waitAndCleanup() {
-      await SessionStore.promiseInitialized;
+      await SessionStore.promiseAllWindowsRestored;
       await this.#resolveGlanceTabs();
       this.#cleanup();
     }

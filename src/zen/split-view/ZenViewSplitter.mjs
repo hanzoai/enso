@@ -1151,6 +1151,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
     this.tabBrowserPanel.removeAttribute('zen-split-view');
     this.currentView = -1;
     this.toggleWrapperDisplay(false);
+    this.maybeDisableOpeningTabOnSplitView();
   }
 
   /**
@@ -1308,6 +1309,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
         });
       }
     });
+    this.maybeDisableOpeningTabOnSplitView();
   }
 
   /**
@@ -1860,6 +1862,24 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       this.currentView = -1;
       this.onLocationChange(gBrowser.selectedTab.linkedBrowser);
     }
+  }
+
+  maybeDisableOpeningTabOnSplitView() {
+    document
+      .getElementById('cmd_zenSplitViewLinkInNewTab')
+      .setAttribute('disabled', !this.canOpenLinkInSplitView());
+  }
+
+  canOpenLinkInSplitView() {
+    const currentView = this.currentView;
+    if (currentView < 0) {
+      return true;
+    }
+    const group = this._data[currentView];
+    if (!group || group.tabs.length >= this.MAX_TABS) {
+      return false;
+    }
+    return true;
   }
 }
 
