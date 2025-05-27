@@ -1139,6 +1139,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
    * Deactivates the split view.
    */
   deactivateCurrentSplitView() {
+    if (this.currentView < 0) return;
     this.setTabsDocShellState(this._data[this.currentView].tabs, false);
     for (const tab of this._data[this.currentView].tabs) {
       const container = tab.linkedBrowser.closest('.browserSidebarContainer');
