@@ -9,7 +9,7 @@
           <hbox class="zen-current-workspace-indicator-icon"></hbox>
           <hbox class="zen-current-workspace-indicator-name"></hbox>
         </vbox>
-        <arrowscrollbox orient="vertical" tabindex="-1" class="workspace-arrowscrollbox">
+        <arrowscrollbox orient="vertical" class="workspace-arrowscrollbox">
           <vbox class="zen-workspace-tabs-section zen-workspace-pinned-tabs-section">
             <html:div class="vertical-pinned-tabs-container-separator"></html:div>
           </vbox>
