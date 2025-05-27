@@ -1068,12 +1068,7 @@ var gZenVerticalTabsManager = {
       !gZenVerticalTabsManager._prefsSidebarExpanded
     )
       return;
-    this._tabEdited =
-      event.target.closest('.tabbrowser-tab') ||
-      event.target.closest('.zen-current-workspace-indicator-name') ||
-      gZenWorkspaces.activeWorkspaceIndicator.querySelector(
-        '.zen-current-workspace-indicator-name'
-      );
+    this._tabEdited = event.target.closest('.tabbrowser-tab');
     if (
       !this._tabEdited ||
       ((!this._tabEdited.pinned || this._tabEdited.hasAttribute('zen-essential')) && isTab)

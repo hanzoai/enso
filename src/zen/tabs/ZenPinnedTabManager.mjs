@@ -634,12 +634,17 @@
       this.resetPinChangedUrl(tab);
     }
 
-    async getFaviconAsBase64(pageUrl) {
+    async getFaviconAsBase64(pageUrl, secondTry = false) {
       try {
         const faviconData = await PlacesUtils.favicons.getFaviconForPage(pageUrl);
         if (!faviconData) {
-          // empty favicon
-          return 'data:image/png;base64,';
+          if (secondTry || pageUrl.spec.startsWith('about:')) {
+            // empty favicon
+            return 'data:image/png;base64,';
+          }
+          // Try again with the domain
+          const domainUrl = pageUrl.spec.substring(0, pageUrl.spec.indexOf('/'));
+          return await this.getFaviconAsBase64(Services.io.newURI(domainUrl), true);
         }
         return faviconData.dataURI;
       } catch (ex) {
@@ -662,7 +667,7 @@
       for (let i = 0; i < tabs.length; i++) {
         let tab = tabs[i];
         const section = gZenWorkspaces.getEssentialsSection(tab);
-        if (section.children.length >= this.MAX_ESSENTIALS_TABS) {
+        if (!this.canEssentialBeAdded(tab)) {
           movedAll = false;
           continue;
         }
@@ -794,7 +799,7 @@
       document.getElementById('context_zen-add-essential').hidden =
         contextTab.getAttribute('zen-essential') ||
         !!contextTab.group ||
-        gBrowser._numZenEssentials >= this.MAX_ESSENTIALS_TABS;
+        !this.canEssentialBeAdded(contextTab);
       document.getElementById('context_zen-remove-essential').hidden =
         !contextTab.getAttribute('zen-essential');
       document.getElementById('context_unpinTab').hidden =
@@ -1007,6 +1012,16 @@
       }
     }
 
+    canEssentialBeAdded(tab) {
+      return (
+        !(
+          (tab.getAttribute('usercontextid') || 0) !=
+            gZenWorkspaces.getActiveWorkspaceFromCache().containerTabId &&
+          gZenWorkspaces.containerSpecificEssentials
+        ) && gBrowser._numZenEssentials < this.MAX_ESSENTIALS_TABS
+      );
+    }
+
     applyDragoverClass(event, draggedTab) {
       if (!this.enabled) {
         return;
@@ -1040,10 +1055,7 @@
           shouldAddDragOverElement = true;
         }
       } else if (essentialTabsTarget) {
-        if (
-          !draggedTab.hasAttribute('zen-essential') &&
-          gBrowser._numZenEssentials < this.MAX_ESSENTIALS_TABS
-        ) {
+        if (!draggedTab.hasAttribute('zen-essential') && this.canEssentialBeAdded(draggedTab)) {
           shouldAddDragOverElement = true;
           isVertical = false;
         }

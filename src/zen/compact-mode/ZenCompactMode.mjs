@@ -91,10 +91,6 @@ var gZenCompactModeManager = {
       this.preference === value ||
       document.documentElement.hasAttribute('zen-compact-animating')
     ) {
-      if (typeof this._wasInCompactMode !== 'undefined') {
-        // We wont do anything with it anyway, so we remove it
-        delete this._wasInCompactMode;
-      }
       // We dont want the user to be able to spam the button
       return value;
     }

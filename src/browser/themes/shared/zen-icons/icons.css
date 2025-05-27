@@ -121,6 +121,10 @@
   list-style-image: url('tab.svg') !important;
 }
 
+#context-navigation > menuitem {
+  padding: 4px;
+}
+
 #history-panelmenu,
 .urlbarView-row[source='history']
   > .urlbarView-row-inner

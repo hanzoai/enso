@@ -78,16 +78,6 @@
     transition: background-color var(--inactive-window-transition);
   }
 
-  @media (not (-moz-windows-mica)) and -moz-pref('zen.view.grey-out-inactive-windows') {
-    transition: color var(--inactive-window-transition);
-    :root:not([zen-welcome-stage]) &:-moz-window-inactive {
-      color: var(--toolbox-textcolor-inactive);
-      &::before {
-        background-color: var(--toolbox-bgcolor-inactive);
-      }
-    }
-  }
-
   #zen-browser-grain {
     content: '';
     width: 100%;
@@ -131,9 +121,7 @@
     z-index: 1;
   }
 
-  @media (-moz-windows-accent-color-in-titlebar) and (-moz-windows-mica) {
-    background-color: ActiveCaption;
-    color: CaptionText;
+  @media -moz-pref('zen.view.grey-out-inactive-windows') {
     transition: background-color var(--inactive-window-transition);
     &:-moz-window-inactive {
       background-color: InactiveCaption;
@@ -264,6 +252,7 @@
     opacity: 0;
     transition: opacity 0.1s ease-in-out;
     pointer-events: none;
+    transform: translateX(-50%);
   }
 
   &:hover::before {

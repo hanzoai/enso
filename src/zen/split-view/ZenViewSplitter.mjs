@@ -210,6 +210,10 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       const node = this.getSplitNodeFromTab(tab);
       const toUpdate = this.removeNode(node);
       this.applyGridLayout(toUpdate);
+      // Select next tab if the removed tab was selected
+      if (gBrowser.selectedTab === tab) {
+        gBrowser.selectedTab = group.tabs[0];
+      }
     }
   }
 
@@ -946,8 +950,8 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       window.gContextMenu.contentData.docLocation ||
       window.gContextMenu.target.ownerDocument.location.href;
     const currentTab = gZenGlanceManager.getTabOrGlanceParent(window.gBrowser.selectedTab);
-    const newTab = this.openAndSwitchToTab(url);
-    this.splitTabs([currentTab, newTab]);
+    const newTab = this.openAndSwitchToTab(url, { inBackground: false });
+    this.splitTabs([currentTab, newTab], 'grid', 1);
   }
 
   /**
@@ -1090,7 +1094,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
     };
     this._data.push(splitData);
     if (!this._sessionRestoring) {
-      window.gBrowser.selectedTab = tabs[0];
+      window.gBrowser.selectedTab = tabs[initialIndex] ?? tabs[0];
     }
 
     // Add tabs to the split view group

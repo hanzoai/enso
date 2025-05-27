@@ -1233,11 +1233,6 @@ Preferences.addAll([
     default: false,
   },
   {
-    id: 'browser.tabs.unloadOnLowMemory',
-    type: 'bool',
-    default: true,
-  },
-  {
     id: 'zen.mods.auto-update',
     type: 'bool',
     default: true,

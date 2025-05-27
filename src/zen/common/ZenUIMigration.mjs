@@ -90,6 +90,9 @@ class ZenUIMigration {
   }
 
   _migrateV4(win) {
+    if (AppConstants.platform === 'linux') {
+      return;
+    }
     Services.prefs.setBoolPref(
       'browser.tabs.unloadOnLowMemory',
       Services.prefs.getBoolPref('zen.tab-unloader.enabled', true)
