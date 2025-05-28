@@ -435,6 +435,11 @@
 
 #zen-glance-sidebar-split {
   list-style-image: url('split.svg');
+
+  &[disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 #sidebar-box[sidebarcommand='viewTabsSidebar']

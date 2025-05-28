@@ -897,7 +897,9 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
         tabCount: window.gBrowser.selectedTabs.length,
       });
       document.getElementById('context_zenSplitTabs').setAttribute('data-l10n-args', tabCountInfo);
-      document.getElementById('context_zenSplitTabs').disabled = !this.contextCanSplitTabs();
+      document
+        .getElementById('context_zenSplitTabs')
+        .setAttribute('disabled', !this.contextCanSplitTabs());
     });
   }
 
@@ -951,7 +953,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
       window.gContextMenu.target.ownerDocument.location.href;
     const currentTab = gZenGlanceManager.getTabOrGlanceParent(window.gBrowser.selectedTab);
     const newTab = this.openAndSwitchToTab(url, { inBackground: false });
-    this.splitTabs([currentTab, newTab], 'grid', 1);
+    this.splitTabs([currentTab, newTab], undefined, 1);
   }
 
   /**
@@ -1028,7 +1030,7 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
    * Splits the given tabs.
    *
    * @param {Tab[]} tabs - The tabs to split.
-   * @param {string} gridType - The type of grid layout.
+   * @param {string|undefined} gridType - The type of grid layout.
    */
   splitTabs(tabs, gridType, initialIndex = 0) {
     // TODO: Add support for splitting essential tabs
@@ -1874,9 +1876,11 @@ class ZenViewSplitter extends ZenDOMOperatedFeature {
   }
 
   maybeDisableOpeningTabOnSplitView() {
+    const shouldBeDisabled = !this.canOpenLinkInSplitView();
     document
       .getElementById('cmd_zenSplitViewLinkInNewTab')
-      .setAttribute('disabled', !this.canOpenLinkInSplitView());
+      .setAttribute('disabled', shouldBeDisabled);
+    document.getElementById('zen-glance-sidebar-split').setAttribute('disabled', shouldBeDisabled);
   }
 
   canOpenLinkInSplitView() {
