@@ -243,11 +243,6 @@ panel {
   opacity: 0;
 }
 
-menupopup::part(content),
-panel::part(content) {
-  border: var(--zen-appcontent-border);
-}
-
 menupopup,
 panel {
   box-shadow: none;
