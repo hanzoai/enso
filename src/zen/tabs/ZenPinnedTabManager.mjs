@@ -953,7 +953,7 @@
       } else {
         tab.setAttribute('zen-pinned-changed', 'true');
       }
-      tab.style.setProperty('--zen-original-tab-icon', `url(${pin.iconUrl})`);
+      tab.style.setProperty('--zen-original-tab-icon', `url(${pin.iconUrl.spec})`);
     }
 
     removeTabContainersDragoverClass() {

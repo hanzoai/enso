@@ -50,6 +50,3 @@ pref("app.update.checkInstallTime.days", 6);
 // TODO: Check this out!
 pref("browser.profiles.enabled", false);
 pref("browser.tabs.groups.enabled", false);
-
-// Open new download in the current tabs
-pref("browser.link.open_newwindow", 1);
