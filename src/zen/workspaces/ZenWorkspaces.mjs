@@ -2134,6 +2134,21 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
           repeat: 0,
         });
         essentialsContainer.parentNode.appendChild(essentialsClone);
+        for (let i = 0; i < essentialsClone.children.length; i++) {
+          const child = essentialsClone.children[i];
+          const originalChild = essentialsContainer.children[i];
+          if (!gBrowser.isTab(child) || !gBrowser.isTab(originalChild)) {
+            continue;
+          }
+          const childBg = child.querySelector('.tab-background');
+          const originalChildBg = originalChild.querySelector('.tab-background');
+          if (childBg && originalChildBg) {
+            childBg.style.setProperty(
+              '--zen-tab-icon',
+              originalChildBg.style.getPropertyValue('--zen-tab-icon')
+            );
+          }
+        }
       }
     }
     document.documentElement.setAttribute('animating-background', 'true');
