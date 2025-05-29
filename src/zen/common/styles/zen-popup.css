@@ -334,7 +334,7 @@ menuseparator {
 
 #zen-toast-container {
   position: fixed;
-  --zen-toast-spacing: max(8px, calc(var(--zen-element-separation) * 2));
+  --zen-toast-spacing: max(4px, var(--zen-element-separation));
   top: var(--zen-toast-spacing);
   z-index: 1000;
   display: flex;
