@@ -109,8 +109,8 @@ var ZenPinnedTabsStorage = {
           `
           INSERT OR REPLACE INTO zen_pins (
             uuid, title, url, container_id, workspace_uuid, position,
-            is_essential, is_group, parent_uuid, created_at, updated_at,
-            edited_title
+            is_essential, is_group, parent_uuid, edited_title, created_at, 
+            updated_at
           ) VALUES (
             :uuid, :title, :url, :container_id, :workspace_uuid, :position,
             :is_essential, :is_group, :parent_uuid, :edited_title,

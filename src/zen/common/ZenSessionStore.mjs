@@ -7,7 +7,6 @@
       this.#waitAndCleanup();
     }
 
-    #glanceTabs = {};
     promiseInitialized = new Promise((resolve) => {
       this._resolveInitialized = resolve;
     });
@@ -34,67 +33,16 @@
       if (tabData.zenPinnedEntry) {
         tab.setAttribute('zen-pinned-entry', tabData.zenPinnedEntry);
       }
-      if (tabData.zenGlanceId) {
-        // We just found the background used for glance. Find
-        // the current
-        if (tabData.zenIsGlance) {
-          if (this.#glanceTabs[tabData.zenGlanceId]) {
-            this.#glanceTabs[tabData.zenGlanceId].tab = tab;
-          } else {
-            this.#glanceTabs[tabData.zenGlanceId] = {
-              tab: tab,
-              background: null,
-            };
-          }
-        } else {
-          if (this.#glanceTabs[tabData.zenGlanceId]) {
-            this.#glanceTabs[tabData.zenGlanceId].background = tab;
-          } else {
-            this.#glanceTabs[tabData.zenGlanceId] = {
-              tab: null,
-              background: tab,
-            };
-          }
-        }
-      }
-    }
-
-    async #resolveGlanceTabs() {
-      for (const [id, data] of Object.entries(this.#glanceTabs)) {
-        const { tab, background } = data;
-        // TODO(Restore glance tab): Finish this implementation
-        continue;
-
-        if (!tab || !background) {
-          tab?.removeAttribute('glance-id');
-          background?.removeAttribute('glance-id');
-          continue;
-        }
-        console.log(tab, background);
-        const browserRect = gBrowser.tabbox.getBoundingClientRect();
-        await gZenGlanceManager.openGlance(
-          {
-            url: undefined,
-            clientX: browserRect.width / 2,
-            clientY: browserRect.height / 2,
-            width: 0,
-            height: 0,
-          },
-          tab,
-          background
-        );
-      }
     }
 
     async #waitAndCleanup() {
       await SessionStore.promiseAllWindowsRestored;
-      await this.#resolveGlanceTabs();
+      await SessionStore.promiseInitialized;
       this.#cleanup();
     }
 
     #cleanup() {
       this._resolveInitialized();
-      delete window.gZenSessionStore;
     }
   }
 

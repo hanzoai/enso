@@ -209,7 +209,7 @@ var gZenMarketplaceManager = {
 
       for (const mod of Object.values(mods)) {
         mod.modId = mod.id;
-        window.ZenInstallMod(mod);
+        await window.ZenInstallMod(mod);
       }
     } catch (error) {
       console.error('[ZenSettings:ZenMods]: Error while importing mods:', error);

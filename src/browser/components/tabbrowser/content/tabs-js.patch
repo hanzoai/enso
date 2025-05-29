@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index 84d633471c89230b981d8a07babef4e0c76c0338..ac51c64014b805e2130ffe6698b439b5df1b6d78 100644
+index 84d633471c89230b981d8a07babef4e0c76c0338..de8b1ecf7cb844f6cf3e66a41b6024c574dfc103 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -83,7 +83,7 @@
@@ -195,7 +195,7 @@ index 84d633471c89230b981d8a07babef4e0c76c0338..ac51c64014b805e2130ffe6698b439b5
 +        if (glanceTab) {
 +          // insert right after the parent tab. note: it must be inserted before
 +          // the last pinned tab so it can be inserted in the correct order
-+          allTabs.splice(Math.max(i++, lastPinnedTabIdx), 0, glanceTab);
++          allTabs.splice(Math.max(i++ + 1, lastPinnedTabIdx), 0, glanceTab);
 +        } else if (tab.classList.contains("vertical-pinned-tabs-container-separator")) {
 +          // remove the separator from the list
 +          allTabs.splice(i, 1);

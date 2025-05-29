@@ -90,10 +90,11 @@
 
     onTabIconChanged(tab, url = null) {
       const iconUrl = url ?? tab.iconImage.src;
-      if (!iconUrl) {
+      if (!iconUrl && tab.hasAttribute('zen-pin-id')) {
         try {
           setTimeout(async () => {
             try {
+              await this.promisePinnedCacheInitialized;
               const pin = this._pinsCache?.find(
                 (pin) => pin.uuid === tab.getAttribute('zen-pin-id')
               );
@@ -162,6 +163,9 @@
       await gZenWorkspaces.promiseSectionsInitialized;
       await this._initializePinsCache();
       await this._initializePinnedTabs(init);
+      if (init) {
+        this._resolveInitializedPinnedCache();
+      }
     }
 
     async _initializePinsCache() {
@@ -637,17 +641,12 @@
       this.resetPinChangedUrl(tab);
     }
 
-    async getFaviconAsBase64(pageUrl, secondTry = false) {
+    async getFaviconAsBase64(pageUrl) {
       try {
         const faviconData = await PlacesUtils.favicons.getFaviconForPage(pageUrl);
         if (!faviconData) {
-          if (secondTry || pageUrl.spec.startsWith('about:')) {
-            // empty favicon
-            return 'data:image/png;base64,';
-          }
-          // Try again with the domain
-          const domainUrl = pageUrl.spec.substring(0, pageUrl.spec.indexOf('/'));
-          return await this.getFaviconAsBase64(Services.io.newURI(domainUrl), true);
+          // empty favicon
+          return 'data:image/png;base64,';
         }
         return faviconData.dataURI;
       } catch (ex) {
@@ -954,7 +953,7 @@
       } else {
         tab.setAttribute('zen-pinned-changed', 'true');
       }
-      tab.style.setProperty('--zen-original-tab-icon', `url(${pin.iconUrl})`);
+      tab.style.setProperty('--zen-original-tab-icon', `url(${pin.iconUrl.spec})`);
     }
 
     removeTabContainersDragoverClass() {
@@ -1135,4 +1134,8 @@
   }
 
   window.gZenPinnedTabManager = new ZenPinnedTabManager();
+
+  gZenPinnedTabManager.promisePinnedCacheInitialized = new Promise((resolve) => {
+    gZenPinnedTabManager._resolveInitializedPinnedCache = resolve;
+  });
 }

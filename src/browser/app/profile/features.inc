@@ -22,7 +22,7 @@ pref('zen.mediacontrols.enabled', true);
 // Exposure:
 pref('zen.haptic-feedback.enabled', true);
 
-pref('zen.mods.auto-update-days', 12); // In days
+pref('zen.mods.auto-update-days', 20); // In days
 #ifdef MOZILLA_OFFICIAL
 pref('zen.mods.auto-update', true);
 pref('zen.rice.api.url', 'https://share.zen-browser.app', locked);
