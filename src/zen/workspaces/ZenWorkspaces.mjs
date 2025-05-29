@@ -2319,7 +2319,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
         const newTransform = `translateX(${newOffset}%)`;
         let existingTransform = `translateX(${existingOffset}%)`;
-        if (container.style.transform) {
+        if (container.style.transform && container.style.transform !== 'none') {
           existingTransform = container.style.transform;
         }
         if (shouldAnimate) {
