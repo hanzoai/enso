@@ -197,6 +197,8 @@
   --toolbar-field-background-color: var(--zen-colors-input-bg) !important;
   --arrowpanel-background: var(--zen-dialog-background) !important;
 
+  --panel-separator-color: color-mix(in srgb, currentColor 15%, transparent) !important;
+
   --zen-big-shadow: 0 0 9.73px 0px light-dark(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.25));
   --zen-active-tab-scale: 0.98;
 
