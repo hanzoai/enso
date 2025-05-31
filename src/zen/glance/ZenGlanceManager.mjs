@@ -752,7 +752,7 @@
       }
       const currentTab = gBrowser.selectedTab;
       const parentTab = currentTab.owner;
-      if (!parentTab) {
+      if (!parentTab || parentTab.hasAttribute('glance-id')) {
         return;
       }
       // Open a new glance if the current tab is a glance tab
