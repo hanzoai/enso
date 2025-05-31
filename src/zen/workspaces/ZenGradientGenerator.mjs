@@ -23,6 +23,9 @@
       ) {
         return;
       }
+      this.promiseInitialized = new Promise((resolve) => {
+        this._resolveInitialized = resolve;
+      });
       this.dragStartPosition = null;
 
       ChromeUtils.defineLazyGetter(this, 'panel', () =>
@@ -116,7 +119,8 @@
       this.initContextMenu();
       this.initPredefinedColors();
 
-      this._hasInitialized = true;
+      this._resolveInitialized();
+      delete this._resolveInitialized;
       this.onDarkModeChange(null);
     }
 
@@ -1102,7 +1106,7 @@
       let workspaceTheme = theme || workspace.theme;
 
       await this.foreachWindowAsActive(async (browser) => {
-        if (!browser.gZenThemePicker?._hasInitialized) {
+        if (browser.closing || (await browser.gZenThemePicker?.promiseInitialized)) {
           return;
         }
         // Do not rebuild if the workspace is not the same as the current one
