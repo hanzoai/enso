@@ -3322,4 +3322,20 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       }
     });
   }
+
+  fixTabInsertLocation(tab) {
+    if (tab.hasAttribute('zen-essential')) {
+      // Essential tabs should always be inserted at the end of the essentials section
+      const essentialsSection = this.getEssentialsSection(tab);
+      if (essentialsSection) {
+        essentialsSection.appendChild(tab);
+      }
+    } else if (tab.pinned) {
+      // Pinned tabs should always be inserted at the end of the pinned tabs container
+      const pinnedContainer = this.pinnedTabsContainer;
+      if (pinnedContainer) {
+        pinnedContainer.insertBefore(tab, pinnedContainer.lastChild);
+      }
+    }
+  }
 })();
