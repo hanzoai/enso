@@ -624,7 +624,7 @@
         // Remove everything except the entry we want to keep
         state.entries = [state.entries[foundEntryIndex]];
       }
-      state.image = pin.iconUrl || null;
+      state.image ||= pin.iconUrl || null;
       state.index = 0;
 
       SessionStore.setTabState(tab, state);
@@ -763,19 +763,6 @@
         `);
 
       document.getElementById('context_pinTab')?.before(element);
-    }
-
-    // TODO: remove this as it's not possible to know the base pinned url any more as it's now stored in tab state
-    resetPinnedTabData(tabData) {
-      if (
-        lazy.zenPinnedTabRestorePinnedTabsToPinnedUrl &&
-        tabData.pinned &&
-        tabData.zenPinnedEntry
-      ) {
-        tabData.entries = [JSON.parse(tabData.zenPinnedEntry)];
-        tabData.image = tabData.zenPinnedIcon;
-        tabData.index = 0;
-      }
     }
 
     updatePinnedTabContextMenu(contextTab) {
