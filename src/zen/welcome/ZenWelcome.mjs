@@ -6,7 +6,7 @@
   var _tabsToPin = [];
   var _tabsToPinEssentials = [];
 
-  const kZenElementsToIgnore = ['zen-browser-background'];
+  const kZenElementsToIgnore = ['zen-browser-background', 'zen-toast-container'];
 
   function clearBrowserElements() {
     for (const element of document.getElementById('browser').children) {

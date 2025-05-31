@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 {
   var ZenStartup = {
-    _watermarkIgnoreElements: ['zen-browser-background'],
+    _watermarkIgnoreElements: ['zen-browser-background', 'zen-toast-container'],
 
     init() {
       this.openWatermark();
