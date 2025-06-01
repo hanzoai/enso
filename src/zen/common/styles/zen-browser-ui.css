@@ -121,6 +121,11 @@
     z-index: 1;
   }
 
+  @media (-moz-windows-accent-color-in-titlebar) and ((-moz-windows-mica) or -moz-pref('browser.theme.windows.accent-color-in-tabs.enabled')) {
+    background: ActiveCaption;
+    color: CaptionText;
+  }
+
   @media -moz-pref('zen.view.grey-out-inactive-windows') {
     transition: background-color var(--inactive-window-transition);
     &:-moz-window-inactive {
