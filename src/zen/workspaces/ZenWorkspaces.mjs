@@ -2133,7 +2133,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
           originalContainer: essentialsContainer,
           repeat: 0,
         });
-        essentialsContainer.parentNode.appendChild(essentialsClone);
         for (let i = 0; i < essentialsClone.children.length; i++) {
           const child = essentialsClone.children[i];
           const originalChild = essentialsContainer.children[i];
@@ -2258,9 +2257,9 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
           (isGoingLeft && newWorkspaceIndex > lastWorkspaceIndex) ||
           (!isGoingLeft && newWorkspaceIndex < firstWorkspaceIndex)
         ) {
-          container.remove();
           continue;
         }
+        cloned.originalContainer.parentNode.appendChild(container);
         let stepsInBetween =
           Math.abs(newWorkspaceIndex - (isGoingLeft ? firstWorkspaceIndex : lastWorkspaceIndex)) +
           1;
