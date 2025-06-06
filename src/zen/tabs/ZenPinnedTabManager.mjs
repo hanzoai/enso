@@ -746,13 +746,15 @@
 
       const element = window.MozXULElement.parseXULToFragment(`
             <menuitem id="context_zen-add-essential"
-                      data-lazy-l10n-id="tab-context-zen-add-essential"
+                      data-l10n-id="tab-context-zen-add-essential"
+                      data-l10n-args='{"num": "0"}'
                       hidden="true"
-                      command="cmd_zenAddToEssentials"/>
+                      disabled="true"
+                      command="cmd_contextZenAddToEssentials"/>
             <menuitem id="context_zen-remove-essential"
                       data-lazy-l10n-id="tab-context-zen-remove-essential"
                       hidden="true"
-                      command="cmd_zenRemoveFromEssentials"/>
+                      command="cmd_contextZenRemoveFromEssentials"/>
         `);
 
       document.getElementById('context_pinTab')?.before(element);
@@ -768,9 +770,14 @@
         !isVisible || !contextTab.getAttribute('zen-pin-id');
       document.getElementById('context_zen-replace-pinned-url-with-current').hidden = !isVisible;
       document.getElementById('context_zen-add-essential').hidden =
-        contextTab.getAttribute('zen-essential') ||
-        !!contextTab.group ||
-        !this.canEssentialBeAdded(contextTab);
+        contextTab.getAttribute('zen-essential') || !!contextTab.group;
+      document.l10n.setArgs(document.getElementById('context_zen-add-essential'), {
+        num: gBrowser._numZenEssentials,
+      });
+      document.getElementById('cmd_contextZenAddToEssentials').setAttribute(
+        'disabled',
+        !this.canEssentialBeAdded(contextTab)
+      );
       document.getElementById('context_zen-remove-essential').hidden =
         !contextTab.getAttribute('zen-essential');
       document.getElementById('context_unpinTab').hidden =
