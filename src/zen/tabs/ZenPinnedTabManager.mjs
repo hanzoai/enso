@@ -774,10 +774,9 @@
       document.l10n.setArgs(document.getElementById('context_zen-add-essential'), {
         num: gBrowser._numZenEssentials,
       });
-      document.getElementById('cmd_contextZenAddToEssentials').setAttribute(
-        'disabled',
-        !this.canEssentialBeAdded(contextTab)
-      );
+      document
+        .getElementById('cmd_contextZenAddToEssentials')
+        .setAttribute('disabled', !this.canEssentialBeAdded(contextTab));
       document.getElementById('context_zen-remove-essential').hidden =
         !contextTab.getAttribute('zen-essential');
       document.getElementById('context_unpinTab').hidden =
