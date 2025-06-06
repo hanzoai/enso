@@ -1,12 +1,11 @@
 diff --git a/browser/base/content/browser-init.js b/browser/base/content/browser-init.js
-index bcbfab4a3781ff3c7349115751b3830976eec4bf..1ab08a9344b16cbe791182fce3f6fbf59ca3df91 100644
+index bcbfab4a3781ff3c7349115751b3830976eec4bf..8176656b6f5e70ccf3766ad9f5406758fdb7034b 100644
 --- a/browser/base/content/browser-init.js
 +++ b/browser/base/content/browser-init.js
-@@ -186,6 +186,8 @@ var gBrowserInit = {
+@@ -186,6 +186,7 @@ var gBrowserInit = {
    },
  
    onLoad() {
-+    Services.scriptloader.loadSubScript("chrome://browser/content/ZenStartup.mjs", window);
 +    Services.scriptloader.loadSubScript("chrome://browser/content/zenThemeModifier.js", window);
      gBrowser.addEventListener("DOMUpdateBlockedPopups", e =>
        PopupBlockerObserver.handleEvent(e)

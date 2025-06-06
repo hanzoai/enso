@@ -42,7 +42,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     this._resolveInitialized = resolve;
   });
 
-  async waitForPromises() {
+  async #waitForPromises() {
     if (this.privateWindowOrDisabled) {
       return;
     }
@@ -115,6 +115,9 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     window.addEventListener('resize', this.onWindowResize.bind(this));
     this.addPopupListeners();
+
+    await this.#waitForPromises();
+    await this._workspaces();
 
     await this.afterLoadInit();
   }
@@ -294,7 +297,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       return;
     }
     this._pinnedTabsResizeObserver = new ResizeObserver(this.onPinnedTabsResize.bind(this));
-    await this.waitForPromises();
     await this._createDefaultWorkspaceIfNeeded();
   }
 
@@ -738,11 +740,12 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   get shouldHaveWorkspaces() {
     if (typeof this._shouldHaveWorkspaces === 'undefined') {
-      let docElement = document.documentElement;
-      this._shouldHaveWorkspaces = !(
-        docElement.getAttribute('chromehidden').includes('toolbar') ||
-        docElement.getAttribute('chromehidden').includes('menubar')
-      );
+      let chromeFlags = docShell.treeOwner
+        .QueryInterface(Ci.nsIInterfaceRequestor)
+        .getInterface(Ci.nsIAppWindow).chromeFlags;
+      this._shouldHaveWorkspaces =
+        chromeFlags & Ci.nsIWebBrowserChrome.CHROME_TOOLBAR ||
+        chromeFlags & Ci.nsIWebBrowserChrome.CHROME_MENUBAR;
       return this._shouldHaveWorkspaces;
     }
     return this._shouldHaveWorkspaces;
@@ -851,7 +854,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     await this.workspaceBookmarks();
     await gZenPinnedTabManager.refreshPinnedTabs({ init: true });
     await this.changeWorkspace(activeWorkspace, { onInit: true });
-    await this._selectStartPage();
+    await this.#selectStartPage();
     this._fixTabPositions();
     this._resolveInitialized();
     this._clearAnyZombieTabs(); // Dont call with await
@@ -868,7 +871,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     window.addEventListener('TabBrowserInserted', this.onTabBrowserInserted.bind(this));
   }
 
-  async _selectStartPage() {
+  async #selectStartPage() {
     if (gZenUIManager.testingEnabled) {
       return;
     }
@@ -2017,7 +2020,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     ) {
       delete this._alwaysAnimatePaddingTop;
       const essentialsHeight = essentialContainer.getBoundingClientRect().height;
-      if (!forAnimation && animateContainer) {
+      if (!forAnimation && animateContainer && gZenUIManager.motion) {
         gZenUIManager.motion.animate(
           workspaceElement,
           {

@@ -21,8 +21,6 @@
       }).format(new Date().getTime());
 
     constructor() {
-      console.log('[ZenMods]: Initializing ZenMods module');
-
       super();
     }
 

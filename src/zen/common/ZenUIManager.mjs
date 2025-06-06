@@ -34,8 +34,6 @@ var gZenUIManager = {
       true
     );
 
-    gURLBar._zenTrimURL = this.urlbarTrim.bind(this);
-
     document.addEventListener('mousedown', this.handleMouseDown.bind(this), true);
 
     ChromeUtils.defineLazyGetter(this, 'motion', () => {
@@ -47,6 +45,8 @@ var gZenUIManager = {
     ChromeUtils.defineLazyGetter(this, '_toastContainer', () => {
       return document.getElementById('zen-toast-container');
     });
+
+    gURLBar._zenTrimURL = this.urlbarTrim.bind(this);
 
     new ResizeObserver(this.updateTabsToolbar.bind(this)).observe(
       document.getElementById('TabsToolbar')
@@ -67,6 +67,7 @@ var gZenUIManager = {
     window.addEventListener('TabClose', this.onTabClose.bind(this));
 
     gZenMediaController.init();
+    gZenVerticalTabsManager.init();
   },
 
   handleMouseDown(event) {
@@ -956,6 +957,10 @@ var gZenVerticalTabsManager = {
         gZenCompactModeManager.getAndApplySidebarWidth();
       }
       gZenUIManager.updateTabsToolbar();
+
+      gURLBar._initCopyCutController();
+      gURLBar._initPasteAndGo();
+      gURLBar._initStripOnShare();
     } catch (e) {
       console.error(e);
     }

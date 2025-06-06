@@ -11,8 +11,8 @@ add_task(async function test_Glance_Next_Tab() {
   const tabToCheck = gBrowser.selectedTab;
   gBrowser.selectedTab = selectedTab;
   await openGlanceOnTab(async (glanceTab) => {
-    const next = gBrowser.tabContainer.findNextTab(glanceTab, { direction: 1 });
-    Assert.equal(next, tabToCheck, 'Next glance tab should equal');
+    gBrowser.tabContainer.advanceSelectedTab(1);
+    Assert.equal(gBrowser.selectedTab, tabToCheck, 'Next glance tab should equal');
   });
   await BrowserTestUtils.removeTab(gBrowser.selectedTab);
 });
