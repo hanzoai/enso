@@ -65,21 +65,8 @@
       this.observer.addPinnedTabListener(this._onPinnedTabEvent.bind(this));
 
       this._zenClickEventListener = this._onTabClick.bind(this);
-      gZenWorkspaces.addChangeListeners(this.onWorkspaceChange.bind(this));
 
-      await ZenPinnedTabsStorage.promiseInitialized;
       gZenWorkspaces._resolvePinnedInitialized();
-    }
-
-    async onWorkspaceChange(newWorkspace, onInit) {
-      if (!this.enabled || PrivateBrowsingUtils.isWindowPrivate(window)) {
-        return;
-      }
-
-      if (onInit) {
-        await this._refreshPinnedTabs({ init: onInit });
-        this._hasFinishedLoading = true;
-      }
     }
 
     log(message) {
@@ -149,13 +136,19 @@
       return this._enabled && !gZenWorkspaces.privateWindowOrDisabled;
     }
 
-    async _refreshPinnedTabs({ init = false } = {}) {
+    async refreshPinnedTabs({ init = false } = {}) {
+      await ZenPinnedTabsStorage.promiseInitialized;
       await gZenWorkspaces.promiseSectionsInitialized;
       await this._initializePinsCache();
-      await this._initializePinnedTabs(init);
-      if (init) {
-        this._resolveInitializedPinnedCache();
-      }
+      (async () => {
+        // Execute in a separate task to avoid blocking the main thread
+        await SessionStore.promiseAllWindowsRestored;
+        await gZenWorkspaces.promiseInitialized;
+        await this._initializePinnedTabs(init);
+        if (init) {
+          this._hasFinishedLoading = true;
+        }
+      })();
     }
 
     async _initializePinsCache() {
@@ -439,7 +432,7 @@
 
       await this.savePin(pin);
       this.resetPinChangedUrl(tab);
-      await this._refreshPinnedTabs();
+      await this.refreshPinnedTabs();
       gZenUIManager.showToast('zen-pinned-tab-replaced');
     }
 
@@ -482,7 +475,7 @@
         return;
       }
       this.onLocationChange(browser);
-      await this._refreshPinnedTabs();
+      await this.refreshPinnedTabs();
     }
 
     async _removePinnedAttributes(tab, isClosing = false) {
@@ -508,7 +501,7 @@
           tab.setAttribute('zen-workspace-id', workspace.uuid);
         }
       }
-      await this._refreshPinnedTabs();
+      await this.refreshPinnedTabs();
       tab.dispatchEvent(
         new CustomEvent('ZenPinnedTabRemoved', {
           detail: { tab },
@@ -958,7 +951,7 @@
       const uuid = tab.getAttribute('zen-pin-id');
       await ZenPinnedTabsStorage.updatePinTitle(uuid, newTitle, isEdited, notifyObservers);
 
-      await this._refreshPinnedTabs();
+      await this.refreshPinnedTabs();
 
       const browsers = Services.wm.getEnumerator('navigator:browser');
 
@@ -1110,8 +1103,4 @@
   }
 
   window.gZenPinnedTabManager = new ZenPinnedTabManager();
-
-  gZenPinnedTabManager.promisePinnedCacheInitialized = new Promise((resolve) => {
-    gZenPinnedTabManager._resolveInitializedPinnedCache = resolve;
-  });
 }

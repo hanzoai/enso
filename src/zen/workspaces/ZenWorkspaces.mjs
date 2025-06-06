@@ -46,11 +46,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (this.privateWindowOrDisabled) {
       return;
     }
-    await Promise.all([
-      this.promiseDBInitialized,
-      this.promisePinnedInitialized,
-      SessionStore.promiseAllWindowsRestored,
-    ]);
+    await Promise.all([this.promiseDBInitialized, this.promisePinnedInitialized]);
   }
 
   async init() {
@@ -119,6 +115,8 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     window.addEventListener('resize', this.onWindowResize.bind(this));
     this.addPopupListeners();
+
+    await this.afterLoadInit();
   }
 
   log(...args) {
@@ -128,14 +126,15 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async afterLoadInit() {
-    await SessionStore.promiseInitialized;
     if (!this._hasInitializedTabsStrip) {
       await this.delayedStartup();
     }
-    await this.promiseSectionsInitialized;
-    this.log('gZenWorkspaces initialized');
-
     await this.initializeWorkspaces();
+    await this.promiseSectionsInitialized;
+
+    // Non UI related initializations
+    this._initializeWorkspaceCreationIcons();
+    this._initializeWorkspaceTabContextMenus();
     if (
       Services.prefs.getBoolPref('zen.workspaces.swipe-actions', false) &&
       this.workspaceEnabled &&
@@ -297,9 +296,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     this._pinnedTabsResizeObserver = new ResizeObserver(this.onPinnedTabsResize.bind(this));
     await this.waitForPromises();
     await this._createDefaultWorkspaceIfNeeded();
-    await this.initializeTabsStripSections();
-    this._resolveSectionsInitialized();
-    this._initializeEmptyTab();
   }
 
   async _createDefaultWorkspaceIfNeeded() {
@@ -375,6 +371,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async initializeTabsStripSections() {
+    await SessionStore.promiseAllWindowsRestored;
     const perifery = document.getElementById('tabbrowser-arrowscrollbox-periphery');
     perifery.setAttribute('hidden', 'true');
     const tabs = gBrowser.tabContainer.allTabs;
@@ -409,6 +406,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     this._hasInitializedTabsStrip = true;
     this.registerPinnedResizeObserver();
     this._fixIndicatorsNames(workspaces);
+    this._resolveSectionsInitialized();
   }
 
   getEssentialsSection(container = 0) {
@@ -836,40 +834,38 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async initializeWorkspaces() {
-    if (this.workspaceEnabled) {
-      this._initializeWorkspaceCreationIcons();
-      this._initializeWorkspaceTabContextMenus();
-      await this.workspaceBookmarks();
-      window.addEventListener('TabBrowserInserted', this.onTabBrowserInserted.bind(this));
-      let activeWorkspace = await this.getActiveWorkspace();
-      this.activeWorkspace = activeWorkspace?.uuid;
-      try {
-        if (activeWorkspace) {
-          window.gZenThemePicker = new ZenThemePicker();
-          await this.changeWorkspace(activeWorkspace, { onInit: true });
-          gBrowser.tabContainer._positionPinnedTabs();
-        }
-      } catch (e) {
-        console.error('gZenWorkspaces: Error initializing theme picker', e);
+    let activeWorkspace = await this.getActiveWorkspace();
+    this.activeWorkspace = activeWorkspace?.uuid;
+    try {
+      if (activeWorkspace) {
+        window.gZenThemePicker = new ZenThemePicker();
+        await gZenThemePicker.onWorkspaceChange(activeWorkspace);
       }
-      this.onWindowResize();
-      if (window.gZenSessionStore) {
-        await gZenSessionStore.promiseInitialized;
-      }
-      await this._selectStartPage();
-      this._fixTabPositions();
-      this._resolveInitialized();
-      this._clearAnyZombieTabs(); // Dont call with await
-
-      const tabUpdateListener = this.updateTabsContainers.bind(this);
-      window.addEventListener('TabOpen', tabUpdateListener);
-      window.addEventListener('TabClose', tabUpdateListener);
-      window.addEventListener('TabAddedToEssentials', tabUpdateListener);
-      window.addEventListener('TabRemovedFromEssentials', tabUpdateListener);
-      window.addEventListener('TabPinned', tabUpdateListener);
-      window.addEventListener('TabUnpinned', tabUpdateListener);
-      window.addEventListener('aftercustomization', tabUpdateListener);
+    } catch (e) {
+      console.error('gZenWorkspaces: Error initializing theme picker', e);
     }
+    this.onWindowResize();
+    await gZenSessionStore.promiseInitialized;
+    await this.initializeTabsStripSections();
+    this._initializeEmptyTab();
+    await this.workspaceBookmarks();
+    await gZenPinnedTabManager.refreshPinnedTabs({ init: true });
+    await this.changeWorkspace(activeWorkspace, { onInit: true });
+    await this._selectStartPage();
+    this._fixTabPositions();
+    this._resolveInitialized();
+    this._clearAnyZombieTabs(); // Dont call with await
+
+    const tabUpdateListener = this.updateTabsContainers.bind(this);
+    window.addEventListener('TabOpen', tabUpdateListener);
+    window.addEventListener('TabClose', tabUpdateListener);
+    window.addEventListener('TabAddedToEssentials', tabUpdateListener);
+    window.addEventListener('TabRemovedFromEssentials', tabUpdateListener);
+    window.addEventListener('TabPinned', tabUpdateListener);
+    window.addEventListener('TabUnpinned', tabUpdateListener);
+    window.addEventListener('aftercustomization', tabUpdateListener);
+
+    window.addEventListener('TabBrowserInserted', this.onTabBrowserInserted.bind(this));
   }
 
   async _selectStartPage() {
@@ -1412,129 +1408,118 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     );
   }
 
-  async _propagateWorkspaceData({ ignoreStrip = false, clearCache = true } = {}) {
-    const currentWindowIsPrivate = this.isPrivateWindow;
-    await this.foreachWindowAsActive(async (browser) => {
-      // Do not update the window if workspaces are not enabled in it.
-      // For example, when the window is in private browsing mode.
-      if (
-        !browser.gZenWorkspaces.workspaceEnabled ||
-        browser.gZenWorkspaces.isPrivateWindow !== currentWindowIsPrivate
-      ) {
-        return;
+  async _propagateWorkspaceDataForWindow(browser, { ignoreStrip = false, clearCache = true } = {}) {
+    let workspaceList = browser.document.getElementById('PanelUI-zen-workspaces-list');
+    const createWorkspaceElement = (workspace) => {
+      let element = browser.document.createXULElement('toolbarbutton');
+      element.className = 'subviewbutton zen-workspace-button';
+      element.setAttribute('tooltiptext', workspace.name);
+      element.setAttribute('zen-workspace-id', workspace.uuid);
+      if (this.isWorkspaceActive(workspace)) {
+        element.setAttribute('active', 'true');
       }
-
-      let workspaceList = browser.document.getElementById('PanelUI-zen-workspaces-list');
-      const createWorkspaceElement = (workspace) => {
-        let element = browser.document.createXULElement('toolbarbutton');
-        element.className = 'subviewbutton zen-workspace-button';
-        element.setAttribute('tooltiptext', workspace.name);
-        element.setAttribute('zen-workspace-id', workspace.uuid);
-        if (this.isWorkspaceActive(workspace)) {
-          element.setAttribute('active', 'true');
-        }
-        let containerGroup = undefined;
-        try {
-          containerGroup = browser.ContextualIdentityService.getPublicIdentities().find(
-            (container) => container.userContextId === workspace.containerTabId
-          );
-        } catch (e) {
-          console.warn('gZenWorkspaces: Error setting container color', e);
-        }
-        if (containerGroup) {
-          element.classList.add('identity-color-' + containerGroup.color);
-          element.setAttribute('data-usercontextid', containerGroup.userContextId);
-        }
-        // Set draggable attribute based on reorder mode
-        if (this.isReorderModeOn(browser)) {
-          element.setAttribute('draggable', 'true');
-        }
-        element.addEventListener(
-          'dragstart',
-          function (event) {
-            if (this.isReorderModeOn(browser)) {
-              this.draggedElement = element;
-              event.dataTransfer.effectAllowed = 'move';
-              event.dataTransfer.setData('text/plain', element.getAttribute('zen-workspace-id'));
-
-              // Create a transparent drag image for Linux
-              if (AppConstants.platform === 'linux') {
-                const dragImage = document.createElement('canvas');
-                dragImage.width = 1;
-                dragImage.height = 1;
-                event.dataTransfer.setDragImage(dragImage, 0, 0);
-              }
-
-              element.classList.add('dragging');
-            } else {
-              event.preventDefault();
-            }
-          }.bind(browser.gZenWorkspaces)
+      let containerGroup = undefined;
+      try {
+        containerGroup = browser.ContextualIdentityService.getPublicIdentities().find(
+          (container) => container.userContextId === workspace.containerTabId
         );
+      } catch (e) {
+        console.warn('gZenWorkspaces: Error setting container color', e);
+      }
+      if (containerGroup) {
+        element.classList.add('identity-color-' + containerGroup.color);
+        element.setAttribute('data-usercontextid', containerGroup.userContextId);
+      }
+      // Set draggable attribute based on reorder mode
+      if (this.isReorderModeOn(browser)) {
+        element.setAttribute('draggable', 'true');
+      }
+      element.addEventListener(
+        'dragstart',
+        function (event) {
+          if (this.isReorderModeOn(browser)) {
+            this.draggedElement = element;
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', element.getAttribute('zen-workspace-id'));
 
-        element.addEventListener(
-          'dragover',
-          function (event) {
-            if (this.isReorderModeOn(browser) && this.draggedElement) {
-              event.preventDefault();
-              event.dataTransfer.dropEffect = 'move';
-
-              // Ensure the dragover effect is visible on Linux
-              if (AppConstants.platform === 'linux') {
-                const targetId = element.getAttribute('zen-workspace-id');
-                const draggedId = this.draggedElement.getAttribute('zen-workspace-id');
-                if (targetId !== draggedId) {
-                  element.classList.add('dragover');
-                }
-              }
+            // Create a transparent drag image for Linux
+            if (AppConstants.platform === 'linux') {
+              const dragImage = document.createElement('canvas');
+              dragImage.width = 1;
+              dragImage.height = 1;
+              event.dataTransfer.setDragImage(dragImage, 0, 0);
             }
-          }.bind(browser.gZenWorkspaces)
-        );
 
-        element.addEventListener('dragenter', function (event) {
-          if (this.isReorderModeOn(browser) && this.draggedElement) {
-            element.classList.add('dragover');
-          }
-        });
-
-        element.addEventListener('dragleave', function (event) {
-          element.classList.remove('dragover');
-        });
-
-        element.addEventListener(
-          'drop',
-          async function (event) {
+            element.classList.add('dragging');
+          } else {
             event.preventDefault();
-            element.classList.remove('dragover');
-            if (this.isReorderModeOn(browser)) {
-              const draggedWorkspaceId = event.dataTransfer.getData('text/plain');
-              const targetWorkspaceId = element.getAttribute('zen-workspace-id');
-              if (draggedWorkspaceId !== targetWorkspaceId) {
-                await this.moveWorkspace(draggedWorkspaceId, targetWorkspaceId);
-              }
-              if (this.draggedElement) {
-                this.draggedElement.classList.remove('dragging');
-                this.draggedElement = null;
+          }
+        }.bind(browser.gZenWorkspaces)
+      );
+
+      element.addEventListener(
+        'dragover',
+        function (event) {
+          if (this.isReorderModeOn(browser) && this.draggedElement) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'move';
+
+            // Ensure the dragover effect is visible on Linux
+            if (AppConstants.platform === 'linux') {
+              const targetId = element.getAttribute('zen-workspace-id');
+              const draggedId = this.draggedElement.getAttribute('zen-workspace-id');
+              if (targetId !== draggedId) {
+                element.classList.add('dragover');
               }
             }
-          }.bind(browser.gZenWorkspaces)
-        );
+          }
+        }.bind(browser.gZenWorkspaces)
+      );
 
-        element.addEventListener(
-          'dragend',
-          function (event) {
+      element.addEventListener('dragenter', function (event) {
+        if (this.isReorderModeOn(browser) && this.draggedElement) {
+          element.classList.add('dragover');
+        }
+      });
+
+      element.addEventListener('dragleave', function (event) {
+        element.classList.remove('dragover');
+      });
+
+      element.addEventListener(
+        'drop',
+        async function (event) {
+          event.preventDefault();
+          element.classList.remove('dragover');
+          if (this.isReorderModeOn(browser)) {
+            const draggedWorkspaceId = event.dataTransfer.getData('text/plain');
+            const targetWorkspaceId = element.getAttribute('zen-workspace-id');
+            if (draggedWorkspaceId !== targetWorkspaceId) {
+              await this.moveWorkspace(draggedWorkspaceId, targetWorkspaceId);
+            }
             if (this.draggedElement) {
               this.draggedElement.classList.remove('dragging');
               this.draggedElement = null;
             }
-            const workspaceElements = browser.document.querySelectorAll('.zen-workspace-button');
-            for (const elem of workspaceElements) {
-              elem.classList.remove('dragover');
-            }
-          }.bind(browser.gZenWorkspaces)
-        );
+          }
+        }.bind(browser.gZenWorkspaces)
+      );
 
-        let childs = browser.MozXULElement.parseXULToFragment(`
+      element.addEventListener(
+        'dragend',
+        function (event) {
+          if (this.draggedElement) {
+            this.draggedElement.classList.remove('dragging');
+            this.draggedElement = null;
+          }
+          const workspaceElements = browser.document.querySelectorAll('.zen-workspace-button');
+          for (const elem of workspaceElements) {
+            elem.classList.remove('dragover');
+          }
+        }.bind(browser.gZenWorkspaces)
+      );
+
+      let childs = browser.MozXULElement.parseXULToFragment(`
           <div class="zen-workspace-icon">
           </div>
           <vbox>
@@ -1549,133 +1534,156 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
           </toolbarbutton>
         `);
 
-        // use text content instead of innerHTML to avoid XSS
-        childs.querySelector('.zen-workspace-icon').textContent =
-          browser.gZenWorkspaces.getWorkspaceIcon(workspace);
-        childs.querySelector('.zen-workspace-name').textContent = workspace.name;
-        if (containerGroup) {
-          childs.querySelector('.zen-workspace-container').textContent =
-            ContextualIdentityService.getUserContextLabel(containerGroup.userContextId);
+      // use text content instead of innerHTML to avoid XSS
+      childs.querySelector('.zen-workspace-icon').textContent =
+        browser.gZenWorkspaces.getWorkspaceIcon(workspace);
+      childs.querySelector('.zen-workspace-name').textContent = workspace.name;
+      if (containerGroup) {
+        childs.querySelector('.zen-workspace-container').textContent =
+          ContextualIdentityService.getUserContextLabel(containerGroup.userContextId);
+      }
+
+      childs.querySelector('.zen-workspace-actions').addEventListener(
+        'command',
+        ((event) => {
+          let button = event.target;
+          this._contextMenuId = button
+            .closest('toolbarbutton[zen-workspace-id]')
+            .getAttribute('zen-workspace-id');
+          const popup = button.ownerDocument.getElementById('zenWorkspaceActionsMenu');
+          popup.openPopup(button, 'after_end');
+        }).bind(browser.gZenWorkspaces)
+      );
+      element.appendChild(childs);
+      element.onclick = (async () => {
+        if (this.isReorderModeOn(browser)) {
+          return; // Return early if reorder mode is on
         }
+        if (event.target.closest('.zen-workspace-actions')) {
+          return; // Ignore clicks on the actions button
+        }
+        const workspaceId = element.getAttribute('zen-workspace-id');
+        const workspaces = await this._workspaces();
+        const workspace = workspaces.workspaces.find((w) => w.uuid === workspaceId);
+        await this.changeWorkspace(workspace);
+        let panel = this.ownerWindow.document.getElementById('PanelUI-zen-workspaces');
+        PanelMultiView.hidePopup(panel);
+      }).bind(browser.gZenWorkspaces);
+      return element;
+    };
 
-        childs.querySelector('.zen-workspace-actions').addEventListener(
-          'command',
-          ((event) => {
-            let button = event.target;
-            this._contextMenuId = button
-              .closest('toolbarbutton[zen-workspace-id]')
-              .getAttribute('zen-workspace-id');
-            const popup = button.ownerDocument.getElementById('zenWorkspaceActionsMenu');
-            popup.openPopup(button, 'after_end');
-          }).bind(browser.gZenWorkspaces)
-        );
-        element.appendChild(childs);
-        element.onclick = (async () => {
-          if (this.isReorderModeOn(browser)) {
-            return; // Return early if reorder mode is on
-          }
-          if (event.target.closest('.zen-workspace-actions')) {
-            return; // Ignore clicks on the actions button
-          }
-          const workspaceId = element.getAttribute('zen-workspace-id');
-          const workspaces = await this._workspaces();
-          const workspace = workspaces.workspaces.find((w) => w.uuid === workspaceId);
-          await this.changeWorkspace(workspace);
-          let panel = this.ownerWindow.document.getElementById('PanelUI-zen-workspaces');
-          PanelMultiView.hidePopup(panel);
-        }).bind(browser.gZenWorkspaces);
-        return element;
-      };
+    const createLastPositionDropTarget = () => {
+      const element = browser.document.createXULElement('div');
+      element.className = 'zen-workspace-last-place-drop-target';
 
-      const createLastPositionDropTarget = () => {
-        const element = browser.document.createXULElement('div');
-        element.className = 'zen-workspace-last-place-drop-target';
+      element.addEventListener(
+        'dragover',
+        function (event) {
+          if (this.isReorderModeOn(browser) && this.draggedElement) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'move';
 
-        element.addEventListener(
-          'dragover',
-          function (event) {
-            if (this.isReorderModeOn(browser) && this.draggedElement) {
-              event.preventDefault();
-              event.dataTransfer.dropEffect = 'move';
-
-              // Ensure the dragover effect is visible on Linux
-              if (AppConstants.platform === 'linux') {
-                element.classList.add('dragover');
-              }
-            }
-          }.bind(browser.gZenWorkspaces)
-        );
-
-        element.addEventListener(
-          'dragenter',
-          function (event) {
-            if (this.isReorderModeOn(browser) && this.draggedElement) {
+            // Ensure the dragover effect is visible on Linux
+            if (AppConstants.platform === 'linux') {
               element.classList.add('dragover');
             }
-          }.bind(browser.gZenWorkspaces)
-        );
+          }
+        }.bind(browser.gZenWorkspaces)
+      );
 
-        element.addEventListener(
-          'dragleave',
-          function (event) {
-            element.classList.remove('dragover');
-          }.bind(browser.gZenWorkspaces)
-        );
+      element.addEventListener(
+        'dragenter',
+        function (event) {
+          if (this.isReorderModeOn(browser) && this.draggedElement) {
+            element.classList.add('dragover');
+          }
+        }.bind(browser.gZenWorkspaces)
+      );
 
-        element.addEventListener(
-          'drop',
-          async function (event) {
-            event.preventDefault();
-            element.classList.remove('dragover');
+      element.addEventListener(
+        'dragleave',
+        function (event) {
+          element.classList.remove('dragover');
+        }.bind(browser.gZenWorkspaces)
+      );
 
-            if (this.isReorderModeOn(browser)) {
-              const draggedWorkspaceId = event.dataTransfer.getData('text/plain');
-              await this.moveWorkspaceToEnd(draggedWorkspaceId);
+      element.addEventListener(
+        'drop',
+        async function (event) {
+          event.preventDefault();
+          element.classList.remove('dragover');
 
-              if (this.draggedElement) {
-                this.draggedElement.classList.remove('dragging');
-                this.draggedElement = null;
-              }
+          if (this.isReorderModeOn(browser)) {
+            const draggedWorkspaceId = event.dataTransfer.getData('text/plain');
+            await this.moveWorkspaceToEnd(draggedWorkspaceId);
+
+            if (this.draggedElement) {
+              this.draggedElement.classList.remove('dragging');
+              this.draggedElement = null;
             }
-          }.bind(browser.gZenWorkspaces)
-        );
+          }
+        }.bind(browser.gZenWorkspaces)
+      );
 
-        return element;
-      };
+      return element;
+    };
 
-      if (clearCache) {
-        browser.gZenWorkspaces._workspaceCache = null;
-        browser.gZenWorkspaces._workspaceBookmarksCache = null;
-      }
-      let workspaces = await browser.gZenWorkspaces._workspaces();
-      if (clearCache) {
-        browser.dispatchEvent(
-          new CustomEvent('ZenWorkspacesUIUpdate', {
-            bubbles: true,
-            detail: { activeIndex: browser.gZenWorkspaces.activeWorkspace },
-          })
-        );
-      }
-      await browser.gZenWorkspaces.workspaceBookmarks();
-      workspaceList.innerHTML = '';
-      workspaceList.parentNode.style.display = 'flex';
-      if (workspaces.workspaces.length <= 0) {
-        workspaceList.innerHTML = 'No workspaces available';
-        workspaceList.setAttribute('empty', 'true');
-      } else {
-        workspaceList.removeAttribute('empty');
-      }
+    if (clearCache) {
+      browser.gZenWorkspaces._workspaceCache = null;
+      browser.gZenWorkspaces._workspaceBookmarksCache = null;
+    }
+    let workspaces = await browser.gZenWorkspaces._workspaces();
+    if (clearCache) {
+      browser.dispatchEvent(
+        new CustomEvent('ZenWorkspacesUIUpdate', {
+          bubbles: true,
+          detail: { activeIndex: browser.gZenWorkspaces.activeWorkspace },
+        })
+      );
+    }
+    await browser.gZenWorkspaces.workspaceBookmarks();
+    workspaceList.innerHTML = '';
+    workspaceList.parentNode.style.display = 'flex';
+    if (workspaces.workspaces.length <= 0) {
+      workspaceList.innerHTML = 'No workspaces available';
+      workspaceList.setAttribute('empty', 'true');
+    } else {
+      workspaceList.removeAttribute('empty');
+    }
 
-      for (let workspace of workspaces.workspaces) {
-        let workspaceElement = createWorkspaceElement(workspace);
-        workspaceList.appendChild(workspaceElement);
-      }
+    for (let workspace of workspaces.workspaces) {
+      let workspaceElement = createWorkspaceElement(workspace);
+      workspaceList.appendChild(workspaceElement);
+    }
 
-      workspaceList.appendChild(createLastPositionDropTarget());
+    workspaceList.appendChild(createLastPositionDropTarget());
+    if (!ignoreStrip) {
+      browser.gZenWorkspaces._fixIndicatorsNames(workspaces);
+    }
+  }
 
-      if (!ignoreStrip) {
-        browser.gZenWorkspaces._fixIndicatorsNames(workspaces);
+  async _propagateWorkspaceData({ ignoreStrip = false, clearCache = true, onInit = false } = {}) {
+    const currentWindowIsPrivate = this.isPrivateWindow;
+    if (onInit) {
+      if (currentWindowIsPrivate) return;
+      return await this._propagateWorkspaceDataForWindow(this.ownerWindow, {
+        ignoreStrip,
+        clearCache,
+      });
+    }
+    await this.foreachWindowAsActive(async (browser) => {
+      // Do not update the window if workspaces are not enabled in it.
+      // For example, when the window is in private browsing mode.
+      if (
+        !browser.gZenWorkspaces.workspaceEnabled ||
+        browser.gZenWorkspaces.isPrivateWindow !== currentWindowIsPrivate
+      ) {
+        return;
       }
+      this._propagateWorkspaceDataForWindow(browser, {
+        ignoreStrip,
+        clearCache,
+      }).catch(console.error);
     });
   }
 
@@ -2505,7 +2513,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     // Update workspace UI
     await this._updateWorkspacesChangeContextMenu();
     // gZenUIManager.updateTabsToolbar();
-    await this._propagateWorkspaceData({ clearCache: false });
+    await this._propagateWorkspaceData({ clearCache: false, onInit });
 
     gZenThemePicker.onWorkspaceChange(workspace);
 
