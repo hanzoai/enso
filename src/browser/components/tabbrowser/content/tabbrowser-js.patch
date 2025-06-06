@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index d5aa64842a35c6697263c63fd3a0571b64b01344..37c84d1f61e76bfcf4fdead2299f748ac461f6a9 100644
+index d5aa64842a35c6697263c63fd3a0571b64b01344..c9a0a404324ae0ae139f92d82270206683470e4f 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -413,11 +413,41 @@
@@ -9,7 +9,7 @@ index d5aa64842a35c6697263c63fd3a0571b64b01344..37c84d1f61e76bfcf4fdead2299f748a
 +    get _numVisiblePinTabsWithoutCollapsed() {
 +      let i = 0;
 +      for (let item of this.tabContainer.ariaFocusableItems) {
-+        if (!!item?.classList?.contains("tab-group-label") && item.closest("tab-group").pinned) {
++        if (this.isTabGroupLabel(item) && item.closest("zen-folder")?.pinned) {
 +          i += 1;
 +          continue;
 +        }
@@ -54,7 +54,13 @@ index d5aa64842a35c6697263c63fd3a0571b64b01344..37c84d1f61e76bfcf4fdead2299f748a
        tab.linkedPanel = uniqueId;
        this._selectedTab = tab;
        this._selectedBrowser = browser;
-@@ -834,11 +865,13 @@
+@@ -829,16 +860,18 @@
+     }
+ 
+     pinTab(aTab) {
+-      if (aTab.pinned || aTab == FirefoxViewHandler.tab) {
++      if (aTab.pinned || aTab == FirefoxViewHandler.tab || aTab.hasAttribute("zen-empty-tab")) {
+         return;
        }
  
        this.showTab(aTab);
@@ -551,6 +557,15 @@ index d5aa64842a35c6697263c63fd3a0571b64b01344..37c84d1f61e76bfcf4fdead2299f748a
          aTab.selected ||
          aTab.closing ||
          // Tabs that are sharing the screen, microphone or camera cannot be hidden.
+@@ -5909,7 +6020,7 @@
+      *   `true` if element is a `<tab-group>`
+      */
+     isTabGroup(element) {
+-      return !!(element?.tagName == "tab-group");
++      return !!(element?.tagName == "tab-group" || element?.tagName == "zen-folder");
+     }
+ 
+     /**
 @@ -5986,7 +6097,7 @@
  
        // Don't allow mixing pinned and unpinned tabs.
