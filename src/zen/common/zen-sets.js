@@ -82,10 +82,10 @@ document.addEventListener(
           case 'cmd_zenReplacePinnedUrlWithCurrent':
             gZenPinnedTabManager.replacePinnedUrlWithCurrent();
             break;
-          case 'cmd_zenAddToEssentials':
+          case 'cmd_contextZenAddToEssentials':
             gZenPinnedTabManager.addToEssentials();
             break;
-          case 'cmd_zenRemoveFromEssentials':
+          case 'cmd_contextZenRemoveFromEssentials':
             gZenPinnedTabManager.removeEssentials();
             break;
           default:
