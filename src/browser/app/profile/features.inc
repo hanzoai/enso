@@ -20,6 +20,7 @@ pref('zen.mediacontrols.enabled', true);
 pref('zen.haptic-feedback.enabled', true);
 
 #include features/mods.inc
+#include features/theme.inc
 #include features/compact-mode.inc
 #include features/urlbar.inc
 #include features/glance.inc
