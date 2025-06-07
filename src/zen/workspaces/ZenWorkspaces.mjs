@@ -524,7 +524,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   _handleAppCommand(event) {
     // note: Dont use this._hoveringSidebar as it's not as reliable as checking for :hover
-    if (!this.workspaceEnabled || !gNavToolbox.matches(':hover')) {
+    if (!this.workspaceEnabled || !this._hoveringSidebar) {
       return;
     }
 
@@ -542,6 +542,9 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
         event.preventDefault();
         break;
     }
+    requestAnimationFrame(() => {
+      gNavToolbox.setAttribute('zen-has-hover', 'true');
+    });
   }
 
   _setupSidebarHandlers() {
