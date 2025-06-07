@@ -285,6 +285,7 @@
 
     _pinRemainingTabs() {
       for (const tab of _tabsToPin) {
+        tab.setAttribute('zen-workspace-id', gZenWorkspaces.activeWorkspace);
         gBrowser.pinTab(tab);
       }
       for (const tab of _tabsToPinEssentials) {
