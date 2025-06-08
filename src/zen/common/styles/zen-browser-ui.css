@@ -115,7 +115,8 @@
 
 #zen-main-app-wrapper {
   background: var(--zen-themed-toolbar-bg-transparent);
-  overflow: hidden;
+  /* See bug #8814, don't an overflow here as it causes issues 
+   * with firefox's rendering of the tab bar */
 
   & > * {
     z-index: 1;
