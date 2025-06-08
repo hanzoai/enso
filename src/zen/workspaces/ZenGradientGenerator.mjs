@@ -39,14 +39,6 @@
         document.getElementById('PanelUI-zen-gradient-generator-custom-list')
       );
 
-      XPCOMUtils.defineLazyPreferenceGetter(
-        this,
-        'allowWorkspaceColors',
-        'zen.theme.color-prefs.use-workspace-colors',
-        true,
-        this.onDarkModeChange.bind(this)
-      );
-
       this.panel.addEventListener('popupshowing', this.handlePanelOpen.bind(this));
       this.panel.addEventListener('popuphidden', this.handlePanelClose.bind(this));
       this.panel.addEventListener('command', this.handlePanelCommand.bind(this));
