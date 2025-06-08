@@ -59,7 +59,7 @@ var gZenUIManager = {
       )
     ).observe(gNavToolbox);
 
-    SessionStore.promiseAllWindowsRestored.then(() => {
+    gZenWorkspaces.promiseInitialized.finally(() => {
       this._hasLoadedDOM = true;
       this.updateTabsToolbar();
     });
@@ -599,7 +599,7 @@ var gZenVerticalTabsManager = {
   },
 
   animateTab(aTab) {
-    if (!gZenUIManager.motion || !aTab || !gZenUIManager._hasLoadedDOM) {
+    if (!gZenUIManager.motion || !aTab || !gZenUIManager._hasLoadedDOM || !aTab.isConnected) {
       return;
     }
     // get next visible tab
@@ -624,7 +624,11 @@ var gZenVerticalTabsManager = {
             easing: 'ease-out',
           }
         )
-        .then(() => {
+        .then(() => {})
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
           aTab.style.removeProperty('margin-bottom');
           aTab.style.removeProperty('transform');
           aTab.style.removeProperty('opacity');
@@ -640,7 +644,11 @@ var gZenVerticalTabsManager = {
             easing: 'ease-out',
           }
         )
-        .then(() => {
+        .then(() => {})
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
           aTab.querySelector('.tab-stack').style.removeProperty('filter');
         });
     } catch (e) {
