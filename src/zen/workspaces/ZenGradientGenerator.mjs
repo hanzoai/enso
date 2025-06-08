@@ -969,9 +969,14 @@
         texture,
       };
     }
+
     //TODO: add a better noise system that adds noise not just changes transparency
     updateNoise(texture) {
       document.documentElement.style.setProperty('--zen-grainy-background-opacity', texture);
+      document.documentElement.setAttribute(
+        'zen-show-grainy-background',
+        texture > 0 ? 'true' : 'false'
+      );
     }
 
     hexToRgb(hex) {
