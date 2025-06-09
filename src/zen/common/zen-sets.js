@@ -88,6 +88,18 @@ document.addEventListener(
           case 'cmd_contextZenRemoveFromEssentials':
             gZenPinnedTabManager.removeEssentials();
             break;
+          case 'cmd_zenCtxDeleteWorkspace':
+            gZenWorkspaces.contextDeleteWorkspace(event);
+            break;
+          case 'cmd_zenChangeWorkspaceName':
+            gZenVerticalTabsManager.renameTabStart(event);
+            break;
+          case 'cmd_zenChangeWorkspaceIcon':
+            gZenWorkspaces.changeWorkspaceIcon();
+            break;
+          case 'cmd_zenOpenWorkspacePanel':
+            gZenWorkspaces.openWorkspacesDialog(event);
+            break;
           default:
             if (event.target.id.startsWith('cmd_zenWorkspaceSwitch')) {
               const index = parseInt(event.target.id.replace('cmd_zenWorkspaceSwitch', ''), 10) - 1;

@@ -16,7 +16,3 @@ pref("browser.lowMemoryResponseMask", 3);
 #endif
 
 pref("network.predictor.enable-hover-on-ssl", true);
-
-// Experimental Zen Features
-// Strategy to use for bytecode cache (Thanks https://github.com/gunir)
-pref('dom.script_loader.bytecode_cache.strategy', 2);
