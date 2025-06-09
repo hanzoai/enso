@@ -92,7 +92,11 @@ document.addEventListener(
             gZenWorkspaces.contextDeleteWorkspace(event);
             break;
           case 'cmd_zenChangeWorkspaceName':
-            gZenVerticalTabsManager.renameTabStart(event);
+            gZenVerticalTabsManager.renameTabStart({
+              target: gZenWorkspaces.activeWorkspaceIndicator.querySelector(
+                '.zen-current-workspace-indicator-name'
+              ),
+            });
             break;
           case 'cmd_zenChangeWorkspaceIcon':
             gZenWorkspaces.changeWorkspaceIcon();

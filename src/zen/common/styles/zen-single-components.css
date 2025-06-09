@@ -55,6 +55,10 @@ body > #confetti {
     display: none;
   }
 
+  #PanelUI-zen-emojis-picker-search {
+    padding: 4px;
+  }
+
   #PanelUI-zen-emojis-picker-list {
     flex-wrap: wrap;
     max-height: 265px;
@@ -63,9 +67,11 @@ body > #confetti {
 
     gap: 5px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(22px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(28px, 1fr));
 
     .zen-emojis-picker-emoji {
+      appearance: none;
+      font-size: 14px;
       & image {
         display: none;
       }

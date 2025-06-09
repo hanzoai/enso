@@ -1094,7 +1094,7 @@ var gZenVerticalTabsManager = {
       this._tabEdited = null;
       return;
     }
-    event.stopPropagation();
+    event.stopPropagation?.();
     document.documentElement.setAttribute('zen-renaming-tab', 'true');
     const label = isTab ? this._tabEdited.querySelector('.tab-label-container') : this._tabEdited;
     label.classList.add('tab-label-container-editing');
