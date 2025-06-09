@@ -157,7 +157,9 @@ var gZenUIManager = {
       if (
         !el.contains(showEvent.explicitOriginalTarget) ||
         (showEvent.explicitOriginalTarget instanceof Element &&
-          showEvent.explicitOriginalTarget?.closest('panel'))
+          showEvent.explicitOriginalTarget?.closest('panel')) ||
+        // See bug #7590: Ignore menupopup elements opening
+        showEvent.explicitOriginalTarget.tagName === 'menupopup'
       ) {
         continue;
       }
