@@ -107,6 +107,7 @@
 
 #PanelUI-menu-button,
 #appMenu-more-button2,
+.zen-workspaces-actions,
 #zen-workspace-actions-menu-icon {
   list-style-image: url('menu.svg') !important;
 }
