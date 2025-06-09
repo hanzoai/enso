@@ -146,7 +146,7 @@ jobs:
           export SURFER_PLATFORM="linux"
           export ZEN_RELEASE=1
           npm run package
-      
+
       - name: Remove API Keys
         run: |
           rm -rf ~/.zen-keys
