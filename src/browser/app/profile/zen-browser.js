@@ -36,5 +36,9 @@ pref('toolkit.legacyUserProfileCustomizations.stylesheets', true);
 
 #include features.inc
 
+#ifndef XP_MACOSX
+#include smoothscroll.inc
+#endif
+
 #include performance.inc
 #include pip.inc
