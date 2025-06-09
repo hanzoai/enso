@@ -21,7 +21,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   _lastScrollTime = 0;
 
   #workspaceCreationArgs = {};
-  
+
   bookmarkMenus = [
     'PlacesToolbar',
     'bookmarks-menu-button',
@@ -467,7 +467,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
             workspaceWrapper.pinnedTabsContainer,
             tabs
           );
-          this.initIndicatorContextMenu(workspaceWrapper.indicator);
           resolve();
         },
         { once: true }
@@ -991,13 +990,32 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
   }
 
-  initIndicatorContextMenu(indicator) {
-    const th = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      this.openWorkspacesDialog(event);
-    };
-    indicator.addEventListener('contextmenu', th);
+  changeWorkspaceIcon() {
+    const anchor = this.activeWorkspaceIndicator?.querySelector(
+      '.zen-current-workspace-indicator-icon'
+    );
+    if (!anchor) {
+      return;
+    }
+    const hasNoIcon = anchor.hasAttribute('no-icon');
+    anchor.removeAttribute('no-icon');
+    gZenEmojiPicker
+      .open(anchor)
+      .then(async (emoji) => {
+        const workspace = this.getActiveWorkspaceFromCache();
+        if (!workspace) {
+          console.warn('No active workspace found to change icon');
+          return;
+        }
+        workspace.icon = emoji;
+        await this.saveWorkspace(workspace);
+      })
+      .catch((error) => {
+        console.warn('Error changing workspace icon:', error);
+        if (hasNoIcon) {
+          anchor.setAttribute('no-icon', 'true');
+        }
+      });
   }
 
   shouldCloseWindow() {
@@ -1525,7 +1543,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (!this.workspaceEnabled || this.isPrivateWindow) {
       return;
     }
-    let target = event.target.closest('.zen-current-workspace-indicator');
+    let target = this.activeWorkspaceIndicator || event.target;
     let panel = document.getElementById('PanelUI-zen-workspaces');
     await this._propagateWorkspaceData({
       ignoreStrip: true,
@@ -1797,10 +1815,11 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
     if (this.workspaceHasIcon(currentWorkspace)) {
       indicatorIcon.removeAttribute('no-icon');
+      indicatorIcon.textContent = this.getWorkspaceIcon(currentWorkspace);
     } else {
       indicatorIcon.setAttribute('no-icon', 'true');
+      indicatorIcon.textContent = '';
     }
-    indicatorIcon.textContent = this.getWorkspaceIcon(currentWorkspace);
     indicatorName.textContent = currentWorkspace.name;
   }
 

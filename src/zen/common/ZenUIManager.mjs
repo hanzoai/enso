@@ -1105,15 +1105,17 @@ var gZenVerticalTabsManager = {
       `);
       label.after(container);
     }
-    const containerHtml = isTab
-      ? this._tabEdited.querySelector('.tab-editor-container')
-      : this._tabEdited.parentNode;
     const input = document.createElement('input');
     input.id = 'tab-label-input';
     input.value = isTab ? this._tabEdited.label : this._tabEdited.textContent;
     input.addEventListener('keydown', this.renameTabKeydown.bind(this));
 
-    containerHtml.appendChild(input);
+    if (isTab) {
+      const containerHtml = this._tabEdited.querySelector('.tab-editor-container');
+      containerHtml.appendChild(input);
+    } else {
+      this._tabEdited.after(input);
+    }
     input.focus();
     input.select();
 

@@ -7,7 +7,7 @@
       return `
         <vbox class="zen-workspace-tabs-section zen-current-workspace-indicator" flex="1">
           <hbox class="zen-current-workspace-indicator-icon"></hbox>
-          <hbox class="zen-current-workspace-indicator-name"></hbox>
+          <hbox class="zen-current-workspace-indicator-name" flex="1"></hbox>
           <toolbarbutton class="toolbarbutton-1 chromeclass-toolbar-additional zen-workspaces-actions" context="zenWorkspaceMoreActions"></toolbarbutton>
         </vbox>
         <arrowscrollbox orient="vertical" class="workspace-arrowscrollbox">

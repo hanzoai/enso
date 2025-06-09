@@ -340,7 +340,7 @@
 
 /* Mark workspaces indicator */
 .zen-current-workspace-indicator {
-padding: calc(4px + var(--tab-inline-padding) + var(--zen-toolbox-padding));
+  padding: calc(4px + var(--tab-inline-padding) + var(--zen-toolbox-padding));
   font-weight: 600;
   position: relative;
   max-height: var(--zen-workspace-indicator-height);
@@ -352,6 +352,7 @@ padding: calc(4px + var(--tab-inline-padding) + var(--zen-toolbox-padding));
   width: 100%;
   font-size: small;
   padding-right: 10px;
+  -moz-window-dragging: no-drag;
 
   &::before {
     border-radius: var(--border-radius-medium);
@@ -376,8 +377,23 @@ padding: calc(4px + var(--tab-inline-padding) + var(--zen-toolbox-padding));
   }
 
   & .zen-current-workspace-indicator-icon {
-    font-size: 12px;
-    line-height: 1;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    justify-content: center;
+    align-items: center;
+
+    &[zen-emoji-open='true']::before {
+      border: 1px dashed light-dark(rgba(0, 0, 0, .5), rgba(255, 255, 255, .5));
+      border-radius: 6px;
+      width: calc(100% + 6px);
+      height: calc(100% + 6px);
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      pointer-events: none;
+    }
   }
 
   .zen-current-workspace-indicator-name {
@@ -386,16 +402,20 @@ padding: calc(4px + var(--tab-inline-padding) + var(--zen-toolbox-padding));
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-cursor: text;
+    cursor: text;
   }
 
-    .zen-workspaces-actions {
+  .zen-workspaces-actions {
     --toolbarbutton-inner-padding: 4px;
     margin-left: auto !important;
     opacity: 0;
     visibility: collapse;
     transition: opacity 0.1s;
     order: 5;
+
+    :root[zen-renaming-tab='true'] & {
+      display: none;
+    }
   }
 
   :root:not([zen-private-window]) &:hover .zen-workspaces-actions,
