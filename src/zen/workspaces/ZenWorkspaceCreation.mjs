@@ -59,6 +59,18 @@
       return this.getAttribute('workspace-id');
     }
 
+    get elementsToAnimate() {
+      return [
+        this.querySelector('.zen-workspace-creation-title'),
+        this.querySelector('.zen-workspace-creation-label'),
+        this.querySelector('.zen-workspace-creation-name-wrapper'),
+        this.querySelector('.zen-workspace-creation-profile-wrapper'),
+        this.querySelector('.zen-workspace-creation-edit-theme-button'),
+        this.createButton,
+        this.cancelButton,
+      ];
+    }
+
     connectedCallback() {
       if (this.delayConnectedCallback()) {
         // If we are not ready yet, or if we have already connected, we
@@ -70,6 +82,16 @@
 
       this.appendChild(this.constructor.fragment);
       this.initializeAttributeInheritance();
+
+      this.inputName = this.querySelector('.zen-workspace-creation-name');
+      this.inputIcon = this.querySelector('.zen-workspace-creation-icon-label');
+      this.inputProfile = this.querySelector('.zen-workspace-creation-profile');
+      this.createButton = this.querySelector('.zen-workspace-creation-create-button');
+      this.cancelButton = this.querySelector('.zen-workspace-creation-cancel-button');
+
+      for (const element of this.elementsToAnimate) {
+        element.style.opacity = 0;
+      }
 
       this.#wasInCollapsedMode =
         document.documentElement.getAttribute('zen-sidebar-expanded') !== 'true';
@@ -103,12 +125,6 @@
         }
       }
 
-      this.inputName = this.querySelector('.zen-workspace-creation-name');
-      this.inputIcon = this.querySelector('.zen-workspace-creation-icon-label');
-      this.inputProfile = this.querySelector('.zen-workspace-creation-profile');
-      this.createButton = this.querySelector('.zen-workspace-creation-create-button');
-      this.cancelButton = this.querySelector('.zen-workspace-creation-cancel-button');
-
       this.createButton.addEventListener('command', this.onCreateButtonCommand.bind(this));
       this.cancelButton.addEventListener('command', this.onCancelButtonCommand.bind(this));
 
@@ -133,6 +149,20 @@
         this.inputProfile.parentNode.hidden = true;
       }
 
+      gZenUIManager.motion.animate(
+        this.elementsToAnimate,
+        {
+          y: [20, 0],
+          opacity: [0, 1],
+        },
+        {
+          duration: 0.9,
+          type: 'spring',
+          bounce: 0,
+          delay: gZenUIManager.motion.stagger(0.05, { startDelay: 0.2 }),
+        }
+      );
+
       this.resolveInitialized();
     }
 
@@ -143,7 +173,7 @@
       workspace.containerTabId = this.currentProfile;
       await gZenWorkspaces.saveWorkspace(workspace);
 
-      this.#cleanup();
+      await this.#cleanup();
 
       await gZenWorkspaces._organizeWorkspaceStripLocations(workspace, true);
       await gZenWorkspaces.updateTabsContainers();
@@ -208,10 +238,24 @@
 
     async handleZenWorkspacesChange() {
       await gZenWorkspaces.removeWorkspace(this.workspaceId);
-      this.#cleanup();
+      await this.#cleanup();
     }
 
-    #cleanup() {
+    async #cleanup() {
+      await gZenUIManager.motion.animate(
+        this.elementsToAnimate.reverse(),
+        {
+          y: [0, 20],
+          opacity: [1, 0],
+        },
+        {
+          duration: 0.9,
+          type: 'spring',
+          bounce: 0,
+          delay: gZenUIManager.motion.stagger(0.05),
+        }
+      );
+
       gZenWorkspaces.removeChangeListeners(this.handleZenWorkspacesChangeBind);
       for (const element of this.constructor.elementsToDisable) {
         const el = document.getElementById(element);

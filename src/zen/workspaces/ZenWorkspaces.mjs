@@ -643,7 +643,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   _handleSwipeMayStart(event) {
     if (this.privateWindowOrDisabled || this._inChangingWorkspace) return;
-    if (event.target.closest('#zen-sidebar-bottom-buttons')) return;
+    if (event.target.closest('#zen-sidebar-foot-buttons')) return;
 
     // Only handle horizontal swipes
     if (event.direction === event.DIRECTION_LEFT || event.direction === event.DIRECTION_RIGHT) {
@@ -2627,6 +2627,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   _initializeWorkspaceTabContextMenus() {
     if (this.privateWindowOrDisabled) {
+      document.getElementById('cmd_zenOpenWorkspaceCreation').setAttribute('disabled', true);
       return;
     }
     const menu = document.createXULElement('menu');
@@ -2639,10 +2640,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     menu.appendChild(menuPopup);
 
     document.getElementById('context_closeDuplicateTabs').after(menu);
-
-    document
-      .getElementById('cmd_zenOpenWorkspaceCreation')
-      .setAttribute('disabled', this.privateWindowOrDisabled);
   }
 
   async changeTabWorkspace(workspaceID) {
