@@ -5,7 +5,7 @@
   class ZenWorkspace extends MozXULElement {
     static get markup() {
       return `
-        <vbox class="zen-workspace-tabs-section zen-current-workspace-indicator" flex="1">
+        <vbox class="zen-workspace-tabs-section zen-current-workspace-indicator" flex="1" context="zenWorkspaceMoreActions">
           <hbox class="zen-current-workspace-indicator-icon"></hbox>
           <hbox class="zen-current-workspace-indicator-name" flex="1"></hbox>
           <toolbarbutton class="toolbarbutton-1 chromeclass-toolbar-additional zen-workspaces-actions" context="zenWorkspaceMoreActions"></toolbarbutton>
@@ -199,16 +199,16 @@
     onActionsCommand(event) {
       event.stopPropagation();
       const popup = document.getElementById('zenWorkspaceMoreActions');
-      event.target.setAttribute('open', 'true');
+      const target = event.target;
+      target.setAttribute('open', 'true');
       this.indicator.setAttribute('open', 'true');
-      popup.addEventListener(
-        'popuphidden',
-        () => {
-          event.target.removeAttribute('open');
-          this.indicator.removeAttribute('open');
-        },
-        { once: true }
-      );
+      const handlePopupHidden = (event) => {
+        if (event.target !== popup) return;
+        target.removeAttribute('open');
+        this.indicator.removeAttribute('open');
+        popup.removeEventListener('popuphidden', handlePopupHidden);
+      };
+      popup.addEventListener('popuphidden', handlePopupHidden);
       popup.openPopup(event.target, 'after_start');
     }
   }

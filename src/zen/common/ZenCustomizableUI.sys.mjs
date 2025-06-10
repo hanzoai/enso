@@ -6,7 +6,7 @@ export var ZenCustomizableUI = new (class {
   constructor() {}
 
   TYPE_TOOLBAR = 'toolbar';
-  defaultSidebarIcons = ['preferences-button', 'zen-workspaces-button', 'downloads-button'];
+  defaultSidebarIcons = ['downloads-button', 'zen-workspaces-button', 'zen-create-new-button'];
 
   startup(CustomizableUIInternal) {
     CustomizableUIInternal.registerArea(
@@ -100,7 +100,32 @@ export var ZenCustomizableUI = new (class {
       elem.setAttribute('removable', 'true');
     }
 
+    this._initCreateNewButton(window);
     this._moveWindowButtons(window);
+  }
+
+  _initCreateNewButton(window) {
+    const button = window.document.getElementById('zen-create-new-button');
+    button.addEventListener('command', () => {
+      const image = button.querySelector('image');
+      const popup = window.document.getElementById('zenCreateNewPopup');
+      button.setAttribute('open', 'true');
+      const handlePopupHidden = () => {
+        button.removeAttribute('open');
+        window.gZenUIManager.motion.animate(
+          image,
+          { transform: ['rotate(45deg)', 'rotate(0deg)'] },
+          { duration: 0.2 }
+        );
+      };
+      popup.addEventListener('popuphidden', handlePopupHidden, { once: true });
+      popup.openPopup(button, 'after_start');
+      window.gZenUIManager.motion.animate(
+        image,
+        { transform: ['rotate(0deg)', 'rotate(45deg)'] },
+        { duration: 0.2 }
+      );
+    });
   }
 
   _moveWindowButtons(window) {

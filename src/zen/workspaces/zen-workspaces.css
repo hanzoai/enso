@@ -402,7 +402,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    cursor: text;
+    cursor: auto;
   }
 
   .zen-workspaces-actions {
@@ -506,3 +506,5 @@ zen-workspace {
 #wrapper-zen-workspaces-button {
   width: 100%;
 }
+
+%include create-workspace-form.css

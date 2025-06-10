@@ -66,7 +66,7 @@
           <toolbarbutton id="PanelUI-zen-workspaces-reorder-mode" class="subviewbutton">
             <image></image>
           </toolbarbutton>
-          <toolbarbutton id="PanelUI-zen-workspaces-new" class="subviewbutton">
+          <toolbarbutton id="PanelUI-zen-workspaces-new" class="subviewbutton" command="cmd_zenOpenWorkspaceCreation">
             <image></image>
           </toolbarbutton>
         </hbox>
@@ -85,11 +85,17 @@
   <hbox id="PanelUI-zen-emojis-picker-list" />
 </panel>
 
+<menupopup id="zenCreateNewPopup">
+  <menuitem data-l10n-id="tabs-toolbar-new-tab" command="cmd_newNavigatorTab" image="chrome://browser/skin/zen-icons/plus.svg" />
+  <menuseparator/>
+  <menuitem data-l10n-id="zen-panel-ui-workspaces-create" command="cmd_zenOpenWorkspaceCreation" image="chrome://browser/skin/zen-icons/duplicate-tab.svg" />
+</menupopup>
+
 <menupopup id="zenWorkspaceMoreActions">
-  <menuitem id="context_zenEditWorkspace" data-l10n-id="zen-workspaces-panel-change-name" command="cmd_zenChangeWorkspaceName"/>
+  <menuitem id="context_zenEditWorkspace" data-l10n-id="zen-panel-ui-workspaces-create" command="cmd_zenChangeWorkspaceName"/>
   <menuitem id="context_zenEditWorkspaceIcon" data-l10n-id="zen-workspaces-panel-change-icon" command="cmd_zenChangeWorkspaceIcon"/>
   <menuitem class="zenToolbarThemePicker"
-          data-l10n-id="zen-workspaces-change-gradient"
+          data-l10n-id="zen-workspaces-change-theme"
           command="cmd_zenOpenZenThemePicker"/>
   <menu id="context_zenWorkspacesOpenInContainerTab"
     data-l10n-id="zen-workspaces-panel-context-open-in-container-tab"

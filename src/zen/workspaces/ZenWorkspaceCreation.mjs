@@ -1,0 +1,246 @@
+{
+  class ZenWorkspaceCreation extends MozXULElement {
+    #wasInCollapsedMode = false;
+
+    promiseInitialized = new Promise((resolve) => {
+      this.resolveInitialized = resolve;
+    });
+
+    #hiddenElements = [];
+
+    static get elementsToDisable() {
+      return [
+        'cmd_zenOpenWorkspacePanel',
+        'cmd_zenOpenWorkspaceCreation',
+        'cmd_zenToggleSidebar',
+        'cmd_newNavigatorTab',
+        'cmd_newNavigatorTabNoEvent',
+      ];
+    }
+
+    static get markup() {
+      return `
+        <vbox class="zen-workspace-creation" flex="1">
+          <form>
+            <vbox>
+              <html:h1 data-l10n-id="zen-workspace-creation-title" class="zen-workspace-creation-title" />
+              <label data-l10n-id="zen-workspace-creation-label" class="zen-workspace-creation-label" />
+            </vbox>
+            <vbox class="zen-workspace-creation-form">
+              <hbox class="zen-workspace-creation-name-wrapper">
+                <toolbarbutton class="zen-workspace-creation-icon-label" />
+                <html:input
+                  class="zen-workspace-creation-name"
+                  type="text"
+                  data-l10n-id="zen-workspace-creation-name" />
+              </hbox>
+              <hbox class="zen-workspace-creation-profile-wrapper">
+                <label class="zen-workspace-creation-profile-label" data-l10n-id="zen-workspace-creation-profile" />
+                <button class="zen-workspace-creation-profile" />
+              </hbox>
+              <button
+                class="zen-workspace-creation-edit-theme-button"
+                data-l10n-id="zen-workspaces-change-theme"
+                command="cmd_zenOpenZenThemePicker" />
+              <menupopup class="zen-workspace-creation-profiles-popup" />
+            </vbox>
+            <vbox class="zen-workspace-creation-buttons">
+              <button class="zen-workspace-creation-create-button footer-button primary"
+                  data-l10n-id="zen-panel-ui-workspaces-create" disabled="true" />
+              <button class="zen-workspace-creation-cancel-button footer-button"
+                data-l10n-id="zen-general-cancel-label" />
+            </vbox>
+          </form>
+        </vbox>
+      `;
+    }
+
+    get workspaceId() {
+      return this.getAttribute('workspace-id');
+    }
+
+    connectedCallback() {
+      if (this.delayConnectedCallback()) {
+        // If we are not ready yet, or if we have already connected, we
+        // don't need to do anything.
+        return;
+      }
+
+      document.documentElement.setAttribute('zen-creating-workspace', 'true');
+
+      this.appendChild(this.constructor.fragment);
+      this.initializeAttributeInheritance();
+
+      this.#wasInCollapsedMode =
+        document.documentElement.getAttribute('zen-sidebar-expanded') !== 'true';
+
+      gNavToolbox.setAttribute('zen-sidebar-expanded', 'true');
+      document.documentElement.setAttribute('zen-sidebar-expanded', 'true');
+
+      window.docShell.treeOwner
+        .QueryInterface(Ci.nsIInterfaceRequestor)
+        .getInterface(Ci.nsIAppWindow)
+        .rollupAllPopups();
+
+      this.handleZenWorkspacesChangeBind = this.handleZenWorkspacesChange.bind(this);
+
+      for (const element of this.parentElement.children) {
+        if (element !== this) {
+          element.hidden = true;
+          this.#hiddenElements.push(element);
+        }
+      }
+
+      gBrowser.tabContainer.style.visibility = 'collapse';
+      if (gZenVerticalTabsManager._hasSetSingleToolbar) {
+        document.getElementById('nav-bar').style.visibility = 'collapse';
+      }
+
+      for (const element of ZenWorkspaceCreation.elementsToDisable) {
+        const el = document.getElementById(element);
+        if (el) {
+          el.setAttribute('disabled', 'true');
+        }
+      }
+
+      this.inputName = this.querySelector('.zen-workspace-creation-name');
+      this.inputIcon = this.querySelector('.zen-workspace-creation-icon-label');
+      this.inputProfile = this.querySelector('.zen-workspace-creation-profile');
+      this.createButton = this.querySelector('.zen-workspace-creation-create-button');
+      this.cancelButton = this.querySelector('.zen-workspace-creation-cancel-button');
+
+      this.createButton.addEventListener('command', this.onCreateButtonCommand.bind(this));
+      this.cancelButton.addEventListener('command', this.onCancelButtonCommand.bind(this));
+
+      this.inputName.addEventListener('input', () => {
+        this.createButton.disabled = !this.inputName.value.trim();
+      });
+
+      this.inputIcon.addEventListener('command', this.onIconCommand.bind(this));
+
+      this.profilesPopup = this.querySelector('.zen-workspace-creation-profiles-popup');
+
+      if (gZenWorkspaces.shouldShowContainers) {
+        this.inputProfile.addEventListener('command', this.onProfileCommand.bind(this));
+        this.profilesPopup.addEventListener('popupshown', this.onProfilePopupShown.bind(this));
+        this.profilesPopup.addEventListener('command', this.onProfilePopupCommand.bind(this));
+
+        this.currentProfile = {
+          id: 0,
+          name: 'Default',
+        };
+      } else {
+        this.inputProfile.parentNode.hidden = true;
+      }
+
+      this.resolveInitialized();
+    }
+
+    async onCreateButtonCommand() {
+      const workspace = await gZenWorkspaces.getActiveWorkspace();
+      workspace.name = this.inputName.value.trim();
+      workspace.icon = this.inputIcon.label || undefined;
+      workspace.containerTabId = this.currentProfile;
+      await gZenWorkspaces.saveWorkspace(workspace);
+
+      this.#cleanup();
+
+      await gZenWorkspaces._organizeWorkspaceStripLocations(workspace, true);
+      await gZenWorkspaces.updateTabsContainers();
+
+      this.tabContainer._invalidateCachedTabs();
+
+      if (gZenVerticalTabsManager._canReplaceNewTab) {
+        BrowserCommands.openTab();
+      }
+    }
+
+    async onCancelButtonCommand() {
+      const workspaces = await gZenWorkspaces._workspaces();
+      await gZenWorkspaces.changeWorkspace(workspaces.workspaces[workspaces.workspaces.length - 2]);
+    }
+
+    onIconCommand(event) {
+      gZenEmojiPicker
+        .open(event.target)
+        .then(async (emoji) => {
+          this.inputIcon.label = emoji || '';
+        })
+        .catch((error) => {
+          console.warn('Error changing workspace icon:', error);
+        });
+    }
+
+    set currentProfile(profile) {
+      this.inputProfile.label = profile.name;
+      this._profileId = profile.id;
+    }
+
+    get currentProfile() {
+      return this._profileId;
+    }
+
+    onProfileCommand(event) {
+      this.profilesPopup.openPopup(event.target, 'after_start');
+    }
+
+    onProfilePopupShown(event) {
+      return window.createUserContextMenu(event, {
+        isContextMenu: true,
+        showDefaultTab: true,
+      });
+    }
+
+    onProfilePopupCommand(event) {
+      let userContextId = parseInt(event.target.getAttribute('data-usercontextid'));
+      if (isNaN(userContextId)) {
+        return;
+      }
+      this.currentProfile = {
+        id: userContextId,
+        name: event.target.label,
+      };
+    }
+
+    finishSetup() {
+      gZenWorkspaces.addChangeListeners(this.handleZenWorkspacesChangeBind, { once: true });
+    }
+
+    async handleZenWorkspacesChange() {
+      await gZenWorkspaces.removeWorkspace(this.workspaceId);
+      this.#cleanup();
+    }
+
+    #cleanup() {
+      gZenWorkspaces.removeChangeListeners(this.handleZenWorkspacesChangeBind);
+      for (const element of this.constructor.elementsToDisable) {
+        const el = document.getElementById(element);
+        if (el) {
+          el.removeAttribute('disabled');
+        }
+      }
+
+      if (this.#wasInCollapsedMode) {
+        gNavToolbox.removeAttribute('zen-sidebar-expanded');
+        document.documentElement.removeAttribute('zen-sidebar-expanded');
+      }
+
+      document.documentElement.removeAttribute('zen-creating-workspace');
+
+      gBrowser.tabContainer.style.visibility = '';
+      if (gZenVerticalTabsManager._hasSetSingleToolbar) {
+        document.getElementById('nav-bar').style.visibility = '';
+      }
+
+      for (const element of this.#hiddenElements) {
+        element.hidden = false;
+      }
+
+      this.#hiddenElements = [];
+
+      this.remove();
+    }
+  }
+
+  customElements.define('zen-workspace-creation', ZenWorkspaceCreation);
+}

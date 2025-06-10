@@ -211,8 +211,10 @@ var gZenCompactModeManager = {
       return;
     }
     let sidebarWidth = this.sidebar.getBoundingClientRect().width;
+    const shouldRecalculate =
+      this.preference || document.documentElement.hasAttribute('zen-creating-workspace');
     if (sidebarWidth > 1) {
-      if (this.preference && gZenVerticalTabsManager._prefsSidebarExpanded) {
+      if (shouldRecalculate && gZenVerticalTabsManager._prefsSidebarExpanded) {
         sidebarWidth = Math.max(sidebarWidth, 150);
       }
       // Second variable to get the genuine width of the sidebar
@@ -220,7 +222,7 @@ var gZenCompactModeManager = {
       window.dispatchEvent(new window.Event('resize')); // To recalculate the layout
       if (
         event &&
-        this.preference &&
+        shouldRecalculate &&
         gZenVerticalTabsManager._prefsSidebarExpanded &&
         !gZenVerticalTabsManager._hadSidebarCollapse
       ) {

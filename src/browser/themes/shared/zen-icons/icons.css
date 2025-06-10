@@ -180,6 +180,7 @@
 
 #zoom-in-button,
 #tabs-newtab-button,
+#zen-create-new-button,
 #new-tab-button,
 #appMenu-zoomEnlarge-button2,
 #PanelUI-zen-profiles-newProfile,
@@ -766,4 +767,21 @@
 
 #zen-media-pip-button {
   list-style-image: url('chrome://global/skin/media/picture-in-picture-open.svg');
+}
+
+#zenCreateNewPopup > menuitem image {
+  -moz-context-properties: fill;
+  fill: currentColor;
+}
+
+#zen-create-new-button {
+  border-radius: var(--tab-border-radius);
+
+  &:hover {
+    background: var(--toolbarbutton-active-background);
+  }
+
+  & image {
+    background: transparent !important;
+  }
 }

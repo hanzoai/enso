@@ -69,15 +69,20 @@
     initContextMenu() {
       const menu = window.MozXULElement.parseXULToFragment(`
         <menuitem id="zenToolbarThemePicker"
-                  data-lazy-l10n-id="zen-workspaces-change-gradient"
+                  data-lazy-l10n-id="zen-workspaces-change-theme"
                   command="cmd_zenOpenZenThemePicker"/>
       `);
       document.getElementById('toolbar-context-customize').before(menu);
     }
 
     openThemePicker(event) {
-      PanelMultiView.openPopup(this.panel, this.toolbox, {
-        position: 'topright topleft',
+      const target = event.explicitOriginalTarget?.classList?.contains(
+        'zen-workspace-creation-edit-theme-button'
+      )
+        ? event.explicitOriginalTarget
+        : this.toolbox;
+      PanelMultiView.openPopup(this.panel, target, {
+        position: 'bottomright topright',
         triggerEvent: event,
       });
     }
