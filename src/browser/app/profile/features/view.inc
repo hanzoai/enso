@@ -6,18 +6,19 @@ pref('zen.view.sidebar-height-throttle', 200); // in ms
 pref('zen.view.sidebar-expanded.max-width', 500);
 
 #ifdef XP_MACOSX
-pref('zen.view.mac.show-three-dot-menu', false);
-pref('zen.widget.mac.mono-window-controls', true);
+  pref('zen.view.mac.show-three-dot-menu', false);
+  pref('zen.widget.mac.mono-window-controls', true);
 #endif
+
 pref('zen.view.use-single-toolbar', true);
 pref('zen.view.sidebar-expanded', true);
 pref('zen.view.sidebar-collapsed.hide-mute-button', true);
 pref('zen.view.experimental-force-window-controls-left', false);
 
 #ifdef XP_MACOSX
-pref('zen.view.grey-out-inactive-windows', false);
+  pref('zen.view.grey-out-inactive-windows', false);
 #else
-pref('zen.view.grey-out-inactive-windows', true);
+  pref('zen.view.grey-out-inactive-windows', true);
 #endif
 
 pref('zen.view.hide-window-controls', true);
