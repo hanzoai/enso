@@ -1296,9 +1296,10 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     await this._propagateWorkspaceData();
   }
 
-  async openWorkspaceCreation(event) {
+  async openWorkspaceCreation() {
     let createForm;
     const previousWorkspace = await this.getActiveWorkspace();
+    document.documentElement.setAttribute('zen-creating-workspace', 'true');
     await this.createAndSaveWorkspace('Space', undefined, false, 0, {
       beforeChangeCallback: async (workspace) => {
         createForm = document.createXULElement('zen-workspace-creation');
@@ -2180,7 +2181,11 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async onPinnedTabsResize(entries, forAnimation = false, animateContainer = false) {
-    if (!this._hasInitializedTabsStrip || (this._organizingWorkspaceStrip && !forAnimation)) {
+    if (
+      !this._hasInitializedTabsStrip ||
+      (this._organizingWorkspaceStrip && !forAnimation) ||
+      document.documentElement.hasAttribute('zen-creating-workspace')
+    ) {
       return;
     }
     if (document.documentElement.hasAttribute('customizing')) return;

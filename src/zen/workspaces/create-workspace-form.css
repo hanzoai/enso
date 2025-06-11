@@ -32,8 +32,8 @@ zen-workspace-creation {
       flex-direction: column;
       width: calc(100% - 10px);
       margin: auto;
-      gap: 2.2rem;
-      margin-top: 2.2rem;
+      gap: 3.2rem;
+      margin-top: 1.2rem;
       height: 100%;
 
       & .zen-workspace-creation-form {

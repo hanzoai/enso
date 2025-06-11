@@ -62,7 +62,8 @@
       opacity: 1;
     }
 
-    &:hover {
+    &:hover,
+    &[dragged='true']{
       background-color: var(--zen-toolbar-element-bg);
     }
 
@@ -90,7 +91,7 @@
 %include overflow-icons.inc.css
     }
 
-    &:has(toolbarbutton:hover) toolbarbutton[active='true'] {
+    &:has(toolbarbutton:hover) toolbarbutton[active='true']:not([dragged='true']) {
 %include overflow-icons.inc.css 
     }
   }

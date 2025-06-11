@@ -86,8 +86,6 @@
         return;
       }
 
-      document.documentElement.setAttribute('zen-creating-workspace', 'true');
-
       this.appendChild(this.constructor.fragment);
       this.initializeAttributeInheritance();
 
@@ -177,6 +175,7 @@
             {
               y: [20, 0],
               opacity: [0, 1],
+              filter: ['blur(2px)', 'blur(0)'],
             },
             {
               duration: 0.6,
@@ -197,16 +196,16 @@
       workspace.containerTabId = this.currentProfile;
       await gZenWorkspaces.saveWorkspace(workspace);
 
+      if (gZenVerticalTabsManager._canReplaceNewTab) {
+        BrowserCommands.openTab();
+      }
+
       await this.#cleanup();
 
       await gZenWorkspaces._organizeWorkspaceStripLocations(workspace, true);
       await gZenWorkspaces.updateTabsContainers();
 
       gBrowser.tabContainer._invalidateCachedTabs();
-
-      if (gZenVerticalTabsManager._canReplaceNewTab) {
-        BrowserCommands.openTab();
-      }
     }
 
     async onCancelButtonCommand() {
@@ -270,6 +269,7 @@
         {
           y: [0, 20],
           opacity: [1, 0],
+          filter: ['blur(0)', 'blur(2px)'],
         },
         {
           duration: 0.4,
