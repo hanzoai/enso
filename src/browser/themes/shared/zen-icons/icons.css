@@ -185,14 +185,8 @@
 #appMenu-zoomEnlarge-button2,
 #PanelUI-zen-profiles-newProfile,
 #zen-sidebar-add-panel-button,
-#PanelUI-zen-workspaces-new image,
 #PanelUI-zen-gradient-generator-color-custom-add image {
   list-style-image: url('plus.svg') !important;
-}
-
-#PanelUI-zen-workspaces-reorder-mode image {
-  list-style-image: url('move-tab.svg') !important;
-  rotate: 90deg;
 }
 
 #cut-button {

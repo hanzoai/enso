@@ -23,7 +23,7 @@
     <menupopup />
   </menu>
   <menuseparator/>
-  <menuitem id="context_zenOpenWorkspacePanel" data-l10n-id="zen-workspaces-panel-context-manage" command="cmd_zenOpenWorkspacePanel"/>
+  <menuitem id="context_zenReorderWorkspaces" data-l10n-id="zen-workspaces-panel-context-reorder" command="cmd_zenReorderWorkspaces"/>
   <menuseparator/>
   <menuitem id="context_zenDeleteWorkspace" data-l10n-id="zen-workspaces-panel-context-delete" command="cmd_zenCtxDeleteWorkspace"/>
 </menupopup>

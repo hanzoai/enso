@@ -61,6 +61,10 @@
       return this.getAttribute('workspace-id');
     }
 
+    get previousWorkspaceId() {
+      return this.getAttribute('previous-workspace-id');
+    }
+
     get elementsToAnimate() {
       return [
         this.querySelector('.zen-workspace-creation-title'),
@@ -150,9 +154,7 @@
         .animate(
           [
             gBrowser.tabContainer,
-            ...(gZenVerticalTabsManager._hasSetSingleToolbar
-              ? [document.getElementById('nav-bar')]
-              : []),
+            ...(gZenVerticalTabsManager._hasSetSingleToolbar ? [gURLBar.textbox] : []),
           ],
           {
             opacity: [1, 0],
@@ -166,7 +168,7 @@
         .then(() => {
           gBrowser.tabContainer.style.visibility = 'collapse';
           if (gZenVerticalTabsManager._hasSetSingleToolbar) {
-            document.getElementById('nav-bar').style.visibility = 'collapse';
+            gURLBar.textbox.style.visibility = 'collapse';
           }
           gZenUIManager.motion.animate(
             this.elementsToAnimate,
@@ -206,8 +208,7 @@
     }
 
     async onCancelButtonCommand() {
-      const workspaces = await gZenWorkspaces._workspaces();
-      await gZenWorkspaces.changeWorkspace(workspaces.workspaces[workspaces.workspaces.length - 2]);
+      await gZenWorkspaces.changeWorkspaceWithID(this.previousWorkspaceId);
     }
 
     onIconCommand(event) {
@@ -294,8 +295,8 @@
       gBrowser.tabContainer.style.visibility = '';
       gBrowser.tabContainer.style.opacity = 0;
       if (gZenVerticalTabsManager._hasSetSingleToolbar) {
-        document.getElementById('nav-bar').style.visibility = '';
-        document.getElementById('nav-bar').style.opacity = 0;
+        gURLBar.textbox.style.visibility = '';
+        gURLBar.textbox.style.opacity = 0;
       }
 
       const workspace = await gZenWorkspaces.getActiveWorkspace();
@@ -305,9 +306,7 @@
       await gZenUIManager.motion.animate(
         [
           gBrowser.tabContainer,
-          ...(gZenVerticalTabsManager._hasSetSingleToolbar
-            ? [document.getElementById('nav-bar')]
-            : []),
+          ...(gZenVerticalTabsManager._hasSetSingleToolbar ? [gURLBar.textbox] : []),
         ],
         {
           opacity: [0, 1],
@@ -320,7 +319,7 @@
       );
       gBrowser.tabContainer.style.opacity = '';
       if (gZenVerticalTabsManager._hasSetSingleToolbar) {
-        document.getElementById('nav-bar').style.opacity = '';
+        gURLBar.textbox.style.opacity = '';
       }
 
       for (const element of this.#hiddenElements) {

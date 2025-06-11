@@ -101,8 +101,10 @@ document.addEventListener(
           case 'cmd_zenChangeWorkspaceIcon':
             gZenWorkspaces.changeWorkspaceIcon();
             break;
-          case 'cmd_zenOpenWorkspacePanel':
-            gZenWorkspaces.openWorkspacesDialog(event);
+          case 'cmd_zenReorderWorkspaces':
+            gZenUIManager.showToast('zen-workspaces-how-to-reorder', {
+              timeout: 10000,
+            });
             break;
           case 'cmd_zenOpenWorkspaceCreation':
             gZenWorkspaces.openWorkspaceCreation(event);
