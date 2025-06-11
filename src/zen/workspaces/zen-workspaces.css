@@ -53,8 +53,7 @@
     transition:
       filter 0.2s,
       opacity 0.2s,
-      width 0.1s,
-      transform 0.1s;
+      width 0.1s;
 
     &[active='true'],
     &:hover,
@@ -68,7 +67,8 @@
     }
 
     &[dragged='true'] {
-      transform: scale(1.05);
+      outline: 1px solid var(--zen-colors-primary);
+      outline-offset: -1px;
     }
   }
 

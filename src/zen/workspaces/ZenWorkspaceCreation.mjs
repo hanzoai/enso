@@ -89,6 +89,8 @@
       this.appendChild(this.constructor.fragment);
       this.initializeAttributeInheritance();
 
+      this.style.visibility = 'collapse';
+
       this.inputName = this.querySelector('.zen-workspace-creation-name');
       this.inputIcon = this.querySelector('.zen-workspace-creation-icon-label');
       this.inputProfile = this.querySelector('.zen-workspace-creation-profile');
@@ -170,6 +172,7 @@
           if (gZenVerticalTabsManager._hasSetSingleToolbar) {
             gURLBar.textbox.style.visibility = 'collapse';
           }
+          this.style.visibility = '';
           gZenUIManager.motion.animate(
             this.elementsToAnimate,
             {
@@ -298,6 +301,8 @@
         gURLBar.textbox.style.visibility = '';
         gURLBar.textbox.style.opacity = 0;
       }
+
+      gZenUIManager.updateTabsToolbar();
 
       const workspace = await gZenWorkspaces.getActiveWorkspace();
       await gZenWorkspaces._organizeWorkspaceStripLocations(workspace, true);
