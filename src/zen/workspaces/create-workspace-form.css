@@ -134,6 +134,7 @@ zen-workspace-creation {
         & .zen-workspace-creation-create-button {
           color: var(--button-text-color-primary) !important;
           background: var(--color-accent-primary) !important;
+          width: 100%;
         }
       }
     }

@@ -45,8 +45,10 @@
               <menupopup class="zen-workspace-creation-profiles-popup" />
             </vbox>
             <vbox class="zen-workspace-creation-buttons">
-              <button class="zen-workspace-creation-create-button footer-button primary"
+              <html:div>
+                <button class="zen-workspace-creation-create-button footer-button primary"
                   data-l10n-id="zen-panel-ui-workspaces-create" disabled="true" />
+              </html:div>
               <button class="zen-workspace-creation-cancel-button footer-button"
                 data-l10n-id="zen-general-cancel-label" />
             </vbox>
@@ -66,7 +68,7 @@
         this.querySelector('.zen-workspace-creation-name-wrapper'),
         this.querySelector('.zen-workspace-creation-profile-wrapper'),
         this.querySelector('.zen-workspace-creation-edit-theme-button'),
-        this.createButton,
+        this.createButton.parentNode,
         this.cancelButton,
       ];
     }
@@ -113,11 +115,6 @@
         }
       }
 
-      gBrowser.tabContainer.style.visibility = 'collapse';
-      if (gZenVerticalTabsManager._hasSetSingleToolbar) {
-        document.getElementById('nav-bar').style.visibility = 'collapse';
-      }
-
       for (const element of ZenWorkspaceCreation.elementsToDisable) {
         const el = document.getElementById(element);
         if (el) {
@@ -149,19 +146,42 @@
         this.inputProfile.parentNode.hidden = true;
       }
 
-      gZenUIManager.motion.animate(
-        this.elementsToAnimate,
-        {
-          y: [20, 0],
-          opacity: [0, 1],
-        },
-        {
-          duration: 0.9,
-          type: 'spring',
-          bounce: 0,
-          delay: gZenUIManager.motion.stagger(0.05, { startDelay: 0.2 }),
-        }
-      );
+      gZenUIManager.motion
+        .animate(
+          [
+            gBrowser.tabContainer,
+            ...(gZenVerticalTabsManager._hasSetSingleToolbar
+              ? [document.getElementById('nav-bar')]
+              : []),
+          ],
+          {
+            opacity: [1, 0],
+          },
+          {
+            duration: 0.3,
+            type: 'spring',
+            bounce: 0,
+          }
+        )
+        .then(() => {
+          gBrowser.tabContainer.style.visibility = 'collapse';
+          if (gZenVerticalTabsManager._hasSetSingleToolbar) {
+            document.getElementById('nav-bar').style.visibility = 'collapse';
+          }
+          gZenUIManager.motion.animate(
+            this.elementsToAnimate,
+            {
+              y: [20, 0],
+              opacity: [0, 1],
+            },
+            {
+              duration: 0.9,
+              type: 'spring',
+              bounce: 0,
+              delay: gZenUIManager.motion.stagger(0.05, { startDelay: 0.2 }),
+            }
+          );
+        });
 
       this.resolveInitialized();
     }
@@ -272,8 +292,35 @@
       document.documentElement.removeAttribute('zen-creating-workspace');
 
       gBrowser.tabContainer.style.visibility = '';
+      gBrowser.tabContainer.style.opacity = 0;
       if (gZenVerticalTabsManager._hasSetSingleToolbar) {
         document.getElementById('nav-bar').style.visibility = '';
+        document.getElementById('nav-bar').style.opacity = 0;
+      }
+
+      const workspace = await gZenWorkspaces.getActiveWorkspace();
+      await gZenWorkspaces._organizeWorkspaceStripLocations(workspace, true);
+      await gZenWorkspaces.updateTabsContainers();
+
+      await gZenUIManager.motion.animate(
+        [
+          gBrowser.tabContainer,
+          ...(gZenVerticalTabsManager._hasSetSingleToolbar
+            ? [document.getElementById('nav-bar')]
+            : []),
+        ],
+        {
+          opacity: [0, 1],
+        },
+        {
+          duration: 0.3,
+          type: 'spring',
+          bounce: 0,
+        }
+      );
+      gBrowser.tabContainer.style.opacity = '';
+      if (gZenVerticalTabsManager._hasSetSingleToolbar) {
+        document.getElementById('nav-bar').style.opacity = '';
       }
 
       for (const element of this.#hiddenElements) {
