@@ -79,9 +79,8 @@
       const fromForm = event.explicitOriginalTarget?.classList?.contains(
         'zen-workspace-creation-edit-theme-button'
       );
-      const position = fromForm ? 'bottomleft bottomright' : 'topright topleft';
       PanelMultiView.openPopup(this.panel, this.toolbox, {
-        position,
+        position: 'topright topleft',
         triggerEvent: event,
         y: fromForm ? -160 : 0,
       });

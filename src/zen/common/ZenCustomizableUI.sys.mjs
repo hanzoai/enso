@@ -107,6 +107,9 @@ export var ZenCustomizableUI = new (class {
   _initCreateNewButton(window) {
     const button = window.document.getElementById('zen-create-new-button');
     button.addEventListener('command', () => {
+      if (button.hasAttribute('open')) {
+        return;
+      }
       const image = button.querySelector('image');
       const popup = window.document.getElementById('zenCreateNewPopup');
       button.setAttribute('open', 'true');

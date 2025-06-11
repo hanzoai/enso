@@ -23,8 +23,10 @@
         <vbox class="zen-workspace-creation" flex="1">
           <form>
             <vbox>
-              <html:h1 data-l10n-id="zen-workspace-creation-title" class="zen-workspace-creation-title" />
-              <label data-l10n-id="zen-workspace-creation-label" class="zen-workspace-creation-label" />
+              <html:h1 data-l10n-id="zen-workspace-creation-header" class="zen-workspace-creation-title" />
+              <html:div>
+                <label data-l10n-id="zen-workspace-creation-label" class="zen-workspace-creation-label" />
+              </html:div>
             </vbox>
             <vbox class="zen-workspace-creation-form">
               <hbox class="zen-workspace-creation-name-wrapper">
@@ -68,7 +70,7 @@
     get elementsToAnimate() {
       return [
         this.querySelector('.zen-workspace-creation-title'),
-        this.querySelector('.zen-workspace-creation-label'),
+        this.querySelector('.zen-workspace-creation-label').parentElement,
         this.querySelector('.zen-workspace-creation-name-wrapper'),
         this.querySelector('.zen-workspace-creation-profile-wrapper'),
         this.querySelector('.zen-workspace-creation-edit-theme-button'),
@@ -88,8 +90,6 @@
 
       this.appendChild(this.constructor.fragment);
       this.initializeAttributeInheritance();
-
-      this.style.visibility = 'collapse';
 
       this.inputName = this.querySelector('.zen-workspace-creation-name');
       this.inputIcon = this.querySelector('.zen-workspace-creation-icon-label');
@@ -152,12 +152,11 @@
         this.inputProfile.parentNode.hidden = true;
       }
 
+      document.getElementById('zen-sidebar-splitter').style.pointerEvents = 'none';
+
       gZenUIManager.motion
         .animate(
-          [
-            gBrowser.tabContainer,
-            ...(gZenVerticalTabsManager._hasSetSingleToolbar ? [gURLBar.textbox] : []),
-          ],
+          [gBrowser.tabContainer, gURLBar.textbox],
           {
             opacity: [1, 0],
           },
@@ -170,9 +169,9 @@
         .then(() => {
           gBrowser.tabContainer.style.visibility = 'collapse';
           if (gZenVerticalTabsManager._hasSetSingleToolbar) {
-            gURLBar.textbox.style.visibility = 'collapse';
+            document.getElementById('nav-bar').style.visibility = 'collapse';
           }
-          this.style.visibility = '';
+          this.style.visibility = 'visible';
           gZenUIManager.motion.animate(
             this.elementsToAnimate,
             {
@@ -180,7 +179,7 @@
               opacity: [0, 1],
             },
             {
-              duration: 0.9,
+              duration: 0.6,
               type: 'spring',
               bounce: 0,
               delay: gZenUIManager.motion.stagger(0.05, { startDelay: 0.2 }),
@@ -203,7 +202,7 @@
       await gZenWorkspaces._organizeWorkspaceStripLocations(workspace, true);
       await gZenWorkspaces.updateTabsContainers();
 
-      this.tabContainer._invalidateCachedTabs();
+      gBrowser.tabContainer._invalidateCachedTabs();
 
       if (gZenVerticalTabsManager._canReplaceNewTab) {
         BrowserCommands.openTab();
@@ -273,12 +272,14 @@
           opacity: [1, 0],
         },
         {
-          duration: 0.9,
+          duration: 0.4,
           type: 'spring',
           bounce: 0,
           delay: gZenUIManager.motion.stagger(0.05),
         }
       );
+
+      document.getElementById('zen-sidebar-splitter').style.pointerEvents = '';
 
       gZenWorkspaces.removeChangeListeners(this.handleZenWorkspacesChangeBind);
       for (const element of this.constructor.elementsToDisable) {
@@ -298,7 +299,7 @@
       gBrowser.tabContainer.style.visibility = '';
       gBrowser.tabContainer.style.opacity = 0;
       if (gZenVerticalTabsManager._hasSetSingleToolbar) {
-        gURLBar.textbox.style.visibility = '';
+        document.getElementById('nav-bar').style.visibility = '';
         gURLBar.textbox.style.opacity = 0;
       }
 
@@ -309,10 +310,7 @@
       await gZenWorkspaces.updateTabsContainers();
 
       await gZenUIManager.motion.animate(
-        [
-          gBrowser.tabContainer,
-          ...(gZenVerticalTabsManager._hasSetSingleToolbar ? [gURLBar.textbox] : []),
-        ],
+        [gBrowser.tabContainer, gURLBar.textbox],
         {
           opacity: [0, 1],
         },

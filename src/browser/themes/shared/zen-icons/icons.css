@@ -39,9 +39,12 @@
 .close-icon,
 #zen-sidebar-web-panel-close,
 #zen-glance-sidebar-close,
-#PanelUI-zen-emojis-picker-none,
 .zen-theme-picker-custom-list-item-remove {
   list-style-image: url('close.svg') !important;
+}
+
+#PanelUI-zen-emojis-picker-none {
+  list-style-image: url('trash.svg');
 }
 
 .reset-icon {
