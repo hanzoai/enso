@@ -664,7 +664,7 @@
           type: 'spring',
         }
       );
-      gZenViewSplitter.deactivateCurrentSplitView();
+      gZenViewSplitter.deactivateCurrentSplitView({ removeDeckSelected: true });
       this.finishOpeningGlance();
     }
 
