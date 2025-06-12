@@ -74,6 +74,7 @@ body > #confetti {
     .zen-emojis-picker-emoji {
       appearance: none;
       font-size: 14px;
+      padding: 0px !important;
       & image {
         display: none;
       }

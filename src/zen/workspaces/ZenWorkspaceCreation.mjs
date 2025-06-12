@@ -186,6 +186,7 @@
               }
             )
             .then(() => {
+              this.inputName.focus();
               gZenWorkspaces.workspaceElement(this.workspaceId).hidden = false;
               this.resolveInitialized();
             });
@@ -198,10 +199,6 @@
       workspace.icon = this.inputIcon.label || undefined;
       workspace.containerTabId = this.currentProfile;
       await gZenWorkspaces.saveWorkspace(workspace);
-
-      if (gZenVerticalTabsManager._canReplaceNewTab) {
-        BrowserCommands.openTab();
-      }
 
       await this.#cleanup();
 
