@@ -468,6 +468,10 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       workspaceWrapper.active = true;
     }
 
+    if (document.documentElement.hasAttribute('zen-creating-workspace')) {
+      workspaceWrapper.hidden = true; // Hide workspace while creating it
+    }
+
     await new Promise((resolve) => {
       workspaceWrapper.addEventListener(
         'ZenWorkspaceAttached',
@@ -1521,6 +1525,10 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async _organizeWorkspaceStripLocations(workspace, justMove = false, offsetPixels = 0) {
+    if (document.documentElement.hasAttribute('zen-creating-workspace')) {
+      // If we are creating a workspace, we don't want to animate the strip
+      return;
+    }
     this._organizingWorkspaceStrip = true;
     const workspaces = await this._workspaces();
     let workspaceIndex = workspaces.workspaces.findIndex((w) => w.uuid === workspace.uuid);
