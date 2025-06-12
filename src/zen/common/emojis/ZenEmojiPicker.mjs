@@ -83,6 +83,7 @@
 
     #onPopupShowing(event) {
       if (event.target !== this.#panel) return;
+      this.searchInput.value = '';
       const emojiList = this.emojiList;
       for (const emoji of this.#emojis) {
         const item = document.createXULElement('toolbarbutton');
@@ -94,6 +95,7 @@
         });
         emojiList.appendChild(item);
       }
+      this.searchInput.focus();
     }
 
     #onPopupHidden(event) {

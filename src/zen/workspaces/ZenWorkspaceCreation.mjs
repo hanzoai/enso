@@ -170,23 +170,26 @@
             document.getElementById('nav-bar').style.visibility = 'collapse';
           }
           this.style.visibility = 'visible';
-          gZenUIManager.motion.animate(
-            this.elementsToAnimate,
-            {
-              y: [20, 0],
-              opacity: [0, 1],
-              filter: ['blur(2px)', 'blur(0)'],
-            },
-            {
-              duration: 0.6,
-              type: 'spring',
-              bounce: 0,
-              delay: gZenUIManager.motion.stagger(0.05, { startDelay: 0.2 }),
-            }
-          );
+          gZenUIManager.motion
+            .animate(
+              this.elementsToAnimate,
+              {
+                y: [20, 0],
+                opacity: [0, 1],
+                filter: ['blur(2px)', 'blur(0)'],
+              },
+              {
+                duration: 0.6,
+                type: 'spring',
+                bounce: 0,
+                delay: gZenUIManager.motion.stagger(0.05, { startDelay: 0.2 }),
+              }
+            )
+            .then(() => {
+              gZenWorkspaces.workspaceElement(this.workspaceId).hidden = false;
+              this.resolveInitialized();
+            });
         });
-
-      this.resolveInitialized();
     }
 
     async onCreateButtonCommand() {
