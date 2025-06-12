@@ -418,3 +418,7 @@ menuseparator {
   padding: 0 !important;
   min-width: unset !important;
 }
+
+#window-modal-dialog {
+  inset: 0;
+}

@@ -455,7 +455,7 @@ var gZenUIManager = {
     const wrapper = document.createXULElement('hbox');
     const element = document.createXULElement('vbox');
     const label = document.createXULElement('label');
-    document.l10n.setAttributes(label, messageId, options);
+    document.l10n.setAttributes(label, messageId, options.l10nArgs);
     element.appendChild(label);
     if (options.descriptionId) {
       const description = document.createXULElement('label');

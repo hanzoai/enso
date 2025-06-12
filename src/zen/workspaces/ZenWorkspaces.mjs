@@ -2338,7 +2338,13 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async contextDeleteWorkspace() {
-    await this.removeWorkspace(this.activeWorkspace);
+    const [title, body] = await document.l10n.formatValues([
+      { id: 'zen-workspaces-delete-workspace-title' },
+      { id: 'zen-workspaces-delete-workspace-body' },
+    ]);
+    if (Services.prompt.confirm(null, title, body)) {
+      await this.removeWorkspace(this.activeWorkspace);
+    }
   }
 
   findTabToBlur(tab) {

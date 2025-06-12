@@ -107,14 +107,14 @@ export var ZenCustomizableUI = new (class {
   _initCreateNewButton(window) {
     const button = window.document.getElementById('zen-create-new-button');
     button.addEventListener('command', () => {
-      if (button.hasAttribute('open')) {
+      if (button.hasAttribute('zen-ignore-open')) {
         return;
       }
       const image = button.querySelector('image');
       const popup = window.document.getElementById('zenCreateNewPopup');
-      button.setAttribute('open', 'true');
+      button.setAttribute('zen-ignore-open', 'true');
       const handlePopupHidden = () => {
-        button.removeAttribute('open');
+        button.removeAttribute('zen-ignore-open');
         window.gZenUIManager.motion.animate(
           image,
           { transform: ['rotate(45deg)', 'rotate(0deg)'] },

@@ -170,6 +170,7 @@
             document.getElementById('nav-bar').style.visibility = 'collapse';
           }
           this.style.visibility = 'visible';
+          this.resolveInitialized();
           gZenUIManager.motion
             .animate(
               this.elementsToAnimate,
@@ -188,7 +189,6 @@
             .then(() => {
               this.inputName.focus();
               gZenWorkspaces.workspaceElement(this.workspaceId).hidden = false;
-              this.resolveInitialized();
             });
         });
     }
