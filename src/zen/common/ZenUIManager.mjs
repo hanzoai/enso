@@ -757,7 +757,9 @@ var gZenVerticalTabsManager = {
       document.getElementById('urlbar').style.setProperty('--urlbar-height', '32px');
     } else if (gURLBar.getAttribute('breakout-extend') !== 'true') {
       try {
-        gURLBar.zenUpdateLayoutBreakout();
+        gURLBar.zenUpdateLayoutBreakout().then(() => {
+          gURLBar.valueFormatter._formatURL();
+        });
       } catch (e) {
         console.warn(e);
       }
