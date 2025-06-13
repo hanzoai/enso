@@ -303,6 +303,7 @@
         gURLBar.textbox.style.opacity = 0;
       }
 
+      this.remove();
       gZenUIManager.updateTabsToolbar();
 
       const workspace = await gZenWorkspaces.getActiveWorkspace();
@@ -320,6 +321,7 @@
           bounce: 0,
         }
       );
+
       gBrowser.tabContainer.style.opacity = '';
       if (gZenVerticalTabsManager._hasSetSingleToolbar) {
         gURLBar.textbox.style.opacity = '';
@@ -330,8 +332,6 @@
       }
 
       this.#hiddenElements = [];
-
-      this.remove();
     }
   }
 
