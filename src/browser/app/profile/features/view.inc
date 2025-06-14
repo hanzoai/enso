@@ -2,7 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-pref('zen.view.sidebar-height-throttle', 200); // in ms
+pref('zen.view.sidebar-height-throttle', 0); // in ms
 pref('zen.view.sidebar-expanded.max-width', 500);
 
 #ifdef XP_MACOSX

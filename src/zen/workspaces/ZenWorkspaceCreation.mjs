@@ -170,6 +170,7 @@
             document.getElementById('nav-bar').style.visibility = 'collapse';
           }
           this.style.visibility = 'visible';
+          gZenCompactModeManager.getAndApplySidebarWidth();
           this.resolveInitialized();
           gZenUIManager.motion
             .animate(
