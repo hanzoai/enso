@@ -41,11 +41,15 @@
     align-items: center;
     position: relative;
 
-    & .zen-workspace-icon[no-icon='true'] {
-      width: 6px;
-      height: 6px;
-      background: light-dark(rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.4));
-      border-radius: 50%;
+    & .zen-workspace-icon {
+      pointer-events: none;
+   
+      &[no-icon='true'] {
+        width: 6px;
+        height: 6px;
+        background: light-dark(rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.4));
+        border-radius: 50%;
+      }
     }
 
     filter: grayscale(1);

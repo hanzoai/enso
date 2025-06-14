@@ -116,7 +116,7 @@ export var ZenCustomizableUI = new (class {
       const handlePopupHidden = () => {
         window.setTimeout(() => {
           button.removeAttribute('open');
-        }, 100);
+        }, 500);
         window.gZenUIManager.motion.animate(
           image,
           { transform: ['rotate(45deg)', 'rotate(0deg)'] },

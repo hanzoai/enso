@@ -41,8 +41,6 @@
           document.getElementById('zen-appcontent-wrapper').prepend(deckTemplate);
         }
 
-        this._hideUnusedElements();
-
         gZenWorkspaces.init();
         gZenUIManager.init();
 
@@ -144,16 +142,6 @@
         const elem = document.getElementById(id);
         if (elem) {
           sidebarPanelWrapper.prepend(elem);
-        }
-      }
-    },
-
-    _hideUnusedElements() {
-      const kElements = ['firefox-view-button'];
-      for (let id of kElements) {
-        const elem = document.getElementById(id);
-        if (elem) {
-          elem.setAttribute('hidden', 'true');
         }
       }
     },

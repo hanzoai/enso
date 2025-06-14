@@ -24,7 +24,7 @@
 
       this.addEventListener('mousedown', (e) => {
         const target = e.target.closest('toolbarbutton[zen-workspace-id]');
-        if (!target) {
+        if (!target || e.button != 0 || e.ctrlKey || e.shiftKey || e.altKey) {
           return;
         }
 
@@ -89,6 +89,7 @@
       button.setAttribute('class', 'subviewbutton');
       button.setAttribute('tooltiptext', workspace.name);
       button.setAttribute('zen-workspace-id', workspace.uuid);
+      button.setAttribute('context', 'zenWorkspaceMoreActions');
       const icon = document.createXULElement('label');
       icon.setAttribute('class', 'zen-workspace-icon');
       if (gZenWorkspaces.workspaceHasIcon(workspace)) {
