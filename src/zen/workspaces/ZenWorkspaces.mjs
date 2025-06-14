@@ -913,7 +913,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async selectStartPage() {
-    if (gZenUIManager.testingEnabled || !this.workspaceEnabled) {
+    if (!this.workspaceEnabled) {
       return;
     }
     await this.promiseInitialized;
@@ -1015,7 +1015,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   handleInitialTab(tab, isEmpty) {
-    if (gZenUIManager.testingEnabled) {
+    if (gZenUIManager.testingEnabled || !this.workspaceEnabled) {
       return;
     }
     // note: We cant access `gZenVerticalTabsManager._canReplaceNewTab` this early

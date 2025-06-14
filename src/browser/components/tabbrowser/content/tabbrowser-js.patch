@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index d5aa64842a35c6697263c63fd3a0571b64b01344..031b384c848fd391f84ed1e6d4f991f3287e37a4 100644
+index d5aa64842a35c6697263c63fd3a0571b64b01344..48d8465f1a4d593ec6d4bff2bd7a83f44116506b 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -413,11 +413,41 @@
@@ -357,7 +357,7 @@ index d5aa64842a35c6697263c63fd3a0571b64b01344..031b384c848fd391f84ed1e6d4f991f3
        // to remove the old selected tab.
        if (tabToSelect) {
          let leftoverTab = this.selectedTab;
-+        if (this._hasAlreadyInitializedZenSessionStore) {
++        if (this._hasAlreadyInitializedZenSessionStore || !gZenWorkspaces.workspaceEnabled) {
          this.selectedTab = tabToSelect;
          this.removeTab(leftoverTab);
 +        } else {
