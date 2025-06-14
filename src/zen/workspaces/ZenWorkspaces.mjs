@@ -134,11 +134,11 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (!this._hasInitializedTabsStrip) {
       await this.delayedStartup();
     }
+    this._initializeWorkspaceTabContextMenus();
     await this.initializeWorkspaces();
     await this.promiseSectionsInitialized;
 
     // Non UI related initializations
-    this._initializeWorkspaceTabContextMenus();
     if (
       Services.prefs.getBoolPref('zen.workspaces.swipe-actions', false) &&
       this.workspaceEnabled &&
