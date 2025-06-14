@@ -889,7 +889,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     } catch (e) {
       console.error('gZenWorkspaces: Error initializing theme picker', e);
     }
-    this.onWindowResize();
     await gZenSessionStore.promiseInitialized;
     await this.workspaceBookmarks();
     await this.initializeTabsStripSections();
@@ -897,6 +896,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     await gZenPinnedTabManager.refreshPinnedTabs({ init: true });
     await this.changeWorkspace(activeWorkspace, { onInit: true });
     this._fixTabPositions();
+    this.onWindowResize();
     this._resolveInitialized();
     this._clearAnyZombieTabs(); // Dont call with await
 
