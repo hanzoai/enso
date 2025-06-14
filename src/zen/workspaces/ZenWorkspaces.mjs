@@ -115,6 +115,8 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       document.documentElement.setAttribute('zen-private-window', 'true');
     }
 
+    this.popupOpenHandler = this._popupOpenHandler.bind(this);
+
     window.addEventListener('resize', this.onWindowResize.bind(this));
     this.addPopupListeners();
 
@@ -646,9 +648,20 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
         document.documentElement.removeAttribute('swipe-gesture');
         gZenUIManager.tabsWrapper.style.removeProperty('scrollbar-width');
         this.updateTabsContainers();
+        document.removeEventListener('popupshown', this.popupOpenHandler, { once: true });
       },
       true
     );
+  }
+
+  _popupOpenHandler(event) {
+    // If a popup is opened, we should stop the swipe gesture
+    if (this._swipeState?.isGestureActive) {
+      document.documentElement.removeAttribute('swipe-gesture');
+      gZenUIManager.tabsWrapper.style.removeProperty('scrollbar-width');
+      this.updateTabsContainers();
+      this._cancelSwipeAnimation();
+    }
   }
 
   _handleSwipeMayStart(event) {
@@ -669,6 +682,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     if (!this.workspaceEnabled) return;
 
     document.documentElement.setAttribute('swipe-gesture', 'true');
+    document.addEventListener('popupshown', this.popupOpenHandler, { once: true });
 
     event.preventDefault();
     event.stopPropagation();
@@ -842,6 +856,14 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async workspaceBookmarks() {
+    if (this.privateWindowOrDisabled) {
+      this._workspaceBookmarksCache = {
+        bookmarks: [],
+        lastChangeTimestamp: 0,
+      };
+      return this._workspaceBookmarksCache;
+    }
+
     if (this._workspaceBookmarksCache) {
       return this._workspaceBookmarksCache;
     }
