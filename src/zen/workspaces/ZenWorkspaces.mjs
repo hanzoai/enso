@@ -1135,7 +1135,9 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     workspaceActions.addEventListener('popupshowing', this.updateWorkspaceActionsMenu.bind(this));
     workspaceActions.addEventListener('popuphidden', () => {
       setTimeout(() => {
-        this.#contextMenuData = null;
+        setTimeout(() => {
+          this.#contextMenuData = null;
+        }, 0);
       }, 0); // Delay to ensure the context menu data is cleared after the popup is hidden
     });
 
