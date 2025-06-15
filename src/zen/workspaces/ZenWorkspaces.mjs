@@ -1180,6 +1180,26 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     themePicker.hidden =
       this.#contextMenuData.workspaceId &&
       this.#contextMenuData.workspaceId !== this.activeWorkspace;
+    const separator = document.getElementById('context_zenWorkspacesSeparator');
+    for (const item of event.target.querySelectorAll('.zen-workspace-context-menu-item')) {
+      item.remove();
+    }
+    if (!this.#contextMenuData.workspaceId) {
+      separator.hidden = false;
+      for (const workspace of [...this._workspaceCache.workspaces].reverse()) {
+        const item = document.createXULElement('menuitem');
+        item.className = 'zen-workspace-context-menu-item';
+        item.setAttribute('zen-workspace-id', workspace.uuid);
+        item.setAttribute('disabled', workspace.uuid === this.activeWorkspace);
+        item.setAttribute('label', (workspace.icon ?? ' \u25CB ') + '  ' + workspace.name);
+        item.addEventListener('command', (e) => {
+          this.changeWorkspaceWithID(e.target.closest('menuitem').getAttribute('zen-workspace-id'));
+        });
+        separator.after(item);
+      }
+    } else {
+      separator.hidden = true;
+    }
     event.target.addEventListener(
       'popuphidden',
       () => {
