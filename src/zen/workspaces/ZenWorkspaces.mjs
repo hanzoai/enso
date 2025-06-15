@@ -1215,10 +1215,10 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
 
   async removeWorkspace(windowID) {
     let workspacesData = await this._workspaces();
-    this._deleteAllTabsInWorkspace(windowID);
     await this.changeWorkspace(
       workspacesData.workspaces.find((workspace) => workspace.uuid !== windowID)
     );
+    this._deleteAllTabsInWorkspace(windowID);
     delete this._lastSelectedWorkspaceTabs[windowID];
     await ZenWorkspacesStorage.removeWorkspace(windowID);
     // Remove the workspace from the cache
@@ -1227,12 +1227,8 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     );
     await this._propagateWorkspaceData();
     await this._updateWorkspacesChangeContextMenu();
+    this.workspaceElement(windowID)?.remove();
     this.onWindowResize();
-    for (let container of document.querySelectorAll(
-      `.zen-workspace-tabs-section[zen-workspace-id="${windowID}"]`
-    )) {
-      container.remove();
-    }
     this.registerPinnedResizeObserver();
   }
 
@@ -1379,7 +1375,9 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     gBrowser.removeTabs(
       Array.from(this.allStoredTabs).filter(
         (tab) =>
-          tab.getAttribute('zen-workspace-id') === workspaceID && !tab.hasAttribute('zen-empty-tab')
+          tab.getAttribute('zen-workspace-id') === workspaceID &&
+          !tab.hasAttribute('zen-empty-tab') &&
+          !tab.hasAttribute('zen-essential')
       ),
       {
         animate: false,
@@ -2395,12 +2393,13 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   async contextDeleteWorkspace() {
+    const workspaceId = this.#contextMenuData?.workspaceId || this.activeWorkspace;
     const [title, body] = await document.l10n.formatValues([
       { id: 'zen-workspaces-delete-workspace-title' },
       { id: 'zen-workspaces-delete-workspace-body' },
     ]);
     if (Services.prompt.confirm(null, title, body)) {
-      await this.removeWorkspace(this.#contextMenuData?.workspaceId || this.activeWorkspace);
+      await this.removeWorkspace(workspaceId);
     }
   }
 
