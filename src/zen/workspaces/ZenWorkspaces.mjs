@@ -562,7 +562,9 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
         break;
     }
     requestAnimationFrame(() => {
-      gNavToolbox.setAttribute('zen-has-hover', 'true');
+      requestAnimationFrame(() => {
+        gNavToolbox.setAttribute('zen-has-hover', 'true');
+      });
     });
   }
 

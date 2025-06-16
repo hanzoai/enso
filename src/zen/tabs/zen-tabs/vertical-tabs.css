@@ -809,7 +809,7 @@
   & #titlebar {
     display: grid;
     grid-template-rows: auto 1fr; /* Allow content below button box */
-    overflow: hidden;
+    overflow: clip;
   }
 
   /* Style top buttons customization target */
