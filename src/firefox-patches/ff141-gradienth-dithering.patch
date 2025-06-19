@@ -70,4 +70,28 @@ diff --git a/gfx/wr/webrender/src/renderer/init.rs b/gfx/wr/webrender/src/render
              for config in configs {
                  shaders.push(ShaderOptimizationInput {
                      shader_name,
+diff --git a/gfx/wr/webrender/res/shared.glsl b/gfx/wr/webrender/res/shared.glsl
+index f9c093f8486dbd481f2520762f80ace257c294f6..904f9991e917423e11563d862bbd185725523573 100644
+--- a/gfx/wr/webrender/res/shared.glsl
++++ b/gfx/wr/webrender/res/shared.glsl
+@@ -226,6 +226,7 @@ uniform __samplerExternal2DY2YEXT sColor1;
+ uniform __samplerExternal2DY2YEXT sColor2;
+ #endif
+ 
++#define WR_FEATURE_DITHERING
+ #ifdef WR_FEATURE_DITHERING
+ uniform sampler2D sDither;
+ #endif
+diff --git a/gfx/wr/webrender/res/gradient.glsl b/gfx/wr/webrender/res/gradient.glsl
+index 6ed2e6987135e04a70fcc908c089bf225ffdb255..09a4acdf3f53a53e123510fdc5aea8b9b8c4d91e 100644
+--- a/gfx/wr/webrender/res/gradient.glsl
++++ b/gfx/wr/webrender/res/gradient.glsl
+@@ -11,6 +11,7 @@ flat varying mediump vec2 v_gradient_repeat;
+ 
+ #ifdef WR_FRAGMENT_SHADER
+ 
++#define WR_FEATURE_DITHERING
+ #ifdef WR_FEATURE_DITHERING
+ vec4 dither(vec4 color) {
+     const int matrix_mask = 7;
 
