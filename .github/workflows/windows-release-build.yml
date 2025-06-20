@@ -53,10 +53,6 @@ jobs:
         with:
           tool-cache: false
 
-      # Bug: https://github.com/actions/checkout/issues/1153
-      - name: Remove zombie lock file
-        run: rm -f /home/ubuntu/actions-runner/_work/desktop/desktop/.git/modules/l10n/index.lock
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
