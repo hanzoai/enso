@@ -546,6 +546,7 @@
               break;
             }
             await gBrowser.explicitUnloadTabs([selectedTab]);
+            selectedTab.removeAttribute('discarded');
           }
           if (selectedTab.selected) {
             this._handleTabSwitch(selectedTab);
@@ -611,7 +612,7 @@
         // Remove everything except the entry we want to keep
         state.entries = [state.entries[foundEntryIndex]];
       }
-      state.image ||= pin.iconUrl || null;
+      state.image = pin.iconUrl || null;
       state.index = 0;
 
       SessionStore.setTabState(tab, state);
