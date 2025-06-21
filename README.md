@@ -38,6 +38,10 @@ If you'd like to report a bug, please do so on our [GitHub Issues page](https://
 
 Zen is an open-source project, and we welcome contributions from the community! Please take a look at the [contribution guidelines](./docs/contribute.md) before getting started!
 
+#### Partners
+
+Thanks to all the partners of Zen for their support and contributions:
+
 <a href="https://blacksmith.sh">
   <img src="./docs/assets/blacksmith-yellow.png" width="350px"/>
 </a>
