@@ -1151,7 +1151,7 @@
           accentColor,
           (1 - this.currentOpacity) * 100
         );
-        minimalLum = this.isDarkMode ? 0.3 : 0.2;
+        minimalLum = this.isDarkMode ? 0.3 : 0.18;
       }
       const lum = this.luminance(accentColor);
       // Return true if background is dark enough that white text is preferred
@@ -1492,7 +1492,7 @@
               : `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`
           );
           let isDarkMode = this.isDarkMode;
-          if (dominantColor !== this.getNativeAccentColor()) {
+          if (dominantColor !== this.hexToRgb(this.getNativeAccentColor())) {
             isDarkMode = browser.gZenThemePicker.shouldBeDarkMode(dominantColor);
             browser.document.documentElement.setAttribute('zen-should-be-dark-mode', isDarkMode);
           } else {

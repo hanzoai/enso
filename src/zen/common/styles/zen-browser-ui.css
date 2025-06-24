@@ -47,7 +47,6 @@
 
   isolation: isolate;
   background: var(--zen-themed-toolbar-bg-transparent);
-  transition: background-color var(--inactive-window-transition);
 
   &::after,
   &::before {

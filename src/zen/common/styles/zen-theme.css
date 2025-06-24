@@ -251,7 +251,8 @@
   &,
   & #tabbrowser-tabpanels,
   & panel,
-  & menupopup {
+  & menupopup,
+  & #zen-browser-background {
     @media -moz-pref('zen.theme.window.scheme', 'dark') {
       color-scheme: dark;
     }
