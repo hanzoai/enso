@@ -1129,7 +1129,7 @@
             `linear-gradient(to top, ${color3} -30%, transparent 60%)`,
           ].join(', ');
         }
-        return [`linear-gradient(${rotation}deg, ${color1} -30%, ${color3} 100%)`].join(', ');
+        return [`linear-gradient(120deg, ${color1} -30%, ${color3} 100%)`].join(', ');
       } else {
         // Just return a linear gradient with all colors
         const gradientColors = themedColors.map((color) =>
