@@ -18,7 +18,7 @@
   }
 
   function getMotion() {
-    return gZenUIManager.motion;
+    return gZenUIManager.anime;
   }
 
   async function animate(...args) {

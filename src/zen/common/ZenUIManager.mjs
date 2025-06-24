@@ -36,10 +36,51 @@ var gZenUIManager = {
 
     document.addEventListener('mousedown', this.handleMouseDown.bind(this), true);
 
-    ChromeUtils.defineLazyGetter(this, 'motion', () => {
-      return ChromeUtils.importESModule('chrome://browser/content/zen-vendor/motion.min.mjs', {
-        global: 'current',
-      });
+    ChromeUtils.defineLazyGetter(this, 'anime', () => {
+      // Polyphill in case we need to change library animations again
+      const module = ChromeUtils.importESModule(
+        'chrome://browser/content/zen-vendor/animejs.min.mjs',
+        {
+          global: 'current',
+        }
+      );
+      return {
+        animate: (element, keyframes, options) => {
+          if (options.duration) {
+            options.duration *= 1000; // convert seconds to milliseconds
+          }
+          if (options.delay) {
+            options.delay *= 1000; // convert seconds to milliseconds
+          }
+          delete options.bounce; // anime.js does not support bounce
+          delete options.type; // anime.js does not support type
+          return module.animate(element, {
+            ...keyframes,
+            ...options,
+          });
+        },
+        waapi: (element, keyframes, options) => {
+          if (options.duration) {
+            options.duration *= 1000; // convert seconds to milliseconds
+          }
+          if (options.delay) {
+            options.delay *= 1000; // convert seconds to milliseconds
+          }
+          return module.waapi.animate(element, {
+            ...keyframes,
+            ...options,
+          });
+        },
+        stagger: (delay, {
+          startDelay = 0,
+        } = {}) => {
+          delay *= 1000; // convert seconds to milliseconds
+          startDelay *= 1000; // convert seconds to milliseconds
+          return module.stagger(delay,{
+            start: startDelay,
+          });
+        },
+      };
     });
 
     ChromeUtils.defineLazyGetter(this, '_toastContainer', () => {
@@ -479,7 +520,7 @@ var gZenUIManager = {
     this._toastContainer.removeAttribute('hidden');
     this._toastContainer.appendChild(toast);
     const timeoutFunction = () => {
-      this.motion
+      this.anime
         .animate(toast, { opacity: [1, 0], scale: [1, 0.5] }, { duration: 0.2, bounce: 0 })
         .then(() => {
           toast.remove();
@@ -489,7 +530,7 @@ var gZenUIManager = {
         });
     };
     if (reused) {
-      await this.motion.animate(toast, { scale: 0.2 }, { duration: 0.1, bounce: 0 });
+      await this.anime.animate(toast, { scale: 0.2 }, { duration: 0.1, bounce: 0 });
     } else {
       toast.addEventListener('mouseover', () => {
         if (this._toastTimeouts[messageId]) {
@@ -506,7 +547,7 @@ var gZenUIManager = {
     if (!toast.style.hasOwnProperty('transform')) {
       toast.style.transform = 'scale(0)';
     }
-    await this.motion.animate(toast, { scale: 1 }, { type: 'spring', bounce: 0.2, duration: 0.5 });
+    await this.anime.animate(toast, { scale: 1 }, { type: 'spring', bounce: 0.2, duration: 0.5 });
     if (this._toastTimeouts[messageId]) {
       clearTimeout(this._toastTimeouts[messageId]);
     }
@@ -601,7 +642,7 @@ var gZenVerticalTabsManager = {
   },
 
   animateTab(aTab) {
-    if (!gZenUIManager.motion || !aTab || !gZenUIManager._hasLoadedDOM || !aTab.isConnected) {
+    if (!gZenUIManager.anime || !aTab || !gZenUIManager._hasLoadedDOM || !aTab.isConnected) {
       return;
     }
     // get next visible tab
@@ -613,7 +654,7 @@ var gZenVerticalTabsManager = {
     try {
       const tabSize = aTab.getBoundingClientRect().height;
       const transform = `-${tabSize}px`;
-      gZenUIManager.motion
+      gZenUIManager.anime
         .animate(
           aTab,
           {
@@ -635,7 +676,7 @@ var gZenVerticalTabsManager = {
           aTab.style.removeProperty('transform');
           aTab.style.removeProperty('opacity');
         });
-      gZenUIManager.motion
+      gZenUIManager.anime
         .animate(
           aTab.querySelector('.tab-content'),
           {
@@ -1060,7 +1101,7 @@ var gZenVerticalTabsManager = {
         }
 
         // Maybe add some confetti here?!?
-        gZenUIManager.motion.animate(
+        gZenUIManager.anime.animate(
           this._tabEdited,
           {
             scale: [1, 0.98, 1],

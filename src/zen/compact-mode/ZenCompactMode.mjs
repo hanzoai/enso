@@ -279,7 +279,7 @@ var gZenCompactModeManager = {
 
           // TODO: Work on this a bit more, needs polishing
           if (lazyCompactMode.COMPACT_MODE_CAN_ANIMATE_SIDEBAR && false) {
-            gZenUIManager.motion
+            gZenUIManager.anime
               .animate(
                 [
                   this.sidebar,
@@ -299,7 +299,7 @@ var gZenCompactModeManager = {
                   ],
                 },
                 {
-                  ease: 'easeIn',
+                  ease: 'in',
                   type: 'spring',
                   bounce: 0,
                   duration: 0.2,
@@ -324,18 +324,16 @@ var gZenCompactModeManager = {
           } else {
             sidebarWidth -= elementSeparation;
           }
-          gZenUIManager.motion
-            .animate(
+          gZenUIManager.anime
+            .waapi(
               this.sidebar,
               {
                 marginRight: this.sidebarIsOnRight ? `-${sidebarWidth}px` : 0,
                 marginLeft: this.sidebarIsOnRight ? 0 : `-${sidebarWidth}px`,
               },
               {
-                ease: 'easeIn',
-                type: 'spring',
-                bounce: 0,
-                duration: 0.2,
+                ease: 'out',
+                duration: 0.1,
               }
             )
             .then(() => {
@@ -373,8 +371,8 @@ var gZenCompactModeManager = {
           } else {
             this.sidebar.style.marginLeft = `-${sidebarWidth}px`;
           }
-          gZenUIManager.motion
-            .animate(
+          gZenUIManager.anime
+            .waapi(
               this.sidebar,
               this.sidebarIsOnRight
                 ? {
@@ -383,10 +381,8 @@ var gZenCompactModeManager = {
                   }
                 : { marginLeft: 0 },
               {
-                ease: 'easeOut',
-                type: 'spring',
-                bounce: 0,
-                duration: 0.2,
+                ease: 'in',
+                duration: 0.1,
               }
             )
             .then(() => {

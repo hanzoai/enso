@@ -322,7 +322,7 @@ class nsZenViewSplitter extends ZenDOMOperatedFeature {
       draggedTab._visuallySelected = true;
       this.fakeBrowser.setAttribute('side', side);
       this._finishAllAnimatingPromise = Promise.all([
-        gZenUIManager.motion.animate(
+        gZenUIManager.anime.animate(
           gBrowser.tabbox,
           side === 'left'
             ? {
@@ -338,7 +338,7 @@ class nsZenViewSplitter extends ZenDOMOperatedFeature {
             easing: 'ease-out',
           }
         ),
-        gZenUIManager.motion.animate(
+        gZenUIManager.anime.animate(
           this.fakeBrowser,
           {
             width: [0, `${halfWidth - padding}px`],
@@ -401,7 +401,7 @@ class nsZenViewSplitter extends ZenDOMOperatedFeature {
     this._draggingTab = null;
     try {
       Promise.all([
-        gZenUIManager.motion.animate(
+        gZenUIManager.anime.animate(
           gBrowser.tabbox,
           side === 'left'
             ? {
@@ -415,7 +415,7 @@ class nsZenViewSplitter extends ZenDOMOperatedFeature {
             easing: 'ease-out',
           }
         ),
-        gZenUIManager.motion.animate(
+        gZenUIManager.anime.animate(
           this.fakeBrowser,
           {
             width: [`${halfWidth - padding * 2}px`, 0],
@@ -1763,7 +1763,7 @@ class nsZenViewSplitter extends ZenDOMOperatedFeature {
   }
 
   animateBrowserDrop(browserContainer, callback = () => {}) {
-    gZenUIManager.motion
+    gZenUIManager.anime
       .animate(
         browserContainer,
         {

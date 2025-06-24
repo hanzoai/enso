@@ -772,7 +772,7 @@
           );
 
           if (!this.dragging) {
-            gZenUIManager.motion.animate(
+            gZenUIManager.anime.animate(
               existingDot.element,
               {
                 left: `${dotPosition.position.x}px`,
@@ -889,7 +889,7 @@
         this.handleColorPositions(colorPositions);
         this.updateCurrentWorkspace(true);
 
-        gZenUIManager.motion.animate(
+        gZenUIManager.anime.animate(
           existingPrimaryDot.element,
           {
             left: `${existingPrimaryDot.position.x}px`,
@@ -1129,7 +1129,7 @@
             `linear-gradient(to top, ${color3} -30%, transparent 60%)`,
           ].join(', ');
         }
-        return [`linear-gradient(${rotation}deg, ${color1} -30%, ${color3} 100%)`].join(', ');
+        return [`linear-gradient(120deg, ${color1} -30%, ${color3} 100%)`].join(', ');
       } else {
         // Just return a linear gradient with all colors
         const gradientColors = themedColors.map((color) =>
@@ -1508,7 +1508,7 @@
           // Set `--toolbox-textcolor` to have a contrast with the primary color
           const blendTarget = isDarkMode ? [255, 255, 255] : [0, 0, 0];
           const blendedColor = this.blendColors(dominantColor, blendTarget, 15); // 15% dominantColor, 85% target
-          await gZenUIManager.motion.animate(
+          await gZenUIManager.anime.animate(
             browser.document.documentElement,
             {
               '--toolbox-textcolor': blendedColor,

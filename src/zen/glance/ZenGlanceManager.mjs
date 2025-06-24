@@ -131,10 +131,10 @@
 
         const startX = isRightSide ? -50 : 50;
 
-        gZenUIManager.motion.animate(
+        gZenUIManager.anime.animate(
           this.sidebarButtons.querySelectorAll('toolbarbutton'),
           { x: [startX, 0], opacity: [0, 1] },
-          { delay: gZenUIManager.motion.stagger(0.1) }
+          { delay: gZenUIManager.anime.stagger(0.1) }
         );
       }
       this.sidebarButtons.removeAttribute('hidden');
@@ -180,7 +180,7 @@
           this.quickOpenGlance({ dontOpenButtons: true });
           this.showSidebarButtons(true);
 
-          gZenUIManager.motion.animate(
+          gZenUIManager.anime.animate(
             this.#currentParentTab.linkedBrowser.closest('.browserSidebarContainer'),
             {
               scale: [1, 0.98],
@@ -211,7 +211,7 @@
           };
           this.browserWrapper.style.transform = 'translate(-50%, -50%)';
           this.overlay.style.overflow = 'visible';
-          gZenUIManager.motion
+          gZenUIManager.anime
             .animate(
               this.browserWrapper,
               {
@@ -311,7 +311,7 @@
       this.overlay.style.pointerEvents = 'none';
       this.quickCloseGlance({ justAnimateParent: true, clearID: false });
       const originalPosition = this.#glances.get(this.#currentGlanceID).originalPosition;
-      gZenUIManager.motion
+      gZenUIManager.anime
         .animate(
           this.#currentParentTab.linkedBrowser.closest('.browserSidebarContainer'),
           {
@@ -332,7 +332,7 @@
         });
       this.browserWrapper.style.opacity = 1;
       return new Promise((resolve) => {
-        gZenUIManager.motion
+        gZenUIManager.anime
           .animate(
             this.browserWrapper,
             {
@@ -653,7 +653,7 @@
         this.finishOpeningGlance();
         return;
       }
-      await gZenUIManager.motion.animate(
+      await gZenUIManager.anime.animate(
         this.browserWrapper,
         {
           width: ['85%', '100%'],

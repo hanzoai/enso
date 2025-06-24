@@ -1593,8 +1593,8 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     ) {
       delete this._alwaysAnimatePaddingTop;
       const essentialsHeight = essentialContainer.getBoundingClientRect().height;
-      if (!forAnimation && animateContainer && gZenUIManager.motion) {
-        gZenUIManager.motion.animate(
+      if (!forAnimation && animateContainer && gZenUIManager.anime) {
+        gZenUIManager.anime.animate(
           workspaceElement,
           {
             paddingTop: [workspaceElement.style.paddingTop, essentialsHeight + 'px'],
@@ -1743,7 +1743,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       await new Promise((resolve) => {
         requestAnimationFrame(() => {
           animations.push(
-            gZenUIManager.motion.animate(
+            gZenUIManager.anime.animate(
               document.documentElement,
               {
                 '--zen-background-opacity': [previousBackgroundOpacity, 1],
@@ -1773,7 +1773,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       if (shouldAnimate) {
         const existingPaddingTop = element.style.paddingTop;
         animations.push(
-          gZenUIManager.motion.animate(
+          gZenUIManager.anime.animate(
             element,
             {
               transform: existingTransform ? [existingTransform, newTransform] : newTransform,
@@ -1912,7 +1912,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
         if (shouldAnimate) {
           container.style.transform = existingTransform;
           animations.push(
-            gZenUIManager.motion.animate(
+            gZenUIManager.anime.animate(
               container,
               {
                 transform: [

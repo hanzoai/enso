@@ -221,7 +221,7 @@
           this.#startBoxAnimation(areTabsPositionedRight);
         }
 
-        await gZenUIManager.motion.animate(arcAnimationElement, sequence, {
+        await gZenUIManager.anime.animate(arcAnimationElement, sequence, {
           duration: Services.prefs.getIntPref('zen.downloads.download-animation-duration') / 1000,
           easing: 'cubic-bezier(0.37, 0, 0.63, 1)',
           fill: 'forwards',
@@ -353,7 +353,7 @@
 
         wrapper.appendChild(this.#boxAnimationElement);
 
-        await gZenUIManager.motion.animate(
+        await gZenUIManager.anime.animate(
           this.#boxAnimationElement,
           {
             [sideProp]: '34px',
@@ -366,7 +366,7 @@
           }
         ).finished;
 
-        await gZenUIManager.motion.animate(
+        await gZenUIManager.anime.animate(
           this.#boxAnimationElement,
           {
             [sideProp]: '24px',
@@ -411,7 +411,7 @@
       try {
         const sideProp = areTabsPositionedRight ? 'right' : 'left';
 
-        await gZenUIManager.motion.animate(
+        await gZenUIManager.anime.animate(
           this.#boxAnimationElement,
           {
             transform: 'scale(0.9)',
@@ -422,7 +422,7 @@
           }
         ).finished;
 
-        await gZenUIManager.motion.animate(
+        await gZenUIManager.anime.animate(
           this.#boxAnimationElement,
           {
             [sideProp]: '-50px',

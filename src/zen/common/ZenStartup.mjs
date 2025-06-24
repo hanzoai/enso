@@ -107,7 +107,7 @@
       document.documentElement.removeAttribute('zen-before-loaded');
       if (Services.prefs.getBoolPref('zen.watermark.enabled', false)) {
         let elementsToIgnore = this._watermarkIgnoreElements.map((id) => '#' + id).join(', ');
-        gZenUIManager.motion
+        gZenUIManager.anime
           .animate(
             '#browser > *:not(' + elementsToIgnore + '), #urlbar, #tabbrowser-tabbox > *',
             {
@@ -115,7 +115,6 @@
             },
             {
               delay: 0.6,
-              easing: 'ease-in-out',
             }
           )
           .then(() => {

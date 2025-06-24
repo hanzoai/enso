@@ -219,7 +219,7 @@
     hideMediaControls() {
       if (this.mediaControlBar.hasAttribute('hidden')) return;
 
-      return gZenUIManager.motion
+      return gZenUIManager.anime
         .animate(
           this.mediaControlBar,
           {
@@ -259,7 +259,7 @@
           this.mediaControlBar.querySelector('toolbaritem').getBoundingClientRect().height + 'px';
         this.mediaControlBar.style.opacity = 0;
         gZenUIManager.updateTabsToolbar();
-        gZenUIManager.motion.animate(
+        gZenUIManager.anime.animate(
           this.mediaControlBar,
           {
             opacity: [0, 1],

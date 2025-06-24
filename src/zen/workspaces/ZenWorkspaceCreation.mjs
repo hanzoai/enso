@@ -152,7 +152,7 @@
 
       document.getElementById('zen-sidebar-splitter').style.pointerEvents = 'none';
 
-      gZenUIManager.motion
+      gZenUIManager.anime
         .animate(
           [gBrowser.tabContainer, gURLBar.textbox],
           {
@@ -172,7 +172,7 @@
           this.style.visibility = 'visible';
           gZenCompactModeManager.getAndApplySidebarWidth();
           this.resolveInitialized();
-          gZenUIManager.motion
+          gZenUIManager.anime
             .animate(
               this.elementsToAnimate,
               {
@@ -184,7 +184,7 @@
                 duration: 0.6,
                 type: 'spring',
                 bounce: 0,
-                delay: gZenUIManager.motion.stagger(0.05, { startDelay: 0.2 }),
+                delay: gZenUIManager.anime.stagger(0.05, { startDelay: 0.2 }),
               }
             )
             .then(() => {
@@ -265,7 +265,7 @@
     }
 
     async #cleanup() {
-      await gZenUIManager.motion.animate(
+      await gZenUIManager.anime.animate(
         this.elementsToAnimate.reverse(),
         {
           y: [0, 20],
@@ -276,7 +276,7 @@
           duration: 0.4,
           type: 'spring',
           bounce: 0,
-          delay: gZenUIManager.motion.stagger(0.05),
+          delay: gZenUIManager.anime.stagger(0.05),
         }
       );
 
@@ -311,7 +311,7 @@
       await gZenWorkspaces._organizeWorkspaceStripLocations(workspace, true);
       await gZenWorkspaces.updateTabsContainers();
 
-      await gZenUIManager.motion.animate(
+      await gZenUIManager.anime.animate(
         [gBrowser.tabContainer, gURLBar.textbox],
         {
           opacity: [0, 1],

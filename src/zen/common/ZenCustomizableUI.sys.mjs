@@ -117,7 +117,7 @@ export var ZenCustomizableUI = new (class {
         window.setTimeout(() => {
           button.removeAttribute('open');
         }, 500);
-        window.gZenUIManager.motion.animate(
+        window.gZenUIManager.anime.animate(
           image,
           { transform: ['rotate(45deg)', 'rotate(0deg)'] },
           { duration: 0.2 }
@@ -125,7 +125,7 @@ export var ZenCustomizableUI = new (class {
       };
       popup.addEventListener('popuphidden', handlePopupHidden, { once: true });
       popup.openPopup(button, 'after_start');
-      window.gZenUIManager.motion.animate(
+      window.gZenUIManager.anime.animate(
         image,
         { transform: ['rotate(0deg)', 'rotate(45deg)'] },
         { duration: 0.2 }

@@ -92,7 +92,7 @@
 
         # JS Vendor
         content/browser/zen-vendor/tsparticles.confetti.bundle.min.js           (../../zen/vendor/tsparticles.confetti.bundle.min.js)
-        content/browser/zen-vendor/motion.min.mjs                               (../../zen/vendor/motion.min.mjs)
+        content/browser/zen-vendor/animejs.min.mjs                               (../../zen/vendor/animejs.min.mjs)
 
         # FavIcons for startup
         content/browser/zen-images/favicons/calendar.ico                        (../../zen/images/favicons/calendar.ico)
