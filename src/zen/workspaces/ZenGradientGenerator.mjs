@@ -1073,29 +1073,40 @@
         return forToolbar ? this.getToolbarModifiedBase() : 'transparent';
       } else if (themedColors.length === 1) {
         return this.getSingleRGBColor(themedColors[0], forToolbar);
-      } else if (themedColors.length === 2) {
-        return [
-          `linear-gradient(${rotation}deg, ${this.getSingleRGBColor(themedColors[0], forToolbar)} -25%, transparent 100%)`,
-          `linear-gradient(${rotation + 180}deg, ${this.getSingleRGBColor(themedColors[1], forToolbar)} -25%, transparent 100%)`,
-        ].join(', ');
-      } else if (themedColors.length === 3) {
-        let color1 = this.getSingleRGBColor(themedColors[2], forToolbar);
-        let color2 = this.getSingleRGBColor(themedColors[0], forToolbar);
-        let color3 = this.getSingleRGBColor(themedColors[1], forToolbar);
-        if (!forToolbar) {
-          return [
-            `radial-gradient(circle at -30% -30%, ${color2}, transparent 100%)`,
-            `radial-gradient(circle at 130% -30%, ${color3}, transparent 100%)`,
-            `linear-gradient(to top, ${color1} -30%, transparent 60%)`,
-          ].join(', ');
-        }
-        return [`linear-gradient(120deg, ${color1} -30%, ${color3} 100%)`].join(', ');
       } else {
-        // Just return a linear gradient with all colors
-        const gradientColors = themedColors.map((color) =>
-          this.getSingleRGBColor(color, forToolbar)
-        );
-        return `linear-gradient(${rotation}deg, ${gradientColors.join(', ')})`;
+        // If there are custom colors, we just return a linear gradient with all colors
+        if (themedColors.find((color) => color.isCustom)) {
+          // Just return a linear gradient with all colors
+          const gradientColors = themedColors.map((color) =>
+            this.getSingleRGBColor(color, forToolbar)
+          );
+          // Divide all colors evenly in the gradient
+          const colorStops = gradientColors
+            .map((color, index) => {
+              const position = (index / (gradientColors.length - 1)) * 100;
+              return `${color} ${position}%`;
+            })
+            .join(', ');
+          return `linear-gradient(${rotation}deg, ${colorStops})`;
+        }
+        if (themedColors.length === 2) {
+          return [
+            `linear-gradient(${rotation}deg, ${this.getSingleRGBColor(themedColors[1], forToolbar)} -25%, transparent 100%)`,
+            `linear-gradient(${rotation + 180}deg, ${this.getSingleRGBColor(themedColors[0], forToolbar)} -25%, transparent 100%)`,
+          ].join(', ');
+        } else if (themedColors.length === 3) {
+          let color1 = this.getSingleRGBColor(themedColors[2], forToolbar);
+          let color2 = this.getSingleRGBColor(themedColors[0], forToolbar);
+          let color3 = this.getSingleRGBColor(themedColors[1], forToolbar);
+          if (!forToolbar) {
+            return [
+              `radial-gradient(circle at -30% -30%, ${color2}, transparent 100%)`,
+              `radial-gradient(circle at 130% -30%, ${color3}, transparent 100%)`,
+              `linear-gradient(to top, ${color1} -30%, transparent 60%)`,
+            ].join(', ');
+          }
+          return [`linear-gradient(120deg, ${color1} -30%, ${color3} 100%)`].join(', ');
+        }
       }
     }
 
@@ -1291,10 +1302,17 @@
         }
 
         if (this.isDarkMode) {
-          browser.document.documentElement.style.setProperty(
-            '--zen-themed-browser-overlay-bg',
-            'rgba(255, 255, 255, 0.3)'
-          );
+          if (window.matchMedia('(-moz-windows-mica)').matches) {
+            browser.document.documentElement.style.setProperty(
+              '--zen-themed-browser-overlay-bg',
+              'transparent'
+            );
+          } else {
+            browser.document.documentElement.style.setProperty(
+              '--zen-themed-browser-overlay-bg',
+              'rgba(255, 255, 255, 0.3)'
+            );
+          }
         } else {
           browser.document.documentElement.style.setProperty(
             '--zen-themed-browser-overlay-bg',
@@ -1375,8 +1393,8 @@
           thirdStop.setAttribute('offset', `${opacity * 100}%`);
           const interpolatedPath = this.#interpolateWavePath(opacity);
           svg.setAttribute('d', interpolatedPath);
-          opacitySlider.style.setProperty('--zen-thumb-height', `${40 + opacity * 12}px`);
-          opacitySlider.style.setProperty('--zen-thumb-width', `${10 + opacity * 12}px`);
+          opacitySlider.style.setProperty('--zen-thumb-height', `${40 + opacity * 15}px`);
+          opacitySlider.style.setProperty('--zen-thumb-width', `${10 + opacity * 15}px`);
           svg.style.stroke =
             interpolatedPath === this.#linePath
               ? thirdStop.getAttribute('stop-color')
