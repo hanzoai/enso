@@ -1381,6 +1381,10 @@
         browser.gZenThemePicker.currentOpacity = workspaceTheme.opacity ?? 0.5;
         browser.gZenThemePicker.currentTexture = workspaceTheme.texture ?? 0;
 
+        const dominantColor = this.getMostDominantColor(workspaceTheme.gradientColors);
+        const isDefaultTheme =
+          dominantColor?.toString() === this.hexToRgb(this.getNativeAccentColor()).toString();
+
         const opacitySlider = browser.document.getElementById(
           'PanelUI-zen-gradient-generator-opacity'
         );
@@ -1399,6 +1403,9 @@
             opacity = 1;
           } else {
             opacity = (opacity - 0.15) / (0.85 - 0.15);
+          }
+          if (isDefaultTheme) {
+            opacity = 1; // If it's the default theme, we want the wave to be
           }
           // Since it's sine waves, we can't just set the offset to the opacity, we need to calculate it
           // The offset is the percentage of the wave that is visible, so we need to multiply
@@ -1484,7 +1491,6 @@
           gradient
         );
 
-        const dominantColor = this.getMostDominantColor(workspaceTheme.gradientColors);
         if (dominantColor) {
           browser.document.documentElement.style.setProperty(
             '--zen-primary-color',
@@ -1493,7 +1499,7 @@
               : `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`
           );
           let isDarkMode = this.isDarkMode;
-          if (dominantColor.toString() !== this.hexToRgb(this.getNativeAccentColor()).toString()) {
+          if (!isDefaultTheme) {
             isDarkMode = browser.gZenThemePicker.shouldBeDarkMode(dominantColor);
             browser.document.documentElement.setAttribute('zen-should-be-dark-mode', isDarkMode);
           } else {

@@ -300,6 +300,7 @@
   white-space: nowrap;
   pointer-events: none;
   font-size: small;
+  margin: 0;
 
   &[hidden] {
     display: none;
