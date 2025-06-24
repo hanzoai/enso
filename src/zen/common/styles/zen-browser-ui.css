@@ -46,7 +46,10 @@
   pointer-events: none;
 
   isolation: isolate;
-  background: var(--zen-themed-toolbar-bg-transparent);
+
+  :root[zen-should-be-dark-mode] {
+    background: var(--zen-themed-toolbar-bg-transparent);
+  }
 
   &::after,
   &::before {

@@ -57,8 +57,8 @@
                       style="stroke-width: 8px;"/>
                 <defs>
                   <linearGradient id="PanelUI-zen-gradient-generator-slider-wave-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="light-dark(rgb(77, 77, 77), rgb(161, 161, 161))"/>
-                    <stop offset="0%" stop-color="light-dark(rgba(77, 77, 77), rgba(161, 161, 161))"/>
+                    <stop offset="0%" stop-color="light-dark(rgb(90, 90, 90), rgb(161, 161, 161))"/>
+                    <stop offset="0%" stop-color="light-dark(rgb(90, 90, 90), rgba(161, 161, 161))"/>
                     <stop offset="100%" stop-color="light-dark(rgba(77, 77, 77, 0.5), rgba(161, 161, 161, 0.5))"/>
                   </linearGradient>
                 </defs>

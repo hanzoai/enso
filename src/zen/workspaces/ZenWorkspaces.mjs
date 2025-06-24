@@ -2840,4 +2840,19 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       }
     }
   }
+
+  updateOverflowingTabs() {
+    if (!this._hasInitializedTabsStrip) {
+      return;
+    }
+    const currentWorkspaceStrip = this.workspaceElement(this.activeWorkspace);
+    if (!currentWorkspaceStrip) {
+      return;
+    }
+    if (currentWorkspaceStrip.overflows) {
+      gBrowser.tabContainer.setAttribute('overflow', 'true');
+    } else {
+      gBrowser.tabContainer.removeAttribute('overflow');
+    }
+  }
 })();

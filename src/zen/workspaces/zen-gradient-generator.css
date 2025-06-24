@@ -210,6 +210,7 @@
     overflow: visible;
     min-width: calc(100% + 2rem);
     scale: 1.2;
+    margin-left: 4px;
   }
 }
 
@@ -298,6 +299,7 @@
   transform: translate(-50%, -50%);
   white-space: nowrap;
   pointer-events: none;
+  font-size: small;
 
   &[hidden] {
     display: none;
@@ -436,4 +438,14 @@
   max-width: 28px;
   max-height: 28px;
   margin: 0 !important;
+}
+
+:root:not([zen-should-be-dark-mode]) {
+  #PanelUI-zen-gradient-generator-opacity {
+    display: none !important;
+  }
+
+  #PanelUI-zen-gradient-slider-wave svg path {
+    stroke: dimgray !important;
+  }
 }

@@ -1110,9 +1110,7 @@
 
       const rotation = -45; // TODO: Detect rotation based on the accent color
       if (themedColors.length === 0) {
-        return forToolbar
-          ? this.getToolbarModifiedBase()
-          : 'var(--zen-themed-toolbar-bg-transparent)';
+        return forToolbar ? this.getToolbarModifiedBase() : 'transparent';
       } else if (themedColors.length === 1) {
         return this.getSingleRGBColor(themedColors[0], forToolbar);
       } else if (themedColors.length === 2) {
@@ -1282,13 +1280,16 @@
 
     getMostDominantColor(allColors) {
       const dominantColor = this.getPrimaryColor(allColors);
+      if (!dominantColor) {
+        return this.hexToRgb(this.getNativeAccentColor());
+      }
       const result = this.pSBC(
         this.isDarkMode ? 0.2 : -0.5,
         `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`
       );
       const color = result?.match(/\d+/g)?.map(Number);
       if (!color || color.length !== 3) {
-        return this.getNativeAccentColor();
+        return this.hexToRgb(this.getNativeAccentColor());
       }
       return color;
     }
@@ -1492,7 +1493,7 @@
               : `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`
           );
           let isDarkMode = this.isDarkMode;
-          if (dominantColor !== this.hexToRgb(this.getNativeAccentColor())) {
+          if (dominantColor.toString() !== this.hexToRgb(this.getNativeAccentColor()).toString()) {
             isDarkMode = browser.gZenThemePicker.shouldBeDarkMode(dominantColor);
             browser.document.documentElement.setAttribute('zen-should-be-dark-mode', isDarkMode);
           } else {
@@ -1558,7 +1559,7 @@
         return primaryColor.c;
       }
       if (colors.length === 0) {
-        return this.hexToRgb(this.getNativeAccentColor());
+        return undefined;
       }
       // Get the middle color
       return colors[Math.floor(colors.length / 2)].c;

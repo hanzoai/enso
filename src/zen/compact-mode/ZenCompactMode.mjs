@@ -155,13 +155,13 @@ var gZenCompactModeManager = {
   },
 
   updateCompactModeContext(isSingleToolbar) {
-    const IDs = [
-      'zen-context-menu-compact-mode-hide-sidebar',
-      'zen-context-menu-compact-mode-hide-toolbar',
-      'zen-context-menu-compact-mode-hide-both',
-    ];
-    for (let id of IDs) {
-      document.getElementById(id).disabled = isSingleToolbar;
+    const menuitem = document.getElementById('zen-context-menu-compact-mode-toggle');
+    const menu = document.getElementById('zen-context-menu-compact-mode');
+    menu.setAttribute('hidden', isSingleToolbar);
+    if (isSingleToolbar) {
+      menu.before(menuitem);
+    } else {
+      menu.querySelector('menupopup').prepend(menuitem);
     }
   },
 
