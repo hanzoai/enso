@@ -23,24 +23,44 @@
         <toolbarbutton id="PanelUI-zen-gradient-generator-color-page-left" class="toolbarbutton-1" disabled="true" />
         <hbox id="PanelUI-zen-gradient-generator-color-pages">
           <hbox>
-            <box data-lightness="90" data-algo="float" data-num-dots="1" data-position="196,176" style="background: #7bcbda;"></box>
-            <box data-lightness="80" data-algo="float" data-num-dots="1" data-position="116,167" style="background: #be9ac9;"></box>
-            <box data-lightness="70" data-algo="float" data-num-dots="1" data-position="122,110" style="background: #cdcea1;"></box>
-            <box data-lightness="60" data-algo="float" data-num-dots="1" data-position="181,83" style="background: #6ac593;"></box>
-            <box data-lightness="50" data-algo="analogous" data-num-dots="3" data-position="219,99" style="background: linear-gradient(135deg, rgb(117, 255, 136), rgb(60, 66, 58));"></box>
-            <box data-lightness="40" data-algo="analogous" data-num-dots="3" data-position="167,201" style="background: linear-gradient(135deg, #a03fe0, #382b5c);"></box>
-            <box data-lightness="30" data-algo="analogous" data-num-dots="3" data-position="90,170" style="background: linear-gradient(135deg, #c57aa3, #af824f);"></box>
-            <box data-lightness="20" data-algo="splitComplementary" data-num-dots="3" data-position="83,103" style="background: linear-gradient(135deg, #1e90ff, #968a4a);"></box>
+            <box data-lightness="90" data-algo="float" data-num-dots="1" data-position="240,240" style="background: #f4efdf;"></box>
+            <box data-lightness="80" data-algo="float" data-num-dots="1" data-position="233,157" style="background: #f0b8cd;"></box>
+            <box data-lightness="80" data-algo="float" data-num-dots="1" data-position="236,111" style="background: #e9c3e3;"></box>
+            <box data-lightness="70" data-algo="float" data-num-dots="1" data-position="234,173" style="background: #da7682;"></box>
+            <box data-lightness="70" data-algo="float" data-num-dots="1" data-position="220,187" style="background: #eb8570;"></box>
+            <box data-lightness="60" data-algo="float" data-num-dots="1" data-position="225,237" style="background: #dcce7f;"></box>
+            <box data-lightness="60" data-algo="float" data-num-dots="1" data-position="147,195" style="background: #5becad;"></box>
+            <box data-lightness="50" data-algo="float" data-num-dots="1" data-position="81,84" style="background: #919bb5;"></box>
           </hbox>
           <hbox>
-            <box data-lightness="90" data-algo="float" data-num-dots="1" data-position="196,176" style="background: red;"></box>
-            <box data-lightness="80" data-algo="float" data-num-dots="1" data-position="116,167" style="background: #be9ac9;"></box>
-            <box data-lightness="70" data-algo="float" data-num-dots="1" data-position="122,110" style="background: #cdcea1;"></box>
-            <box data-lightness="60" data-algo="float" data-num-dots="1" data-position="181,83" style="background: #6ac593;"></box>
-            <box data-lightness="50" data-algo="analogous" data-num-dots="3" data-position="219,99" style="background: linear-gradient(135deg, rgb(117, 255, 136), rgb(60, 66, 58));"></box>
-            <box data-lightness="40" data-algo="analogous" data-num-dots="3" data-position="167,201" style="background: linear-gradient(135deg, #a03fe0, #382b5c);"></box>
-            <box data-lightness="30" data-algo="analogous" data-num-dots="3" data-position="90,170" style="background: linear-gradient(135deg, #c57aa3, #af824f);"></box>
-            <box data-lightness="20" data-algo="splitComplementary" data-num-dots="3" data-position="83,103" style="background: linear-gradient(135deg, #1e90ff, #968a4a);"></box>
+            <box data-lightness="90" data-algo="analogous" data-num-dots="3" data-position="240,240" style="background: linear-gradient(135deg, #f4efdf, rgb(244, 223, 244));"></box>
+            <box data-lightness="85" data-algo="analogous" data-num-dots="3" data-position="233,157" style="background: linear-gradient(135deg, #f0b8cd,rgb(244, 237, 224));"></box>
+            <box data-lightness="80" data-algo="analogous" data-num-dots="3" data-position="236,111" style="background: linear-gradient(135deg, #e9c3e3,rgb(144, 97, 116));"></box>
+            <box data-lightness="70" data-algo="analogous" data-num-dots="3" data-position="234,173" style="background: linear-gradient(135deg, #da7682,rgb(242, 197, 160));"></box>
+            <box data-lightness="70" data-algo="analogous" data-num-dots="3" data-position="220,187" style="background: linear-gradient(135deg, #eb8570,rgb(229, 244, 164));"></box>
+            <box data-lightness="60" data-algo="analogous" data-num-dots="3" data-position="225,237" style="background: linear-gradient(135deg, #dcce7f,rgb(115, 195, 128));"></box>
+            <box data-lightness="60" data-algo="analogous" data-num-dots="3" data-position="147,195" style="background: linear-gradient(135deg, #5becad,rgb(195, 248, 207));"></box>
+            <box data-lightness="55" data-algo="analogous" data-num-dots="3" data-position="81,84" style="background: linear-gradient(135deg, #919bb5,rgb(179, 176, 223));"></box>
+          </hbox>
+          <hbox>
+            <box data-lightness="10" data-algo="float" data-num-dots="1" data-position="171,72" style="background:rgb(93, 86, 106);"></box>
+            <box data-lightness="40" data-algo="float" data-num-dots="1" data-position="265,79" style="background: #997096;"></box>
+            <box data-lightness="35" data-algo="float" data-num-dots="1" data-position="301,176" style="background: #956066;"></box>
+            <box data-lightness="30" data-algo="float" data-num-dots="1" data-position="237,210" style="background: #9c6645;"></box>
+            <box data-lightness="30" data-algo="float" data-num-dots="1" data-position="91,228" style="background: #517b6c;"></box>
+            <box data-lightness="25" data-algo="float" data-num-dots="1" data-position="67,159" style="background: #576e75;"></box>
+            <box data-lightness="20" data-algo="float" data-num-dots="1" data-position="314,235" style="background:rgb(131, 109, 95);"></box>
+            <box data-lightness="20" data-algo="float" data-num-dots="1" data-position="118,215" style="background: #447464;"></box>
+          </hbox>
+          <hbox>
+            <box data-lightness="10" data-algo="analogous" data-num-dots="3" data-position="171,72" style="background: linear-gradient(135deg, #584e69,rgb(32, 27, 41));"></box>
+            <box data-lightness="40" data-algo="analogous" data-num-dots="3" data-position="265,79" style="background: linear-gradient(135deg, #997096,rgb(125, 62, 88));"></box>
+            <box data-lightness="35" data-algo="analogous" data-num-dots="3" data-position="301,176" style="background: linear-gradient(135deg, #956066,rgb(116, 82, 131));"></box>
+            <box data-lightness="30" data-algo="analogous" data-num-dots="3" data-position="237,210" style="background: linear-gradient(135deg, #9c6645,rgb(171, 195, 109));"></box>
+            <box data-lightness="30" data-algo="analogous" data-num-dots="3" data-position="91,228" style="background: linear-gradient(135deg, #517b6c,rgb(118, 141, 164));"></box>
+            <box data-lightness="25" data-algo="analogous" data-num-dots="3" data-position="67,159" style="background: linear-gradient(135deg, #576e75,rgb(67, 66, 92));"></box>
+            <box data-lightness="20" data-algo="analogous" data-num-dots="3" data-position="314,235" style="background: linear-gradient(135deg, #665951,rgb(81, 67, 59));"></box>
+            <box data-lightness="20" data-algo="analogous" data-num-dots="3" data-position="118,215" style="background: linear-gradient(135deg, #447464,rgb(109, 129, 168));"></box>
           </hbox>
         </hbox>
         <toolbarbutton id="PanelUI-zen-gradient-generator-color-page-right" class="toolbarbutton-1" />
@@ -64,7 +84,7 @@
                 </defs>
               </svg>
             </box>
-            <html:input type="range" min="0.15" max="0.85" value="0.5" step="0.01" id="PanelUI-zen-gradient-generator-opacity" />
+            <html:input type="range" min="0.15" max="0.8" value="0.4" step="0.01" id="PanelUI-zen-gradient-generator-opacity" />
           </vbox>
           <vbox id="PanelUI-zen-gradient-generator-texture-wrapper">
           </vbox>

@@ -175,12 +175,7 @@
           const algo = target.getAttribute('data-algo');
           const lightness = target.getAttribute('data-lightness');
           const numDots = parseInt(target.getAttribute('data-num-dots'));
-          if (algo == 'float') {
-            for (const dot of this.dots) {
-              dot.element.remove();
-            }
-            this.dots = [];
-          } else if (numDots < this.dots.length) {
+          if (numDots < this.dots.length) {
             for (let i = numDots; i < this.dots.length; i++) {
               this.dots[i].element.remove();
             }
@@ -192,6 +187,7 @@
             {
               ID: 0,
               position: { x, y },
+              isPrimary: true,
             },
           ];
           for (let i = 1; i < numDots; i++) {
@@ -203,12 +199,6 @@
           this.useAlgo = algo;
           this.#currentLightness = lightness;
           dots = this.calculateCompliments(dots, 'update', this.useAlgo);
-          if (algo == 'float') {
-            for (const dot of dots) {
-              this.spawnDot(dot.position);
-            }
-            this.dots[0].element.classList.add('primary');
-          }
           this.handleColorPositions(dots);
           this.updateCurrentWorkspace();
         });
@@ -419,8 +409,8 @@
       // important: If any sort of sizing is changed, make sure changes are reflected here
       const padding = 20;
       const rect = {
-        width: 318,
-        height: 318,
+        width: 338,
+        height: 338,
       };
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
@@ -705,36 +695,6 @@
 
     handleColorPositions(colorPositions) {
       colorPositions.sort((a, b) => a.ID - b.ID);
-      if (this.useAlgo === 'floating') {
-        const dotPad = this.panel.querySelector('.zen-theme-picker-gradient');
-        const rect = dotPad.getBoundingClientRect();
-        this.dots.forEach((dot) => {
-          dot.element.style.zIndex = 999;
-
-          let pixelX, pixelY;
-          if (dot.position.x === null) {
-            const leftPercentage = parseFloat(dot.element.style.left) / 100;
-            const topPercentage = parseFloat(dot.element.style.top) / 100;
-
-            pixelX = leftPercentage * rect.width;
-            pixelY = topPercentage * rect.height;
-          } else {
-            pixelX = dot.position.x;
-            pixelY = dot.position.y;
-          }
-
-          const colorFromPos = this.getColorFromPosition(pixelX, pixelY);
-
-          dot.element.style.setProperty(
-            '--zen-theme-picker-dot-color',
-            `rgb(${colorFromPos[0]}, ${colorFromPos[1]}, ${colorFromPos[2]})`
-          );
-
-          dot.element.setAttribute('data-position', this.getJSONPos(pixelX, pixelY));
-        });
-
-        return;
-      }
       const existingPrimaryDot = this.dots.find((d) => d.ID === 0);
 
       if (existingPrimaryDot) {
@@ -1124,9 +1084,9 @@
         let color3 = this.getSingleRGBColor(themedColors[1], forToolbar);
         if (!forToolbar) {
           return [
-            `radial-gradient(circle at -30% -30%, ${color1}, transparent 100%)`,
-            `radial-gradient(circle at 130% -30%, ${color2}, transparent 100%)`,
-            `linear-gradient(to top, ${color3} -30%, transparent 60%)`,
+            `radial-gradient(circle at -30% -30%, ${color2}, transparent 100%)`,
+            `radial-gradient(circle at 130% -30%, ${color3}, transparent 100%)`,
+            `linear-gradient(to top, ${color1} -30%, transparent 60%)`,
           ].join(', ');
         }
         return [`linear-gradient(120deg, ${color1} -30%, ${color3} 100%)`].join(', ');
@@ -1395,14 +1355,14 @@
           const [_, secondStop, thirdStop] = document.querySelectorAll(
             '#PanelUI-zen-gradient-generator-slider-wave-gradient stop'
           );
-          // Opacity can only be between 0.15 to 0.85. Make opacity relative to that range
-          // So 0.15 becomes 0, and 0.85 becomes 1.
+          // Opacity can only be between 0.15 to 0.80. Make opacity relative to that range
+          // So 0.15 becomes 0, and 0.80 becomes 1.
           if (opacity < 0.15) {
             opacity = 0;
-          } else if (opacity > 0.85) {
+          } else if (opacity > 0.8) {
             opacity = 1;
           } else {
-            opacity = (opacity - 0.15) / (0.85 - 0.15);
+            opacity = (opacity - 0.15) / (0.8 - 0.15);
           }
           if (isDefaultTheme) {
             opacity = 1; // If it's the default theme, we want the wave to be
@@ -1416,7 +1376,7 @@
           const interpolatedPath = this.#interpolateWavePath(opacity);
           svg.setAttribute('d', interpolatedPath);
           opacitySlider.style.setProperty('--zen-thumb-height', `${40 + opacity * 12}px`);
-          opacitySlider.style.setProperty('--zen-thumb-width', `${10 + opacity * 10}px`);
+          opacitySlider.style.setProperty('--zen-thumb-width', `${10 + opacity * 12}px`);
           svg.style.stroke =
             interpolatedPath === this.#linePath
               ? thirdStop.getAttribute('stop-color')

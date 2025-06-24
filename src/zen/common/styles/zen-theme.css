@@ -117,7 +117,7 @@
   --zen-button-padding: 0.6rem 1.2rem;
 
   --zen-toolbar-element-bg: light-dark(
-    color-mix(in srgb, currentColor 5%, transparent 5%),
+    color-mix(in srgb, currentColor 6%, transparent 94%),
     color-mix(in srgb, currentColor 10%, transparent 90%)
   ) !important;
 
@@ -125,6 +125,8 @@
   --zen-toolbar-height: 38px;
   --zen-toolbar-button-inner-padding: 6px;
   --toolbarbutton-outer-padding: 4px;
+
+  --toolbarbutton-inner-padding: 5px !important;
 
   --toolbarbutton-hover-background: color-mix(
     in srgb,

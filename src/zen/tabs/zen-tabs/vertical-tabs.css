@@ -42,11 +42,6 @@
     }
   }
 
-  /* Adjust padding for top sidebar buttons */
-  & #zen-sidebar-top-buttons .toolbarbutton-1 > .toolbarbutton-icon {
-    padding: 4px;
-  }
-
   /* Make the separator take full width */
   & #zen-sidebar-top-buttons-separator {
     width: 100%;
@@ -428,7 +423,6 @@
   gap: 5px;
   align-items: center;
   padding-top: var(--zen-element-separation);
-  --toolbarbutton-inner-padding: 5px;
 
   & > toolbarbutton:not(#zen-workspaces-button) {
     padding: 0 !important;
@@ -1172,14 +1166,6 @@
     }
     :root[zen-right-side='true']:not([zen-window-buttons-reversed='true']) {
       padding-inline-end: var(--zen-toolbox-padding); /* Add end padding for right sidebar */
-    }
-
-    /* Standardize height and padding for toolbar buttons (excluding titlebar buttons) */
-    & toolbarbutton:not(.titlebar-button) {
-      height: calc(
-        2 * var(--toolbarbutton-inner-padding) + 16px
-      ); /* Calculate height based on padding + icon */
-      padding: 0 var(--toolbarbutton-outer-padding) !important; /* Apply outer padding */
     }
 
     /* Hide flexible space when collapsed */

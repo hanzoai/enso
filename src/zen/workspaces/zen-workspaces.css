@@ -71,11 +71,6 @@
     &[dragged='true']{
       background-color: var(--zen-toolbar-element-bg);
     }
-
-    &[dragged='true'] {
-      outline: 1px solid var(--zen-colors-primary);
-      outline-offset: -1px;
-    }
   }
 
   &[reorder-mode='true'] toolbarbutton:not([dragged='true']) {
@@ -208,7 +203,6 @@
   }
 
   .zen-workspaces-actions {
-    --toolbarbutton-inner-padding: 4px;
     margin-left: auto !important;
     opacity: 0;
     visibility: collapse;
