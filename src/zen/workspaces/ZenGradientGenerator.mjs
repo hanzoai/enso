@@ -40,6 +40,9 @@
     return points;
   }
 
+  const MAX_OPACITY = 0.9;
+  const MIN_OPACITY = AppConstants.platform === 'win' ? 0.2 : 0.15;
+
   class nsZenThemePicker extends ZenMultiWindowFeature {
     static MAX_DOTS = 3;
 
@@ -1018,11 +1021,7 @@
     }
 
     luminance([r, g, b]) {
-      const a = [r, g, b].map((v) => {
-        v /= 255;
-        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-      });
-      return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+      return 0.2126 * (r / 255) + 0.7152 * (g / 255) + 0.0722 * (b / 255);
     }
 
     contrastRatio(rgb1, rgb2) {
@@ -1111,7 +1110,7 @@
     }
 
     shouldBeDarkMode(accentColor) {
-      let minimalLum = this.isDarkMode ? 0.6 : 0.5;
+      let minimalLum = 0.5;
       if (!this.canBeTransparent) {
         // Blend the color with the toolbar background
         const toolbarBg = this.getToolbarModifiedBaseRaw();
@@ -1363,14 +1362,13 @@
           const [_, secondStop, thirdStop] = document.querySelectorAll(
             '#PanelUI-zen-gradient-generator-slider-wave-gradient stop'
           );
-          // Opacity can only be between 0.15 to 0.80. Make opacity relative to that range
-          // So 0.15 becomes 0, and 0.80 becomes 1.
-          if (opacity < 0.15) {
+          // Opacity can only be between MIN_OPACITY to MAX_OPACITY. Make opacity relative to that range
+          if (opacity < MIN_OPACITY) {
             opacity = 0;
-          } else if (opacity > 0.8) {
+          } else if (opacity > MAX_OPACITY) {
             opacity = 1;
           } else {
-            opacity = (opacity - 0.15) / (0.8 - 0.15);
+            opacity = (opacity - MIN_OPACITY) / (MAX_OPACITY - MIN_OPACITY);
           }
           if (isDefaultTheme) {
             opacity = 1; // If it's the default theme, we want the wave to be

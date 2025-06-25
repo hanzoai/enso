@@ -134,6 +134,8 @@
     transparent 90%
   );
 
+  --toolbar-color: light-dark(rgb(21, 20, 26, 0.7), rgb(251, 251, 254, 0.7)) !important;
+
   /* Other colors */
   --urlbar-box-bgcolor: var(--zen-urlbar-background) !important;
   --urlbar-box-active-bgcolor: var(--toolbarbutton-hover-background) !important;
@@ -227,6 +229,9 @@
   @media (-moz-windows-mica) or (-moz-platform: macos) {
     background: transparent;
     --zen-themed-toolbar-bg-transparent: transparent;
+    @media -moz-pref('widget.windows.mica.toplevel-backdrop', 2) {
+      --zen-themed-toolbar-bg-transparent: light-dark(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.3));
+    }
     &[zen-should-be-dark-mode] {
       --zen-themed-toolbar-bg-transparent: var(--zen-themed-browser-overlay-bg);
     }

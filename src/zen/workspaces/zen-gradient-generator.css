@@ -277,6 +277,7 @@
       &:hover {
         transform: scale(1.05) translate(-50%, -50%);
       }
+      transform-origin: center center;
     }
 
     &[dragging='true'] {
