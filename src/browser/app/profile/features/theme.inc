@@ -21,3 +21,5 @@ pref('zen.theme.window.scheme', 'auto'); // auto, light, dark
   pref('zen.theme.acrylic-elements', false);
 #endif
 
+// Light weight themes
+pref('zen.theme.disable-lightweight', false);

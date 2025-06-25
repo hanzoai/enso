@@ -136,9 +136,6 @@
   }
 
   & #nav-bar {
-    /* Add bottom margin */
-    margin-bottom: var(--zen-toolbox-padding);
-
     /* Hide flexible spaces */
     & toolbarspring {
       display: none;
@@ -1275,7 +1272,6 @@
 .zen-essentials-container {
   will-change: transform;
 
-  padding-bottom: var(--zen-toolbox-padding);
   overflow: hidden;
   gap: 4px;
   transition:
@@ -1299,6 +1295,7 @@
   min-width: calc(100% + var(--zen-toolbox-padding) * 2);
   width: calc(100% + var(--zen-toolbox-padding) * 2);
   padding: 0 var(--zen-toolbox-padding);
+  padding-top: 6px;
   display: grid;
 
   position: absolute;

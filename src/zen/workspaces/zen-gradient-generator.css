@@ -192,14 +192,14 @@
   &::before {
     content: '';
     position: absolute;
-    width: 100%;
+    width: calc(100% - 8px);
     height: 16px;
     background: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
     border-radius: 999px;
     pointer-events: none;
     z-index: -1;
     top: 50%;
-    left: 4px;
+    left: 8px;
     transform: translateY(-50%);
   }
 
@@ -215,6 +215,7 @@
   margin: 0 !important;
   background: transparent;
   z-index: 2;
+  padding: 0 5px;
 
   &::-moz-range-thumb {
     background: light-dark(black, white);

@@ -1091,8 +1091,8 @@
         }
         if (themedColors.length === 2) {
           return [
-            `linear-gradient(${rotation}deg, ${this.getSingleRGBColor(themedColors[1], forToolbar)} -25%, transparent 100%)`,
-            `linear-gradient(${rotation + 180}deg, ${this.getSingleRGBColor(themedColors[0], forToolbar)} -25%, transparent 100%)`,
+            `linear-gradient(${rotation}deg, ${this.getSingleRGBColor(themedColors[1], forToolbar)} 0%, transparent 100%)`,
+            `linear-gradient(${rotation + 180}deg, ${this.getSingleRGBColor(themedColors[0], forToolbar)} 0%, transparent 100%)`,
           ].join(', ');
         } else if (themedColors.length === 3) {
           let color1 = this.getSingleRGBColor(themedColors[2], forToolbar);
@@ -1100,9 +1100,9 @@
           let color3 = this.getSingleRGBColor(themedColors[1], forToolbar);
           if (!forToolbar) {
             return [
-              `radial-gradient(circle at -30% -30%, ${color2}, transparent 100%)`,
-              `radial-gradient(circle at 130% -30%, ${color3}, transparent 100%)`,
-              `linear-gradient(to top, ${color1} -30%, transparent 60%)`,
+              `radial-gradient(circle at 0% 0%, ${color2}, transparent 100%)`,
+              `radial-gradient(circle at 100% 0%, ${color3}, transparent 100%)`,
+              `linear-gradient(to top, ${color1} 0%, transparent 60%)`,
             ].join(', ');
           }
           return [`linear-gradient(120deg, ${color1} -30%, ${color3} 100%)`].join(', ');
@@ -1250,19 +1250,7 @@
     };
 
     getMostDominantColor(allColors) {
-      const dominantColor = this.getPrimaryColor(allColors);
-      if (!dominantColor) {
-        return this.hexToRgb(this.getNativeAccentColor());
-      }
-      const result = this.pSBC(
-        this.isDarkMode ? 0.2 : -0.5,
-        `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`
-      );
-      const color = result?.match(/\d+/g)?.map(Number);
-      if (!color || color.length !== 3) {
-        return this.hexToRgb(this.getNativeAccentColor());
-      }
-      return color;
+      return this.getPrimaryColor(allColors);
     }
 
     blendColors(rgb1, rgb2, percentage) {
@@ -1359,9 +1347,11 @@
         browser.gZenThemePicker.currentOpacity = workspaceTheme.opacity ?? 0.5;
         browser.gZenThemePicker.currentTexture = workspaceTheme.texture ?? 0;
 
-        const dominantColor = this.getMostDominantColor(workspaceTheme.gradientColors);
-        const isDefaultTheme =
-          dominantColor?.toString() === this.hexToRgb(this.getNativeAccentColor()).toString();
+        let dominantColor = this.getMostDominantColor(workspaceTheme.gradientColors);
+        const isDefaultTheme = !dominantColor;
+        if (isDefaultTheme) {
+          dominantColor = this.hexToRgb(this.getNativeAccentColor());
+        }
 
         const opacitySlider = browser.document.getElementById(
           'PanelUI-zen-gradient-generator-opacity'
@@ -1472,9 +1462,10 @@
         if (dominantColor) {
           browser.document.documentElement.style.setProperty(
             '--zen-primary-color',
-            typeof dominantColor === 'string'
-              ? dominantColor
-              : `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`
+            this.pSBC(
+              this.isDarkMode ? 0.2 : -0.5,
+              `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`
+            )
           );
           let isDarkMode = this.isDarkMode;
           if (!isDefaultTheme) {
