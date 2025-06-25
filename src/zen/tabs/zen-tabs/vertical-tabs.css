@@ -773,18 +773,22 @@
   }
 
   #zen-sidebar-foot-buttons {
-    & > .toolbarbutton-1 {
+    & > .toolbarbutton-1,
+    & .toolbarbutton-badge-stack {
       min-height: var(--tab-min-height);
       line-height: var(--tab-label-line-height);
       border-radius: var(--border-radius-medium);
       padding: 0 calc(var(--tab-inline-padding) - var(--tab-inner-inline-margin));
-      width: var(--tab-collapsed-background-width);
-      margin-inline: var(--tab-inner-inline-margin);
 
-      & .toolbarbutton-badge-stack {
+      &.toolbarbutton-badge-stack {
         justify-content: center;
         padding: 8px;
         width: var(--tab-collapsed-background-width);
+      }
+
+      &.toolbarbutton-1 {
+        width: var(--tab-collapsed-background-width);
+        margin-inline: var(--tab-inner-inline-margin);
       }
     }
   }

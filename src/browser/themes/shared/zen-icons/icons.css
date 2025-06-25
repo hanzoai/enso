@@ -759,7 +759,7 @@
   border-radius: var(--tab-border-radius);
 
   &:hover {
-    background: var(--toolbarbutton-active-background);
+    background: var(--toolbarbutton-hover-background);
   }
 
   & image {

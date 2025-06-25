@@ -130,9 +130,15 @@
 
   --toolbarbutton-hover-background: color-mix(
     in srgb,
-    var(--zen-branding-bg-reverse) 10%,
-    transparent 90%
+    var(--zen-branding-bg-reverse) 5%,
+    transparent 95%
   );
+
+  --toolbarbutton-active-background: color-mix(
+    in srgb,
+    var(--zen-branding-bg-reverse) 7%,
+    transparent 93%
+  ) !important;
 
   --toolbar-color: light-dark(rgb(21, 20, 26, 0.7), rgb(251, 251, 254, 0.7)) !important;
 
@@ -157,10 +163,7 @@
   --urlbar-margin-inline: 1px !important;
 
   --tab-icon-overlay-stroke: light-dark(white, black) !important;
-
   --tab-close-button-padding: 5px !important;
-
-  --toolbarbutton-active-background: var(--zen-toolbar-element-bg);
 
   --input-bgcolor: var(--zen-colors-tertiary) !important;
   --input-border-color: var(--zen-input-border-color) !important;

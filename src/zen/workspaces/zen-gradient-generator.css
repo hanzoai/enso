@@ -91,6 +91,7 @@
   overflow: auto;
   scrollbar-width: none;
   scroll-behavior: smooth;
+  mask-image: linear-gradient(to right, transparent 0%, black 2.5%, black 97.5%, transparent 100%);
 
   & > hbox {
     justify-content: space-around;
@@ -103,6 +104,7 @@
       cursor: pointer;
       position: relative;
       transition: transform 0.1s;
+
       &::after {
         content: '';
         position: absolute;
@@ -110,7 +112,7 @@
         height: 100%;
         top: 0;
         left: 0;
-        outline: 2px solid var(--zen-toolbar-element-bg);
+        outline: 2px solid color-mix(in srgb, var(--zen-toolbar-element-bg) 80%, transparent 20%);
         border-radius: 50%;
         pointer-events: none;
         transition: transform 0.1s;

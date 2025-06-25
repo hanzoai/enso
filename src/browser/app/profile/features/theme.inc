@@ -22,4 +22,4 @@ pref('zen.theme.window.scheme', 'auto'); // auto, light, dark
 #endif
 
 // Light weight themes
-pref('zen.theme.disable-lightweight', false);
+pref('zen.theme.disable-lightweight', true);
