@@ -100,7 +100,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       false
     );
     this.containerSpecificEssentials = Services.prefs.getBoolPref(
-      'zen.workspaces.container-specific-essentials-enabled',
+      'zen.workspaces.separate-essentials',
       false
     );
     ChromeUtils.defineLazyGetter(this, 'tabContainer', () =>
