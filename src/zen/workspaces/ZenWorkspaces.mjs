@@ -647,6 +647,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     element.addEventListener(
       'MozSwipeGestureEnd',
       () => {
+        Services.prefs.setBoolPref('zen.swipe.is-fast-swipe', false);
         document.documentElement.removeAttribute('swipe-gesture');
         gZenUIManager.tabsWrapper.style.removeProperty('scrollbar-width');
         delete this._hasAnimatedBackgrounds;
@@ -694,6 +695,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       lastDelta: 0,
       direction: null,
     };
+    Services.prefs.setBoolPref('zen.swipe.is-fast-swipe', true);
   }
 
   _handleSwipeUpdate(event) {
@@ -714,7 +716,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       translateX = this._swipeState.lastDelta;
     }
 
-    if (Math.abs(delta) > 1) {
+    if (Math.abs(delta) > 0.8) {
       this._swipeState.direction = delta > 0 ? 'left' : 'right';
     }
 
@@ -1665,30 +1667,33 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
     if (offsetPixels) {
       // Find the next workspace we are scrolling to
-      if (!this._hasAnimatedBackgrounds) {
-        this._hasAnimatedBackgrounds = true;
-        const nextWorkspace = workspaces.workspaces[workspaceIndex + (offsetPixels > 0 ? -1 : 1)];
-        if (nextWorkspace) {
-          const nextGradient = await gZenThemePicker.getGradientForWorkspace(nextWorkspace);
-          const existingBackground = document.documentElement.style.getPropertyValue(
-            '--zen-main-browser-background'
+      const nextWorkspace = workspaces.workspaces[workspaceIndex + (offsetPixels > 0 ? -1 : 1)];
+      if (nextWorkspace) {
+        const [nextGradient, nextGrain] =
+          await gZenThemePicker.getGradientForWorkspace(nextWorkspace);
+        const [existingBackground, existingGrain] =
+          await gZenThemePicker.getGradientForWorkspace(workspace);
+        const percentage = Math.abs(offsetPixels) / 200;
+        if (!this._hasAnimatedBackgrounds) {
+          this._hasAnimatedBackgrounds = true;
+          document.documentElement.style.setProperty(
+            '--zen-main-browser-background-old',
+            existingBackground
           );
-          if (existingBackground !== nextGradient) {
-            document.documentElement.style.setProperty(
-              '--zen-main-browser-background-old',
-              existingBackground
-            );
-            document.documentElement.style.setProperty(
-              '--zen-main-browser-background',
-              nextGradient
-            );
-          }
+          document.documentElement.style.setProperty('--zen-main-browser-background', nextGradient);
         }
+        document.documentElement.style.setProperty('--zen-background-opacity', percentage);
+        // Fit the offsetPixels into the grain limits. Both ends may be nextGrain and existingGrain,
+        // so we need to use the min and max of both. For example, existing may be 0.2 and next may be 0.5,
+        // meaning we should convert the offset to a percentage between 0.2 and 0.5. BUT if existingGrain
+        // is 0.5 and nextGrain is 0.2, we should still convert the offset to a percentage between 0.2 and 0.5.
+        const minGrain = Math.min(existingGrain, nextGrain);
+        const maxGrain = Math.max(existingGrain, nextGrain);
+        const grainValue =
+          minGrain +
+          (maxGrain - minGrain) * (existingGrain > nextGrain ? 1 - percentage : percentage);
+        gZenThemePicker.updateNoise(grainValue);
       }
-      document.documentElement.style.setProperty(
-        '--zen-background-opacity',
-        Math.abs(offsetPixels) / 200
-      );
     } else {
       delete this._hasAnimatedBackgrounds;
     }
