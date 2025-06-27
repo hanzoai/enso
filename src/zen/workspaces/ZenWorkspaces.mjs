@@ -650,6 +650,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
         Services.prefs.setBoolPref('zen.swipe.is-fast-swipe', false);
         document.documentElement.removeAttribute('swipe-gesture');
         gZenUIManager.tabsWrapper.style.removeProperty('scrollbar-width');
+        document.documentElement.style.setProperty('--zen-background-opacity', '1');
         delete this._hasAnimatedBackgrounds;
         this.updateTabsContainers();
         document.removeEventListener('popupshown', this.popupOpenHandler, { once: true });
@@ -1674,15 +1675,23 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
         const [existingBackground, existingGrain] =
           await gZenThemePicker.getGradientForWorkspace(workspace);
         const percentage = Math.abs(offsetPixels) / 200;
-        if (!this._hasAnimatedBackgrounds) {
-          this._hasAnimatedBackgrounds = true;
-          document.documentElement.style.setProperty(
-            '--zen-main-browser-background-old',
-            existingBackground
-          );
-          document.documentElement.style.setProperty('--zen-main-browser-background', nextGradient);
-        }
-        document.documentElement.style.setProperty('--zen-background-opacity', percentage);
+        await new Promise((resolve) => {
+          requestAnimationFrame(() => {
+            document.documentElement.style.setProperty('--zen-background-opacity', percentage);
+            if (!this._hasAnimatedBackgrounds) {
+              this._hasAnimatedBackgrounds = true;
+              document.documentElement.style.setProperty(
+                '--zen-main-browser-background-old',
+                existingBackground
+              );
+              document.documentElement.style.setProperty(
+                '--zen-main-browser-background',
+                nextGradient
+              );
+            }
+            resolve();
+          });
+        });
         // Fit the offsetPixels into the grain limits. Both ends may be nextGrain and existingGrain,
         // so we need to use the min and max of both. For example, existing may be 0.2 and next may be 0.5,
         // meaning we should convert the offset to a percentage between 0.2 and 0.5. BUT if existingGrain

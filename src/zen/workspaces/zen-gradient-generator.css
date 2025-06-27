@@ -455,6 +455,6 @@
   }
 
   #PanelUI-zen-gradient-slider-wave svg path {
-    stroke: dimgray !important;
+    stroke: light-dark(rgba(77, 77, 77, 0.5), rgba(161, 161, 161, 0.5)) !important;
   }
 }
