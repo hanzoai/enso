@@ -41,7 +41,7 @@
   }
 
   const MAX_OPACITY = 0.8;
-  const MIN_OPACITY = 0.3;
+  const MIN_OPACITY = 0.2;
 
   class nsZenThemePicker extends ZenMultiWindowFeature {
     static MAX_DOTS = 3;
@@ -975,10 +975,11 @@
     themedColors(colors) {
       const colorToBlend = this.isDarkMode ? [255, 255, 255] : [0, 0, 0]; // Default to white for dark mode, black otherwise
       const opacity = this.currentOpacity;
-      // Convert opacity into a percentage where the lowest is 80% and the highest is 100%
+      // Convert opacity into a percentage where the lowest is 60% and the highest is 100%
       // The more transparent, the more white the color will be blended with. In order words,
       // make the transparency relative to these 2 ends.
-      const blendPercentage = 80 + opacity * 20; // 80% to 100% range
+      // e.g. 0% opacity becomes 60% blend, 100% opacity becomes 100% blend
+      const blendPercentage = Math.max(30, 30 + opacity * 70);
       return colors.map((color) => ({
         c: color.isCustom ? color.c : this.blendColors(color.c, colorToBlend, blendPercentage),
         isCustom: color.isCustom,
@@ -991,8 +992,9 @@
     onOpacityChange(event) {
       this.currentOpacity = parseFloat(event.target.value);
       // If we reached a whole number (e.g., 0.1, 0.2, etc.), send a haptic feedback.
-      if (((this.currentOpacity * 10) | 0) % 10 === 0) {
+      if (Math.abs((this.currentOpacity * 10) % 1) !== this._lastHapticFeedback) {
         Services.zen.playHapticFeedback();
+        this._lastHapticFeedback = Math.abs((this.currentOpacity * 10) % 1);
       }
       this.updateCurrentWorkspace();
     }
@@ -1020,8 +1022,11 @@
       let opacity = this.currentOpacity;
       if (forToolbar) {
         opacity = 1; // Toolbar colors should always be fully opaque
+        color = this.blendColors(color.c, this.getToolbarModifiedBaseRaw().slice(0, 3), 80);
+      } else {
+        color = color.c;
       }
-      return `rgba(${color.c[0]}, ${color.c[1]}, ${color.c[2]}, ${opacity})`;
+      return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${opacity})`;
     }
 
     luminance([r, g, b]) {
@@ -1449,7 +1454,9 @@
           await gZenUIManager.motion.animate(
             browser.document.documentElement,
             {
-              '--toolbox-textcolor': isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+              '--toolbox-textcolor': isDarkMode
+                ? 'rgba(255, 255, 255, 0.7)'
+                : 'rgba(23, 23, 23, 0.7)',
             },
             {
               duration: 0.05,

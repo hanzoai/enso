@@ -626,8 +626,8 @@
     --tab-inline-padding: 8px; /* Define padding for tab content */
 
     & .tabbrowser-tab {
-      /* Show tab label */
       & .tab-label-container {
+        opacity: 1;
         display: flex;
       }
 

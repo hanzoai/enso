@@ -116,7 +116,10 @@
   --zen-button-border-radius: 5px;
   --zen-button-padding: 0.6rem 1.2rem;
 
-  --zen-toolbar-element-bg: color-mix(in srgb, currentColor 15%, transparent 85%);
+  --zen-toolbar-element-bg: light-dark(
+    color-mix(in srgb, currentColor 10%, transparent 90%),
+    color-mix(in srgb, currentColor 15%, transparent 85%)
+  );
 
   /* Toolbar */
   --zen-toolbar-height: 38px;
@@ -240,7 +243,8 @@
   & panel,
   & menupopup,
   & #zen-browser-background,
-  & #urlbar[breakout-extend='true'] {
+  & #urlbar[breakout-extend='true'],
+  & #tabbrowser-tabpanels browser[type='content'] {
     @media -moz-pref('zen.theme.window.scheme', 'dark') {
       color-scheme: dark;
     }
