@@ -711,7 +711,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       document.getElementById('zen-sidebar-splitter').getBoundingClientRect().width * 2;
     let translateX = this._swipeState.lastDelta + delta;
     // Add a force multiplier as we are translating the strip depending on how close to the edge we are
-    let forceMultiplier = Math.min(1, 1 - Math.abs(translateX) / (stripWidth * 5)); // 4.5 instead of 4 to add a bit of a buffer
+    let forceMultiplier = Math.min(1, 1 - Math.abs(translateX) / (stripWidth * 4.5)); // 4.5 instead of 4 to add a bit of a buffer
     if (forceMultiplier > 0.5) {
       translateX *= forceMultiplier;
       this._swipeState.lastDelta = delta + (translateX - delta) * 0.5;

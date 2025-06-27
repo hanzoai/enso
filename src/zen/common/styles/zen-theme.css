@@ -117,8 +117,8 @@
   --zen-button-padding: 0.6rem 1.2rem;
 
   --zen-toolbar-element-bg: light-dark(
-    color-mix(in srgb, currentColor 10%, transparent 90%),
-    color-mix(in srgb, currentColor 15%, transparent 85%)
+    color-mix(in srgb, var(--toolbox-textcolor) 10%, transparent 90%),
+    color-mix(in srgb, var(--toolbox-textcolor) 15%, transparent 85%)
   );
 
   /* Toolbar */
