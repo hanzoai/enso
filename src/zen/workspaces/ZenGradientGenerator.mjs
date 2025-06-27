@@ -41,7 +41,7 @@
   }
 
   const MAX_OPACITY = 0.8;
-  const MIN_OPACITY = 0.2;
+  const MIN_OPACITY = 0.3;
 
   class nsZenThemePicker extends ZenMultiWindowFeature {
     static MAX_DOTS = 3;
@@ -992,9 +992,9 @@
     onOpacityChange(event) {
       this.currentOpacity = parseFloat(event.target.value);
       // If we reached a whole number (e.g., 0.1, 0.2, etc.), send a haptic feedback.
-      if (Math.abs((this.currentOpacity * 10) % 1) !== this._lastHapticFeedback) {
+      if (Math.round(this.currentOpacity * 10) !== this._lastHapticFeedback) {
         Services.zen.playHapticFeedback();
-        this._lastHapticFeedback = Math.abs((this.currentOpacity * 10) % 1);
+        this._lastHapticFeedback = Math.round(this.currentOpacity * 10);
       }
       this.updateCurrentWorkspace();
     }
