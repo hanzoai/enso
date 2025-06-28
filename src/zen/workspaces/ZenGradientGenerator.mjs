@@ -1132,7 +1132,6 @@
           accentColor,
           (1 - this.currentOpacity) * 100
         );
-        minimalLum = this.isDarkMode ? 0.3 : 0.18;
       }
       const lum = this.luminance(accentColor);
       // Return true if background is dark enough that white text is preferred
