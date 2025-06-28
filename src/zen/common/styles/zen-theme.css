@@ -117,11 +117,13 @@
   --zen-button-padding: 0.6rem 1.2rem;
 
   --zen-toolbar-element-bg: light-dark(
-    color-mix(in srgb, var(--toolbox-textcolor) 10%, transparent 90%),
-    color-mix(in srgb, var(--toolbox-textcolor) 15%, transparent 85%)
+    color-mix(in oklch, var(--toolbox-textcolor) 8%, rgba(255, 255, 255, 0.01)),
+    color-mix(in oklch, var(--toolbox-textcolor) 15%, transparent 85%)
   );
 
   /* Toolbar */
+  --tab-selected-color-scheme: inherit;
+
   --zen-toolbar-height: 38px;
   --zen-toolbar-button-inner-padding: 6px;
   --toolbarbutton-outer-padding: 4px;
@@ -231,12 +233,10 @@
 
   &[zen-should-be-dark-mode='true'] #browser {
     color-scheme: dark;
-    --tab-selected-color-scheme: dark;
   }
 
   &[zen-should-be-dark-mode='false'] #browser {
     color-scheme: light;
-    --tab-selected-color-scheme: light;
   }
 
   &,

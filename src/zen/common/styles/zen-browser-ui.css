@@ -66,8 +66,8 @@
     }
 
     @media (-moz-pref('zen.view.grey-out-inactive-windows')) {
-      &:-moz-window-inactive::after {
-        background: var(--zen-main-browser-background-toolbar);
+      &:-moz-window-inactive {
+        background: InactiveCaption;
       }
     }
 

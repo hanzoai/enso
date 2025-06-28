@@ -284,6 +284,18 @@
   justify-content: space-between;
   max-width: 100%;
   --toolbarbutton-outer-padding: 0;
+  container: media-controls / inline-size;
+}
+
+#zen-media-playback-buttons {
+  gap: 1.3rem;
+}
+
+/* Hide #zen-media-focus-button if it doesn't fit in the toolbar */
+@container media-controls (max-width: 160px) {
+  #zen-media-focus-button {
+    display: none;
+  }
 }
 
 #zen-media-info-container {

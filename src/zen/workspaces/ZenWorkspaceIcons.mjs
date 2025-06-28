@@ -54,6 +54,7 @@
                 mouse > rect[isVertical ? 'top' : 'left'] &&
                 mouse < rect[isVertical ? 'bottom' : 'right']
               ) {
+                const nextSibling = draggedTab.nextSibling;
                 if (
                   mouse <
                   rect[isVertical ? 'top' : 'left'] + rect[isVertical ? 'height' : 'width'] / 2
@@ -62,7 +63,9 @@
                 } else {
                   this.insertBefore(draggedTab, tab.nextSibling);
                 }
-                Services.zen.playHapticFeedback();
+                if (nextSibling !== draggedTab.nextSibling) {
+                  Services.zen.playHapticFeedback();
+                }
               }
             }
           }

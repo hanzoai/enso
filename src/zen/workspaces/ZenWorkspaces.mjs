@@ -2022,10 +2022,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   }
 
   _shouldChangeToTab(aTab) {
-    return !(
-      aTab?.hasAttribute('zen-essential') ||
-      (aTab?.pinned && aTab?.hasAttribute('pending'))
-    );
+    return !(aTab?.pinned && aTab?.hasAttribute('pending'));
   }
 
   async #shouldShowTabInCurrentWorkspace(tab) {
