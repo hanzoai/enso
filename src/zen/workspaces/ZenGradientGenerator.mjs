@@ -1451,16 +1451,9 @@
             browser.document.documentElement.removeAttribute('zen-should-be-dark-mode');
           }
           // Set `--toolbox-textcolor` to have a contrast with the primary color
-          await gZenUIManager.motion.animate(
-            browser.document.documentElement,
-            {
-              '--toolbox-textcolor': isDarkMode
-                ? 'rgba(255, 255, 255, 0.7)'
-                : 'rgba(23, 23, 23, 0.7)',
-            },
-            {
-              duration: 0.05,
-            }
+          document.documentElement.style.setProperty(
+            '--toolbox-textcolor',
+            isDarkMode ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)'
           );
         }
 

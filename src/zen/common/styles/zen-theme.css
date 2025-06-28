@@ -117,8 +117,8 @@
   --zen-button-padding: 0.6rem 1.2rem;
 
   --zen-toolbar-element-bg: light-dark(
-    color-mix(in oklch, var(--toolbox-textcolor) 8%, rgba(255, 255, 255, 0.01)),
-    color-mix(in oklch, var(--toolbox-textcolor) 15%, transparent 85%)
+    color-mix(in oklch, var(--toolbox-textcolor) 9%, transparent),
+    color-mix(in oklch, var(--toolbox-textcolor) 15%, transparent)
   );
 
   /* Toolbar */
@@ -139,6 +139,7 @@
   ) !important;
 
   --toolbar-color: light-dark(rgb(21, 20, 26, 0.7), rgb(251, 251, 254, 0.7)) !important;
+  --toolbox-textcolor-inactive: var(--toolbox-textcolor) !important;
 
   /* Other colors */
   --urlbar-box-bgcolor: var(--zen-urlbar-background) !important;
