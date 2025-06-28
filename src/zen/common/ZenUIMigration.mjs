@@ -55,6 +55,8 @@ class nsZenUIMigration {
       'zen.workspaces.separate-essentials',
       Services.prefs.getBoolPref('zen.workspaces.container-specific-essentials-enabled', false)
     );
+    const theme = Services.prefs.getIntPref('layout.css.prefers-color-scheme.content-override', 0);
+    Services.prefs.setIntPref('zen.view.window.scheme', theme);
   }
 }
 

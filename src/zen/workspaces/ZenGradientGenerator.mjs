@@ -116,8 +116,8 @@
       XPCOMUtils.defineLazyPreferenceGetter(
         this,
         'windowSchemeType',
-        'zen.theme.window.scheme',
-        true,
+        'zen.view.window.scheme',
+        2,
         darkModeChange
       );
     }
@@ -128,9 +128,9 @@
 
     get isDarkMode() {
       switch (this.windowSchemeType) {
-        case 'dark':
+        case 0:
           return true;
-        case 'light':
+        case 1:
           return false;
         default:
       }
@@ -252,11 +252,15 @@
         if (!scheme) {
           return;
         }
-        if (this.currentScheme === scheme) {
+        const themeInt = {
+          auto: 2,
+          light: 1,
+          dark: 0,
+        }[scheme];
+        if (themeInt === undefined) {
           return;
         }
-        this.currentScheme = scheme;
-        Services.prefs.setStringPref('zen.theme.window.scheme', scheme);
+        Services.prefs.setIntPref('zen.view.window.scheme', themeInt);
       });
     }
 
@@ -1021,8 +1025,12 @@
       }
       let opacity = this.currentOpacity;
       if (forToolbar) {
+        color = this.blendColors(
+          color.c,
+          this.getToolbarModifiedBaseRaw().slice(0, 3),
+          opacity * 100
+        );
         opacity = 1; // Toolbar colors should always be fully opaque
-        color = this.blendColors(color.c, this.getToolbarModifiedBaseRaw().slice(0, 3), 80);
       } else {
         color = color.c;
       }
@@ -1132,7 +1140,6 @@
           accentColor,
           (1 - this.currentOpacity) * 100
         );
-        minimalLum = this.isDarkMode ? 0.3 : 0.18;
       }
       const lum = this.luminance(accentColor);
       // Return true if background is dark enough that white text is preferred
