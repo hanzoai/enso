@@ -130,7 +130,7 @@
 
   --toolbarbutton-inner-padding: 5px !important;
 
-  --toolbarbutton-hover-background: color-mix(in srgb, currentColor 6%, transparent 94%) !important;
+  --toolbarbutton-hover-background: var(--zen-toolbar-element-bg) !important;
 
   --toolbarbutton-active-background: color-mix(
     in srgb,
@@ -180,6 +180,7 @@
     );
     --zen-main-browser-background-toolbar: var(--zen-main-browser-background);
     --zen-primary-color: light-dark(rgb(93, 42, 107), rgb(110, 48, 125)) !important;
+    --toolbox-textcolor: currentColor !important;
   }
 
   --toolbar-field-background-color: var(--zen-colors-input-bg) !important;

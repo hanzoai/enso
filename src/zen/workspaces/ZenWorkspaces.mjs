@@ -1779,11 +1779,17 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       }
       if (previousBackgroundOpacity == 1 || !previousBackgroundOpacity) {
         previousBackgroundOpacity = 0;
+      } else {
+        previousBackgroundOpacity = 1 - previousBackgroundOpacity;
       }
-      previousBackgroundOpacity = 1 - previousBackgroundOpacity;
+      previousBackgroundOpacity = previousBackgroundOpacity;
       gZenThemePicker.previousBackgroundOpacity = previousBackgroundOpacity;
       await new Promise((resolve) => {
         requestAnimationFrame(() => {
+          document.documentElement.style.setProperty(
+            '--zen-background-opacity',
+            previousBackgroundOpacity
+          );
           animations.push(
             gZenUIManager.motion.animate(
               document.documentElement,

@@ -71,6 +71,10 @@
     &[dragged='true']{
       background-color: var(--zen-toolbar-element-bg);
     }
+
+    & label {
+      margin: 0 !important;
+    }
   }
 
   &[reorder-mode='true'] toolbarbutton:not([dragged='true']) {
