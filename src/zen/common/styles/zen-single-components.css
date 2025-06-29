@@ -104,7 +104,7 @@ body > #confetti {
     #zen-sidebar-top-buttons-customization-target
     &,
   #zen-sidebar-foot-buttons & {
-    --tab-border-radius: 4px;
+    --tab-border-radius: 6px;
     --toolbarbutton-border-radius: var(--tab-border-radius);
     --toolbarbutton-inner-padding: 7px;
 
