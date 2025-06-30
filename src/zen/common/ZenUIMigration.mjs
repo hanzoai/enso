@@ -57,6 +57,7 @@ class nsZenUIMigration {
     );
     const theme = Services.prefs.getIntPref('layout.css.prefers-color-scheme.content-override', 0);
     Services.prefs.setIntPref('zen.view.window.scheme', theme);
+    Services.prefs.setIntPref('zen.theme.gradient-legacy-version', 0);
   }
 }
 

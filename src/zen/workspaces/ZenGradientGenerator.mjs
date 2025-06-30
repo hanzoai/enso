@@ -75,6 +75,9 @@
       });
       this.dragStartPosition = null;
 
+      this.isLegacyVersion =
+        Services.prefs.getIntPref('zen.theme.gradient-legacy-version', 1) === 0;
+
       ChromeUtils.defineLazyGetter(this, 'panel', () =>
         document.getElementById('PanelUI-zen-gradient-generator')
       );
@@ -203,7 +206,7 @@
           this.useAlgo = algo;
           this.#currentLightness = lightness;
           dots = this.calculateCompliments(dots, 'update', this.useAlgo);
-          this.handleColorPositions(dots);
+          this.handleColorPositions(dots, true);
           this.updateCurrentWorkspace();
         });
     }
@@ -702,9 +705,14 @@
       return updatedDots;
     }
 
-    handleColorPositions(colorPositions) {
+    handleColorPositions(colorPositions, ignoreLegacy = false) {
       colorPositions.sort((a, b) => a.ID - b.ID);
       const existingPrimaryDot = this.dots.find((d) => d.ID === 0);
+
+      if (this.isLegacyVersion && !ignoreLegacy) {
+        this.isLegacyVersion = false;
+        Services.prefs.setIntPref('zen.theme.gradient-legacy-version', 1);
+      }
 
       if (existingPrimaryDot) {
         existingPrimaryDot.element.style.zIndex = 999;
@@ -981,7 +989,10 @@
       // The more transparent, the more white the color will be blended with. In order words,
       // make the transparency relative to these 2 ends.
       // e.g. 0% opacity becomes 60% blend, 100% opacity becomes 100% blend
-      const blendPercentage = Math.max(30, 30 + opacity * 70);
+      let blendPercentage = Math.max(30, 30 + opacity * 70);
+      if (this.isLegacyVersion) {
+        blendPercentage = 100; // Legacy version always blends to 100%
+      }
       return colors.map((color) => ({
         c: color.isCustom ? color.c : this.blendColors(color.c, colorToBlend, blendPercentage),
         isCustom: color.isCustom,
@@ -1448,8 +1459,9 @@
               `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`
             )
           );
+          browser.gZenThemePicker.isLegacyVersion = this.isLegacyVersion;
           let isDarkMode = this.isDarkMode;
-          if (!isDefaultTheme) {
+          if (!isDefaultTheme && !this.isLegacyVersion) {
             // Check for the primary color
             isDarkMode = browser.gZenThemePicker.shouldBeDarkMode(dominantColor);
             browser.document.documentElement.setAttribute('zen-should-be-dark-mode', isDarkMode);
