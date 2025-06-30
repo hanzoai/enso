@@ -598,6 +598,7 @@
         ID: id,
         element: dot,
         position: { x: relativePosition.x, y: relativePosition.y },
+        lightness: this.#currentLightness,
       });
     }
 
@@ -840,9 +841,8 @@
       const relativeY = pixelY - rect.top;
 
       if (!clickedDot && this.dots.length < 1) {
-        this.spawnDot({ x: relativeX, y: relativeY }, this.dots.length === 0);
-        // Set brightness to 50%
         this.#currentLightness = 50;
+        this.spawnDot({ x: relativeX, y: relativeY }, this.dots.length === 0);
 
         this.updateCurrentWorkspace(true);
       } else if (!clickedDot && existingPrimaryDot) {
