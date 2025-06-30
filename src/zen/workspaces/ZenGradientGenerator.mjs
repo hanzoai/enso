@@ -1110,7 +1110,7 @@
               `linear-gradient(${rotation + 180}deg, ${this.getSingleRGBColor(themedColors[0], forToolbar)} 0%, transparent 100%)`,
             ].join(', ');
           }
-          return `linear-gradient(${rotation}deg, ${this.getSingleRGBColor(themedColors[0], forToolbar)} 0%, ${this.getSingleRGBColor(themedColors[1], forToolbar)} 100%)`;
+          return `linear-gradient(${rotation}deg, ${this.getSingleRGBColor(themedColors[1], forToolbar)} 0%, ${this.getSingleRGBColor(themedColors[0], forToolbar)} 100%)`;
         } else if (themedColors.length === 3) {
           let color1 = this.getSingleRGBColor(themedColors[2], forToolbar);
           let color2 = this.getSingleRGBColor(themedColors[0], forToolbar);
@@ -1450,7 +1450,10 @@
           );
           let isDarkMode = this.isDarkMode;
           if (!isDefaultTheme) {
-            isDarkMode = browser.gZenThemePicker.shouldBeDarkMode(dominantColor);
+            // Check for the primary color
+            isDarkMode = browser.gZenThemePicker.shouldBeDarkMode(
+              workspaceTheme.gradientColors[0].c
+            );
             browser.document.documentElement.setAttribute('zen-should-be-dark-mode', isDarkMode);
           } else {
             browser.document.documentElement.removeAttribute('zen-should-be-dark-mode');
@@ -1475,7 +1478,7 @@
         !theme.gradientColors.find((color) => color.isPrimary) &&
         theme.gradientColors.length > 0
       ) {
-        theme.gradientColors[(theme.gradientColors.length / 2) | 0].isPrimary = true;
+        theme.gradientColors[0].isPrimary = true;
       }
       return theme;
     }
