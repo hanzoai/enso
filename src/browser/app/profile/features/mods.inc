@@ -8,11 +8,9 @@ pref('zen.mods.auto-update-days', 20); // In days
 
 #ifdef MOZILLA_OFFICIAL
   pref('zen.mods.auto-update', true);
-  pref('zen.rice.api.url', 'https://share.zen-browser.app', locked);
-  pref('zen.injections.match-urls', 'https://zen-browser.app/*,https://share.zen-browser.app/*', locked);
+  pref('zen.injections.match-urls', 'https://zen-browser.app/*', locked);
 #else
   pref('zen.mods.auto-update', false);
-  pref('zen.rice.api.url', "http://localhost", locked);
   pref('zen.injections.match-urls', 'http://localhost/*', locked);
 #endif
 

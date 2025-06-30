@@ -16,6 +16,15 @@
       window.addEventListener('ZenWorkspacesUIUpdate', this, true);
 
       this.initDragAndDrop();
+      this.addEventListener('mouseover', (e) => {
+        if (this.isReorderMode) {
+          return;
+        }
+        const target = e.target.closest('toolbarbutton[zen-workspace-id]');
+        if (target) {
+          this.scrollLeft = target.offsetLeft - 10;
+        }
+      });
     }
 
     initDragAndDrop() {
@@ -118,6 +127,7 @@
       } else {
         this.removeAttribute('dont-show');
       }
+      gZenWorkspaces.onWindowResize();
     }
 
     on_command(event) {

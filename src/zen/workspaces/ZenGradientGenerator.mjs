@@ -840,11 +840,9 @@
       const relativeY = pixelY - rect.top;
 
       if (!clickedDot && this.dots.length < 1) {
-        if (this.dots.length === 0) {
-          this.spawnDot({ x: relativeX, y: relativeY }, true);
-        } else {
-          this.spawnDot({ x: relativeX, y: relativeY });
-        }
+        this.spawnDot({ x: relativeX, y: relativeY }, this.dots.length === 0);
+        // Set brightness to 50%
+        this.#currentLightness = 50;
 
         this.updateCurrentWorkspace(true);
       } else if (!clickedDot && existingPrimaryDot) {

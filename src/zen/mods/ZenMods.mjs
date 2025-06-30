@@ -48,9 +48,18 @@
       );
     }
 
+    async #readStylesheet() {
+      const path = this.modsRootPath;
+      if (!(await IOUtils.exists(path))) {
+        return '';
+      }
+      return await IOUtils.readUTF8(this.#styleSheetPath);
+    }
+
     async #insertStylesheet() {
       try {
-        this.#modsBackend.rebuildModsStyles();
+        const content = await this.#readStylesheet();
+        this.#modsBackend.rebuildModsStyles(content);
       } catch (e) {
         console.warn('[ZenMods]: Error rebuilding mods styles:', e);
       }
