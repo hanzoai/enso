@@ -1451,9 +1451,7 @@
           let isDarkMode = this.isDarkMode;
           if (!isDefaultTheme) {
             // Check for the primary color
-            isDarkMode = browser.gZenThemePicker.shouldBeDarkMode(
-              workspaceTheme.gradientColors[0].c
-            );
+            isDarkMode = browser.gZenThemePicker.shouldBeDarkMode(dominantColor);
             browser.document.documentElement.setAttribute('zen-should-be-dark-mode', isDarkMode);
           } else {
             browser.document.documentElement.removeAttribute('zen-should-be-dark-mode');
