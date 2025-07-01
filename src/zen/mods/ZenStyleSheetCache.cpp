@@ -8,6 +8,8 @@
 #include "nsCOMPtr.h"
 #include "nsIFile.h"
 
+#include "nsStyleSheetService.h"
+
 #include "mozilla/css/SheetParsingMode.h"
 #include "mozilla/GlobalStyleSheetCache.h"
 
@@ -82,6 +84,9 @@ nsresult ZenStyleSheetCache::RebuildModsStylesheets(const nsACString& aContents)
   }
   ErrorResult aRv;
   sheet->ReparseSheet(aContents, aRv);
+  if (auto sss = nsStyleSheetService::GetInstance()) {
+    sss->ZenMarkStylesAsChanged();
+  }
   return aRv.StealNSResult();
 }
 

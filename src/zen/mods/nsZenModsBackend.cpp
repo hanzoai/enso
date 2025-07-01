@@ -51,3 +51,14 @@ auto nsZenModsBackend::RebuildModsStyles(const nsACString& aContents) -> nsresul
 }
 
 } // namespace: zen
+
+auto nsStyleSheetService::ZenMarkStylesAsChanged() -> void {
+  for (auto& presShell : mPresShells) {
+    if (presShell) {
+      if (auto doc = presShell->GetDocument(); doc && doc->IsInChromeDocShell()) {
+        // Notify the document that styles have changed.
+        doc->ApplicableStylesChanged();
+      }
+    }
+  }
+}

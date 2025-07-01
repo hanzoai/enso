@@ -42,10 +42,8 @@
       await this.#rebuildModsStylesheet();
     }
 
-    #getStylesheetURIForMod(mod) {
-      return Services.io.newFileURI(
-        new FileUtils.File(PathUtils.join(this.getModFolder(mod.id), 'chrome.css'))
-      );
+    #getStylesheetPathForMod(mod) {
+      return PathUtils.join(this.getModFolder(mod.id), 'chrome.css');
     }
 
     async #readStylesheet() {
@@ -223,7 +221,7 @@
       const mods = [];
 
       for (let mod of modList) {
-        mod._chromeURL = this.#getStylesheetURIForMod(mod).spec;
+        mod._filePath = this.#getStylesheetPathForMod(mod);
         mods.push(mod);
       }
 
@@ -244,7 +242,8 @@
           content += `/* Readme: ${mod.readme} */\n`;
         }
 
-        content += `@import url("${mod._chromeURL}");\n`;
+        const chromeContent = await IOUtils.readUTF8(mod._filePath);
+        content += chromeContent;
       }
 
       content += this.#kZenStylesheetModFooter;
