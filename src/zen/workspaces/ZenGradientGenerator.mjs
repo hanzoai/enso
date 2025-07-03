@@ -1628,7 +1628,7 @@
       const previousOpacity = this.currentOpacity;
       const previousLightness = this.#currentLightness;
       this.currentOpacity = workspace.theme.opacity ?? 0.5;
-      this.#currentLightness = workspace.theme.lightness ?? 70;
+      this.#currentLightness = workspace.theme.lightness ?? 50;
       const gradient = this.getGradient(workspace.theme.gradientColors);
       this.currentOpacity = previousOpacity;
       this.#currentLightness = previousLightness;
