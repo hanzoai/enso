@@ -2944,4 +2944,10 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       gBrowser.tabContainer.removeAttribute('overflow');
     }
   }
+
+  handleTabCloseWindow() {
+    if (this.shouldCloseWindow()) {
+      document.getElementById('cmd_closeWindow').doCommand();
+    }
+  }
 })();

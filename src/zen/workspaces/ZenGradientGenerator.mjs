@@ -1140,7 +1140,7 @@
     }
 
     shouldBeDarkMode(accentColor) {
-      let minimalLum = 0.5;
+      let minimalLum = 0.6;
       if (!this.canBeTransparent) {
         // Blend the color with the toolbar background
         const toolbarBg = this.getToolbarModifiedBaseRaw();
