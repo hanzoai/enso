@@ -40,8 +40,10 @@
     return points;
   }
 
-  const MAX_OPACITY = 0.8;
+  const MAX_OPACITY = 0.9;
   const MIN_OPACITY = 0.3;
+
+  const EXPLICIT_LIGHTNESS_TYPE = 'explicit-lightness';
 
   class nsZenThemePicker extends ZenMultiWindowFeature {
     static MAX_DOTS = 3;
@@ -195,12 +197,14 @@
               ID: 0,
               position: { x, y },
               isPrimary: true,
+              type: EXPLICIT_LIGHTNESS_TYPE,
             },
           ];
           for (let i = 1; i < numDots; i++) {
             dots.push({
               ID: i,
               position: { x: 0, y: 0 },
+              type: EXPLICIT_LIGHTNESS_TYPE,
             });
           }
           this.useAlgo = algo;
@@ -434,13 +438,16 @@
       return { x, y };
     }
 
-    getColorFromPosition(x, y) {
+    getColorFromPosition(x, y, type = undefined) {
       // Return a color as hsl based on the position in the gradient
       const gradient = this.panel.querySelector('.zen-theme-picker-gradient');
       const rect = gradient.getBoundingClientRect();
       const padding = 20; // each side
-      rect.width += padding * 2;
-      rect.height += padding * 2;
+      const dotHalfSize = 36 / 2; // half the size of the dot
+      x += dotHalfSize;
+      y += dotHalfSize;
+      rect.width += padding * 2; // Adjust width and height for padding
+      rect.height += padding * 2; // Adjust width and height for padding
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
       const radius = (rect.width - padding) / 2;
@@ -453,6 +460,11 @@
       const normalizedDistance = 1 - Math.min(distance / radius, 1); // Normalize distance to [0, 1]
       const hue = (angle / 360) * 360; // Normalize angle to [0, 360)
       const saturation = normalizedDistance * 100; // Scale distance to [0, 100]
+      if (type !== EXPLICIT_LIGHTNESS_TYPE) {
+        // Set the current lightness to how far we are from the center of the circle
+        // For example, moving the dot outside will have higher lightness, while moving it inside will have lower lightness
+        this.#currentLightness = Math.round((1 - normalizedDistance) * 100);
+      }
       const lightness = this.#currentLightness; // Fixed lightness for simplicity
       const [r, g, b] = this.hslToRgb(hue / 360, saturation / 100, lightness / 100);
       return [
@@ -498,11 +510,14 @@
 
         dot.style.setProperty('--zen-theme-picker-dot-color', `rgb(${r}, ${g}, ${b})`);
         dot.setAttribute('data-position', this.getJSONPos(x, y));
+        dot.setAttribute('data-type', color.type);
 
         this.dots.push({
           ID: id,
           element: dot,
           position: { x: null, y: null }, // at some point possition should instead be stored as percentege just so that the size of the color picker does not matter.
+          type: color.type,
+          lightness: color.lightness,
         });
       }
       if (!fromWorkspace) {
@@ -566,14 +581,18 @@
       }
     }
 
-    spawnDot(relativePosition, primary = false) {
+    spawnDot(dotData, primary = false) {
       const dotPad = this.panel.querySelector('.zen-theme-picker-gradient');
+      const relativePosition = {
+        x: dotData.x,
+        y: dotData.y,
+      };
 
       const dot = document.createElement('div');
       dot.classList.add('zen-theme-picker-dot');
 
-      dot.style.left = `${relativePosition.x}px`;
-      dot.style.top = `${relativePosition.y}px`;
+      dot.style.left = `${dotData.x}px`;
+      dot.style.top = `${dotData.y}px`;
 
       dotPad.appendChild(dot);
 
@@ -590,18 +609,24 @@
         }
       }
 
-      const colorFromPos = this.getColorFromPosition(relativePosition.x, relativePosition.y);
+      const colorFromPos = this.getColorFromPosition(
+        relativePosition.x,
+        relativePosition.y,
+        dotData.type
+      );
       dot.style.setProperty(
         '--zen-theme-picker-dot-color',
         `rgb(${colorFromPos[0]}, ${colorFromPos[1]}, ${colorFromPos[2]})`
       );
       dot.setAttribute('data-position', this.getJSONPos(relativePosition.x, relativePosition.y));
+      dot.setAttribute('data-type', dotData.type);
 
       this.dots.push({
         ID: id,
         element: dot,
         position: { x: relativePosition.x, y: relativePosition.y },
         lightness: this.#currentLightness,
+        type: dotData.type,
       });
     }
 
@@ -685,9 +710,14 @@
       let distance = getDistanceFromCenter(primaryDot.position, centerPosition);
       const radius = (rect.width - padding) / 2;
       if (distance > radius) distance = radius;
-
       if (this.dots.length > 0) {
-        updatedDots = [{ ID: 0, position: primaryDot.position }];
+        updatedDots = [
+          {
+            ID: 0,
+            position: primaryDot.position,
+            type: primaryDot.type,
+          },
+        ];
       }
 
       harmonyAngles.angles.forEach((angleOffset, index) => {
@@ -699,7 +729,11 @@
           y: centerPosition.y + distance * Math.sin(radian),
         };
 
-        updatedDots.push({ ID: index + 1, position: newPosition });
+        updatedDots.push({
+          ID: index + 1,
+          position: newPosition,
+          type: primaryDot.type,
+        });
       });
 
       return updatedDots;
@@ -707,38 +741,24 @@
 
     handleColorPositions(colorPositions, ignoreLegacy = false) {
       colorPositions.sort((a, b) => a.ID - b.ID);
-      const existingPrimaryDot = this.dots.find((d) => d.ID === 0);
 
       if (this.isLegacyVersion && !ignoreLegacy) {
         this.isLegacyVersion = false;
         Services.prefs.setIntPref('zen.theme.gradient-legacy-version', 1);
       }
 
-      if (existingPrimaryDot) {
-        existingPrimaryDot.element.style.zIndex = 999;
-        const colorFromPos = this.getColorFromPosition(
-          existingPrimaryDot.position.x,
-          existingPrimaryDot.position.y
-        );
-        existingPrimaryDot.element.style.setProperty(
-          '--zen-theme-picker-dot-color',
-          `rgb(${colorFromPos[0]}, ${colorFromPos[1]}, ${colorFromPos[2]})`
-        );
-        existingPrimaryDot.element.setAttribute(
-          'data-position',
-          this.getJSONPos(existingPrimaryDot.position.x, existingPrimaryDot.position.y)
-        );
-      }
-
       colorPositions.forEach((dotPosition) => {
         const existingDot = this.dots.find((dot) => dot.ID === dotPosition.ID);
 
         if (existingDot) {
+          existingDot.type = dotPosition.type;
           existingDot.position = dotPosition.position;
           const colorFromPos = this.getColorFromPosition(
             dotPosition.position.x,
-            dotPosition.position.y
+            dotPosition.position.y,
+            dotPosition.type
           );
+          existingDot.lightness = this.#currentLightness;
           existingDot.element.style.setProperty(
             '--zen-theme-picker-dot-color',
             `rgb(${colorFromPos[0]}, ${colorFromPos[1]}, ${colorFromPos[2]})`
@@ -747,6 +767,7 @@
             'data-position',
             this.getJSONPos(dotPosition.position.x, dotPosition.position.y)
           );
+          existingDot.element.setAttribute('data-type', dotPosition.type);
 
           if (!this.dragging) {
             gZenUIManager.motion.animate(
@@ -766,7 +787,10 @@
             existingDot.element.style.top = `${dotPosition.position.y}px`;
           }
         } else {
-          this.spawnDot(dotPosition.position);
+          this.spawnDot({
+            type: dotPosition.type,
+            ...dotPosition.position,
+          });
         }
       });
     }
@@ -849,7 +873,6 @@
       const relativeY = pixelY - rect.top;
 
       if (!clickedDot && this.dots.length < 1) {
-        this.#currentLightness = 50;
         this.spawnDot({ x: relativeX, y: relativeY }, this.dots.length === 0);
 
         this.updateCurrentWorkspace(true);
@@ -983,23 +1006,7 @@
     }
 
     themedColors(colors) {
-      const colorToBlend = this.isDarkMode ? [255, 255, 255] : [0, 0, 0]; // Default to white for dark mode, black otherwise
-      const opacity = this.currentOpacity;
-      // Convert opacity into a percentage where the lowest is 60% and the highest is 100%
-      // The more transparent, the more white the color will be blended with. In order words,
-      // make the transparency relative to these 2 ends.
-      // e.g. 0% opacity becomes 60% blend, 100% opacity becomes 100% blend
-      let blendPercentage = Math.max(30, 30 + opacity * 70);
-      if (this.isLegacyVersion) {
-        blendPercentage = 100; // Legacy version always blends to 100%
-      }
-      return colors.map((color) => ({
-        c: color.isCustom ? color.c : this.blendColors(color.c, colorToBlend, blendPercentage),
-        isCustom: color.isCustom,
-        algorithm: color.algorithm,
-        lightness: color.lightness,
-        position: color.position,
-      }));
+      return [...colors];
     }
 
     onOpacityChange(event) {
@@ -1028,6 +1035,20 @@
       ).matches;
     }
 
+    blendWithWhiteOverlay(baseColor, opacity) {
+      const blendColor = [255, 255, 255];
+      const blendAlpha = 0.2;
+      const baseAlpha = baseColor[3] !== undefined ? baseColor[3] : 1;
+      const blended = [];
+
+      for (let i = 0; i < 3; i++) {
+        blended[i] = Math.round(blendColor[i] * (1 - opacity) + baseColor[i] * opacity);
+      }
+
+      const blendedAlpha = +(blendAlpha * (1 - opacity) + baseAlpha * opacity).toFixed(3);
+      return `rgba(${blended[0]}, ${blended[1]}, ${blended[2]}, ${blendedAlpha})`;
+    }
+
     getSingleRGBColor(color, forToolbar = false) {
       if (color.isCustom) {
         return color.c;
@@ -1043,7 +1064,7 @@
       } else {
         color = color.c;
       }
-      return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${opacity})`;
+      return this.blendWithWhiteOverlay(color, opacity);
     }
 
     luminance([r, g, b]) {
@@ -1067,31 +1088,10 @@
       ];
     }
 
-    findOptimalBlend(dominantColor, blendTarget, minContrast = 4.5) {
-      let low = 0;
-      let high = 100;
-      let bestMatch = null;
-
-      for (let i = 0; i < 10; i++) {
-        const mid = (low + high) / 2;
-        const blended = this.blendColors(dominantColor, blendTarget, mid);
-        const contrast = this.contrastRatio(blended, blendTarget);
-
-        if (contrast >= minContrast) {
-          bestMatch = blended;
-          high = mid;
-        } else {
-          low = mid;
-        }
-      }
-
-      return bestMatch || this.blendColors(dominantColor, blendTarget, 10); // fallback
-    }
-
     getGradient(colors, forToolbar = false) {
       const themedColors = this.themedColors(colors);
       this.useAlgo = themedColors[0]?.algorithm ?? '';
-      this.#currentLightness = themedColors[0]?.lightness ?? 70;
+      this.#currentLightness = themedColors[0]?.lightness ?? 50;
 
       const rotation = -45; // TODO: Detect rotation based on the accent color
       if (themedColors.length === 0) {
@@ -1118,8 +1118,10 @@
           if (!forToolbar) {
             return [
               `linear-gradient(${rotation}deg, ${this.getSingleRGBColor(themedColors[1], forToolbar)} 0%, transparent 100%)`,
-              `linear-gradient(${rotation + 180}deg, ${this.getSingleRGBColor(themedColors[0], forToolbar)} 0%, transparent 100%)`,
-            ].join(', ');
+              `linear-gradient(${rotation + 180}deg, ${this.getSingleRGBColor(themedColors[0], forToolbar)} 0%, transparent 80%)`,
+            ]
+              .reverse()
+              .join(', ');
           }
           return `linear-gradient(${rotation}deg, ${this.getSingleRGBColor(themedColors[1], forToolbar)} 0%, ${this.getSingleRGBColor(themedColors[0], forToolbar)} 100%)`;
         } else if (themedColors.length === 3) {
@@ -1140,9 +1142,7 @@
     }
 
     shouldBeDarkMode(accentColor) {
-      let minimalLum = 0.6;
       if (!this.canBeTransparent) {
-        // Blend the color with the toolbar background
         const toolbarBg = this.getToolbarModifiedBaseRaw();
         accentColor = this.blendColors(
           toolbarBg.slice(0, 3),
@@ -1150,9 +1150,23 @@
           (1 - this.currentOpacity) * 100
         );
       }
-      const lum = this.luminance(accentColor);
-      // Return true if background is dark enough that white text is preferred
-      return lum < minimalLum;
+
+      const bg = accentColor;
+
+      // Get text colors (with alpha)
+      let darkText = this.getToolbarColor(true); // e.g. [r, g, b, a]
+      let lightText = this.getToolbarColor(false); // e.g. [r, g, b, a]
+
+      lightText[3] -= 0.4; // Reduce alpha for light text
+
+      // Composite text color over background
+      darkText = this.blendColors(bg, darkText.slice(0, 3), (1 - darkText[3]) * 100);
+      lightText = this.blendColors(bg, lightText.slice(0, 3), (1 - lightText[3]) * 100);
+
+      const darkContrast = this.contrastRatio(bg, darkText);
+      const lightContrast = this.contrastRatio(bg, lightText);
+
+      return darkContrast > lightContrast;
     }
 
     static getTheme(colors = [], opacity = 0.5, texture = 0) {
@@ -1283,6 +1297,10 @@
         return this.hexToRgb(color);
       }
       return color;
+    }
+
+    getToolbarColor(isDarkMode = false) {
+      return isDarkMode ? [255, 255, 255, 0.8] : [0, 0, 0, 0.8]; // Default toolbar
     }
 
     async onWorkspaceChange(workspace, skipUpdate = false, theme = null) {
@@ -1465,13 +1483,18 @@
             // Check for the primary color
             isDarkMode = browser.gZenThemePicker.shouldBeDarkMode(dominantColor);
             browser.document.documentElement.setAttribute('zen-should-be-dark-mode', isDarkMode);
+            browser.gZenThemePicker.panel.removeAttribute('invalidate-controls');
           } else {
             browser.document.documentElement.removeAttribute('zen-should-be-dark-mode');
+            if (!this.isLegacyVersion) {
+              browser.gZenThemePicker.panel.setAttribute('invalidate-controls', 'true');
+            }
           }
           // Set `--toolbox-textcolor` to have a contrast with the primary color
+          const textColor = this.getToolbarColor(isDarkMode);
           document.documentElement.style.setProperty(
             '--toolbox-textcolor',
-            isDarkMode ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)'
+            `rgba(${textColor[0]}, ${textColor[1]}, ${textColor[2]}, ${textColor[3]})`
           );
         }
 
@@ -1549,6 +1572,7 @@
           const algorithm = this.useAlgo;
           const position =
             dot.getAttribute('data-position') && JSON.parse(dot.getAttribute('data-position'));
+          const type = dot.getAttribute('data-type');
           return {
             c: isCustom ? color : color.match(/\d+/g).map(Number),
             isCustom,
@@ -1556,6 +1580,7 @@
             isPrimary,
             lightness: this.#currentLightness,
             position,
+            type,
           };
         });
       const gradient = nsZenThemePicker.getTheme(colors, this.currentOpacity, this.currentTexture);
