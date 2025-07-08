@@ -261,6 +261,11 @@
         color-scheme: dark;
       }
     }
+
+    :root[privatebrowsingmode='temporary'] &,
+    &[privatebrowsingmode='temporary'] {
+      color-scheme: dark;
+    }
   }
 }
 

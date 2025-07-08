@@ -132,6 +132,9 @@
     }
 
     get isDarkMode() {
+      if (PrivateBrowsingUtils.isWindowPrivate(window)) {
+        return true;
+      }
       switch (this.windowSchemeType) {
         case 0:
           return true;
@@ -1468,17 +1471,17 @@
           '--zen-main-browser-background',
           gradient
         );
-
+        const isDarkModeWindow = browser.gZenThemePicker.isDarkMode;
         if (dominantColor) {
           browser.document.documentElement.style.setProperty(
             '--zen-primary-color',
             this.pSBC(
-              this.isDarkMode ? 0.2 : -0.5,
+              isDarkModeWindow ? 0.2 : -0.5,
               `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`
             )
           );
           browser.gZenThemePicker.isLegacyVersion = this.isLegacyVersion;
-          let isDarkMode = this.isDarkMode;
+          let isDarkMode = isDarkModeWindow;
           if (!isDefaultTheme && !this.isLegacyVersion) {
             // Check for the primary color
             isDarkMode = browser.gZenThemePicker.shouldBeDarkMode(dominantColor);

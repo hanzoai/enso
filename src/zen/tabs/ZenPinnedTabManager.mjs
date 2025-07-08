@@ -940,7 +940,7 @@
       if (!this._dragIndicator) {
         this._dragIndicator = document.createElement('div');
         this._dragIndicator.id = 'zen-drag-indicator';
-        document.body.appendChild(this._dragIndicator);
+        gNavToolbox.appendChild(this._dragIndicator);
       }
       return this._dragIndicator;
     }

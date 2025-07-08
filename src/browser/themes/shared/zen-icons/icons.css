@@ -68,6 +68,10 @@
   list-style-image: url('downloads.svg') !important;
 }
 
+#downloads-indicator-icon {
+  max-height: 16px;
+}
+
 #appMenu-translate-button {
   list-style-image: url('translations.svg') !important;
 }

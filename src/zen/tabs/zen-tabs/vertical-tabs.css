@@ -1521,3 +1521,11 @@
 .zen-current-workspace-indicator-name {
   opacity: 0.7;
 }
+
+.tab-throbber {
+  display: none !important; /* Hide throbber always */
+}
+
+.tab-icon-image {
+  display: flex !important;
+}
