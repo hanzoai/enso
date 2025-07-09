@@ -1039,17 +1039,20 @@
     }
 
     blendWithWhiteOverlay(baseColor, opacity) {
-      const blendColor = [255, 255, 255];
-      const blendAlpha = 0.2;
-      const baseAlpha = baseColor[3] !== undefined ? baseColor[3] : 1;
-      const blended = [];
+      if (AppConstants.platform === 'macosx') {
+        const blendColor = [255, 255, 255];
+        const blendAlpha = 0.2;
+        const baseAlpha = baseColor[3] !== undefined ? baseColor[3] : 1;
+        const blended = [];
 
-      for (let i = 0; i < 3; i++) {
-        blended[i] = Math.round(blendColor[i] * (1 - opacity) + baseColor[i] * opacity);
+        for (let i = 0; i < 3; i++) {
+          blended[i] = Math.round(blendColor[i] * (1 - opacity) + baseColor[i] * opacity);
+        }
+
+        const blendedAlpha = +(blendAlpha * (1 - opacity) + baseAlpha * opacity).toFixed(3);
+        return `rgba(${blended[0]}, ${blended[1]}, ${blended[2]}, ${blendedAlpha})`;
       }
-
-      const blendedAlpha = +(blendAlpha * (1 - opacity) + baseAlpha * opacity).toFixed(3);
-      return `rgba(${blended[0]}, ${blended[1]}, ${blended[2]}, ${blendedAlpha})`;
+      return `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, ${opacity})`;
     }
 
     getSingleRGBColor(color, forToolbar = false) {
