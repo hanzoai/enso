@@ -889,6 +889,7 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
   async initializeWorkspaces() {
     let activeWorkspace = await this.getActiveWorkspace();
     this.activeWorkspace = activeWorkspace?.uuid;
+    await gZenSessionStore.promiseInitialized;
     try {
       if (activeWorkspace) {
         window.gZenThemePicker = new nsZenThemePicker();
@@ -897,7 +898,6 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     } catch (e) {
       console.error('gZenWorkspaces: Error initializing theme picker', e);
     }
-    await gZenSessionStore.promiseInitialized;
     await this.workspaceBookmarks();
     await this.initializeTabsStripSections();
     this._initializeEmptyTab();

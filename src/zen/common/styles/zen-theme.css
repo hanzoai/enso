@@ -121,6 +121,11 @@
     color-mix(in oklch, var(--toolbox-textcolor) 15%, transparent)
   );
 
+  --zen-toolbar-element-bg-hover: light-dark(
+    color-mix(in srgb, var(--zen-toolbar-element-bg) 75%, transparent),
+    color-mix(in srgb, var(--zen-toolbar-element-bg) 60%, transparent)
+  );
+
   /* Toolbar */
   --tab-selected-color-scheme: inherit;
 
@@ -130,7 +135,7 @@
 
   --toolbarbutton-inner-padding: 5px !important;
 
-  --toolbarbutton-hover-background: var(--zen-toolbar-element-bg) !important;
+  --toolbarbutton-hover-background: var(--zen-toolbar-element-bg-hover) !important;
 
   --toolbarbutton-active-background: color-mix(
     in srgb,
@@ -172,11 +177,7 @@
   --toolbar-field-color: var(--toolbox-textcolor) !important;
 
   &[zen-private-window='true'] {
-    --zen-main-browser-background: linear-gradient(
-      130deg,
-      light-dark(rgb(247, 217, 255), rgb(10, 6, 11)) 0%,
-      light-dark(rgb(242, 198, 255), rgb(19, 7, 22)) 100%
-    );
+    --zen-main-browser-background: linear-gradient(130deg, rgb(10, 6, 11) 0%, rgb(19, 7, 22) 100%);
     --zen-main-browser-background-toolbar: var(--zen-main-browser-background);
     --zen-primary-color: light-dark(rgb(93, 42, 107), rgb(110, 48, 125)) !important;
     --toolbox-textcolor: currentColor !important;
