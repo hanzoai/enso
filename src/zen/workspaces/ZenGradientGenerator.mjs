@@ -1070,6 +1070,10 @@
       } else {
         color = color.c;
       }
+      if (this.isLegacyVersion && this.isDarkMode) {
+        // In legacy version, we blend with white overlay or black overlay based on if we are in dark mode
+        color = this.blendColors(color, [0, 0, 0], 30);
+      }
       return this.blendWithWhiteOverlay(color, opacity);
     }
 
