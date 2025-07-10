@@ -41,7 +41,7 @@
   }
 
   const MAX_OPACITY = 0.9;
-  const MIN_OPACITY = 0.3;
+  const MIN_OPACITY = AppConstants.platform === 'macosx' ? 0.3 : 0.25;
 
   const EXPLICIT_LIGHTNESS_TYPE = 'explicit-lightness';
 
@@ -425,7 +425,7 @@
     calculateInitialPosition([r, g, b]) {
       // This function is called before the picker is even rendered, so we hard code the dimensions
       // important: If any sort of sizing is changed, make sure changes are reflected here
-      const padding = 20;
+      const padding = 30;
       const rect = {
         width: 338,
         height: 338,
@@ -445,7 +445,7 @@
       // Return a color as hsl based on the position in the gradient
       const gradient = this.panel.querySelector('.zen-theme-picker-gradient');
       const rect = gradient.getBoundingClientRect();
-      const padding = 20; // each side
+      const padding = 30; // each side
       const dotHalfSize = 36 / 2; // half the size of the dot
       x += dotHalfSize;
       y += dotHalfSize;
@@ -691,7 +691,7 @@
 
       const dotPad = this.panel.querySelector('.zen-theme-picker-gradient');
       const rect = dotPad.getBoundingClientRect();
-      const padding = 20;
+      const padding = 30;
 
       let updatedDots = [...dots];
       const centerPosition = { x: rect.width / 2, y: rect.height / 2 };
@@ -840,7 +840,7 @@
 
       const gradient = this.panel.querySelector('.zen-theme-picker-gradient');
       const rect = gradient.getBoundingClientRect();
-      const padding = 20;
+      const padding = 30;
 
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
@@ -973,7 +973,7 @@
       if (this.dragging) {
         event.preventDefault();
         const rect = this.panel.querySelector('.zen-theme-picker-gradient').getBoundingClientRect();
-        const padding = 20; // each side
+        const padding = 30; // each side
         // do NOT let the ball be draged outside of an imaginary circle. You can drag it anywhere inside the circle
         // if the distance between the center of the circle and the dragged ball is bigger than the radius, then the ball
         // should be placed on the edge of the circle. If it's inside the circle, then the ball just follows the mouse
@@ -1074,7 +1074,13 @@
     }
 
     luminance([r, g, b]) {
-      return 0.2126 * (r / 255) + 0.7152 * (g / 255) + 0.0722 * (b / 255);
+      // These magic numbers are extracted from the wikipedia article on relative luminance
+      // https://en.wikipedia.org/wiki/Relative_luminance
+      var a = [r, g, b].map((v) => {
+        v /= 255;
+        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+      });
+      return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
     }
 
     contrastRatio(rgb1, rgb2) {
@@ -1163,7 +1169,9 @@
       let darkText = this.getToolbarColor(true); // e.g. [r, g, b, a]
       let lightText = this.getToolbarColor(false); // e.g. [r, g, b, a]
 
-      lightText[3] -= 0.4; // Reduce alpha for light text
+      if (this.canBeTransparent) {
+        lightText[3] -= 0.15; // Reduce alpha for light text
+      }
 
       // Composite text color over background
       darkText = this.blendColors(bg, darkText.slice(0, 3), (1 - darkText[3]) * 100);
@@ -1315,7 +1323,7 @@
       let workspaceTheme = theme || workspace.theme;
 
       await this.foreachWindowAsActive(async (browser) => {
-        if (!browser.gZenThemePicker.promiseInitialized) {
+        if (!browser.gZenThemePicker?.promiseInitialized) {
           return;
         }
 
@@ -1505,7 +1513,7 @@
         }
 
         if (!skipUpdate) {
-          this.dots = [];
+          browser.gZenThemePicker.dots = [];
           browser.gZenThemePicker.recalculateDots(workspaceTheme.gradientColors);
         }
       });
@@ -1599,7 +1607,7 @@
         currentWorkspace = await gZenWorkspaces.getActiveWorkspace();
       }
 
-      await this.onWorkspaceChange(currentWorkspace, true, skipSave ? gradient : null);
+      await this.onWorkspaceChange(currentWorkspace, skipSave, skipSave ? gradient : null);
     }
 
     async handlePanelClose() {

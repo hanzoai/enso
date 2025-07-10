@@ -69,7 +69,7 @@
 
     &:hover,
     &[dragged='true']{
-      background-color: var(--zen-toolbar-element-bg);
+      background-color: var(--toolbarbutton-hover-background);
     }
 
     & label {
@@ -215,7 +215,7 @@
     transition: opacity 0.1s;
     order: 5;
     --toolbarbutton-inner-padding: 6px;
-    --tab-border-radius: 8px;
+    --tab-border-radius: 6px;
 
     :root[zen-renaming-tab='true'] & {
       display: none;
