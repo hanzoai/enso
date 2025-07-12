@@ -250,22 +250,27 @@
   &:not([zen-should-be-dark-mode]) #zen-toast-container {
     @media -moz-pref('zen.view.window.scheme', 0) {
       color-scheme: dark;
+      --toolbar-color-scheme: dark;
     }
 
     @media -moz-pref('zen.view.window.scheme', 1) {
       color-scheme: light;
+      --toolbar-color-scheme: light;
     }
 
     @media -moz-pref('zen.view.window.scheme', 2) {
       color-scheme: light;
+      --toolbar-color-scheme: light;
       @media (-moz-system-dark-theme) {
         color-scheme: dark;
+        --toolbar-color-scheme: dark;
       }
     }
 
     :root[privatebrowsingmode='temporary'] &,
     &[privatebrowsingmode='temporary'] {
       color-scheme: dark;
+      --toolbar-color-scheme: dark;
     }
   }
 }
