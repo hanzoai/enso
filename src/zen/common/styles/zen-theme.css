@@ -118,7 +118,7 @@
 
   --zen-toolbar-element-bg: light-dark(
     color-mix(in oklch, var(--toolbox-textcolor) 8%, transparent),
-    color-mix(in oklch, var(--toolbox-textcolor) 15%, transparent)
+    color-mix(in oklch, var(--toolbox-textcolor) 12.5%, transparent)
   );
 
   --zen-toolbar-element-bg-hover: light-dark(
@@ -229,7 +229,13 @@
     background: transparent;
     --zen-themed-toolbar-bg-transparent: transparent;
     @media -moz-pref('widget.windows.mica.toplevel-backdrop', 2) {
-      --zen-themed-toolbar-bg-transparent: light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.1));
+      --zen-themed-toolbar-bg-transparent: light-dark(
+        rgba(0, 0, 0, 0.2),
+        rgba(255, 255, 255, 0.35)
+      );
+    }
+    @media (-moz-platform: macos) {
+      --zen-themed-toolbar-bg-transparent: rgba(255, 255, 255, 0.3);
     }
   }
 

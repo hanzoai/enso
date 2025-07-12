@@ -462,8 +462,9 @@
       }
       const normalizedDistance = 1 - Math.min(distance / radius, 1); // Normalize distance to [0, 1]
       const hue = (angle / 360) * 360; // Normalize angle to [0, 360)
-      const saturation = normalizedDistance * 100; // Scale distance to [0, 100]
+      let saturation = normalizedDistance * 100; // stays high even in center
       if (type !== EXPLICIT_LIGHTNESS_TYPE) {
+        saturation = 80 + (1 - normalizedDistance) * 20;
         // Set the current lightness to how far we are from the center of the circle
         // For example, moving the dot outside will have higher lightness, while moving it inside will have lower lightness
         this.#currentLightness = Math.round((1 - normalizedDistance) * 100);
@@ -1009,22 +1010,6 @@
     }
 
     themedColors(colors) {
-      if (this.isMica) {
-        const isDarkMode = this.isDarkMode;
-        const baseColor = !isDarkMode ? [255, 255, 255] : [0, 0, 0];
-        return colors.map((color) => {
-          if (color.isCustom) {
-            return color;
-          }
-          const [r, g, b] = color.c;
-          // Blend with white or black based on the theme
-          const blendedColor = this.blendColors([r, g, b], baseColor, isDarkMode ? 30 : 70);
-          return {
-            ...color,
-            c: blendedColor,
-          };
-        });
-      }
       // For non-Mica themes, we return the colors as they are
       return [...colors];
     }
@@ -1063,19 +1048,6 @@
     }
 
     blendWithWhiteOverlay(baseColor, opacity) {
-      if (AppConstants.platform === 'macosx') {
-        const blendColor = [255, 255, 255];
-        const blendAlpha = 0.2;
-        const baseAlpha = baseColor[3] !== undefined ? baseColor[3] : 1;
-        const blended = [];
-
-        for (let i = 0; i < 3; i++) {
-          blended[i] = Math.round(blendColor[i] * (1 - opacity) + baseColor[i] * opacity);
-        }
-
-        const blendedAlpha = +(blendAlpha * (1 - opacity) + baseAlpha * opacity).toFixed(3);
-        return `rgba(${blended[0]}, ${blended[1]}, ${blended[2]}, ${blendedAlpha})`;
-      }
       return `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, ${opacity})`;
     }
 
@@ -1182,7 +1154,7 @@
     }
 
     shouldBeDarkMode(accentColor) {
-      if (Services.prefs.getBoolPref('zen.theme.use-sysyem-colors') || this.isMica) {
+      if (Services.prefs.getBoolPref('zen.theme.use-sysyem-colors')) {
         return this.isDarkMode;
       }
 
@@ -1202,7 +1174,7 @@
       let lightText = this.getToolbarColor(false); // e.g. [r, g, b, a]
 
       if (this.canBeTransparent) {
-        lightText[3] -= 0.15; // Reduce alpha for light text
+        lightText[3] -= 0.25; // Reduce alpha for light text
       }
 
       // Composite text color over background
