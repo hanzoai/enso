@@ -41,7 +41,7 @@
   }
 
   const MAX_OPACITY = 0.9;
-  const MIN_OPACITY = AppConstants.platform === 'macosx' ? 0.3 : 0.35;
+  const MIN_OPACITY = AppConstants.platform === 'macosx' ? 0.25 : 0.3;
 
   const EXPLICIT_LIGHTNESS_TYPE = 'explicit-lightness';
 
@@ -1107,7 +1107,11 @@
 
       const rotation = -45; // TODO: Detect rotation based on the accent color
       if (themedColors.length === 0) {
-        return forToolbar ? this.getToolbarModifiedBase() : 'transparent';
+        return forToolbar
+          ? this.getToolbarModifiedBase()
+          : this.isDarkMode
+            ? 'rgba(0, 0, 0, 0.6)'
+            : 'transparent';
       } else if (themedColors.length === 1) {
         return this.getSingleRGBColor(themedColors[0], forToolbar);
       } else {
