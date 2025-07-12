@@ -41,7 +41,7 @@
   }
 
   const MAX_OPACITY = 0.9;
-  const MIN_OPACITY = AppConstants.platform === 'macosx' ? 0.3 : 0.25;
+  const MIN_OPACITY = AppConstants.platform === 'macosx' ? 0.3 : 0.35;
 
   const EXPLICIT_LIGHTNESS_TYPE = 'explicit-lightness';
 
@@ -1009,6 +1009,23 @@
     }
 
     themedColors(colors) {
+      if (this.isMica) {
+        const isDarkMode = this.isDarkMode;
+        const baseColor = !isDarkMode ? [255, 255, 255] : [0, 0, 0];
+        return colors.map((color) => {
+          if (color.isCustom) {
+            return color;
+          }
+          const [r, g, b] = color.c;
+          // Blend with white or black based on the theme
+          const blendedColor = this.blendColors([r, g, b], baseColor, isDarkMode ? 30 : 70);
+          return {
+            ...color,
+            c: blendedColor,
+          };
+        });
+      }
+      // For non-Mica themes, we return the colors as they are
       return [...colors];
     }
 
@@ -1032,10 +1049,17 @@
       return `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, ${baseColor[3]})`;
     }
 
+    get isMica() {
+      return window.matchMedia('(-moz-windows-mica)').matches;
+    }
+
     get canBeTransparent() {
-      return window.matchMedia(
-        '(-moz-windows-mica) or (-moz-platform: macos) or ((-moz-platform: linux) and -moz-pref("zen.widget.linux.transparency"))'
-      ).matches;
+      return (
+        this.isMica ||
+        window.matchMedia(
+          '(-moz-platform: macos) or ((-moz-platform: linux) and -moz-pref("zen.widget.linux.transparency"))'
+        ).matches
+      );
     }
 
     blendWithWhiteOverlay(baseColor, opacity) {
@@ -1158,6 +1182,10 @@
     }
 
     shouldBeDarkMode(accentColor) {
+      if (Services.prefs.getBoolPref('zen.theme.use-sysyem-colors') || this.isMica) {
+        return this.isDarkMode;
+      }
+
       if (!this.canBeTransparent) {
         const toolbarBg = this.getToolbarModifiedBaseRaw();
         accentColor = this.blendColors(
