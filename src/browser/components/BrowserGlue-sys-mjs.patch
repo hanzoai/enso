@@ -18,7 +18,7 @@ index bde641f7112adde948707c172b9f18d3635d8ef1..70c4769d265210084c8ee2910fa68a0a
 +        pagecount += tabbrowser.visibleTabs.filter(t => t.getAttribute("pending")!=="true").length;
        }
      }
-
+ 
 @@ -1659,6 +1660,8 @@ BrowserGlue.prototype = {
      } else if (profileDataVersion < APP_DATA_VERSION) {
        lazy.ProfileDataUpgrader.upgrade(profileDataVersion, APP_DATA_VERSION);
