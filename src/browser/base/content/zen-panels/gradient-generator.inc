@@ -104,7 +104,7 @@
 #ifdef XP_MACOSX
               min="0.25"
 #else
-              min="0.3"
+              min="0.35"
 #endif
               />
           </vbox>

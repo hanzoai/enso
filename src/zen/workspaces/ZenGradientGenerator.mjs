@@ -41,7 +41,7 @@
   }
 
   const MAX_OPACITY = 0.9;
-  const MIN_OPACITY = AppConstants.platform === 'macosx' ? 0.25 : 0.3;
+  const MIN_OPACITY = AppConstants.platform === 'macosx' ? 0.25 : 0.35;
 
   const EXPLICIT_LIGHTNESS_TYPE = 'explicit-lightness';
 
@@ -1052,7 +1052,7 @@
       let colorToBlendOpacity;
       if (this.isMica) {
         colorToBlend = !this.isDarkMode ? [0, 0, 0] : [255, 255, 255];
-        colorToBlendOpacity = !this.isDarkMode ? 0.2 : 0.3;
+        colorToBlendOpacity = 0.35;
       } else if (AppConstants.platform === 'macosx') {
         colorToBlend = [255, 255, 255];
         colorToBlendOpacity = 0.3;
@@ -1127,7 +1127,7 @@
         return forToolbar
           ? this.getToolbarModifiedBase()
           : this.isDarkMode
-            ? 'rgba(0, 0, 0, 0.25)'
+            ? 'rgba(0, 0, 0, 0.4)'
             : 'transparent';
       } else if (themedColors.length === 1) {
         return this.getSingleRGBColor(themedColors[0], forToolbar);
