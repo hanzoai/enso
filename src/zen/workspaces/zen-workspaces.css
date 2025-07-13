@@ -22,7 +22,6 @@
     display: none !important;
   }
 
-  --toolbarbutton-hover-background: transparent !important;
   border-radius: var(--zen-button-border-radius) !important;
   background: transparent;
   appearance: unset !important;

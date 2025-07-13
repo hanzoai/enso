@@ -1110,7 +1110,7 @@
         return forToolbar
           ? this.getToolbarModifiedBase()
           : this.isDarkMode
-            ? 'rgba(0, 0, 0, 0.6)'
+            ? 'rgba(0, 0, 0, 0.45)'
             : 'transparent';
       } else if (themedColors.length === 1) {
         return this.getSingleRGBColor(themedColors[0], forToolbar);
@@ -1501,14 +1501,15 @@
           );
           browser.gZenThemePicker.isLegacyVersion = this.isLegacyVersion;
           let isDarkMode = isDarkModeWindow;
-          if (!isDefaultTheme && !this.isLegacyVersion) {
+          const isUsingCustomColors = workspaceTheme.gradientColors.some((color) => color.isCustom);
+          if (!isDefaultTheme && !this.isLegacyVersion && !isUsingCustomColors) {
             // Check for the primary color
             isDarkMode = browser.gZenThemePicker.shouldBeDarkMode(dominantColor);
             browser.document.documentElement.setAttribute('zen-should-be-dark-mode', isDarkMode);
             browser.gZenThemePicker.panel.removeAttribute('invalidate-controls');
           } else {
             browser.document.documentElement.removeAttribute('zen-should-be-dark-mode');
-            if (!this.isLegacyVersion) {
+            if (!this.isLegacyVersion && !isUsingCustomColors) {
               browser.gZenThemePicker.panel.setAttribute('invalidate-controls', 'true');
             }
           }
