@@ -1048,6 +1048,23 @@
     }
 
     blendWithWhiteOverlay(baseColor, opacity) {
+      let colorToBlend;
+      let colorToBlendOpacity;
+      if (this.isMica) {
+        colorToBlend = !this.isDarkMode ? [0, 0, 0] : [255, 255, 255];
+        colorToBlendOpacity = !this.isDarkMode ? 0.2 : 0.3;
+      } else if (AppConstants.platform === 'macosx') {
+        colorToBlend = [255, 255, 255];
+        colorToBlendOpacity = 0.3;
+      }
+      if (colorToBlend) {
+        const blendedAlpha = Math.min(
+          1,
+          opacity + MIN_OPACITY + colorToBlendOpacity * (1 - (opacity + MIN_OPACITY))
+        );
+        baseColor = this.blendColors(baseColor, colorToBlend, blendedAlpha * 100);
+        opacity += colorToBlendOpacity * (1 - opacity);
+      }
       return `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, ${opacity})`;
     }
 
@@ -1110,7 +1127,7 @@
         return forToolbar
           ? this.getToolbarModifiedBase()
           : this.isDarkMode
-            ? 'rgba(0, 0, 0, 0.45)'
+            ? 'rgba(0, 0, 0, 0.25)'
             : 'transparent';
       } else if (themedColors.length === 1) {
         return this.getSingleRGBColor(themedColors[0], forToolbar);
