@@ -108,7 +108,7 @@ use std::path::PathBuf;
 
 const STATIC_PREFS: &str = "../engine/modules/libpref/init/zen-static-prefs.inc";
 const FIREFOX_PREFS: &str = "../engine/browser/app/profile/firefox.js";
-const DYNAMIC_PREFS: &str = "../engine/browser/app/profile/zen-browser.js";
+const DYNAMIC_PREFS: &str = "../engine/browser/app/profile/zen.js";
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 struct Preference {
@@ -245,7 +245,7 @@ fn get_value(pref: &Preference) -> String {
     // If the value is empty or there are any characters that could be misinterpreted,
     // we should wrap it in double quotes.
     let letters_inside_value =
-        value.chars().any(|c| c.is_alphabetic()) && value != "true" && value != "false";
+        value.chars().any(|c| c.is_alphabetic() || c == '.') && value != "true" && value != "false";
     if value.is_empty() || value.contains([' ', '\n', '\t', '"']) || letters_inside_value {
         format!("\"{}\"", value.replace('"', "\\\""))
     } else {
@@ -278,13 +278,21 @@ fn write_preferences(prefs: &[Preference]) {
         dynamic_content.push_str(&content);
     }
 
+    // Create files if they do not exist
+    if !static_prefs_path.exists() {
+        fs::File::create(&static_prefs_path).expect("Failed to create static prefs file");
+    }
+    if !dynamic_prefs_path.exists() {
+        fs::File::create(&dynamic_prefs_path).expect("Failed to create dynamic prefs file");
+    }
+
     fs::write(&static_prefs_path, static_content).expect("Failed to write static prefs");
     fs::write(&dynamic_prefs_path, dynamic_content).expect("Failed to write dynamic prefs");
 }
 
 fn prepare_zen_prefs() {
-    // Add `#include zen-browser.js` to the bottom of the firefox.js file if it doesn't exist
-    let line = "#include zen-browser.js";
+    // Add `#include zen.js` to the bottom of the firefox.js file if it doesn't exist
+    let line = "#include zen.js";
     let firefox_prefs_path = get_config_path().join(FIREFOX_PREFS);
     if let Ok(mut content) = fs::read_to_string(&firefox_prefs_path) {
         if !content.contains(line) {
