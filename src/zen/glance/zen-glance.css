@@ -27,7 +27,7 @@
     height: 32px;
     background: color-mix(
       in srgb,
-      light-dark(rgb(24, 24, 24), rgb(231, 231, 231)) 90%,
+      light-dark(rgb(24, 24, 24), rgb(231, 231, 231)) 96%,
       var(--zen-primary-color)
     );
     transition:

@@ -516,7 +516,7 @@
         this.dots.push({
           ID: id,
           element: dot,
-          position: { x: null, y: null }, // at some point possition should instead be stored as percentege just so that the size of the color picker does not matter.
+          position: { x, y },
           type: color.type,
           lightness: color.lightness,
         });

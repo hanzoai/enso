@@ -74,6 +74,10 @@
     & label {
       margin: 0 !important;
     }
+
+    :root:not([zen-sidebar-expanded='true']) & {
+      min-width: 36px;
+    }
   }
 
   &[reorder-mode='true'] toolbarbutton:not([dragged='true']) {

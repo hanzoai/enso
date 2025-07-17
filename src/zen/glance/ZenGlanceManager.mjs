@@ -209,7 +209,7 @@
                 opacity: 1,
               },
               {
-                duration: 0.5,
+                duration: 0.4,
                 type: 'spring',
                 bounce: 0.3,
               }
