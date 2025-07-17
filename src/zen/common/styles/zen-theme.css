@@ -221,6 +221,10 @@
       Segoe UI Symbol,
       Noto Color Emoji;
   }
+
+  @media (-moz-platform: windows) {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
 }
 
 #main-window:not([chromehidden~='toolbar']) {

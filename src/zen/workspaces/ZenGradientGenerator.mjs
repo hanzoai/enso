@@ -125,6 +125,8 @@
         2,
         darkModeChange
       );
+
+      XPCOMUtils.defineLazyPreferenceGetter(this, 'darkModeBias', 'zen.theme.dark-mode-bias', 0.25);
     }
 
     handleDarkModeChange(event) {
@@ -1209,7 +1211,7 @@
       let lightText = this.getToolbarColor(false); // e.g. [r, g, b, a]
 
       if (this.canBeTransparent) {
-        lightText[3] -= 0.25; // Reduce alpha for light text
+        lightText[3] -= this.darkModeBias; // Reduce alpha for light text
       }
 
       // Composite text color over background
@@ -1490,7 +1492,7 @@
       const rgb = this.hexToRgb(accentColor);
       if (this.isDarkMode) {
         // If the theme is dark, we want to use a lighter color
-        return this.blendColors(rgb, [0, 0, 0], 30);
+        return this.blendColors(rgb, [0, 0, 0], 60);
       }
       return rgb;
     }

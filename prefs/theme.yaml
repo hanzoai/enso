@@ -8,6 +8,9 @@
 - name: zen.theme.content-element-separation
   value: 8
 
+- name: zen.theme.dark-mode-bias
+  value: 0.25
+
 - name: zen.theme.gradient
   value: true
 
