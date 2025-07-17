@@ -310,7 +310,10 @@ zen-workspace {
 
 .workspace-arrowscrollbox {
   font-size: 14px;
-  font-weight: 500;  
+
+  @media not (-moz-platform: linux) {
+    font-weight: 500;
+  }
 }
 
 /** Customiable UI, this is an auto generated ID */
