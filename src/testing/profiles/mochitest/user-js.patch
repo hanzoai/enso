@@ -1,14 +1,12 @@
 diff --git a/testing/profiles/mochitest/user.js b/testing/profiles/mochitest/user.js
-index c43196b3c9cf8c90fa1cca5b6d205c410adec022..767e78ae1d9e4067a4c4777840bef2952a480f66 100644
+index c43196b3c9cf8c90fa1cca5b6d205c410adec022..854aec05b568aa3dfe7d9b994c0ee7ee9a6b5fd8 100644
 --- a/testing/profiles/mochitest/user.js
 +++ b/testing/profiles/mochitest/user.js
-@@ -44,3 +44,9 @@ user_pref("geo.prompt.open_system_prefs", false);
+@@ -44,3 +44,7 @@ user_pref("geo.prompt.open_system_prefs", false);
  
  // Enable Nimbus debug logging.
  user_pref("messaging-system.log", "all");
 +
 +user_pref("zen.welcome-screen.seen", true);
-+user_pref("zen.tab-unloader.enabled", false);
 +user_pref("zen.watermark.enabled", false);
-+user_pref("zen.urlbar.replace-newtab", false);
 +user_pref("zen.testing.enabled", true);

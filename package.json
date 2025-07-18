@@ -26,7 +26,9 @@
     "surfer": "surfer",
     "test": "python3 scripts/run_tests.py",
     "test:dbg": "python3 scripts/run_tests.py --jsdebugger --debug-on-failure",
-    "ffprefs": "cd tools/ffprefs && cargo run --release --bin ffprefs -- ../../"
+    "ffprefs": "cd tools/ffprefs && cargo run --release --bin ffprefs -- ../../",
+    "lc": "surfer license-check",
+    "lc:fix": "surfer license-check --fix"
   },
   "repository": {
     "type": "git",
@@ -43,7 +45,7 @@
   },
   "homepage": "https://github.com/zen-browser/desktop#readme",
   "dependencies": {
-    "@zen-browser/surfer": "^1.11.14"
+    "@zen-browser/surfer": "^1.11.15"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.27.0",
