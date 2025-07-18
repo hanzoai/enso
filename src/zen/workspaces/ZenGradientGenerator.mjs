@@ -1184,8 +1184,7 @@
               `linear-gradient(to top, ${color1} 0%, transparent 60%)`,
             ].join(', ');
           }
-          // TODO(m): Stop doing this once we have support for bluring the sidebar
-          return [`linear-gradient(120deg, ${color1} -30%, ${color3} 100%)`].join(', ');
+          return [`linear-gradient(-45deg, ${color1} 15%, ${color2})`].join(', ');
         }
       }
     }
