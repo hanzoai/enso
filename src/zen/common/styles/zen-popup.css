@@ -10,9 +10,6 @@
 
 :root {
   --panel-subview-body-padding: 2px 0;
-  --arrowpanel-menuitem-border-radius: 5px;
-  --arrowpanel-menuitem-margin: var(--uc-arrowpanel-menuitem-margin-block)
-    var(--uc-arrowpanel-menuitem-margin-inline);
   --arrowpanel-menuitem-padding-block: 8px;
   --arrowpanel-menuitem-padding-inline: 14px;
   --uc-arrowpanel-menuicon-margin-inline: 14px;

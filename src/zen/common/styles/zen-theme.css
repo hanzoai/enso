@@ -235,14 +235,6 @@
     --zen-themed-toolbar-bg-transparent: transparent;
   }
 
-  &[zen-should-be-dark-mode='true'] #browser {
-    color-scheme: dark;
-  }
-
-  &[zen-should-be-dark-mode='false'] #browser {
-    color-scheme: light;
-  }
-
   &,
   & panel,
   & menupopup,
@@ -274,6 +266,16 @@
       color-scheme: dark;
       --toolbar-color-scheme: dark;
     }
+  }
+
+  &[zen-should-be-dark-mode='true'] #browser {
+    color-scheme: dark;
+    --toolbar-color-scheme: dark;
+  }
+
+  &[zen-should-be-dark-mode='false'] #browser {
+    color-scheme: light;
+    --toolbar-color-scheme: light;
   }
 }
 
