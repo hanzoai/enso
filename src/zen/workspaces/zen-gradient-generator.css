@@ -39,6 +39,16 @@
     width: 100%;
     position: relative;
   }
+
+  & #PanelUI-zen-gradient-generator-custom-input {
+    padding: 0;
+    align-self: center;
+    border: none;
+  }
+
+  & #PanelUI-zen-gradient-generator-custom-opacity {
+    max-width: 50px;
+  }
 }
 
 #PanelUI-zen-gradient-generator-custom-input {
