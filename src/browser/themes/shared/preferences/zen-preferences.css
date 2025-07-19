@@ -592,7 +592,7 @@ groupbox h2 {
 }
 
 @media -moz-pref('zen.theme.disable-lightweight') {
-  html|div[data-l10n-id="preferences-web-appearance-footer"] {
+  html|div[data-l10n-id='preferences-web-appearance-footer'] {
     display: none;
   }
 }
