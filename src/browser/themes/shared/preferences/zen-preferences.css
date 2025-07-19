@@ -590,3 +590,9 @@ groupbox h2 {
 .sync-engine-workspaces.sync-engine-image {
   list-style-image: url('chrome://devtools/skin/images/tool-storage.svg');
 }
+
+@media -moz-pref('zen.theme.disable-lightweight') {
+  html|div[data-l10n-id="preferences-web-appearance-footer"] {
+    display: none;
+  }
+}
