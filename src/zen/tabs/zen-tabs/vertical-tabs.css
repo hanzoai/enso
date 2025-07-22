@@ -1226,29 +1226,6 @@
     @media -moz-pref('zen.view.show-newtab-button-top') {
       order: -1;
     }
-
-    /* Add a separator line above the button if preferences are set and there are tabs */
-    @media -moz-pref('zen.view.show-newtab-button-border-top') and (not -moz-pref('zen.view.show-newtab-button-top')) {
-      #tabbrowser-arrowscrollbox:has(tab:not([hidden])) & {
-        /* Only if tabs exist */
-        margin-top: 15px; /* Space above */
-        position: relative; /* For pseudo-element */
-        &::before {
-          content: '';
-          display: block;
-          height: 1px;
-          background: light-dark(
-            rgba(1, 1, 1, 0.075),
-            rgba(255, 255, 255, 0.1)
-          ); /* Separator color */
-          width: 98%; /* Near full width */
-          position: absolute;
-          top: -8px; /* Position above the button */
-          left: 50%;
-          transform: translateX(-50%); /* Center horizontally */
-        }
-      }
-    }
   }
 }
 

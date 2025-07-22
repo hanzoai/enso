@@ -1150,11 +1150,6 @@ Preferences.addAll([
     default: true,
   },
   {
-    id: 'zen.view.show-newtab-button-border-top',
-    type: 'bool',
-    default: false,
-  },
-  {
     id: 'zen.view.show-newtab-button-top',
     type: 'bool',
     default: true,

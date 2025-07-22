@@ -211,7 +211,7 @@
               {
                 duration: 0.4,
                 type: 'spring',
-                bounce: 0.3,
+                bounce: 0.25,
               }
             )
             .then(() => {
