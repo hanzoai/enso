@@ -4,7 +4,6 @@
 
 import os
 import sys
-import subprocess
 from pathlib import Path
 
 
@@ -32,7 +31,8 @@ def main():
 
   def run_mach_with_paths(test_paths):
     command = ['./mach', 'mochitest'] + other_args + test_paths
-    subprocess.run(command, check=True)
+    # Replace the current process with the mach command
+    os.execvp(command[0], command)
 
   if path in ("", "all"):
     test_dirs = [p for p in Path("zen/tests").iterdir() if p.is_dir()]

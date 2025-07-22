@@ -37,9 +37,6 @@
 - name: zen.view.grey-out-inactive-windows
   value: true
 
-- name: zen.view.show-newtab-button-border-top
-  value: false
-
 - name: zen.view.show-newtab-button-top
   value: true
 
