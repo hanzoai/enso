@@ -169,7 +169,6 @@
   --tab-icon-overlay-stroke: light-dark(white, black) !important;
   --tab-close-button-padding: 5px !important;
 
-  --input-bgcolor: var(--zen-colors-tertiary) !important;
   --input-border-color: var(--zen-input-border-color) !important;
   --zen-themed-toolbar-bg-transparent: light-dark(var(--zen-branding-bg), #171717);
 
