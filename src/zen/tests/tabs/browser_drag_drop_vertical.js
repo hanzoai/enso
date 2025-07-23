@@ -152,13 +152,13 @@ add_task(async function test_basic_unpinned_vertical_ltr() {
   await dropAfter(tab1, tab2, window);
   Assert.deepEqual(
     gBrowser.tabs,
-    [tab2, tab1, tab3, emptyTab],
+    [emptyTab, tab2, tab1, tab3],
     'confirm that tab1 moved after tab2'
   );
   await dropAfter(tab1, tab3, window);
   Assert.deepEqual(
     gBrowser.tabs,
-    [tab2, tab3, tab1, emptyTab],
+    [emptyTab, tab2, tab3, tab1],
     'confirm that tab1 moved after tab3'
   );
 
@@ -166,13 +166,13 @@ add_task(async function test_basic_unpinned_vertical_ltr() {
   await dropBefore(tab1, tab3, window);
   Assert.deepEqual(
     gBrowser.tabs,
-    [tab2, tab1, tab3, emptyTab],
+    [emptyTab, tab2, tab1, tab3],
     'confirm that tab1 moved before tab3'
   );
   await dropBefore(tab1, tab2, window);
   Assert.deepEqual(
     gBrowser.tabs,
-    [tab1, tab2, tab3, emptyTab],
+    [emptyTab, tab1, tab2, tab3],
     'confirm that tab1 moved before tab2'
   );
 });
