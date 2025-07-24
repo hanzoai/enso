@@ -117,11 +117,6 @@ jobs:
           ./mach --no-interactive bootstrap --application-choice browser
           cd ..
 
-      - name: Install Rust
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain $(cat .rust-toolchain)
-          source $HOME/.cargo/env
-
       - name: Insert API Keys
         run: |
           mkdir -p ~/.zen-keys
