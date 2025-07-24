@@ -1151,6 +1151,7 @@ class nsZenViewSplitter extends ZenDOMOperatedFeature {
     }
     this.removeSplitters();
     this.tabBrowserPanel.removeAttribute('zen-split-view');
+    document.getElementById('tabbrowser-tabbox').removeAttribute('zen-split-view');
     this.currentView = -1;
     this.toggleWrapperDisplay(false);
     this.maybeDisableOpeningTabOnSplitView();
@@ -1174,6 +1175,7 @@ class nsZenViewSplitter extends ZenDOMOperatedFeature {
     });
 
     this.tabBrowserPanel.setAttribute('zen-split-view', 'true');
+    document.getElementById('tabbrowser-tabbox').setAttribute('zen-split-view', 'true');
 
     this.applyGridToTabs(splitData.tabs);
     this.applyGridLayout(splitData.layoutTree);

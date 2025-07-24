@@ -60,6 +60,8 @@ var gZenCompactModeManager = {
       document.getElementById('zen-appcontent-navbar-wrapper')
     );
 
+    this.addHasPolyfillObserver();
+
     // Clear hover states when window state changes (minimize, maximize, etc.)
     window.addEventListener('sizemodechange', () => this._clearAllHoverStates());
 
@@ -124,6 +126,19 @@ var gZenCompactModeManager = {
 
   get sidebar() {
     return gNavToolbox;
+  },
+
+  addHasPolyfillObserver() {
+    this.sidebarObserverId = ZenHasPolyfill.observeSelectorExistence(
+      this.sidebar,
+      [
+        {
+          selector:
+            ":is([panelopen='true'], [open='true'], #urlbar:focus-within, [breakout-extend='true']):not(#urlbar[zen-floating-urlbar='true']):not(tab):not(.zen-compact-mode-ignore)",
+        },
+      ],
+      'zen-compact-mode-active'
+    );
   },
 
   flashSidebarIfNecessary(aInstant = false) {
@@ -199,6 +214,11 @@ var gZenCompactModeManager = {
     // IF we are animating IN, call the callbacks first so we can calculate the width
     // once the window buttons are shown
     this.updateContextMenu();
+    if (this.preference) {
+      ZenHasPolyfill.connectObserver(this.sidebarObserverId);
+    } else {
+      ZenHasPolyfill.disconnectObserver(this.sidebarObserverId);
+    }
     if (!this.preference) {
       this._evenListeners.forEach((callback) => callback());
       await this.animateCompactMode();
