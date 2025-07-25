@@ -8,7 +8,7 @@
   #tabbrowser-tabpanels[dragging-split='true'] {
     width: -moz-available;
     position: relative;
-    overflow: hidden;
+    overflow: clip;
 
     &.browserSidebarContainer {
       :root:not([zen-no-padding='true']) & {
