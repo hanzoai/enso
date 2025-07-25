@@ -151,14 +151,20 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
     }
 
     if (!this.privateWindowOrDisabled) {
+      const observerFunction = async function observe(subject) {
+        this._workspaceBookmarksCache = null;
+        await this.workspaceBookmarks();
+        this._invalidateBookmarkContainers();
+      };
       Services.obs.addObserver(this, 'weave:engine:sync:finish');
-      Services.obs.addObserver(
-        async function observe(subject) {
-          this._workspaceBookmarksCache = null;
-          await this.workspaceBookmarks();
-          this._invalidateBookmarkContainers();
-        }.bind(this),
-        'workspace-bookmarks-updated'
+      Services.obs.addObserver(observerFunction, 'workspace-bookmarks-updated');
+      window.addEventListener(
+        'unload',
+        () => {
+          Services.obs.removeObserver(this, 'weave:engine:sync:finish');
+          Services.obs.removeObserver(observerFunction, 'workspace-bookmarks-updated');
+        },
+        { once: true }
       );
     }
   }
@@ -962,7 +968,14 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       ) {
         this.log(`Found tab to select: ${this._tabToSelect}, ${tabs.length}`);
         setTimeout(() => {
-          gBrowser.selectedTab = gZenGlanceManager.getTabOrGlanceParent(tabs[this._tabToSelect]);
+          let tabToUse = gZenGlanceManager.getTabOrGlanceParent(tabs[this._tabToSelect]);
+          if (tabToUse.pinned) {
+            // We are before the empty tab here, so we need to select the next tab
+            tabToUse = gZenGlanceManager.getTabOrGlanceParent(
+              tabs[this._tabToSelect + 1] || tabs[this._tabToSelect]
+            );
+          }
+          gBrowser.selectedTab = tabToUse;
           this._removedByStartupPage = true;
           gBrowser.removeTab(this._tabToRemoveForEmpty, {
             skipSessionStore: true,
