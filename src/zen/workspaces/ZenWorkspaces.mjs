@@ -1537,6 +1537,9 @@ var gZenWorkspaces = new (class extends ZenMultiWindowFeature {
       const container = this.workspaceElement(otherWorkspace.uuid);
       container.active = otherWorkspace.uuid === workspace.uuid;
     }
+    // note: We are calling this even though it is also called in `updateTabsContainers`. This is mostly
+    // due to a race condition where the workspace strip is not updated before the tabs are moved.
+    this.makeSureEmptyTabIsFirst();
     gBrowser.pinnedTabsContainer = this.pinnedTabsContainer || gBrowser.pinnedTabsContainer;
     gBrowser.tabContainer.pinnedTabsContainer =
       this.pinnedTabsContainer || gBrowser.tabContainer.pinnedTabsContainer;
