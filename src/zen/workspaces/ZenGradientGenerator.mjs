@@ -1268,7 +1268,8 @@
     getMostDominantColor(allColors) {
       const color = this.getPrimaryColor(allColors);
       if (typeof color === 'string') {
-        return this.hexToRgb(color);
+        // We found a custom color, we should rather return the native accent color
+        return this.getNativeAccentColor();
       }
       return color;
     }
@@ -1448,15 +1449,14 @@
           browser.document.documentElement.style.setProperty('--zen-primary-color', primaryColor);
           browser.gZenThemePicker.isLegacyVersion = this.isLegacyVersion;
           let isDarkMode = isDarkModeWindow;
-          const isUsingCustomColors = workspaceTheme.gradientColors.some((color) => color.isCustom);
-          if (!isDefaultTheme && !this.isLegacyVersion && !isUsingCustomColors) {
+          if (!isDefaultTheme && !this.isLegacyVersion) {
             // Check for the primary color
             isDarkMode = browser.gZenThemePicker.shouldBeDarkMode(dominantColor);
             browser.document.documentElement.setAttribute('zen-should-be-dark-mode', isDarkMode);
             browser.gZenThemePicker.panel.removeAttribute('invalidate-controls');
           } else {
             browser.document.documentElement.removeAttribute('zen-should-be-dark-mode');
-            if (!this.isLegacyVersion && !isUsingCustomColors) {
+            if (!this.isLegacyVersion) {
               browser.gZenThemePicker.panel.setAttribute('invalidate-controls', 'true');
             }
           }

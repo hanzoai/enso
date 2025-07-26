@@ -259,11 +259,9 @@
         }
       }
 
-      const browserSidebarContainer = this.#currentParentTab?.linkedBrowser?.closest(
-        '.browserSidebarContainer'
-      );
-      if (onTabClose && hasFocused && !this.#confirmationTimeout && browserSidebarContainer) {
-        const cancelButton = browserSidebarContainer?.querySelector('.zen-glance-sidebar-close');
+      const sidebarButtons = this.browserWrapper.querySelector('.zen-glance-sidebar-container');
+      if (onTabClose && hasFocused && !this.#confirmationTimeout && sidebarButtons) {
+        const cancelButton = sidebarButtons?.querySelector('.zen-glance-sidebar-close');
         cancelButton.setAttribute('waitconfirmation', true);
         this.#confirmationTimeout = setTimeout(() => {
           cancelButton.removeAttribute('waitconfirmation');
@@ -274,7 +272,9 @@
 
       this.browserWrapper.removeAttribute('has-finished-animation');
       if (noAnimation) {
-        this._clearContainerStyles(browserSidebarContainer);
+        this._clearContainerStyles(
+          this.#currentParentTab?.linkedBrowser?.closest('.browserSidebarContainer')
+        );
         this.quickCloseGlance({ closeCurrentTab: false });
         return;
       }
@@ -299,7 +299,6 @@
       this.overlay.style.pointerEvents = 'none';
       this.quickCloseGlance({ justAnimateParent: true, clearID: false });
       const originalPosition = this.#glances.get(this.#currentGlanceID).originalPosition;
-      const sidebarButtons = this.browserWrapper.querySelector('.zen-glance-sidebar-container');
       if (sidebarButtons) {
         gZenUIManager.motion
           .animate(
