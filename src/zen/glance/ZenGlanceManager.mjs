@@ -259,6 +259,9 @@
         }
       }
 
+      const browserSidebarContainer = this.#currentParentTab?.linkedBrowser?.closest(
+        '.browserSidebarContainer'
+      );
       const sidebarButtons = this.browserWrapper.querySelector('.zen-glance-sidebar-container');
       if (onTabClose && hasFocused && !this.#confirmationTimeout && sidebarButtons) {
         const cancelButton = sidebarButtons?.querySelector('.zen-glance-sidebar-close');
@@ -272,9 +275,7 @@
 
       this.browserWrapper.removeAttribute('has-finished-animation');
       if (noAnimation) {
-        this._clearContainerStyles(
-          this.#currentParentTab?.linkedBrowser?.closest('.browserSidebarContainer')
-        );
+        this._clearContainerStyles(browserSidebarContainer);
         this.quickCloseGlance({ closeCurrentTab: false });
         return;
       }
