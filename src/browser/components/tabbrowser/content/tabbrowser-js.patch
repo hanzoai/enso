@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 96fd8acdc09cc4c9649d1ed7503c2a0bde536613..1033da146ef5a3463f9fb15168060424b64a64ab 100644
+index 96fd8acdc09cc4c9649d1ed7503c2a0bde536613..32b3e4cd13c2fffa4630e49f209e382cc1fcac10 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -422,15 +422,49 @@
@@ -603,7 +603,14 @@ index 96fd8acdc09cc4c9649d1ed7503c2a0bde536613..1033da146ef5a3463f9fb15168060424
            if (neighbor && this.isTab(element) && tabIndex > element._tPos) {
              neighbor.after(element);
            } else {
-@@ -6122,7 +6252,7 @@
+@@ -6116,13 +6246,13 @@
+     #moveTabNextTo(element, targetElement, moveBefore = false, metricsContext) {
+       if (this.isTabGroupLabel(targetElement)) {
+         targetElement = targetElement.group;
+-        if (!moveBefore && !targetElement.collapsed) {
++        if (!moveBefore && !targetElement.collapsed && !targetElement.hasAttribute("split-view-group")) {
+           // Right after the tab group label = before the first tab in the tab group
+           targetElement = targetElement.tabs[0];
            moveBefore = true;
          }
        }

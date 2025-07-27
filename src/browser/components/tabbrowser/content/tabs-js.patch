@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index 1fcebe3962398ff1b7cadef657ac8b68a80e720d..bd64221c60aa2c2f4efdf765299ed03077710ff9 100644
+index 1fcebe3962398ff1b7cadef657ac8b68a80e720d..d3c0a1ac7f24301e56cb46e83a4d9b8e2ccc453a 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -289,6 +289,7 @@
@@ -408,6 +408,15 @@ index 1fcebe3962398ff1b7cadef657ac8b68a80e720d..bd64221c60aa2c2f4efdf765299ed030
 +        let dropElementForOverlap = isTabGroupLabel(dropElement) && !dropElement.group?.hasAttribute("split-view-group")
            ? dropElement.parentElement
            : dropElement;
+ 
+@@ -2659,7 +2736,7 @@
+         if (
+           isTabGroupLabel(draggedTab) &&
+           dropElement?.group &&
+-          !dropElement.group.collapsed
++          !dropElement.group.collapsed && !dropElement.group.hasAttribute("split-view-group")
+         ) {
+           let overlappedGroup = dropElement.group;
  
 @@ -2686,12 +2763,7 @@
          }
