@@ -197,54 +197,6 @@ var gZenUIManager = {
   _clearTimeout: null,
   _lastTab: null,
 
-  // Track tab switching state to prevent race conditions
-  _tabSwitchState: {
-    inProgress: false,
-    lastSwitchTime: 0,
-    debounceTime: 100, // ms to wait between tab switches
-    queue: [],
-    processingQueue: false,
-  },
-
-  // Queue tab switch operations to prevent race conditions
-  async _queueTabOperation(operation) {
-    // Add operation to queue
-    this._tabSwitchState.queue.push(operation);
-
-    // If already processing queue, just return
-    if (this._tabSwitchState.processingQueue) {
-      return;
-    }
-
-    // Start processing queue
-    this._tabSwitchState.processingQueue = true;
-
-    try {
-      while (this._tabSwitchState.queue.length > 0) {
-        // Get next operation
-        const nextOp = this._tabSwitchState.queue.shift();
-
-        // Check if we need to wait for debounce
-        const now = Date.now();
-        const timeSinceLastSwitch = now - this._tabSwitchState.lastSwitchTime;
-
-        if (timeSinceLastSwitch < this._tabSwitchState.debounceTime) {
-          await new Promise((resolve) =>
-            setTimeout(resolve, this._tabSwitchState.debounceTime - timeSinceLastSwitch)
-          );
-        }
-
-        // Execute operation
-        this._tabSwitchState.inProgress = true;
-        await nextOp();
-        this._tabSwitchState.inProgress = false;
-        this._tabSwitchState.lastSwitchTime = Date.now();
-      }
-    } finally {
-      this._tabSwitchState.processingQueue = false;
-    }
-  },
-
   // Check if browser elements are in a valid state for tab operations
   _validateBrowserState() {
     // Check if browser window is still open
@@ -286,52 +238,45 @@ var gZenUIManager = {
       return false;
     }
 
-    // Queue the tab operation to prevent race conditions
-    this._queueTabOperation(async () => {
-      // Clear any existing timeout
-      if (this._clearTimeout) {
-        clearTimeout(this._clearTimeout);
-        this._clearTimeout = null;
-      }
+    // Clear any existing timeout
+    if (this._clearTimeout) {
+      clearTimeout(this._clearTimeout);
+      this._clearTimeout = null;
+    }
 
-      // Store the current tab
-      this._lastTab = gBrowser.selectedTab;
-      if (!this._lastTab) {
-        console.warn('No selected tab found when creating new tab');
-        return false;
-      }
+    // Store the current tab
+    this._lastTab = gBrowser.selectedTab;
+    if (!this._lastTab) {
+      console.warn('No selected tab found when creating new tab');
+      return false;
+    }
 
-      // Set visual state with proper validation
-      if (this._lastTab && !this._lastTab.closing) {
-        this._lastTab._visuallySelected = false;
-      }
+    // Set visual state with proper validation
+    if (this._lastTab && !this._lastTab.closing) {
+      this._lastTab._visuallySelected = false;
+    }
 
-      // Store URL bar state
-      this._prevUrlbarLabel = gURLBar._untrimmedValue || '';
+    // Store URL bar state
+    this._prevUrlbarLabel = gURLBar._untrimmedValue || '';
 
-      // Set up URL bar for new tab
-      gURLBar._zenHandleUrlbarClose = this.handleUrlbarClose.bind(this);
-      gURLBar.setAttribute('zen-newtab', true);
+    // Set up URL bar for new tab
+    gURLBar._zenHandleUrlbarClose = this.handleUrlbarClose.bind(this);
+    gURLBar.setAttribute('zen-newtab', true);
 
-      // Update newtab buttons
-      for (const button of this.newtabButtons) {
-        button.setAttribute('in-urlbar', true);
-      }
+    // Update newtab buttons
+    for (const button of this.newtabButtons) {
+      button.setAttribute('in-urlbar', true);
+    }
 
-      // Open location command
-      try {
-        // Wait for a small delay to ensure DOM is ready
-        await new Promise((resolve) => setTimeout(resolve, 10));
-
-        document.getElementById('Browser:OpenLocation').doCommand();
-        gURLBar.search(this._lastSearch || '');
-      } catch (e) {
-        console.error('Error opening location in new tab:', e);
-        this.handleUrlbarClose(false);
-        return false;
-      }
-    });
-
+    // Open location command
+    try {
+      document.getElementById('Browser:OpenLocation').doCommand();
+      gURLBar.search(this._lastSearch || '');
+    } catch (e) {
+      console.error('Error opening location in new tab:', e);
+      this.handleUrlbarClose(false);
+      return false;
+    }
     return true;
   },
 
@@ -347,72 +292,69 @@ var gZenUIManager = {
       return;
     }
 
-    // Queue the operation to prevent race conditions
-    this._queueTabOperation(async () => {
-      // Reset URL bar state
-      if (gURLBar._zenHandleUrlbarClose) {
-        gURLBar._zenHandleUrlbarClose = null;
-      }
-      gURLBar.removeAttribute('zen-newtab');
+    // Reset URL bar state
+    if (gURLBar._zenHandleUrlbarClose) {
+      gURLBar._zenHandleUrlbarClose = null;
+    }
+    gURLBar.removeAttribute('zen-newtab');
 
-      // Safely restore tab visual state with proper validation
-      if (
-        this._lastTab &&
-        !this._lastTab.closing &&
-        this._lastTab.ownerGlobal &&
-        !this._lastTab.ownerGlobal.closed
-      ) {
-        this._lastTab._visuallySelected = true;
-        this._lastTab = null;
-      }
+    // Safely restore tab visual state with proper validation
+    if (
+      this._lastTab &&
+      !this._lastTab.closing &&
+      this._lastTab.ownerGlobal &&
+      !this._lastTab.ownerGlobal.closed
+    ) {
+      this._lastTab._visuallySelected = true;
+      this._lastTab = null;
+    }
 
-      // Reset newtab buttons
-      for (const button of this.newtabButtons) {
-        button.removeAttribute('in-urlbar');
-      }
+    // Reset newtab buttons
+    for (const button of this.newtabButtons) {
+      button.removeAttribute('in-urlbar');
+    }
 
-      // Handle search data
-      if (!onElementPicked) {
-        if (onSwitch) {
-          this.clearUrlbarData();
-        } else {
-          this._lastSearch = gURLBar._untrimmedValue || '';
-
-          if (this._clearTimeout) {
-            clearTimeout(this._clearTimeout);
-          }
-
-          this._clearTimeout = setTimeout(() => {
-            this.clearUrlbarData();
-          }, this.urlbarWaitToClear);
-        }
-
-        // Safely restore URL bar state with proper validation
-        if (this._prevUrlbarLabel) {
-          gURLBar.setURI(this._prevUrlbarLabel, onSwitch, false, false, !onSwitch);
-        }
-
-        gURLBar.handleRevert();
-      } else if (onElementPicked && onSwitch) {
+    // Handle search data
+    if (!onElementPicked) {
+      if (onSwitch) {
         this.clearUrlbarData();
+      } else {
+        this._lastSearch = gURLBar._untrimmedValue || '';
+
+        if (this._clearTimeout) {
+          clearTimeout(this._clearTimeout);
+        }
+
+        this._clearTimeout = setTimeout(() => {
+          this.clearUrlbarData();
+        }, this.urlbarWaitToClear);
       }
 
-      if (gURLBar.focused) {
-        setTimeout(() => {
-          gURLBar.view.close({ elementPicked: onSwitch });
-          gURLBar.updateTextOverflow();
+      // Safely restore URL bar state with proper validation
+      if (this._prevUrlbarLabel) {
+        gURLBar.setURI(this._prevUrlbarLabel, onSwitch, false, false, !onSwitch);
+      }
 
-          // Ensure tab and browser are valid before updating state
-          const selectedTab = gBrowser.selectedTab;
-          if (selectedTab && selectedTab.linkedBrowser && !selectedTab.closing && onSwitch) {
-            const browserState = gURLBar.getBrowserState(selectedTab.linkedBrowser);
-            if (browserState) {
-              browserState.urlbarFocused = false;
-            }
+      gURLBar.handleRevert();
+    } else if (onElementPicked && onSwitch) {
+      this.clearUrlbarData();
+    }
+
+    if (gURLBar.focused) {
+      setTimeout(() => {
+        gURLBar.view.close({ elementPicked: onSwitch });
+        gURLBar.updateTextOverflow();
+
+        // Ensure tab and browser are valid before updating state
+        const selectedTab = gBrowser.selectedTab;
+        if (selectedTab && selectedTab.linkedBrowser && !selectedTab.closing && onSwitch) {
+          const browserState = gURLBar.getBrowserState(selectedTab.linkedBrowser);
+          if (browserState) {
+            browserState.urlbarFocused = false;
           }
-        }, 0);
-      }
-    });
+        }
+      }, 0);
+    }
   },
 
   urlbarTrim(aURL) {
