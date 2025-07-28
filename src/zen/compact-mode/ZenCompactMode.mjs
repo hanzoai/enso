@@ -45,14 +45,21 @@ var gZenCompactModeManager = {
     lazyCompactMode.mainAppWrapper.removeAttribute('zen-compact-mode');
 
     this.addContextMenu();
+    this._resolvePreInit();
   },
 
   init() {
     this.addMouseActions();
 
-    Services.prefs.addObserver(
-      'zen.tabs.vertical.right-side',
-      this._updateSidebarIsOnRight.bind(this)
+    const tabIsRightObserver = this._updateSidebarIsOnRight.bind(this);
+    Services.prefs.addObserver('zen.tabs.vertical.right-side', tabIsRightObserver);
+
+    window.addEventListener(
+      'unload',
+      () => {
+        Services.prefs.removeObserver('zen.tabs.vertical.right-side', tabIsRightObserver);
+      },
+      { once: true }
     );
 
     gZenUIManager.addPopupTrackingAttribute(this.sidebar);
@@ -77,7 +84,12 @@ var gZenCompactModeManager = {
         buttons.removeAttribute('zen-has-hover');
       });
     }
-    this.preference = this._wasInCompactMode;
+
+    this._preInitPromise.then(() => {
+      this.preference = this._wasInCompactMode;
+      delete this._resolvePreInit;
+      delete this._preInitPromise;
+    });
   },
 
   get preference() {
@@ -724,6 +736,10 @@ var gZenCompactModeManager = {
     delete this._nextTimeWillBeActive;
   },
 };
+
+gZenCompactModeManager._preInitPromise = new Promise((resolve) => {
+  gZenCompactModeManager._resolvePreInit = resolve;
+});
 
 document.addEventListener(
   'MozBeforeInitialXULLayout',
