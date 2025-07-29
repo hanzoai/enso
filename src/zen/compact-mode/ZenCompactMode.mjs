@@ -597,7 +597,7 @@ var gZenCompactModeManager = {
               target.removeAttribute('zen-has-hover')
             );
           }
-        }, 0);
+        }, 10);
       };
 
       target.addEventListener('mouseenter', onEnter);
