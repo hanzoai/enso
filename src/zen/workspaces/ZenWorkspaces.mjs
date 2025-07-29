@@ -314,6 +314,14 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
   }
 
   _initializeEmptyTab() {
+    for (const tab of gBrowser.tabs) {
+      // Check if session store has an empty tab
+      if (tab.hasAttribute('zen-empty-tab')) {
+        this.log('Found existing empty tab from session store!');
+        this._emptyTab = tab;
+        return;
+      }
+    }
     this._emptyTab = gBrowser.addTrustedTab('about:blank', {
       inBackground: true,
       userContextId: 0,
@@ -952,9 +960,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     }
 
     if (this._tabToRemoveForEmpty && !removedEmptyTab) {
-      const tabs = gBrowser.tabs.filter(
-        (tab) => !tab.collapsed && !tab.hasAttribute('zen-empty-tab')
-      );
+      const tabs = gBrowser.tabs.filter((tab) => !tab.collapsed);
       if (
         typeof this._tabToSelect === 'number' &&
         this._tabToSelect >= 0 &&
@@ -964,13 +970,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
       ) {
         this.log(`Found tab to select: ${this._tabToSelect}, ${tabs.length}`);
         setTimeout(() => {
-          let tabToUse = gZenGlanceManager.getTabOrGlanceParent(tabs[this._tabToSelect]);
-          if (tabToUse.pinned) {
-            // We are before the empty tab here, so we need to select the next tab
-            tabToUse = gZenGlanceManager.getTabOrGlanceParent(
-              tabs[this._tabToSelect + 1] || tabs[this._tabToSelect]
-            );
-          }
+          let tabToUse = gZenGlanceManager.getTabOrGlanceParent(tabs[this._tabToSelect + 1]);
           gBrowser.selectedTab = tabToUse;
           this._removedByStartupPage = true;
           gBrowser.removeTab(this._tabToRemoveForEmpty, {

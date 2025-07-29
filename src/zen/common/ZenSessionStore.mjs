@@ -18,9 +18,6 @@
       if (tabData.zenPinnedId) {
         tab.setAttribute('zen-pin-id', tabData.zenPinnedId);
       }
-      if (tabData.zenIsEmpty) {
-        tab.setAttribute('zen-empty-tab', 'true');
-      }
       if (tabData.zenHasStaticLabel) {
         tab.setAttribute('zen-has-static-label', 'true');
       }

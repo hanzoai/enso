@@ -1,5 +1,5 @@
 diff --git a/browser/components/sessionstore/SessionStore.sys.mjs b/browser/components/sessionstore/SessionStore.sys.mjs
-index be029379c101a0105d4837136e064e6007b67c3e..f998ad44015b05104e8a1dbeebd7b94e586e4fbd 100644
+index be029379c101a0105d4837136e064e6007b67c3e..93cf9042822f1eed1e53a28bc9f052597bd305bb 100644
 --- a/browser/components/sessionstore/SessionStore.sys.mjs
 +++ b/browser/components/sessionstore/SessionStore.sys.mjs
 @@ -2120,7 +2120,6 @@ var SessionStoreInternal = {
@@ -69,7 +69,7 @@ index be029379c101a0105d4837136e064e6007b67c3e..f998ad44015b05104e8a1dbeebd7b94e
        winData.workspaceID = workspaceID;
      }
    },
-@@ -5554,14 +5557,15 @@ var SessionStoreInternal = {
+@@ -5554,11 +5557,12 @@ var SessionStoreInternal = {
      }
  
      let tabbrowser = aWindow.gBrowser;
@@ -82,18 +82,12 @@ index be029379c101a0105d4837136e064e6007b67c3e..f998ad44015b05104e8a1dbeebd7b94e
 +    winData.splitViewData = aWindow.gZenViewSplitter?.storeDataForSessionStore();
      // update the internal state data for this window
      for (let tab of tabs) {
--      if (tab == aWindow.FirefoxViewHandler.tab) {
-+      if (tab == aWindow.FirefoxViewHandler.tab || tab.hasAttribute("zen-empty-tab")) {
-         continue;
-       }
-       let tabData = lazy.TabState.collect(tab, TAB_CUSTOM_VALUES.get(tab));
-@@ -5580,8 +5584,8 @@ var SessionStoreInternal = {
-     // We don't store the Firefox View tab in Session Store, so if it was the last selected "tab" when
+       if (tab == aWindow.FirefoxViewHandler.tab) {
+@@ -5581,7 +5585,7 @@ var SessionStoreInternal = {
      // a window is closed, point to the first item in the tab strip instead (it will never be the Firefox View tab,
      // since it's only inserted into the tab strip after it's selected).
--    if (aWindow.FirefoxViewHandler.tab?.selected) {
+     if (aWindow.FirefoxViewHandler.tab?.selected) {
 -      selectedIndex = 1;
-+    if (aWindow.FirefoxViewHandler.tab?.selected || tabbrowser.selectedTab.hasAttribute("zen-empty-tab")) {
 +      selectedIndex = 0;
        winData.title = tabbrowser.tabs[0].label;
      }

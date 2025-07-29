@@ -624,6 +624,7 @@
 
       gBrowser.moveTabAfter(this.#currentTab, this.#currentParentTab);
 
+      const browserRect = window.windowUtils.getBoundsWithoutFlushing(this.browserWrapper);
       this.#currentTab.removeAttribute('zen-glance-tab');
       this._clearContainerStyles(this.browserWrapper);
       this.browserWrapper.removeAttribute('has-finished-animation');
@@ -635,6 +636,7 @@
         .closest('.browserSidebarContainer')
         .classList.remove('zen-glance-background');
       this.#currentParentTab._visuallySelected = false;
+      gBrowser.TabStateFlusher.flush(this.#currentTab);
       const sidebarButtons = this.browserWrapper.querySelector('.zen-glance-sidebar-container');
       if (sidebarButtons) {
         sidebarButtons.remove();
@@ -648,6 +650,9 @@
         this.finishOpeningGlance();
         return;
       }
+      // Write the styles early to avoid flickering
+      this.browserWrapper.style.width = `${browserRect.width}px`;
+      this.browserWrapper.style.height = `${browserRect.height}px`;
       await gZenUIManager.motion.animate(
         this.browserWrapper,
         {
