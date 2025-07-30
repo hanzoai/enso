@@ -33,6 +33,8 @@ var gZenCompactModeManager = {
   _evenListeners: [],
   _removeHoverFrames: {},
 
+  HOVER_HACK_DELAY: 10, // Delay to avoid flickering when hovering over the sidebar
+
   preInit() {
     // Remove it before initializing so we can properly calculate the width
     // of the sidebar at startup and avoid overflowing items not being hidden
@@ -597,7 +599,7 @@ var gZenCompactModeManager = {
               target.removeAttribute('zen-has-hover')
             );
           }
-        }, 10);
+        }, this.HOVER_HACK_DELAY);
       };
 
       target.addEventListener('mouseenter', onEnter);
@@ -608,33 +610,35 @@ var gZenCompactModeManager = {
     }
 
     document.documentElement.addEventListener('mouseleave', (event) => {
-      const screenEdgeCrossed = this._getCrossedEdge(event.pageX, event.pageY);
-      if (!screenEdgeCrossed) return;
-      for (let entry of this.hoverableElements) {
-        if (screenEdgeCrossed !== entry.screenEdge) continue;
-        const target = entry.element;
-        const boundAxis = entry.screenEdge === 'right' || entry.screenEdge === 'left' ? 'y' : 'x';
-        if (!this._positionInBounds(boundAxis, target, event.pageX, event.pageY, 7)) {
-          continue;
-        }
-        window.cancelAnimationFrame(this._removeHoverFrames[target.id]);
+      setTimeout(() => {
+        const screenEdgeCrossed = this._getCrossedEdge(event.pageX, event.pageY);
+        if (!screenEdgeCrossed) return;
+        for (let entry of this.hoverableElements) {
+          if (screenEdgeCrossed !== entry.screenEdge) continue;
+          const target = entry.element;
+          const boundAxis = entry.screenEdge === 'right' || entry.screenEdge === 'left' ? 'y' : 'x';
+          if (!this._positionInBounds(boundAxis, target, event.pageX, event.pageY, 7)) {
+            continue;
+          }
+          window.cancelAnimationFrame(this._removeHoverFrames[target.id]);
 
-        this.flashElement(
-          target,
-          this.hideAfterHoverDuration,
-          'has-hover' + target.id,
-          'zen-has-hover'
-        );
-        document.addEventListener(
-          'mousemove',
-          () => {
-            if (target.matches(':hover')) return;
-            target.removeAttribute('zen-has-hover');
-            this.clearFlashTimeout('has-hover' + target.id);
-          },
-          { once: true }
-        );
-      }
+          this.flashElement(
+            target,
+            this.hideAfterHoverDuration,
+            'has-hover' + target.id,
+            'zen-has-hover'
+          );
+          document.addEventListener(
+            'mousemove',
+            () => {
+              if (target.matches(':hover')) return;
+              target.removeAttribute('zen-has-hover');
+              this.clearFlashTimeout('has-hover' + target.id);
+            },
+            { once: true }
+          );
+        }
+      }, this.HOVER_HACK_DELAY);
     });
 
     gURLBar.textbox.addEventListener('mouseleave', () => {
