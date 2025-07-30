@@ -2,12 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 {
-  var ZenStartup = {
+  var gZenStartup = {
     _watermarkIgnoreElements: ['zen-toast-container'],
 
-    async init() {
+    isReady: false,
+
+    init() {
       this.openWatermark();
-      await this._initBrowserBackground();
+      this._initBrowserBackground();
       this._changeSidebarLocation();
       this._zenInitBrowserLayout();
     },
@@ -21,7 +23,7 @@
       document.getElementById('browser').prepend(background);
     },
 
-    async _zenInitBrowserLayout() {
+    _zenInitBrowserLayout() {
       if (this.__hasInitBrowserLayout) return;
       this.__hasInitBrowserLayout = true;
       try {
@@ -42,7 +44,9 @@
         }
 
         gZenWorkspaces.init();
-        gZenUIManager.init();
+        setTimeout(() => {
+          gZenUIManager.init();
+        }, 0);
 
         this._checkForWelcomePage();
 
@@ -75,21 +79,16 @@
         await SessionStore.promiseAllWindowsRestored;
         delete gZenUIManager.promiseInitialized;
         this._initSearchBar();
-        setTimeout(() => {
-          gZenCompactModeManager.init();
-          setTimeout(() => {
-            // Fix for https://github.com/zen-browser/desktop/issues/7605, specially in compact mode
-            if (gURLBar.hasAttribute('breakout-extend')) {
-              gURLBar.focus();
-            }
-            setTimeout(() => {
-              // A bit of a hack to make sure the tabs toolbar is updated.
-              // Just in case we didn't get the right size.
-              gZenUIManager.updateTabsToolbar();
-            }, 0);
-          }, 100);
-        }, 0);
+        gZenCompactModeManager.init();
+        // Fix for https://github.com/zen-browser/desktop/issues/7605, specially in compact mode
+        if (gURLBar.hasAttribute('breakout-extend')) {
+          gURLBar.focus();
+        }
+        // A bit of a hack to make sure the tabs toolbar is updated.
+        // Just in case we didn't get the right size.
+        gZenUIManager.updateTabsToolbar();
         this.closeWatermark();
+        this.isReady = true;
       });
     },
 
@@ -114,8 +113,7 @@
               opacity: [0, 1],
             },
             {
-              delay: 0.6,
-              easing: 'ease-in-out',
+              duration: 0.1,
             }
           )
           .then(() => {
@@ -165,7 +163,7 @@
   window.addEventListener(
     'MozBeforeInitialXULLayout',
     () => {
-      ZenStartup.init();
+      gZenStartup.init();
     },
     { once: true }
   );

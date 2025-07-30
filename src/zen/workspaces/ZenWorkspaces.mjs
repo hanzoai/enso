@@ -1606,7 +1606,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     ) {
       delete this._alwaysAnimatePaddingTop;
       const essentialsHeight = essentialContainer.getBoundingClientRect().height;
-      if (!forAnimation && animateContainer && gZenUIManager.motion) {
+      if (!forAnimation && animateContainer && gZenUIManager.motion && gZenStartup.isReady) {
         gZenUIManager.motion.animate(
           workspaceElement,
           {

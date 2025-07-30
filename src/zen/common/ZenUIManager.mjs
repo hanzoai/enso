@@ -549,7 +549,8 @@ var gZenVerticalTabsManager = {
       !aTab ||
       !gZenUIManager._hasLoadedDOM ||
       !aTab.isConnected ||
-      gZenUIManager.testingEnabled
+      gZenUIManager.testingEnabled ||
+      !gZenStartup.isReady
     ) {
       return;
     }

@@ -17,6 +17,7 @@ export default [
 
   'gZenUIManager',
   'gZenVerticalTabsManager',
+  'gZenStartup',
 
   'gZenWorkspaces',
   'ZenWorkspacesEngine',

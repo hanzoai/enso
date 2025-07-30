@@ -11,7 +11,7 @@
           <toolbarbutton class="toolbarbutton-1 chromeclass-toolbar-additional zen-workspaces-actions" context="zenWorkspaceMoreActions"></toolbarbutton>
         </vbox>
         <arrowscrollbox orient="vertical" class="workspace-arrowscrollbox">
-          <vbox class="zen-workspace-tabs-section zen-workspace-pinned-tabs-section">
+          <vbox class="zen-workspace-tabs-section zen-workspace-pinned-tabs-section" hide-separator="true">
             <html:div class="pinned-tabs-container-separator"></html:div>
           </vbox>
           <vbox class="zen-workspace-tabs-section zen-workspace-normal-tabs-section">
