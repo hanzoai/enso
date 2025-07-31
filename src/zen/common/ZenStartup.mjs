@@ -46,9 +46,8 @@
         gZenWorkspaces.init();
         setTimeout(() => {
           gZenUIManager.init();
+          this._checkForWelcomePage();
         }, 0);
-
-        this._checkForWelcomePage();
 
         document.l10n.setAttributes(
           document.getElementById('tabs-newtab-button'),
