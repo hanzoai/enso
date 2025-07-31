@@ -33,7 +33,8 @@ var gZenCompactModeManager = {
   _evenListeners: [],
   _removeHoverFrames: {},
 
-  HOVER_HACK_DELAY: 10, // Delay to avoid flickering when hovering over the sidebar
+  // Delay to avoid flickering when hovering over the sidebar
+  HOVER_HACK_DELAY: Services.prefs.getIntPref('zen.view.compact.hover-hack-delay', 0),
 
   preInit() {
     // Remove it before initializing so we can properly calculate the width
