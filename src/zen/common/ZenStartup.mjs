@@ -47,12 +47,12 @@
         setTimeout(() => {
           gZenUIManager.init();
           this._checkForWelcomePage();
-        }, 0);
 
-        document.l10n.setAttributes(
-          document.getElementById('tabs-newtab-button'),
-          'tabs-toolbar-new-tab'
-        );
+          document.l10n.setAttributes(
+            document.getElementById('tabs-newtab-button'),
+            'tabs-toolbar-new-tab'
+          );
+        }, 0);
       } catch (e) {
         console.error('ZenThemeModifier: Error initializing browser layout', e);
       }
