@@ -612,7 +612,9 @@
         ];
       } else {
         // Remove everything except the entry we want to keep
-        state.entries = [state.entries[foundEntryIndex]];
+        const existingEntry = state.entries[foundEntryIndex];
+        existingEntry.title = pin.title;
+        state.entries = [existingEntry];
       }
       state.image = pin.iconUrl || null;
       state.index = 0;
