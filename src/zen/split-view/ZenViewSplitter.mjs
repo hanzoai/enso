@@ -494,7 +494,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
     this.getSplitters(node)?.forEach((s) => s.remove());
     this._splitNodeToSplitters.delete(node);
     if (!recursive) return;
-    if (node.children) node.children.forEach((c) => this._removeNodeSplitters(c));
+    if (node && node.children) node.children.forEach((c) => this._removeNodeSplitters(c));
   }
 
   get rearangeActionTarget() {

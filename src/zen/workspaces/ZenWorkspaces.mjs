@@ -970,7 +970,9 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
       ) {
         this.log(`Found tab to select: ${this._tabToSelect}, ${tabs.length}`);
         setTimeout(() => {
-          let tabToUse = gZenGlanceManager.getTabOrGlanceParent(tabs[this._tabToSelect + 1]);
+          let tabToUse = gZenGlanceManager.getTabOrGlanceParent(
+            tabs[this._tabToSelect + 1] || this._emptyTab
+          );
           gBrowser.selectedTab = tabToUse;
           this._removedByStartupPage = true;
           gBrowser.removeTab(this._tabToRemoveForEmpty, {
@@ -1578,6 +1580,8 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
   makeSureEmptyTabIsFirst() {
     const emptyTab = this._emptyTab;
     if (emptyTab) {
+      emptyTab.setAttribute('zen-workspace-id', this.activeWorkspace);
+      gBrowser.TabStateFlusher.flush(emptyTab.linkedBrowser);
       const container = this.activeWorkspaceStrip;
       if (container) {
         container.insertBefore(emptyTab, container.firstChild);

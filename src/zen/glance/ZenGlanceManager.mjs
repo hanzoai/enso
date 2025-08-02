@@ -636,7 +636,7 @@
         .closest('.browserSidebarContainer')
         .classList.remove('zen-glance-background');
       this.#currentParentTab._visuallySelected = false;
-      gBrowser.TabStateFlusher.flush(this.#currentTab);
+      gBrowser.TabStateFlusher.flush(this.#currentTab.linkedBrowser);
       const sidebarButtons = this.browserWrapper.querySelector('.zen-glance-sidebar-container');
       if (sidebarButtons) {
         sidebarButtons.remove();
