@@ -7,7 +7,12 @@
 
     isReady: false,
 
-    init() {
+    async init() {
+      // important: We do this to ensure that some firefox components
+      // are initialized before we start our own initialization.
+      // please, do not remove this line and if you do, make sure to
+      // test the startup process.
+      await new Promise((resolve) => resolve());
       this.openWatermark();
       this._initBrowserBackground();
       this._changeSidebarLocation();
