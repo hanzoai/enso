@@ -282,6 +282,11 @@ zen-folder {
       display: none;
     }
 
+    & > label,
+    & > #tab-label-input {
+      padding: 0 0 0 30px !important;
+    }
+
     & > label {
       width: 100% !important;
       background: transparent !important;
@@ -289,7 +294,6 @@ zen-folder {
       color: var(--sidebar-text-color) !important;
       margin: 0 !important;
       font-weight: 500;
-      padding: 0 0 0 30px !important;
       display: flex;
       align-items: center;
       height: 100% !important;
