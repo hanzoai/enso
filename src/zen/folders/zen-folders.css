@@ -230,6 +230,7 @@ zen-folder {
   }
 
   margin: 0 var(--tab-block-margin);
+  margin-inline-end: 0;
 
   & > .tab-group-label-container {
     flex: 0 0 auto !important;
