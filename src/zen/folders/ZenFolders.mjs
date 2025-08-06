@@ -817,7 +817,7 @@
       if (!group) return;
 
       gZenEmojiPicker
-        .open(group, { onlySvgIcons: true })
+        .open(group.labelElement, { onlySvgIcons: true })
         .then((icon) => {
           this.setFolderUserIcon(group, icon);
           group.dispatchEvent(new CustomEvent('ZenFolderIconChanged', { bubbles: true }));
