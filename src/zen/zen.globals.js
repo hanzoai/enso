@@ -69,6 +69,7 @@ export default [
   'gInitialPages',
   'isInitialPage',
   'browserWindows',
+  'MozTabbrowserTabGroup',
   'updateBookmarkToolbarVisibility',
   'gNavigatorBundle',
   'updateFxaToolbarMenu',

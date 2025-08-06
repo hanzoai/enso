@@ -543,33 +543,33 @@ var gZenVerticalTabsManager = {
     return this.__topButtonsSeparatorElement;
   },
 
-  animateTab(aTab) {
+  animateItemOpen(aItem) {
     if (
       !gZenUIManager.motion ||
-      !aTab ||
+      !aItem ||
       !gZenUIManager._hasLoadedDOM ||
-      !aTab.isConnected ||
+      !aItem.isConnected ||
       gZenUIManager.testingEnabled ||
       !gZenStartup.isReady
     ) {
       return;
     }
     // get next visible tab
-    const isLastTab = () => {
-      const visibleTabs = gBrowser.visibleTabs;
-      return visibleTabs[visibleTabs.length - 1] === aTab;
+    const isLastItem = () => {
+      const visibleItems = gBrowser.tabContainer.ariaFocusableItems;
+      return visibleItems[visibleItems.length - 1] === aItem;
     };
 
     try {
-      const tabSize = aTab.getBoundingClientRect().height;
-      const transform = `-${tabSize}px`;
+      const itemSize = aItem.getBoundingClientRect().height;
+      const transform = `-${itemSize}px`;
       gZenUIManager.motion
         .animate(
-          aTab,
+          aItem,
           {
             opacity: [0, 1],
             transform: ['scale(0.95)', 'scale(1)'],
-            marginBottom: isLastTab() ? [] : [transform, '0px'],
+            marginBottom: isLastItem() ? [] : [transform, '0px'],
           },
           {
             duration: 0.12,
@@ -581,13 +581,15 @@ var gZenVerticalTabsManager = {
           console.error(err);
         })
         .finally(() => {
-          aTab.style.removeProperty('margin-bottom');
-          aTab.style.removeProperty('transform');
-          aTab.style.removeProperty('opacity');
+          aItem.style.removeProperty('margin-bottom');
+          aItem.style.removeProperty('transform');
+          aItem.style.removeProperty('opacity');
         });
+      const itemLabel =
+        aItem.querySelector('.tab-group-label-container') || aItem.querySelector('.tab-content');
       gZenUIManager.motion
         .animate(
-          aTab.querySelector('.tab-content'),
+          itemLabel,
           {
             filter: ['blur(1px)', 'blur(0px)'],
           },
@@ -601,7 +603,7 @@ var gZenVerticalTabsManager = {
           console.error(err);
         })
         .finally(() => {
-          aTab.querySelector('.tab-stack').style.removeProperty('filter');
+          itemLabel.style.removeProperty('filter');
         });
     } catch (e) {
       console.error(e);
@@ -1045,7 +1047,8 @@ var gZenVerticalTabsManager = {
       return;
     this._tabEdited =
       event.target.closest('.tabbrowser-tab') ||
-      event.target.closest('.zen-current-workspace-indicator-name');
+      event.target.closest('.zen-current-workspace-indicator-name') ||
+      (event.explicit && event.target.closest('.tab-group-label'));
     if (
       !this._tabEdited ||
       ((!this._tabEdited.pinned || this._tabEdited.hasAttribute('zen-essential')) && isTab)

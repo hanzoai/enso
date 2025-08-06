@@ -1115,11 +1115,6 @@ Preferences.addAll([
     default: true,
   },
   {
-    id: 'zen.tabs.show-newtab-under',
-    type: 'bool',
-    default: false,
-  },
-  {
     id: 'zen.glance.activation-method',
     type: 'string',
     default: 'ctrl',
