@@ -522,7 +522,11 @@
         folder.setAttribute('zen-pin-id', options.initialPinId);
       }
 
-      insertBefore.before(folder);
+      if (options.insertAfter) {
+        options.insertAfter.after(folder);
+      } else {
+        insertBefore.before(folder);
+      }
       gZenVerticalTabsManager.animateItemOpen(folder);
 
       folder.addTabs(tabs);
@@ -837,7 +841,6 @@
       } else {
         svgIcon.style.opacity = '1';
       }
-      svgIcon.setAttribute('transform', 'translate(-52.5, 2.5)');
     }
 
     collapseVisibleTab(group) {

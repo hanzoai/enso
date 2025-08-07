@@ -257,7 +257,7 @@
               collapsed: pin.isFolderCollapsed,
               initialPinId: pin.uuid,
               workspaceId: pin.workspaceUuid,
-              insertBefore:
+              insertAfter:
                 groups.get(pin.parentUuid)?.querySelector('.tab-group-container')?.lastChild ||
                 null,
             });
@@ -323,8 +323,6 @@
 
           this.log(`Created new pinned tab for pin ${pin.uuid} (isEssential: ${pin.isEssential})`);
           gBrowser.pinTab(newTab);
-          gBrowser.tabContainer._invalidateCachedTabs();
-          newTab.initialize();
 
           if (pin.parentUuid) {
             const parentGroup = groups.get(pin.parentUuid);
@@ -343,6 +341,9 @@
               gZenWorkspaces.getEssentialsSection(pin.containerTabId).appendChild(newTab);
             }
           }
+
+          gBrowser.tabContainer._invalidateCachedTabs();
+          newTab.initialize();
         } catch (ex) {
           console.error('Failed to initialize pinned tabs:', ex);
         }
@@ -432,7 +433,7 @@
       if (!tabPin) {
         return;
       }
-      ZenPinnedTabsStorage.addTabToGroup(tabPinId, pinId, /* position */ tab._tPos);
+      ZenPinnedTabsStorage.addTabToGroup(tabPinId, pinId, /* position */ tab._pPos);
     }
 
     async #onTabUngrouped(event) {
@@ -446,7 +447,7 @@
       if (!tabPin) {
         return;
       }
-      ZenPinnedTabsStorage.removeTabFromGroup(tabPinId, /* position */ tab._tPos);
+      ZenPinnedTabsStorage.removeTabFromGroup(tabPinId, /* position */ tab._pPos);
     }
 
     async #updateGroupInfo(group) {
@@ -496,7 +497,7 @@
         if (tab.pinned && tab.getAttribute('zen-pin-id') === pinId) {
           const pin = this._pinsCache.find((p) => p.uuid === pinId);
           if (pin) {
-            pin.position = tab._tPos;
+            pin.position = tab._pPos;
             await this.savePin(pin, false);
           }
           break;
@@ -515,7 +516,9 @@
         return;
       }
 
-      for (let otherTab of [...gBrowser.tabs, ...gBrowser.tabGroups]) {
+      const allTabs = [...gBrowser.tabs, ...gBrowser.tabGroups];
+      for (let i = 0; i < allTabs.length; i++) {
+        const otherTab = allTabs[i];
         if (
           otherTab.pinned &&
           otherTab.getAttribute('zen-pin-id') !== tab.getAttribute('zen-pin-id')
@@ -526,7 +529,7 @@
           if (!actualPin) {
             continue;
           }
-          actualPin.position = otherTab._tPos;
+          actualPin.position = otherTab._pPos;
           actualPin.workspaceUuid = otherTab.getAttribute('zen-workspace-id');
           actualPin.parentUuid = otherTab.group?.getAttribute('zen-pin-id') || null;
           await this.savePin(actualPin, false);
@@ -538,7 +541,7 @@
       if (!actualPin) {
         return;
       }
-      actualPin.position = tab._tPos;
+      actualPin.position = tab._pPos;
       actualPin.isEssential = tab.hasAttribute('zen-essential');
       actualPin.parentUuid = tab.group?.getAttribute('zen-pin-id') || null;
       actualPin.workspaceUuid = tab.getAttribute('zen-workspace-id') || null;

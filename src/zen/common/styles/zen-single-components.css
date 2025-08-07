@@ -69,7 +69,7 @@ body > #confetti {
     }
 
     & #PanelUI-zen-emojis-picker-change-svg {
-      background: transparent !important;
+      pointer-events: none;
     }
 
     & #PanelUI-zen-emojis-picker-pages > vbox[emojis='true'] {
@@ -89,6 +89,10 @@ body > #confetti {
   #PanelUI-zen-picker-header {
     padding: 6px 16px;
     justify-content: space-between;
+
+    & > toolbarbutton:first-of-type {
+      pointer-events: none;
+    }
 
     & #PanelUI-zen-emojis-buttons-wrapper {
       gap: 4px;
