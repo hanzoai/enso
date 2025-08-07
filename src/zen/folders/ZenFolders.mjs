@@ -29,6 +29,8 @@
     return `${month} month${month === 1 ? '' : 's'} ago`;
   }
 
+  const ZEN_MAX_SUBFOLDERS = Services.prefs.getIntPref('zen.folders.max-subfolders');
+
   class nsZenFolders extends nsZenPreloadedFeature {
     #popup = null;
     #popupTimer = null;
@@ -496,6 +498,13 @@
       gZenWorkspaces.changeWorkspaceWithID(workspaceId);
     }
 
+    canDropElement(element, targetElement) {
+      if (element?.isZenFolder && targetElement?.group?.level >= ZEN_MAX_SUBFOLDERS) {
+        return false;
+      }
+      return true;
+    }
+
     createFolder(tabs = [], options = {}) {
       for (const tab of tabs) {
         if (tab.hasAttribute('zen-essential')) return;
@@ -652,6 +661,32 @@
       };
       search.addEventListener('input', onSearchInput);
 
+      const onKeyDown = (event) => {
+        // Arrow down and up to navigate through the list
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          const items = Array.from(tabsList.children).filter((item) => !item.hidden);
+          if (items.length === 0) return;
+          let index = items.indexOf(tabsList.querySelector('.folders-tabs-list-item[selected]'));
+          if (event.key === 'ArrowDown') {
+            index = (index + 1) % items.length;
+          } else if (event.key === 'ArrowUp') {
+            index = (index - 1 + items.length) % items.length;
+          }
+          items.forEach((item) => item.removeAttribute('selected'));
+          const targetItem = items[index];
+          targetItem.setAttribute('selected', 'true');
+          targetItem.scrollIntoView({ block: 'nearest' });
+        } else if (event.key === 'Enter') {
+          // Enter to select the currently highlighted item
+          const highlightedItem = tabsList.querySelector('.folders-tabs-list-item[selected]');
+          if (highlightedItem) {
+            highlightedItem.click();
+          }
+        }
+      };
+      document.addEventListener('keydown', onKeyDown);
+
       const target = event.target;
       target.setAttribute('open', true);
 
@@ -660,6 +695,7 @@
         search.value = '';
         target.removeAttribute('open');
         search.removeEventListener('input', onSearchInput);
+        document.removeEventListener('keydown', onKeyDown);
       };
 
       this.#popup.addEventListener(
@@ -854,11 +890,18 @@
         itemHeight += item.getBoundingClientRect().height;
         if (item.hasAttribute('folder-active')) {
           item.removeAttribute('folder-active');
-          item.setAttribute('was-folder-active', 'true');
+          if (!onlyIfActive) {
+            item.setAttribute('was-folder-active', 'true');
+          }
         }
       }
       const newMargin = -(itemHeight + 4);
       groupStart.setAttribute('new-margin', newMargin);
+
+      if (onlyIfActive) {
+        group.removeAttribute('has-active');
+        this.updateFolderIcon(group, 'close', false);
+      }
 
       gZenUIManager.motion.animate(
         groupStart,
@@ -1183,7 +1226,10 @@
       if (
         folder &&
         (!folder.hasAttribute('split-view-group') || !folder.hasAttribute('selected')) &&
-        folder !== tab?.group
+        folder !== tab?.group &&
+        !(
+          folder.level >= ZEN_MAX_SUBFOLDERS && movingTabs?.some((t) => gBrowser.isTabGroupLabel(t))
+        )
       ) {
         folder.setAttribute('selected', 'true');
         folder.style.transform = '';
@@ -1236,7 +1282,6 @@
       const isSplitGroup = dropElement?.group?.hasAttribute('split-view-group');
       let firstGroupElem =
         dropElementGroup.querySelector('.zen-tab-group-start').nextElementSibling;
-      // let lastGroupElem = dropElementGroup?.group?.allItems?.filter(tab => tab.visible)?.at(-1);
 
       const isRestrictedGroup = isSplitGroup || dropElementGroup.collapsed;
 

@@ -421,7 +421,8 @@ zen-folder {
   padding: 0 var(--tab-inline-padding);
   border-radius: 4px;
 
-  &:hover {
+  &:hover,
+  .folders-tabs-list-item[selected] & {
     background-color: color-mix(in srgb, currentColor, transparent 90%);
   }
 
