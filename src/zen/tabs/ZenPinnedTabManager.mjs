@@ -1260,6 +1260,7 @@
             for (const tab of tabs) {
               gBrowser.pinTab(tab);
             }
+            gBrowser.tabContainer.finishAnimateTabMove(true);
             Services.zen.playHapticFeedback();
           } else {
             shouldAddDragOverElement = true;
@@ -1280,6 +1281,7 @@
             for (const tab of tabs) {
               gBrowser.unpinTab(tab);
             }
+            gBrowser.tabContainer.finishAnimateTabMove(true);
             Services.zen.playHapticFeedback();
           } else {
             shouldAddDragOverElement = true;
