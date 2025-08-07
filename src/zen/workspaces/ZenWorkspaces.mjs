@@ -349,25 +349,22 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     if (!this._hasInitializedTabsStrip) {
       return gBrowser.tabContainer.arrowScrollbox;
     }
-    return document.querySelector(`zen-workspace[active]`)?.tabsContainer;
+    return this.activeWorkspaceElement?.tabsContainer;
   }
 
   get pinnedTabsContainer() {
     if (!this.workspaceEnabled || !this._hasInitializedTabsStrip) {
       return document.getElementById('pinned-tabs-container');
     }
-    return document.querySelector(`zen-workspace[active]`)?.pinnedTabsContainer;
+    return this.activeWorkspaceElement?.pinnedTabsContainer;
   }
 
   get activeWorkspaceIndicator() {
-    return document.querySelector(`zen-workspace[active]`)?.indicator;
+    return this.activeWorkspaceElement?.indicator;
   }
 
   get activeScrollbox() {
-    return (
-      document.querySelector(`zen-workspace[active]`)?.scrollbox ??
-      gBrowser.tabContainer.arrowScrollbox
-    );
+    return this.activeWorkspaceElement?.scrollbox ?? gBrowser.tabContainer.arrowScrollbox;
   }
 
   get tabboxChildren() {
@@ -383,6 +380,10 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
       this.containerSpecificEssentials ||
       document.documentElement.hasAttribute('zen-creating-workspace')
     );
+  }
+
+  get activeWorkspaceElement() {
+    return this.workspaceElement(this.activeWorkspace);
   }
 
   workspaceElement(workspaceId) {

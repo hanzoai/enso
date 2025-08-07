@@ -156,16 +156,32 @@
    Pinned Tabs Separator
    ========================================================================== */
 .pinned-tabs-container-separator {
-  background: light-dark(rgba(1, 1, 1, 0.075), rgba(255, 255, 255, 0.1));
-  margin: 8px auto; /* Center horizontally */
-  border: none;
+  margin: 0 auto; /* Center vertically */
+  padding: 8px 0;
   height: 1px;
   max-height: 1px;
   width: 98%; /* Slightly less than full width */
   transition:
-    margin 0.2s ease-in-out,
-    background 0.2s ease-in-out,
+    padding 0.2s ease-in-out,
     max-height 0.2s ease-in-out;
+  overflow: hidden;
+  position: relative;
+
+  #tabbrowser-tabs[movingtab] & {
+    transition: transform 0.1s ease-in-out;
+  }
+
+  &::before {
+    background: light-dark(rgba(1, 1, 1, 0.075), rgba(255, 255, 255, 0.1));
+    content: '';
+    height: 1px;
+    width: 100%;
+    margin: 0 auto; /* Center the line */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
   /* Hide separator when specified by parent container attribute */
   .zen-workspace-pinned-tabs-section[hide-separator] & {
@@ -429,10 +445,6 @@
   & > toolbarbutton:not(#zen-workspaces-button) {
     padding: 0 !important;
   }
-}
-
-#newtab-button-container {
-  display: none !important;
 }
 
 /* ==========================================================================
@@ -1187,22 +1199,23 @@
 #tabs-newtab-button {
   display: none;
   font-weight: 500;
-  -moz-user-focus: ignore !important; /* Prevent focus */
+  -moz-user-focus: ignore !important;
 }
 
 /* Show and style the button if preference `zen.tabs.show-newtab-vertical` is enabled */
 @media -moz-pref('zen.tabs.show-newtab-vertical') {
   #tabs-newtab-button {
-    display: flex !important; /* Show the button */
-    transition: scale 0.1s ease; /* Add scale transition */
+    display: flex !important;
+    transition: scale 0.1s ease;
+    #tabbrowser-tabs[movingtab] & {
+      transition: transform 0.1s ease;
+    }
 
-    /* Style text within the button */
     & .toolbarbutton-text {
       align-items: center;
       padding-top: 0;
     }
 
-    /* Scale down slightly on press */
     &:active,
     &[open] {
       scale: 0.98;

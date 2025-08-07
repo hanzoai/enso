@@ -218,6 +218,10 @@
       popup.addEventListener('popuphidden', handlePopupHidden);
       popup.openPopup(event.target, 'after_start');
     }
+
+    get newTabButton() {
+      return this.querySelector('#tabs-newtab-button');
+    }
   }
 
   customElements.define('zen-workspace', nsZenWorkspace);

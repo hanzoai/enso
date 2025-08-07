@@ -725,7 +725,7 @@
             if (selectedTab.hasAttribute('glance-id')) {
               break;
             }
-            await gZenFolders.collapseVisibleTab(selectedTab.group);
+            await gZenFolders.collapseVisibleTab(selectedTab.group, /* only if active */ true);
             await gBrowser.explicitUnloadTabs([selectedTab]);
             selectedTab.removeAttribute('discarded');
           }
@@ -974,7 +974,8 @@
       try {
         const pinnedTabsTarget =
           event.target.closest('.zen-workspace-pinned-tabs-section') ||
-          event.target.closest('.zen-current-workspace-indicator');
+          event.target.closest('.zen-current-workspace-indicator') ||
+          this._pinnedTabsContainer;
         const essentialTabsTarget = event.target.closest('.zen-essentials-container');
         const tabsTarget = event.target.closest('.zen-workspace-normal-tabs-section');
 
@@ -1134,6 +1135,61 @@
       }
     }
 
+    onDragFinish() {
+      for (const item of this.dragShiftableItems) {
+        item.style.transform = '';
+      }
+      this.removeTabContainersDragoverClass();
+    }
+
+    get dragShiftableItems() {
+      const separator = gZenWorkspaces.pinnedTabsContainer.querySelector(
+        '.pinned-tabs-container-separator'
+      );
+      // Make sure to always return the separator at the start of the array
+      return Services.prefs.getBoolPref('zen.view.show-newtab-button-top')
+        ? [separator, gZenWorkspaces.activeWorkspaceElement.newTabButton]
+        : [separator];
+    }
+
+    animateSeparatorMove(draggedTab, dropElement, isPinned) {
+      if (draggedTab?.group?.hasAttribute('split-view-group')) {
+        draggedTab = draggedTab.group;
+      }
+      const itemsToCheck = this.dragShiftableItems;
+      const separator = itemsToCheck[0];
+      const separatorRect = window.windowUtils.getBoundsWithoutFlushing(separator);
+      const tabRect = window.windowUtils.getBoundsWithoutFlushing(draggedTab);
+      const translate = tabRect.top - tabRect.height / 2 + separatorRect.height / 2;
+      const topToNormalTabs = separatorRect.top - separatorRect.height / 2;
+      const isGoingToPinnedTabs = translate < topToNormalTabs;
+      const multiplier = isGoingToPinnedTabs !== isPinned ? (isGoingToPinnedTabs ? 1 : -1) : 0;
+      const draggingTabHeight =
+        window.windowUtils.getBoundsWithoutFlushing(draggedTab).height * multiplier;
+      this._isGoingToPinnedTabs = isGoingToPinnedTabs;
+      if (!dropElement) {
+        itemsToCheck.forEach((item) => {
+          item.style.transform = `translateY(${draggingTabHeight}px)`;
+        });
+      }
+    }
+
+    getLastTabBound(lastBound, lastTab, isDraggingFolder = false) {
+      if (!gBrowser.isTab(lastTab) || !lastTab.pinned || isDraggingFolder) {
+        return lastBound;
+      }
+      const shiftedItems = this.dragShiftableItems;
+      let totalHeight = shiftedItems.reduce((acc, item) => {
+        return acc + window.windowUtils.getBoundsWithoutFlushing(item).height;
+      }, 0);
+      if (shiftedItems.length === 1) {
+        // Means the new tab button is not at the top or not visible
+        const lastTabRect = window.windowUtils.getBoundsWithoutFlushing(lastTab);
+        totalHeight += lastTabRect.height;
+      }
+      return lastBound + totalHeight + 6;
+    }
+
     get dragIndicator() {
       if (!this._dragIndicator) {
         this._dragIndicator = document.createElement('div');
@@ -1230,44 +1286,11 @@
       let isVertical = this.expandedSidebarMode;
 
       // Decide whether we should show a dragover class for the given target
-      if (folderTarget && (!draggedTab.pinned || draggedTab.hasAttribute('zen-essential'))) {
-        shouldAddDragOverElement = true;
-        const isCollapsed = folderTarget.collapsed;
-        let groupElem = isCollapsed
-          ? [folderTarget]
-          : folderTarget.childGroupsAndTabs
-              .filter((tab) => !tab.hasAttribute('zen-empty-tab'))
-              .map((tab) => {
-                if (gBrowser.isTabGroupLabel(tab) || tab.group.hasAttribute('split-view-group')) {
-                  return tab.group;
-                }
-                return tab;
-              });
-
-        let newTarget = isCollapsed ? groupElem[0] : groupElem.at(-1);
-        for (const elem of groupElem) {
-          const rect = elem.getBoundingClientRect();
-          if (event.clientY < rect.top + rect.height / 2) {
-            newTarget = elem;
-            break;
-          }
-        }
-        targetTab = newTarget;
-      } else if (pinnedTabsTarget) {
+      if (pinnedTabsTarget) {
         if (draggedTab.hasAttribute('zen-essential')) {
           shouldAddDragOverElement = true;
         } else if (!draggedTab.pinned) {
-          if (draggedTab._dragData?.screenY) {
-            draggedTab._dragData['screenY'] = event.screenY + 10;
-            const tabs = draggedTab._dragData.movingTabs || [draggedTab];
-            for (const tab of tabs) {
-              gBrowser.pinTab(tab);
-            }
-            gBrowser.tabContainer.finishAnimateTabMove(true);
-            Services.zen.playHapticFeedback();
-          } else {
-            shouldAddDragOverElement = true;
-          }
+          Services.zen.playHapticFeedback();
         }
       } else if (essentialTabsTarget) {
         if (!draggedTab.hasAttribute('zen-essential') && this.canEssentialBeAdded(draggedTab)) {
@@ -1278,21 +1301,11 @@
         if (draggedTab.hasAttribute('zen-essential')) {
           shouldAddDragOverElement = true;
         } else if (draggedTab.pinned) {
-          if (draggedTab._dragData?.screenY) {
-            draggedTab._dragData['screenY'] = event.screenY + 10;
-            const tabs = draggedTab._dragData.movingTabs || [draggedTab];
-            for (const tab of tabs) {
-              gBrowser.unpinTab(tab);
-            }
-            gBrowser.tabContainer.finishAnimateTabMove(true);
-            Services.zen.playHapticFeedback();
-          } else {
-            shouldAddDragOverElement = true;
-          }
+          Services.zen.playHapticFeedback();
         }
       }
 
-      if (!shouldAddDragOverElement || (!targetTab && !folderTarget)) {
+      if (!shouldAddDragOverElement || (!targetTab && !folderTarget) || !targetTab) {
         this.removeTabContainersDragoverClass(!isHoveringIndicator);
         return;
       }

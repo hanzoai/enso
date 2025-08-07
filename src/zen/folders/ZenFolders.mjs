@@ -843,8 +843,9 @@
       }
     }
 
-    collapseVisibleTab(group) {
+    collapseVisibleTab(group, onlyIfActive = false) {
       if (!group?.isZenFolder) return;
+      if (onlyIfActive && !group.hasAttribute('has-active')) return;
 
       const groupStart = group.querySelector('.zen-tab-group-start');
       groupStart.setAttribute('old-margin', groupStart.style.marginTop);
