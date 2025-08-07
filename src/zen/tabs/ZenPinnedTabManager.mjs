@@ -722,6 +722,7 @@
             if (selectedTab.hasAttribute('glance-id')) {
               break;
             }
+            await gZenFolders.collapseVisibleTab(selectedTab.group);
             await gBrowser.explicitUnloadTabs([selectedTab]);
             selectedTab.removeAttribute('discarded');
           }
