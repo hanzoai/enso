@@ -1289,8 +1289,6 @@
       if (pinnedTabsTarget) {
         if (draggedTab.hasAttribute('zen-essential')) {
           shouldAddDragOverElement = true;
-        } else if (!draggedTab.pinned) {
-          Services.zen.playHapticFeedback();
         }
       } else if (essentialTabsTarget) {
         if (!draggedTab.hasAttribute('zen-essential') && this.canEssentialBeAdded(draggedTab)) {
@@ -1300,8 +1298,6 @@
       } else if (tabsTarget) {
         if (draggedTab.hasAttribute('zen-essential')) {
           shouldAddDragOverElement = true;
-        } else if (draggedTab.pinned) {
-          Services.zen.playHapticFeedback();
         }
       }
 
