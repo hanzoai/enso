@@ -1173,6 +1173,9 @@
     }
 
     animateSeparatorMove(draggedTab, dropElement, isPinned, event) {
+      if (gBrowser.isTabGroupLabel(draggedTab) && draggedTab.group.isZenFolder) {
+        return;
+      }
       if (draggedTab?.group?.hasAttribute('split-view-group')) {
         draggedTab = draggedTab.group;
       }
