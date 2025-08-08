@@ -140,6 +140,7 @@
           const item = document.createXULElement('toolbarbutton');
           item.className = 'toolbarbutton-1 zen-emojis-picker-emoji';
           item.setAttribute('label', emoji.emoji);
+          item.setAttribute('tooltiptext', '');
           item.addEventListener('command', () => {
             this.#selectEmoji(emoji.emoji);
           });
@@ -154,7 +155,7 @@
         const item = document.createXULElement('toolbarbutton');
         item.className = 'toolbarbutton-1 zen-emojis-picker-svg';
         item.setAttribute('label', icon);
-        item.setAttribute('tooltiptext', icon.replace('.svg', ''));
+        item.setAttribute('tooltiptext', '');
         item.style.listStyleImage = `url(${this.getSVGURL(icon)})`;
         item.setAttribute('icon', icon);
         item.addEventListener('command', () => {

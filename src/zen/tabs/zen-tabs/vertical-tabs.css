@@ -162,10 +162,12 @@
   max-height: 1px;
   width: 98%; /* Slightly less than full width */
   transition:
-    padding 0.2s ease-in-out,
-    max-height 0.2s ease-in-out;
+    padding 0.1s ease-in-out,
+    max-height 0.2s ease-in-out,
+    opacity 0.1s ease-in-out;
   overflow: hidden;
   position: relative;
+  opacity: 1;
 
   #tabbrowser-tabs[movingtab] & {
     transition: transform 0.1s ease-in-out;
@@ -186,7 +188,8 @@
   /* Hide separator when specified by parent container attribute */
   .zen-workspace-pinned-tabs-section[hide-separator] & {
     max-height: 0;
-    margin: 0 auto; /* Collapse margins */
+    padding: 0;
+    opacity: 0;
   }
 }
 
