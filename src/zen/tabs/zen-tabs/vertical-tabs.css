@@ -156,40 +156,31 @@
    Pinned Tabs Separator
    ========================================================================== */
 .pinned-tabs-container-separator {
-  margin: 0 auto; /* Center vertically */
-  padding: 8px 0;
+  background: light-dark(rgba(1, 1, 1, 0.075), rgba(255, 255, 255, 0.1));
+  margin: 8px auto;
+  border: none;
   height: 1px;
   max-height: 1px;
   width: 98%; /* Slightly less than full width */
   transition:
-    padding 0.1s ease-in-out,
-    max-height 0.2s ease-in-out,
-    opacity 0.1s ease-in-out;
+    margin 0.2s ease-in-out,
+    background 0.2s ease-in-out,
+    max-height 0.2s ease-in-out;
   overflow: hidden;
   position: relative;
   opacity: 1;
 
   #tabbrowser-tabs[movingtab] & {
-    transition: transform 0.1s ease-in-out;
+    transition:
+      margin 0.2s ease-in-out,
+      background 0.2s ease-in-out,
+      max-height 0.2s ease-in-out,
+      transform 0.1s ease-in-out;
   }
 
-  &::before {
-    background: light-dark(rgba(1, 1, 1, 0.075), rgba(255, 255, 255, 0.1));
-    content: '';
-    height: 1px;
-    width: 100%;
-    margin: 0 auto; /* Center the line */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  /* Hide separator when specified by parent container attribute */
   .zen-workspace-pinned-tabs-section[hide-separator] & {
     max-height: 0;
-    padding: 0;
-    opacity: 0;
+    margin: 0 auto;
   }
 }
 

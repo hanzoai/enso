@@ -68,6 +68,8 @@
   class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
     MAX_ESSENTIALS_TABS = 12;
 
+    #hasInitializedPins = false;
+
     async init() {
       if (!this.enabled) {
         return;
@@ -351,6 +353,10 @@
 
       gBrowser._updateTabBarForPinnedTabs();
       gZenUIManager.updateTabsToolbar();
+
+      setTimeout(() => {
+        this.#hasInitializedPins = true;
+      }, 0);
     }
 
     _onPinnedTabEvent(action, event) {
@@ -693,6 +699,9 @@
     }
 
     async savePin(pin, notifyObservers = true) {
+      if (!this.#hasInitializedPins) {
+        return;
+      }
       const existingPin = this._pinsCache.find((p) => p.uuid === pin.uuid);
       if (existingPin) {
         Object.assign(existingPin, pin);
@@ -1163,24 +1172,23 @@
         : [separator];
     }
 
-    animateSeparatorMove(draggedTab, dropElement, isPinned) {
+    animateSeparatorMove(draggedTab, dropElement, isPinned, event) {
       if (draggedTab?.group?.hasAttribute('split-view-group')) {
         draggedTab = draggedTab.group;
       }
       const itemsToCheck = this.dragShiftableItems;
-      const separatorHeight = window.windowUtils.getBoundsWithoutFlushing(itemsToCheck[0]).height;
-      const tabRect = window.windowUtils.getBoundsWithoutFlushing(draggedTab);
-      const translate = tabRect.top - tabRect.height / 2;
-      const topToNormalTabs =
-        window.windowUtils.getBoundsWithoutFlushing(itemsToCheck[0]).top - separatorHeight / 2;
+      const translate = event.screenY;
+      const draggingTabHeight = window.windowUtils.getBoundsWithoutFlushing(draggedTab).height;
+      let topToNormalTabs = itemsToCheck[0].screenY;
+      if (!isPinned) {
+        topToNormalTabs += draggedTab.getBoundingClientRect().height;
+      }
       const isGoingToPinnedTabs = translate < topToNormalTabs;
       const multiplier = isGoingToPinnedTabs !== isPinned ? (isGoingToPinnedTabs ? 1 : -1) : 0;
-      const draggingTabHeight =
-        window.windowUtils.getBoundsWithoutFlushing(draggedTab).height * multiplier;
       this._isGoingToPinnedTabs = isGoingToPinnedTabs;
       if (!dropElement) {
         itemsToCheck.forEach((item) => {
-          item.style.transform = `translateY(${draggingTabHeight}px)`;
+          item.style.transform = `translateY(${draggingTabHeight * multiplier}px)`;
         });
       }
     }

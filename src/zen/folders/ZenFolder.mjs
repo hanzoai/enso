@@ -158,7 +158,7 @@
     }
 
     async delete() {
-      for (const tab of this.tabs) {
+      for (const tab of this.allItemsRecursive) {
         await ZenPinnedTabsStorage.removePin(tab.getAttribute('zen-pin-id'));
         if (tab.hasAttribute('zen-empty-tab')) {
           // Manually remove the empty tabs as removeTabs() inside removeTabGroup
@@ -167,6 +167,18 @@
         }
       }
       await gBrowser.removeTabGroup(this, { isUserTriggered: true });
+    }
+
+    get allItemsRecursive() {
+      const items = [];
+      for (const item of this.allItems) {
+        if (item.isZenFolder) {
+          items.push(item, ...item.allItemsRecursive);
+        } else {
+          items.push(item);
+        }
+      }
+      return items;
     }
 
     get level() {

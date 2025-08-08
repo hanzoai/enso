@@ -874,7 +874,7 @@
       return [];
     }
 
-    setFolderIndentation(tab, group = undefined, dropBefore = false) {
+    setFolderIndentation(tab, group = undefined) {
       if (!gZenPinnedTabManager.expandedSidebarMode) {
         return;
       }
@@ -882,11 +882,14 @@
       if (!group && tab?.group) {
         group = tab; // So we can set isTab later
       }
-      if (gBrowser.isTab(group)) {
+      if (gBrowser.isTab(group) && !group.hasAttribute('zen-empty-tab')) {
         group = group.group;
         isTab = true;
       }
-      const level = group?.level + 1 - (dropBefore && !isTab ? 1 : 0) || 0;
+      if (!isTab && !group?.hasAttribute('selected')) {
+        group = null; // Don't indent if the group is not selected
+      }
+      const level = group?.level + 1 || 0;
       const baseSpacing = 14; // Base spacing for each level
       const tabLevel = tab?.group?.level || 0;
       const spacing = (level - tabLevel) * baseSpacing;
