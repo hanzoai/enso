@@ -998,33 +998,27 @@
         let hasActuallyMoved;
         for (const draggedTab of movingTabs) {
           let isRegularTabs = false;
-          // Check for pinned tabs container
-          if (pinnedTabsTarget) {
-            if (!draggedTab.pinned) {
-              gBrowser.pinTab(draggedTab);
-              moved = true;
-            } else if (draggedTab.hasAttribute('zen-essential')) {
-              this.removeEssentials(draggedTab, false);
-              moved = true;
-            }
-          }
           // Check for essentials container
-          else if (essentialTabsTarget) {
+          if (essentialTabsTarget) {
             if (!draggedTab.hasAttribute('zen-essential') && !draggedTab?.group) {
               moved = true;
               isVertical = false;
               hasActuallyMoved = this.addToEssentials(draggedTab);
             }
           }
+          // Check for pinned tabs container
+          else if (pinnedTabsTarget) {
+            if (!draggedTab.pinned) {
+              gBrowser.pinTab(draggedTab);
+            } else if (draggedTab.hasAttribute('zen-essential')) {
+              this.removeEssentials(draggedTab, false);
+              moved = true;
+            }
+          }
           // Check for normal tabs container
           else if (tabsTarget || event.target.id === 'zen-tabs-wrapper') {
-            if (
-              draggedTab.pinned &&
-              !draggedTab.hasAttribute('zen-essential') &&
-              !draggedTab?.group?.isZenFolder
-            ) {
+            if (draggedTab.pinned && !draggedTab.hasAttribute('zen-essential')) {
               gBrowser.unpinTab(draggedTab);
-              moved = true;
               isRegularTabs = true;
             } else if (draggedTab.hasAttribute('zen-essential')) {
               this.removeEssentials(draggedTab);
@@ -1139,6 +1133,23 @@
       for (const item of this.dragShiftableItems) {
         item.style.transform = '';
       }
+      for (const item of gBrowser.tabContainer.ariaFocusableItems) {
+        if (gBrowser.isTab(item)) {
+          let isVisible = true;
+          let parent = item.group;
+          while (parent) {
+            if (parent.collapsed && !parent.hasAttribute('has-active')) {
+              isVisible = false;
+              break;
+            }
+            parent = parent.group;
+          }
+          if (!isVisible) {
+            continue;
+          }
+        }
+        item.style.removeProperty('--zen-folder-indent');
+      }
       this.removeTabContainersDragoverClass();
     }
 
@@ -1157,11 +1168,11 @@
         draggedTab = draggedTab.group;
       }
       const itemsToCheck = this.dragShiftableItems;
-      const separator = itemsToCheck[0];
-      const separatorRect = window.windowUtils.getBoundsWithoutFlushing(separator);
+      const separatorHeight = window.windowUtils.getBoundsWithoutFlushing(itemsToCheck[0]).height;
       const tabRect = window.windowUtils.getBoundsWithoutFlushing(draggedTab);
-      const translate = tabRect.top - tabRect.height / 2 + separatorRect.height / 2;
-      const topToNormalTabs = separatorRect.top - separatorRect.height / 2;
+      const translate = tabRect.top - tabRect.height / 2;
+      const topToNormalTabs =
+        window.windowUtils.getBoundsWithoutFlushing(itemsToCheck[0]).top - separatorHeight / 2;
       const isGoingToPinnedTabs = translate < topToNormalTabs;
       const multiplier = isGoingToPinnedTabs !== isPinned ? (isGoingToPinnedTabs ? 1 : -1) : 0;
       const draggingTabHeight =
@@ -1253,12 +1264,7 @@
       if (!this.enabled) {
         return;
       }
-      const folderTarget = event.target.closest('zen-folder');
       let isVertical = this.expandedSidebarMode;
-      //if (isVertical) {
-      //  draggedTab.style.marginInlineStart = `${gZenFolders.getFolderIndentation(draggedTab, folderTarget)}px`;
-      //}
-
       if (
         gBrowser.isTabGroupLabel(draggedTab) &&
         !draggedTab?.group?.hasAttribute('split-view-group')
@@ -1270,6 +1276,7 @@
       const pinnedTabsTarget = event.target.closest('.zen-workspace-pinned-tabs-section');
       const essentialTabsTarget = event.target.closest('.zen-essentials-container');
       const tabsTarget = event.target.closest('.zen-workspace-normal-tabs-section');
+      const folderTarget = event.target.closest('zen-folder');
       let targetTab = event.target.closest('.tabbrowser-tab');
       targetTab = targetTab?.group || targetTab;
       draggedTab = draggedTab?.group?.hasAttribute('split-view-group')
@@ -1290,14 +1297,14 @@
       let shouldAddDragOverElement = false;
 
       // Decide whether we should show a dragover class for the given target
-      if (pinnedTabsTarget) {
-        if (draggedTab.hasAttribute('zen-essential')) {
-          shouldAddDragOverElement = true;
-        }
-      } else if (essentialTabsTarget) {
+      if (essentialTabsTarget) {
         if (!draggedTab.hasAttribute('zen-essential') && this.canEssentialBeAdded(draggedTab)) {
           shouldAddDragOverElement = true;
           isVertical = false;
+        }
+      } else if (pinnedTabsTarget) {
+        if (draggedTab.hasAttribute('zen-essential')) {
+          shouldAddDragOverElement = true;
         }
       } else if (tabsTarget) {
         if (draggedTab.hasAttribute('zen-essential')) {

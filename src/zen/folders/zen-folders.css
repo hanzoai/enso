@@ -166,14 +166,6 @@ tab-group[split-view-group] .tab-group-line {
   display: none !important;
 }
 
-#tabbrowser-tabs[orient='vertical'][expanded] {
-  tab-group > :is(.tab-group-label-container, .tabbrowser-tab),
-  &[movingtab][movingtab-addToGroup]:not([movingtab-createGroup], [movingtab-ungroup])
-    .tabbrowser-tab:is(:active, [multiselected]) {
-    margin-inline-start: 0;
-  }
-}
-
 zen-folder {
   display: flex;
   flex-direction: column;
@@ -191,6 +183,7 @@ zen-folder {
   );
 
   -moz-window-dragging: no-drag;
+  transition: margin-inline-start 0.15s ease-in-out;
 
   &[selected] > .tab-group-label-container::before {
     background-color: color-mix(in srgb, var(--zen-colors-border) 60%, transparent);
@@ -215,7 +208,8 @@ zen-folder {
 
   & > .tab-group-container {
     :root[zen-sidebar-expanded] & > * {
-      margin-inline-start: var(--zen-folder-indent, 14px) !important;
+      --zen-folder-indent: 14px; /* Can get overriden by the JS */
+      margin-inline-start: var(--zen-folder-indent) !important;
     }
 
     & > zen-folder {
@@ -225,10 +219,6 @@ zen-folder {
     & > tab::before {
       background: none !important;
     }
-  }
-
-  &[collapsed][has-active='true'] > .tab-group-container zen-folder {
-    margin-inline-start: 0 !important;
   }
 
   margin: 0 var(--tab-block-margin);
@@ -296,6 +286,7 @@ zen-folder {
     & > label,
     & > #tab-label-input {
       padding: 0 0 0 30px !important;
+      width: 100%;
     }
 
     & > label {

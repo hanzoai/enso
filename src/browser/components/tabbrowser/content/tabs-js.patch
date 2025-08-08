@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index 1fcebe3962398ff1b7cadef657ac8b68a80e720d..9022f3f566e8829fa8d3c5a58f0300ab96869073 100644
+index 1fcebe3962398ff1b7cadef657ac8b68a80e720d..49cb1c803b3b4384d948103f6352058e543081de 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -289,6 +289,7 @@
@@ -548,7 +548,12 @@ index 1fcebe3962398ff1b7cadef657ac8b68a80e720d..9022f3f566e8829fa8d3c5a58f0300ab
            }
            this.#setDragOverGroupColor(colorCode);
            this.toggleAttribute("movingtab-ungroup", !colorCode);
-@@ -2769,15 +2817,24 @@
+@@ -2765,19 +2813,28 @@
+       dragData.dropElement = dropElement;
+       dragData.dropBefore = dropBefore;
+       dragData.animDropElementIndex = newDropElementIndex;
+-
++      gZenFolders.setFolderIndentation(draggedTab, dropElement);
        // Shift background tabs to leave a gap where the dragged tab
        // would currently be dropped.
        for (let item of tabs) {

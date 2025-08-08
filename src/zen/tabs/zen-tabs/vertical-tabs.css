@@ -297,11 +297,14 @@
      Individual Tab Styles (.tabbrowser-tab within #tabbrowser-tabs)
      ======================================================================== */
   & .tabbrowser-tab {
-    /* Add smooth scaling transition */
     &,
     & .tab-content > image {
-      transition: scale 0.07s ease;
+      transition:
+        scale 0.07s ease,
+        margin-inline-start 0.15s ease-in-out;
     }
+
+    margin-inline-start: var(--zen-folder-indent) !important;
 
     /* Hide specific empty tabs (likely placeholders) */
     &[zen-empty-tab] {

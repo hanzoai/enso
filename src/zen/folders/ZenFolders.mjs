@@ -318,6 +318,7 @@
       if (selectedItem) {
         group.setAttribute('has-active', 'true');
         selectedItem.setAttribute('folder-active', 'true');
+        this.setFolderIndentation(selectedItem, group, false);
       }
 
       for (const item of itemsAfterSelected) {
@@ -378,6 +379,21 @@
             item = item.group;
           } else {
             item = item.parentNode;
+          }
+        }
+        // If all the groups above the item are visible, remove the indentation
+        if (gBrowser.isTab(item)) {
+          let isVisible = true;
+          let parent = item.group;
+          while (parent) {
+            if (parent.collapsed && !parent.hasAttribute('has-active')) {
+              isVisible = false;
+              break;
+            }
+            parent = parent.group;
+          }
+          if (isVisible) {
+            item.style.removeProperty('--zen-folder-indent');
           }
         }
         groupItems.push(item);
@@ -858,14 +874,23 @@
       return [];
     }
 
-    getFolderIndentation(tab, group = undefined) {
-      const level = group?.level || 0;
-      const baseSpacing = 4; // Base spacing for each level
+    setFolderIndentation(tab, group = undefined, dropBefore = false) {
+      if (!gZenPinnedTabManager.expandedSidebarMode) {
+        return;
+      }
+      let isTab = false;
+      if (!group && tab?.group) {
+        group = tab; // So we can set isTab later
+      }
+      if (gBrowser.isTab(group)) {
+        group = group.group;
+        isTab = true;
+      }
+      const level = group?.level + 1 - (dropBefore && !isTab ? 1 : 0) || 0;
+      const baseSpacing = 14; // Base spacing for each level
       const tabLevel = tab?.group?.level || 0;
-      // If the level is less, we need to make a negative margin
-      const spacing =
-        level > tabLevel ? -baseSpacing * (level - tabLevel) : baseSpacing * (tabLevel - level);
-      return spacing;
+      const spacing = (level - tabLevel) * baseSpacing;
+      tab.style.setProperty('--zen-folder-indent', `${spacing}px`);
     }
 
     changeFolderUserIcon(group) {
