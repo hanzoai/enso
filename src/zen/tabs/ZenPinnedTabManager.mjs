@@ -975,7 +975,7 @@
         const pinnedTabsTarget =
           event.target.closest('.zen-workspace-pinned-tabs-section') ||
           event.target.closest('.zen-current-workspace-indicator') ||
-          this._pinnedTabsContainer;
+          this._isGoingToPinnedTabs;
         const essentialTabsTarget = event.target.closest('.zen-essentials-container');
         const tabsTarget = event.target.closest('.zen-workspace-normal-tabs-section');
 
@@ -1253,6 +1253,12 @@
       if (!this.enabled) {
         return;
       }
+      const folderTarget = event.target.closest('zen-folder');
+      let isVertical = this.expandedSidebarMode;
+      //if (isVertical) {
+      //  draggedTab.style.marginInlineStart = `${gZenFolders.getFolderIndentation(draggedTab, folderTarget)}px`;
+      //}
+
       if (
         gBrowser.isTabGroupLabel(draggedTab) &&
         !draggedTab?.group?.hasAttribute('split-view-group')
@@ -1261,7 +1267,6 @@
         this.removeTabContainersDragoverClass();
         return;
       }
-      const folderTarget = event.target.closest('zen-folder');
       const pinnedTabsTarget = event.target.closest('.zen-workspace-pinned-tabs-section');
       const essentialTabsTarget = event.target.closest('.zen-essentials-container');
       const tabsTarget = event.target.closest('.zen-workspace-normal-tabs-section');
@@ -1283,7 +1288,6 @@
       }
 
       let shouldAddDragOverElement = false;
-      let isVertical = this.expandedSidebarMode;
 
       // Decide whether we should show a dragover class for the given target
       if (pinnedTabsTarget) {

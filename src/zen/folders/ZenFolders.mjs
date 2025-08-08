@@ -170,7 +170,7 @@
         .getElementById('zen-context-menu-new-folder')
         .addEventListener('command', this.#onNewFolder.bind(this));
       SessionStore.promiseInitialized.then(() => {
-        gBrowser.tabContainer.addEventListener('dragstart', this.#cancelPopupTimer.bind(this));
+        gBrowser.tabContainer.addEventListener('dragstart', this.cancelPopupTimer.bind(this));
       });
     }
 
@@ -204,6 +204,9 @@
       const isActive = group?.activeGroups?.length > 0;
       if (isActive) tab.setAttribute('folder-active', true);
       if (prevTab.hasAttribute('folder-active')) prevTab.removeAttribute('folder-active');
+      if (tab.group?.collapsed) {
+        this.expandToSelected(group);
+      }
       gBrowser.tabContainer._invalidateCachedTabs();
     }
 
@@ -257,7 +260,7 @@
       }
     }
 
-    #cancelPopupTimer() {
+    cancelPopupTimer() {
       if (this.#mouseTimer) {
         clearTimeout(this.#mouseTimer);
         this.#mouseTimer = null;
@@ -269,7 +272,7 @@
       const group = event.target;
       if (!group.isZenFolder) return;
 
-      this.#cancelPopupTimer();
+      this.cancelPopupTimer();
 
       const tabsContainer = group.querySelector('.tab-group-container');
       const animations = [];
@@ -348,7 +351,7 @@
       const group = event.target;
       if (!group.isZenFolder) return;
 
-      this.#cancelPopupTimer();
+      this.cancelPopupTimer();
 
       const tabsContainer = group.querySelector('.tab-group-container');
       tabsContainer.removeAttribute('hidden');
@@ -632,6 +635,9 @@
 
     openTabsPopup(event) {
       event.stopPropagation();
+      if (document.documentElement.getAttribute('zen-renaming-tab')) {
+        return;
+      }
 
       const activeGroup = event.target.parentElement;
       if (activeGroup.tabs.filter((tab) => !tab.hasAttribute('zen-empty-tab')).length === 0) {
@@ -777,7 +783,6 @@
           group.setAttribute('has-active', 'true');
           gBrowser.selectedTab = tab;
           this.#popup.hidePopup();
-          this.expandToSelected(group);
         });
 
         tabsList.appendChild(item);
@@ -851,6 +856,16 @@
       });
 
       return [];
+    }
+
+    getFolderIndentation(tab, group = undefined) {
+      const level = group?.level || 0;
+      const baseSpacing = 4; // Base spacing for each level
+      const tabLevel = tab?.group?.level || 0;
+      // If the level is less, we need to make a negative margin
+      const spacing =
+        level > tabLevel ? -baseSpacing * (level - tabLevel) : baseSpacing * (tabLevel - level);
+      return spacing;
     }
 
     changeFolderUserIcon(group) {
