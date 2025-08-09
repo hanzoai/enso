@@ -17,6 +17,12 @@ tab-group[split-view-group] {
     transparent 40%
   );
 
+  margin-inline-start: var(--zen-folder-indent) !important;
+
+  #tabbrowser-tabs[movingtab] & {
+    transition: margin-inline-start 0.15s ease-in-out;
+  }
+
   & .tab-group-container {
     display: flex;
     flex-wrap: nowrap;
@@ -48,6 +54,7 @@ tab-group[split-view-group] {
       --tab-selected-shadow: none;
       --border-radius-medium: var(--tab-border-radius);
       --zen-active-tab-scale: 1;
+      --zen-folder-indent: 0 !important;
 
       :root[zen-sidebar-expanded='true'] & {
         --tab-min-height: 28px;
@@ -94,7 +101,6 @@ tab-group[split-view-group] {
 
       & > .tabbrowser-tab {
         --tab-hover-background-color: var(--zen-split-view-active-tab-bg);
-        --zen-folder-indent: 0 !important;
         & .tab-background {
           background-color: var(--zen-split-view-active-tab-bg) !important;
         }

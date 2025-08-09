@@ -254,7 +254,15 @@
           }
 
           if (pin.isGroup) {
-            const group = gZenFolders.createFolder([], {
+            const tabs = [];
+            // If there's already existing tabs, let's use them
+            for (const [uuid, existingTab] of pinnedTabsByUUID) {
+              const pinObject = this._pinsCache.find((p) => p.uuid === uuid);
+              if (pinObject && pinObject.parentUuid === pin.uuid) {
+                tabs.push(existingTab);
+              }
+            }
+            const group = gZenFolders.createFolder(tabs, {
               label: pin.title,
               collapsed: pin.isFolderCollapsed,
               initialPinId: pin.uuid,
@@ -981,13 +989,9 @@
       }
       movingTabs = [...movingTabs];
       try {
-        const pinnedTabsTarget =
-          event.target.closest('.zen-workspace-pinned-tabs-section') ||
-          event.target.closest('.zen-current-workspace-indicator') ||
-          this._isGoingToPinnedTabs;
+        const pinnedTabsTarget = this._isGoingToPinnedTabs;
         const essentialTabsTarget = event.target.closest('.zen-essentials-container');
-        const tabsTarget =
-          event.target.closest('.zen-workspace-normal-tabs-section') || !this._isGoingToPinnedTabs;
+        const tabsTarget = !this._isGoingToPinnedTabs;
 
         // TODO: Solve the issue of adding a tab between two groups
         // Remove group labels from the moving tabs and replace it
@@ -1158,7 +1162,8 @@
             continue;
           }
         }
-        item.style.removeProperty('--zen-folder-indent');
+        const itemToAnimate = item.group?.hasAttribute('split-view-group') ? item.group : item;
+        itemToAnimate.style.removeProperty('--zen-folder-indent');
       }
       this.removeTabContainersDragoverClass();
     }
@@ -1173,7 +1178,8 @@
         : [separator];
     }
 
-    animateSeparatorMove(draggedTab, dropElement, isPinned, event) {
+    animateSeparatorMove(movingTabs, dropElement, isPinned, event) {
+      let draggedTab = movingTabs[0];
       if (gBrowser.isTabGroupLabel(draggedTab) && draggedTab.group.isZenFolder) {
         return;
       }
@@ -1182,7 +1188,9 @@
       }
       const itemsToCheck = this.dragShiftableItems;
       const translate = event.screenY;
-      const draggingTabHeight = window.windowUtils.getBoundsWithoutFlushing(draggedTab).height;
+      const draggingTabHeight = movingTabs.reduce((acc, item) => {
+        return acc + window.windowUtils.getBoundsWithoutFlushing(item).height;
+      }, 0);
       let topToNormalTabs = itemsToCheck[0].screenY;
       if (!isPinned) {
         topToNormalTabs += draggedTab.getBoundingClientRect().height;
