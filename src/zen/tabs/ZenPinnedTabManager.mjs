@@ -986,7 +986,8 @@
           event.target.closest('.zen-current-workspace-indicator') ||
           this._isGoingToPinnedTabs;
         const essentialTabsTarget = event.target.closest('.zen-essentials-container');
-        const tabsTarget = event.target.closest('.zen-workspace-normal-tabs-section');
+        const tabsTarget =
+          event.target.closest('.zen-workspace-normal-tabs-section') || !this._isGoingToPinnedTabs;
 
         // TODO: Solve the issue of adding a tab between two groups
         // Remove group labels from the moving tabs and replace it

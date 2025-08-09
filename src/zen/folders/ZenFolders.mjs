@@ -318,7 +318,7 @@
       if (selectedItem) {
         group.setAttribute('has-active', 'true');
         selectedItem.setAttribute('folder-active', 'true');
-        this.setFolderIndentation(selectedItem, group, /* for collapse = */ true);
+        this.setFolderIndentation([selectedItem], group, /* for collapse = */ true);
       }
 
       for (const item of itemsAfterSelected) {
@@ -874,10 +874,11 @@
       return [];
     }
 
-    setFolderIndentation(tab, group = undefined, forCollapse = true) {
+    setFolderIndentation(tabs, group = undefined, forCollapse = true) {
       if (!gZenPinnedTabManager.expandedSidebarMode) {
         return;
       }
+      const tab = tabs[0];
       let isTab = false;
       if (!group && tab?.group) {
         group = tab; // So we can set isTab later
@@ -897,7 +898,13 @@
       }
       const tabLevel = tabToAnimate?.group?.level || 0;
       const spacing = (level - tabLevel) * baseSpacing;
-      tabToAnimate.style.setProperty('--zen-folder-indent', `${spacing}px`);
+      for (const tab of tabs) {
+        if (gBrowser.isTabGroupLabel(tab)) {
+          tab.group.style.setProperty('--zen-folder-indent', `${spacing}px`);
+          continue;
+        }
+        tab.style.setProperty('--zen-folder-indent', `${spacing}px`);
+      }
     }
 
     changeFolderUserIcon(group) {
