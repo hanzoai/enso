@@ -260,6 +260,8 @@ zen-folder {
 
       & svg {
         filter: contrast(150%);
+        transition: 0.2s scale;
+        transform-origin: right bottom;
 
         & image {
           fill-opacity: 0.9;
@@ -267,6 +269,10 @@ zen-folder {
           fill: var(--zen-folder-stroke);
           transform: translate(-180%, 8%);
         }
+      }
+
+      & svg[state='open'] {
+        scale: 0.9;
       }
     }
 

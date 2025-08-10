@@ -815,7 +815,6 @@
     updateFolderIcon(group, state = 'auto', play = true) {
       const svg = group.querySelector('svg');
       if (!svg) return [];
-
       let animations = this.#folderAnimCache.get(group);
       if (!animations) {
         animations = svg.querySelectorAll('animate, animateTransform, animateMotion');
@@ -823,6 +822,7 @@
       }
 
       const isCollapsed = group.collapsed;
+      svg.setAttribute('state', state === 'auto' ? (isCollapsed ? 'close' : 'open') : state);
       const hasActive = group.hasAttribute('has-active');
 
       const OPACITY = {
