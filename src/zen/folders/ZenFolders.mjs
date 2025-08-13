@@ -31,7 +31,7 @@
 
   const ZEN_MAX_SUBFOLDERS = Services.prefs.getIntPref('zen.folders.max-subfolders');
 
-  class nsZenFolders extends nsZenPreloadedFeature {
+  class nsZenFolders extends nsZenDOMOperatedFeature {
     #popup = null;
     #popupTimer = null;
     #mouseTimer = null;
@@ -143,11 +143,11 @@
         }
       });
 
-      this.#popup.addEventListener('mouseenter', () => {
+      this.#popup.addEventListener('mouseover', () => {
         clearTimeout(this.#popupTimer);
       });
 
-      this.#popup.addEventListener('mouseleave', () => {
+      this.#popup.addEventListener('mouseout', () => {
         this.#popupTimer = setTimeout(() => {
           if (this.#popup.matches(':hover')) return;
           this.#popup.hidePopup();
