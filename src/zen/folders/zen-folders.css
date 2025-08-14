@@ -263,6 +263,10 @@ zen-folder {
         transition: 0.2s scale;
         transform-origin: right bottom;
 
+        :root:not([zen-sidebar-expanded]) & {
+          transform-origin: center bottom;
+        }
+
         & image {
           fill-opacity: 0.9;
           -moz-context-properties: fill, fill-opacity;

@@ -63,7 +63,7 @@
       const folderActionsMenu = document.getElementById('zenFolderActions');
       folderActionsMenu.addEventListener('popupshowing', (event) => {
         const folder =
-          event.explicitOriginalTarget?.group || event.explicitOriginalTarget.parentElement?.group;
+          event.explicitOriginalTarget?.group || event.explicitOriginalTarget.parentElement;
         // We only want to rename zen-folders as firefox groups don't work well with this
         if (!folder?.isZenFolder) {
           return;
@@ -918,7 +918,7 @@
       if (!group) return;
 
       gZenEmojiPicker
-        .open(group.labelElement, { onlySvgIcons: true })
+        .open(group.icon, { onlySvgIcons: true })
         .then((icon) => {
           this.setFolderUserIcon(group, icon);
           group.dispatchEvent(new CustomEvent('ZenFolderIconChanged', { bubbles: true }));
