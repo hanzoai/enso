@@ -466,7 +466,9 @@
     #onNewFolder(event) {
       const isFromToolbar = event.target.id === 'zen-context-menu-new-folder-toolbar';
       const contextMenu = event.target.parentElement;
-      let tabs = [];
+      let tabs = TabContextMenu.contextTab.multiselected
+        ? gBrowser.selectedTabs
+        : [TabContextMenu.contextTab];
       let triggerTab =
         contextMenu.triggerNode &&
         (contextMenu.triggerNode.tab || contextMenu.triggerNode.closest('tab'));
