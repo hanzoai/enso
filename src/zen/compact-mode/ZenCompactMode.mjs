@@ -607,7 +607,7 @@ var gZenCompactModeManager = {
       target.addEventListener('mouseover', onEnter);
       target.addEventListener('dragover', onEnter);
 
-      target.addEventListener('mouseout', onLeave);
+      target.addEventListener('mouseleave', onLeave);
       target.addEventListener('dragleave', onLeave);
     }
 
