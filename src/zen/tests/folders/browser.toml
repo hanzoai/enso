@@ -4,3 +4,6 @@
 
 ["browser_folder_create.js"]
 ["browser_folder_subfolder.js"]
+["browser_folder_basic_toggle.js"]
+
+["browser_folder_issue_9885.js"]

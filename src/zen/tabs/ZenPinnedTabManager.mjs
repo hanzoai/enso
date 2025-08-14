@@ -1162,7 +1162,10 @@
             continue;
           }
         }
-        const itemToAnimate = item.group?.hasAttribute('split-view-group') ? item.group : item;
+        const itemToAnimate =
+          item.group?.hasAttribute('split-view-group') || gBrowser.isTabGroupLabel(item)
+            ? item.group
+            : item;
         itemToAnimate.style.removeProperty('--zen-folder-indent');
       }
       this.removeTabContainersDragoverClass();

@@ -890,7 +890,10 @@
       if (!group && tab?.group) {
         group = tab; // So we can set isTab later
       }
-      if (gBrowser.isTab(group) && !group.hasAttribute('zen-empty-tab')) {
+      if (
+        gBrowser.isTab(group) &&
+        !(group.hasAttribute('zen-empty-tab') && group.group === tab.group)
+      ) {
         group = group.group;
         isTab = true;
       }
