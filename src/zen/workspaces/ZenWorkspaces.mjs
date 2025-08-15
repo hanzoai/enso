@@ -151,7 +151,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     }
 
     if (!this.privateWindowOrDisabled) {
-      const observerFunction = async function observe() {
+      const observerFunction = async () => {
         this._workspaceBookmarksCache = null;
         await this.workspaceBookmarks();
         this._invalidateBookmarkContainers();
@@ -1315,7 +1315,11 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     if (this.workspaceHasIcon(workspace)) {
       return workspace.icon;
     }
-    return new Intl.Segmenter().segment(workspace.name).containing().segment.toUpperCase();
+    try {
+      return new Intl.Segmenter().segment(workspace.name).containing().segment.toUpperCase();
+    } catch {
+      return Array.from(workspace.name)[0]?.toUpperCase();
+    }
   }
 
   get shouldShowContainers() {
