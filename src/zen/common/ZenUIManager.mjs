@@ -72,6 +72,35 @@ var gZenUIManager = {
 
     gZenMediaController.init();
     gZenVerticalTabsManager.init();
+
+    this._initCreateNewPopup();
+  },
+
+  _initCreateNewPopup() {
+    const popup = document.getElementById('zenCreateNewPopup');
+    const button = document.getElementById('zen-create-new-button');
+
+    popup.addEventListener('popupshowing', () => {
+      const image = button.querySelector('image');
+      button.setAttribute('open', 'true');
+      gZenUIManager.motion.animate(
+        image,
+        { transform: ['rotate(0deg)', 'rotate(45deg)'] },
+        { duration: 0.2 }
+      );
+      popup.addEventListener(
+        'popuphidden',
+        () => {
+          button.removeAttribute('open');
+          gZenUIManager.motion.animate(
+            image,
+            { transform: ['rotate(45deg)', 'rotate(0deg)'] },
+            { duration: 0.2 }
+          );
+        },
+        { once: true }
+      );
+    });
   },
 
   handleMouseDown(event) {
