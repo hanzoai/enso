@@ -166,6 +166,7 @@
       window.addEventListener('TabGroupCollapse', this.#onTabGroupCollapse.bind(this));
       window.addEventListener('FolderGrouped', this.#onFolderGrouped.bind(this));
       window.addEventListener('TabSelect', this.#onTabSelected.bind(this));
+      window.addEventListener('TabOpen', this.#onTabOpened.bind(this));
       document
         .getElementById('zen-context-menu-new-folder')
         .addEventListener('command', this.#onNewFolder.bind(this));
@@ -208,6 +209,17 @@
         this.expandToSelected(group);
       }
       gBrowser.tabContainer._invalidateCachedTabs();
+    }
+
+    #onTabOpened(event) {
+      const tab = event.target;
+      const group = tab.group;
+      if (!group?.isZenFolder || tab.pinned) return;
+      // Edge case: In occations where we add a tab with an ownerTab
+      // inside a folder, the tab gets added into the folder in an
+      // unpinned state. We need to pin it and re-add it into the folder.
+      gBrowser.pinTab(tab);
+      group.addTabs([tab]);
     }
 
     #onTabUngrouped(event) {
