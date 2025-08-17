@@ -127,6 +127,9 @@
           case 'context_zenFolderExpand':
             this.#lastFolderContextMenu.expandGroupTabs();
             break;
+          case 'context_zenFolderNewSubfolder':
+            this.#lastFolderContextMenu.createSubfolder();
+            break;
           case 'context_zenFolderDelete':
             this.#lastFolderContextMenu.delete();
             break;

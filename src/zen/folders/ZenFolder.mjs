@@ -143,6 +143,14 @@
       });
     }
 
+    createSubfolder() {
+      gZenFolders.createFolder([], {
+        renameFolder: true,
+        label: 'Subfolder',
+        insertAfter: this.querySelector('.tab-group-container').lastElementChild,
+      });
+    }
+
     async expandGroupTabs() {
       for (let tab of this.allItems.reverse()) {
         tab = tab.group.hasAttribute('split-view-group') ? tab.group : tab;

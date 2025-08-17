@@ -8,6 +8,9 @@ zen-folders-panel-rename-folder =
 zen-folders-panel-unpack-folder =
     .label = Unpack Folder
 
+zen-folders-new-subfolder =
+    .label = New Subfolder
+
 zen-folders-panel-delete-folder =
     .label = Delete Folder
 
