@@ -303,8 +303,11 @@
       // Calculate the height we need to hide until we reach the selected item.
       let heightUntilSelected;
       if (selectedItem) {
+        const selectedContainer = selectedItem.group?.hasAttribute('split-view-group')
+          ? selectedItem.group
+          : selectedItem;
         heightUntilSelected =
-          window.windowUtils.getBoundsWithoutFlushing(selectedItem).top -
+          window.windowUtils.getBoundsWithoutFlushing(selectedContainer).top -
           window.windowUtils.getBoundsWithoutFlushing(groupStart).bottom;
       } else {
         heightUntilSelected = window.windowUtils.getBoundsWithoutFlushing(tabsContainer).height;

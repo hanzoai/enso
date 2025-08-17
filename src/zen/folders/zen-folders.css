@@ -247,6 +247,7 @@ zen-folder {
     height: 40px;
     padding-inline: var(--tab-group-label-padding);
     align-items: center;
+    font-weight: 600;
 
     :root:not([zen-sidebar-expanded]) {
       width: var(--tab-min-width) !important;
