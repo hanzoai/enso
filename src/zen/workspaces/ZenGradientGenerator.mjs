@@ -1089,7 +1089,7 @@
         return color.c;
       }
       let opacity = this.currentOpacity;
-      if (forToolbar) {
+      if (forToolbar && !this.#allowTransparencyOnSidebar) {
         color = this.blendColors(
           color.c,
           this.getToolbarModifiedBaseRaw().slice(0, 3),

@@ -92,7 +92,7 @@
       this.labelElement.parentElement.setAttribute('context', 'zenFolderActions');
 
       this.labelElement.onRenameFinished = (newLabel) => {
-        this.name = newLabel;
+        this.name = newLabel.trim() || 'Folder';
         const event = new CustomEvent('ZenFolderRenamed', {
           bubbles: true,
         });
