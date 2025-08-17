@@ -2772,7 +2772,12 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
         }
       }
     }
-    this._allStoredTabs = tabs;
+    const currentWorkspace = this.activeWorkspace;
+    this._allStoredTabs = tabs.sort((a, b) => {
+      const aWorkspaceId = a.getAttribute('zen-workspace-id');
+      const bWorkspaceId = b.getAttribute('zen-workspace-id');
+      return aWorkspaceId === currentWorkspace ? -1 : bWorkspaceId === currentWorkspace ? 1 : 0;
+    });
     return this._allStoredTabs;
   }
 
@@ -2807,20 +2812,14 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     if (!this._hasInitializedTabsStrip) {
       return gBrowser.browsers;
     }
-    const browsers = Array.from(gBrowser.tabpanels.querySelectorAll('browser'));
-    // Sort browsers by making the current workspace first
-    const currentWorkspace = this.activeWorkspace;
-    const sortedBrowsers = browsers.sort((a, b) => {
-      const aTab = gBrowser.getTabForBrowser(a);
-      const bTab = gBrowser.getTabForBrowser(b);
-      if (!bTab || !aTab) {
-        return 0;
+    const browsers = [];
+    for (const tab of this.allStoredTabs) {
+      const browser = tab.linkedBrowser;
+      if (browser) {
+        browsers.push(browser);
       }
-      const aWorkspaceId = aTab.getAttribute('zen-workspace-id');
-      const bWorkspaceId = bTab.getAttribute('zen-workspace-id');
-      return aWorkspaceId === currentWorkspace ? -1 : bWorkspaceId === currentWorkspace ? 1 : 0;
-    });
-    return sortedBrowsers;
+    }
+    return browsers;
   }
 
   get pinnedTabCount() {
