@@ -59,11 +59,21 @@
         `<menuitem id="zen-context-menu-new-folder" data-l10n-id="zen-toolbar-context-new-folder"/>`
       );
       document.getElementById('context_moveTabToGroup').before(contextMenuItems);
+      const contextMenuItemsToolbar = window.MozXULElement.parseXULToFragment(
+        `<menuitem id="zen-context-menu-new-folder-toolbar" data-l10n-id="zen-toolbar-context-new-folder"/>`
+      );
+      document.getElementById('toolbar-context-openANewTab').after(contextMenuItemsToolbar);
 
       const folderActionsMenu = document.getElementById('zenFolderActions');
       folderActionsMenu.addEventListener('popupshowing', (event) => {
-        const folder =
-          event.explicitOriginalTarget?.group || event.explicitOriginalTarget.parentElement;
+        const target = event.explicitOriginalTarget;
+        let folder;
+        if (gBrowser.isTabGroupLabel(target)) {
+          folder = target.group;
+        } else if (gBrowser.isTabGroupLabel(target.parentElement)) {
+          folder = target.parentElement.group;
+        }
+
         // We only want to rename zen-folders as firefox groups don't work well with this
         if (!folder?.isZenFolder) {
           return;
@@ -167,9 +177,13 @@
       window.addEventListener('FolderGrouped', this.#onFolderGrouped.bind(this));
       window.addEventListener('TabSelect', this.#onTabSelected.bind(this));
       window.addEventListener('TabOpen', this.#onTabOpened.bind(this));
+      const onNewFolder = this.#onNewFolder.bind(this);
       document
         .getElementById('zen-context-menu-new-folder')
-        .addEventListener('command', this.#onNewFolder.bind(this));
+        .addEventListener('command', onNewFolder);
+      document
+        .getElementById('zen-context-menu-new-folder-toolbar')
+        .addEventListener('command', onNewFolder);
       SessionStore.promiseInitialized.then(() => {
         gBrowser.tabContainer.addEventListener('dragstart', this.cancelPopupTimer.bind(this));
       });
@@ -309,8 +323,11 @@
       // Calculate the height we need to hide until we reach the selected item.
       let heightUntilSelected;
       if (selectedItem) {
+        const selectedContainer = selectedItem.group?.hasAttribute('split-view-group')
+          ? selectedItem.group
+          : selectedItem;
         heightUntilSelected =
-          window.windowUtils.getBoundsWithoutFlushing(selectedItem).top -
+          window.windowUtils.getBoundsWithoutFlushing(selectedContainer).top -
           window.windowUtils.getBoundsWithoutFlushing(groupStart).bottom;
       } else {
         heightUntilSelected = window.windowUtils.getBoundsWithoutFlushing(tabsContainer).height;
@@ -447,6 +464,7 @@
     }
 
     #onNewFolder(event) {
+      const isFromToolbar = event.target.id === 'zen-context-menu-new-folder-toolbar';
       const contextMenu = event.target.parentElement;
       let tabs = [];
       let triggerTab =
@@ -454,6 +472,9 @@
         (contextMenu.triggerNode.tab || contextMenu.triggerNode.closest('tab'));
 
       tabs.push(triggerTab, ...gBrowser.selectedTabs);
+      if (isFromToolbar) {
+        tabs = [];
+      }
 
       const group = this.createFolder(tabs, { insertBefore: triggerTab, renameFolder: true });
       if (!group) return;
@@ -893,26 +914,30 @@
       return [];
     }
 
-    setFolderIndentation(tabs, group = undefined, forCollapse = true) {
+    setFolderIndentation(tabs, groupElem = undefined, forCollapse = true) {
       if (!gZenPinnedTabManager.expandedSidebarMode) {
         return;
       }
       const tab = tabs[0];
       let isTab = false;
-      if (!group && tab?.group) {
-        group = tab; // So we can set isTab later
+      if (!groupElem && tab?.group) {
+        groupElem = tab; // So we can set isTab later
       }
       if (
-        gBrowser.isTab(group) &&
-        !(group.hasAttribute('zen-empty-tab') && group.group === tab.group)
+        gBrowser.isTab(groupElem) &&
+        !(groupElem.hasAttribute('zen-empty-tab') && groupElem.group === tab.group)
       ) {
-        group = group.group;
+        groupElem = groupElem.group;
         isTab = true;
       }
-      if (!isTab && !group?.hasAttribute('selected') && !forCollapse) {
-        group = null; // Don't indent if the group is not selected
+      if (!isTab && !groupElem?.hasAttribute('selected') && !forCollapse) {
+        groupElem = null; // Don't indent if the group is not selected
       }
-      const level = group?.level + 1 || 0;
+      let level = groupElem?.level + 1 || 0;
+      if (gBrowser.isTabGroupLabel(groupElem)) {
+        // If it is a group label, we should not increase its level by one.
+        level = groupElem.group.level;
+      }
       const baseSpacing = 14; // Base spacing for each level
       let tabToAnimate = tab;
       if (gBrowser.isTabGroupLabel(tab)) {
@@ -1354,10 +1379,11 @@
       let dragDownThreshold =
         Services.prefs.getIntPref('zen.view.drag-and-drop.drop-inside-lower-threshold') / 100;
 
-      let dropElementGroup = dropElement.group;
+      const dropElementGroup = dropElement.group;
       const isSplitGroup = dropElement?.group?.hasAttribute('split-view-group');
       let firstGroupElem =
         dropElementGroup.querySelector('.zen-tab-group-start').nextElementSibling;
+      if (gBrowser.isTabGroup(firstGroupElem)) firstGroupElem = firstGroupElem.labelElement;
 
       const isRestrictedGroup = isSplitGroup || dropElementGroup.collapsed;
 
@@ -1374,15 +1400,10 @@
         this.highlightGroupOnDragOver(dropElementGroup, movingTabs);
       } else if (shouldDropNear) {
         if (dropBefore) {
-          dropElement = dropElementGroup;
           colorCode = undefined;
-        } else {
-          if (isRestrictedGroup) {
-            dropElement = dropElementGroup;
-          } else {
-            dropElement = firstGroupElem;
-            dropBefore = true;
-          }
+        } else if (!isRestrictedGroup) {
+          dropElement = firstGroupElem;
+          dropBefore = true;
         }
         this.highlightGroupOnDragOver(null);
       }

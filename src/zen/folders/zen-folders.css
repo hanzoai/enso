@@ -247,6 +247,7 @@ zen-folder {
     height: 40px;
     padding-inline: var(--tab-group-label-padding);
     align-items: center;
+    font-weight: 600;
 
     :root:not([zen-sidebar-expanded]) {
       width: var(--tab-min-width) !important;
@@ -367,7 +368,6 @@ zen-folder {
   flex-direction: row;
   padding: 6px;
   border-bottom: 1px solid color-mix(in srgb, currentColor, transparent 90%);
-  margin-bottom: 2px;
 }
 
 #zen-folder-tabs-popup #zen-folder-tabs-list-search {
@@ -441,16 +441,21 @@ zen-folder {
   align-items: center;
   direction: ltr;
   padding: 0 var(--tab-inline-padding);
-  border-radius: 4px;
-  margin: 2px 0;
+  border-radius: 6px;
+  margin: 4px 0;
 
   .folders-tabs-list-item[selected] & {
     background-color: color-mix(in srgb, currentColor, transparent 90%);
   }
 
   &:last-child {
-    border-bottom-left-radius: max(calc(var(--panel-border-radius) - 4px), 4px);
-    border-bottom-right-radius: max(calc(var(--panel-border-radius) - 4px), 4px);
+    border-bottom-left-radius: max(calc(var(--panel-border-radius) - 6px), 4px);
+    border-bottom-right-radius: max(calc(var(--panel-border-radius) - 6px), 4px);
+  }
+
+  &:first-child {
+    border-top-left-radius: max(calc(var(--panel-border-radius) - 6px), 4px);
+    border-top-right-radius: max(calc(var(--panel-border-radius) - 6px), 4px);
   }
 }
 

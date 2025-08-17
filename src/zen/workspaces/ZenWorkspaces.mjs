@@ -301,7 +301,12 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     if (!this.workspaceEnabled) {
       return;
     }
-    this._pinnedTabsResizeObserver = new ResizeObserver(this.onPinnedTabsResize.bind(this));
+    const onResize = (...args) => {
+      requestAnimationFrame(() => {
+        this.onPinnedTabsResize(...args);
+      });
+    };
+    this._pinnedTabsResizeObserver = new ResizeObserver(onResize);
     await this._createDefaultWorkspaceIfNeeded();
   }
 
@@ -2402,73 +2407,67 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
   }
 
   async onPinnedTabsResize(entries, forAnimation = false, animateContainer = false) {
-    await new Promise((resolve) => {
-      requestAnimationFrame(async () => {
-        if (
-          !this._hasInitializedTabsStrip ||
-          (this._organizingWorkspaceStrip && !forAnimation) ||
-          document.documentElement.hasAttribute('zen-creating-workspace') ||
-          document.documentElement.hasAttribute('customizing')
-        ) {
-          resolve();
-          return;
+    if (
+      !this._hasInitializedTabsStrip ||
+      (this._organizingWorkspaceStrip && !forAnimation) ||
+      document.documentElement.hasAttribute('zen-creating-workspace') ||
+      document.documentElement.hasAttribute('customizing')
+    ) {
+      return;
+    }
+    // forAnimation may be of type "ResizeObserver" if it's not a boolean, just ignore it
+    if (typeof forAnimation !== 'boolean') {
+      forAnimation = false;
+    }
+    for (const entry of entries) {
+      let originalWorkspaceId = entry.target.getAttribute('zen-workspace-id');
+      if (!originalWorkspaceId) {
+        originalWorkspaceId = entry.target.closest('zen-workspace')?.id;
+      }
+      const workspacesIds = [];
+      if (entry.target.closest('#zen-essentials')) {
+        // Get all workspaces that have the same userContextId
+        const activeWorkspace = await this.getActiveWorkspace();
+        const userContextId = activeWorkspace.containerTabId;
+        const workspaces = this._workspaceCache.workspaces.filter(
+          (w) => w.containerTabId === userContextId && w.uuid !== originalWorkspaceId
+        );
+        workspacesIds.push(...workspaces.map((w) => w.uuid));
+      } else {
+        workspacesIds.push(originalWorkspaceId);
+      }
+      for (const workspaceId of workspacesIds) {
+        const workspaceElement = this.workspaceElement(workspaceId);
+        if (!workspaceElement) {
+          continue;
         }
-        // forAnimation may be of type "ResizeObserver" if it's not a boolean, just ignore it
-        if (typeof forAnimation !== 'boolean') {
-          forAnimation = false;
+        const arrowScrollbox = workspaceElement.tabsContainer;
+        const pinnedContainer = workspaceElement.pinnedTabsContainer;
+        const workspaceObject = this.getWorkspaceFromId(workspaceId);
+        const essentialContainer = this.getEssentialsSection(workspaceObject.containerTabId);
+        const essentialNumChildren = essentialContainer.children.length;
+        let essentialHackType = 0;
+        if (essentialNumChildren === 6 || essentialNumChildren === 9) {
+          essentialHackType = 1;
+        } else if (essentialNumChildren % 2 === 0 && essentialNumChildren < 8) {
+          essentialHackType = 2;
+        } else if (essentialNumChildren === 5) {
+          essentialHackType = 3;
         }
-        for (const entry of entries) {
-          let originalWorkspaceId = entry.target.getAttribute('zen-workspace-id');
-          if (!originalWorkspaceId) {
-            originalWorkspaceId = entry.target.closest('zen-workspace')?.id;
-          }
-          const workspacesIds = [];
-          if (entry.target.closest('#zen-essentials')) {
-            // Get all workspaces that have the same userContextId
-            const activeWorkspace = await this.getActiveWorkspace();
-            const userContextId = activeWorkspace.containerTabId;
-            const workspaces = this._workspaceCache.workspaces.filter(
-              (w) => w.containerTabId === userContextId && w.uuid !== originalWorkspaceId
-            );
-            workspacesIds.push(...workspaces.map((w) => w.uuid));
-          } else {
-            workspacesIds.push(originalWorkspaceId);
-          }
-          for (const workspaceId of workspacesIds) {
-            const workspaceElement = this.workspaceElement(workspaceId);
-            if (!workspaceElement) {
-              continue;
-            }
-            const arrowScrollbox = workspaceElement.tabsContainer;
-            const pinnedContainer = workspaceElement.pinnedTabsContainer;
-            const workspaceObject = this.getWorkspaceFromId(workspaceId);
-            const essentialContainer = this.getEssentialsSection(workspaceObject.containerTabId);
-            const essentialNumChildren = essentialContainer.children.length;
-            let essentialHackType = 0;
-            if (essentialNumChildren === 6 || essentialNumChildren === 9) {
-              essentialHackType = 1;
-            } else if (essentialNumChildren % 2 === 0 && essentialNumChildren < 8) {
-              essentialHackType = 2;
-            } else if (essentialNumChildren === 5) {
-              essentialHackType = 3;
-            }
-            if (essentialHackType > 0) {
-              essentialContainer.setAttribute('data-hack-type', essentialHackType);
-            } else {
-              essentialContainer.removeAttribute('data-hack-type');
-            }
-            this._updatePaddingTopOnTabs(
-              workspaceElement,
-              essentialContainer,
-              forAnimation,
-              animateContainer
-            );
-            this.updateShouldHideSeparator(arrowScrollbox, pinnedContainer);
-          }
-          resolve();
+        if (essentialHackType > 0) {
+          essentialContainer.setAttribute('data-hack-type', essentialHackType);
+        } else {
+          essentialContainer.removeAttribute('data-hack-type');
         }
-      });
-    });
+        this._updatePaddingTopOnTabs(
+          workspaceElement,
+          essentialContainer,
+          forAnimation,
+          animateContainer
+        );
+        this.updateShouldHideSeparator(arrowScrollbox, pinnedContainer);
+      }
+    }
   }
 
   async onTabBrowserInserted(event) {
