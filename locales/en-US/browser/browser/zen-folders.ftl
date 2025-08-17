@@ -5,8 +5,8 @@ zen-folders-search-placeholder =
 zen-folders-panel-rename-folder =
     .label = Rename Folder
 
-zen-folders-panel-expand-folder =
-    .label = Expand Folder
+zen-folders-panel-unpack-folder =
+    .label = Unpack Folder
 
 zen-folders-panel-delete-folder =
     .label = Delete Folder

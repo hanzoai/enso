@@ -59,6 +59,10 @@
         `<menuitem id="zen-context-menu-new-folder" data-l10n-id="zen-toolbar-context-new-folder"/>`
       );
       document.getElementById('context_moveTabToGroup').before(contextMenuItems);
+      const contextMenuItemsToolbar = window.MozXULElement.parseXULToFragment(
+        `<menuitem id="zen-context-menu-new-folder-toolbar" data-l10n-id="zen-toolbar-context-new-folder"/>`
+      );
+      document.getElementById('toolbar-context-openANewTab').after(contextMenuItemsToolbar);
 
       const folderActionsMenu = document.getElementById('zenFolderActions');
       folderActionsMenu.addEventListener('popupshowing', (event) => {
@@ -172,9 +176,13 @@
       window.addEventListener('TabGroupCollapse', this.#onTabGroupCollapse.bind(this));
       window.addEventListener('FolderGrouped', this.#onFolderGrouped.bind(this));
       window.addEventListener('TabSelect', this.#onTabSelected.bind(this));
+      const onNewFolder = this.#onNewFolder.bind(this);
       document
         .getElementById('zen-context-menu-new-folder')
-        .addEventListener('command', this.#onNewFolder.bind(this));
+        .addEventListener('command', onNewFolder);
+      document
+        .getElementById('zen-context-menu-new-folder-toolbar')
+        .addEventListener('command', onNewFolder);
       SessionStore.promiseInitialized.then(() => {
         gBrowser.tabContainer.addEventListener('dragstart', this.cancelPopupTimer.bind(this));
       });
@@ -444,6 +452,7 @@
     }
 
     #onNewFolder(event) {
+      const isFromToolbar = event.target.id === 'zen-context-menu-new-folder-toolbar';
       const contextMenu = event.target.parentElement;
       let tabs = [];
       let triggerTab =
@@ -451,6 +460,9 @@
         (contextMenu.triggerNode.tab || contextMenu.triggerNode.closest('tab'));
 
       tabs.push(triggerTab, ...gBrowser.selectedTabs);
+      if (isFromToolbar) {
+        tabs = [];
+      }
 
       const group = this.createFolder(tabs, { insertBefore: triggerTab, renameFolder: true });
       if (!group) return;
