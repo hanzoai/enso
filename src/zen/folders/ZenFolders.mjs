@@ -42,6 +42,8 @@
     #foldersEnabled = false;
     #folderAnimCache = new Map();
 
+    #animationCount = 0;
+
     init() {
       this.#foldersEnabled = !gZenWorkspaces.privateWindowOrDisabled;
 
@@ -373,11 +375,14 @@
           {
             marginTop: [0, -(heightUntilSelected + 4 * !selectedItem)],
           },
-          { duration: 0.15, ease: 'easeInOut' }
+          { duration: 0.1, ease: 'easeInOut' }
         )
       );
+      this.#animationCount += 1;
       await Promise.all(animations);
-      if (!selectedItem) tabsContainer.setAttribute('hidden', true);
+      // Prevent hiding if we spam the group animations
+      this.#animationCount -= 1;
+      if (!selectedItem && !this.#animationCount) tabsContainer.setAttribute('hidden', true);
     }
 
     async #onTabGroupExpand(event) {
@@ -452,12 +457,17 @@
             marginTop: 0,
           },
           {
-            duration: 0.15,
+            duration: 0.1,
             ease: 'linear',
           }
         )
       );
+      this.#animationCount += 1;
       await Promise.all(animations);
+      this.#animationCount -= 1;
+      if (this.#animationCount) {
+        return;
+      }
       tabsContainer.style.overflow = '';
       groupItems.map((item) => {
         // Cleanup just in case

@@ -1143,7 +1143,7 @@
         return forToolbar
           ? this.getToolbarModifiedBase()
           : this.isDarkMode
-            ? 'linear-gradient(-45deg, rgba(255, 255, 255, 0.01), rgba(0, 0, 0, 0.4))'
+            ? 'rgba(0, 0, 0, 0.4)'
             : 'transparent';
       } else if (themedColors.length === 1) {
         return this.getSingleRGBColor(themedColors[0], forToolbar);
