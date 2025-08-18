@@ -253,6 +253,7 @@
       if (activeGroup?.length > 0) {
         for (const folder of activeGroup) {
           folder.removeAttribute('has-active');
+          folder.removeAttribute('selected-tab-id');
           this.collapseVisibleTab(folder);
           this.updateFolderIcon(folder, 'close', false);
         }
@@ -352,6 +353,7 @@
       if (selectedItem) {
         group.setAttribute('has-active', 'true');
         selectedItem.setAttribute('folder-active', 'true');
+        group.setAttribute('selected-tab-id', selectedItem.getAttribute('zen-pin-id'));
         this.setFolderIndentation([selectedItem], group, /* for collapse = */ true);
       }
 
@@ -398,43 +400,48 @@
       const animations = [];
       tabsContainer.style.overflow = 'hidden';
       if (group.hasAttribute('has-active')) {
+        const selectedTabId = group.getAttribute('selected-tab-id');
+        const selectedTab = group?.querySelector(`tab[zen-pin-id="${selectedTabId}"]`);
+        // Since the folder is now expanded, we should remove active attribute
+        // to the tab that was previously visible
+        selectedTab.removeAttribute('folder-active');
+        selectedTab.style.removeProperty('--zen-folder-indent');
         group.removeAttribute('has-active');
+        group.removeAttribute('selected-tab-id');
       }
 
-      // Since the folder is now expanded, we should remove active attribute
-      // to the tab that was previously visible
-      for (const tab of group.tabs) {
-        if (tab.group === group && tab.hasAttribute('folder-active')) {
-          tab.removeAttribute('folder-active');
-        }
-      }
-
-      const groupItems = [];
-      group.childGroupsAndTabs.forEach((item) => {
-        if (gBrowser.isTabGroupLabel(item)) {
-          if (item?.group?.hasAttribute('split-view-group')) {
-            item = item.group;
-          } else {
-            item = item.parentNode;
-          }
-        }
-        // If all the groups above the item are visible, remove the indentation
-        if (gBrowser.isTab(item)) {
-          let isVisible = true;
-          let parent = item.group;
-          while (parent) {
-            if (parent.collapsed && !parent.hasAttribute('has-active')) {
-              isVisible = false;
-              break;
+      const normalizeGroupItems = (items) => {
+        const processed = [];
+        items
+          .filter((item) => !item.hasAttribute('zen-empty-tab'))
+          .forEach((item) => {
+            if (gBrowser.isTabGroupLabel(item)) {
+              if (item?.group?.hasAttribute('split-view-group')) {
+                item = item.group;
+              } else {
+                item = item.parentElement;
+              }
             }
-            parent = parent.group;
-          }
-          if (isVisible) {
-            item.style.removeProperty('--zen-folder-indent');
-          }
+            processed.push(item);
+          });
+        return processed;
+      };
+
+      const activeGroups = group.querySelectorAll('zen-folder[has-active]');
+      const groupItems = normalizeGroupItems(group.childGroupsAndTabs);
+      const itemsToHide = [];
+
+      for (const activeGroup of activeGroups) {
+        let selectedTabId = activeGroup.getAttribute('selected-tab-id');
+        let selectedTab = activeGroup.querySelector(`tab[zen-pin-id="${selectedTabId}"]`);
+        // If the selected tab is in a split view group, we need to get the last tab
+        if (selectedTab?.group?.hasAttribute('split-view-group')) {
+          selectedTab = selectedTab.group.tabs.at(-1);
         }
-        groupItems.push(item);
-      });
+        let index = activeGroup.childGroupsAndTabs.indexOf(selectedTab);
+        let itemsAfter = activeGroup.childGroupsAndTabs.slice(index + 1);
+        itemsToHide.push(...normalizeGroupItems(itemsAfter));
+      }
 
       groupItems.map((item) => {
         animations.push(
@@ -442,7 +449,20 @@
             item,
             {
               opacity: 1,
-              height: 'auto',
+              height: '',
+            },
+            { duration: 0.1, ease: 'easeInOut' }
+          )
+        );
+      });
+
+      itemsToHide.map((item) => {
+        animations.push(
+          gZenUIManager.motion.animate(
+            item,
+            {
+              opacity: 0,
+              height: 0,
             },
             { duration: 0.1, ease: 'easeInOut' }
           )
@@ -451,16 +471,20 @@
 
       animations.push(...this.updateFolderIcon(group));
       animations.push(
-        gZenUIManager.motion.animate(
-          groupStart,
-          {
-            marginTop: 0,
-          },
-          {
-            duration: 0.1,
-            ease: 'linear',
-          }
-        )
+        gZenUIManager.motion
+          .animate(
+            groupStart,
+            {
+              marginTop: 0,
+            },
+            {
+              duration: 0.1,
+              ease: 'linear',
+            }
+          )
+          .then(() => {
+            tabsContainer.style.overflow = '';
+          })
       );
       this.#animationCount += 1;
       await Promise.all(animations);
@@ -468,9 +492,12 @@
       if (this.#animationCount) {
         return;
       }
-      tabsContainer.style.overflow = '';
-      groupItems.map((item) => {
+      groupItems.forEach((item) => {
         // Cleanup just in case
+        item.style.opacity = '';
+        item.style.height = '';
+      });
+      itemsToHide.forEach((item) => {
         item.style.opacity = '';
         item.style.height = '';
       });
@@ -1004,7 +1031,7 @@
       let itemHeight = 0;
       for (const item of group.allItems) {
         itemHeight += item.getBoundingClientRect().height;
-        if (item.hasAttribute('folder-active')) {
+        if (item.hasAttribute('folder-active') && !item.selected) {
           item.removeAttribute('folder-active');
           if (!onlyIfActive) {
             item.setAttribute('was-folder-active', 'true');
@@ -1132,6 +1159,7 @@
       }
 
       selectedItem.setAttribute('folder-active', 'true');
+      group.setAttribute('selected-tab-id', selectedItem.getAttribute('zen-pin-id'));
 
       animations.push(...this.updateFolderIcon(group, 'close', false));
 
