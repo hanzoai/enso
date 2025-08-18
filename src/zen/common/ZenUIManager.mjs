@@ -807,6 +807,7 @@ var gZenVerticalTabsManager = {
 
       const appContentNavbarContaienr = document.getElementById('zen-appcontent-navbar-container');
       const appContentNavbarWrapper = document.getElementById('zen-appcontent-navbar-wrapper');
+      appContentNavbarWrapper.style.transition = 'none';
       let shouldHide = false;
       if (
         ((!isRightSide && this.isWindowsStyledButtons) ||
@@ -951,6 +952,7 @@ var gZenVerticalTabsManager = {
       }
       gZenUIManager.updateTabsToolbar();
       this.rebuildURLBarMenus();
+      appContentNavbarWrapper.style.transition = '';
     } catch (e) {
       console.error(e);
     }
