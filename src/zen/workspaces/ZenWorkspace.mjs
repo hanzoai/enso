@@ -144,7 +144,8 @@
 
       this.#updateOverflow();
 
-      window.addEventListener('ZenGradientCacheChanged', this.#onGradientCacheChanged.bind(this));
+      this.onGradientCacheChanged = this.#onGradientCacheChanged.bind(this);
+      window.addEventListener('ZenGradientCacheChanged', this.onGradientCacheChanged);
 
       this.dispatchEvent(
         new CustomEvent('ZenWorkspaceAttached', {
@@ -153,6 +154,10 @@
           detail: { workspace: this },
         })
       );
+    }
+
+    disconnectedCallback() {
+      window.removeEventListener('ZenGradientCacheChanged', this.onGradientCacheChanged);
     }
 
     get active() {

@@ -182,7 +182,7 @@ zen-folder {
   flex-direction: column;
   --zen-folder-behind-bgcolor: light-dark(
     color-mix(in srgb, var(--zen-primary-color) 85%, white),
-    color-mix(in srgb, var(--zen-primary-color) 75%, black)
+    color-mix(in srgb, var(--zen-primary-color) 60%, #c1c1c1)
   );
   --zen-folder-front-bgcolor: light-dark(
     color-mix(in srgb, var(--zen-primary-color), white 70%),

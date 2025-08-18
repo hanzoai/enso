@@ -1504,7 +1504,7 @@
       const rgb = this.hexToRgb(accentColor);
       if (this.isDarkMode) {
         // If the theme is dark, we want to use a lighter color
-        return this.blendColors(rgb, [0, 0, 0], 60);
+        return this.blendColors(rgb, [0, 0, 0], 40);
       }
       return rgb;
     }
@@ -1648,8 +1648,6 @@
       this.currentOpacity = theme.opacity ?? 0.5;
       this.#currentLightness = theme.lightness ?? 50;
       const gradient = this.getGradient(theme.gradientColors);
-      this.currentOpacity = previousOpacity;
-      this.#currentLightness = previousLightness;
       let dominantColor = this.getMostDominantColor(theme.gradientColors);
       const isDefaultTheme = !dominantColor;
       if (isDefaultTheme) {
@@ -1670,6 +1668,8 @@
         toolbarColor: this.getToolbarColor(isDarkMode),
         primaryColor: this.getAccentColorForUI(dominantColor),
       };
+      this.currentOpacity = previousOpacity;
+      this.#currentLightness = previousLightness;
       return this.#gradientsCache[uuid];
     }
   }
