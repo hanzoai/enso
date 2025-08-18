@@ -81,6 +81,13 @@
           return;
         }
         this.#lastFolderContextMenu = folder;
+
+        const newSubfolderItem = document.getElementById('context_zenFolderNewSubfolder');
+        newSubfolderItem.setAttribute(
+          'disabled',
+          folder.level >= ZEN_MAX_SUBFOLDERS - 1 ? 'true' : 'false'
+        );
+
         const changeFolderSpace = document
           .getElementById('context_zenChangeFolderSpace')
           .querySelector('menupopup');

@@ -11,5 +11,7 @@ support-files = [
 ["browser_folder_subfolder.js"]
 ["browser_folder_basic_toggle.js"]
 ["browser_folder_owner_tabs.js"]
+["browser_folder_density.js"]
+["browser_folder_max_subfolders.js"]
 
 ["browser_folder_issue_9885.js"]

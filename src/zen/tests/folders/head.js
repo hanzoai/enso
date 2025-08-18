@@ -9,3 +9,12 @@ async function removeFolder(folder) {
   folder.delete();
   await removeEvent;
 }
+
+async function openFolderContextMenu(folder) {
+  const popup = document.getElementById('zenFolderActions');
+  let menuEvent = BrowserTestUtils.waitForEvent(popup, 'popupshown');
+  EventUtils.synthesizeMouseAtCenter(folder.labelElement, {
+    type: 'contextmenu',
+  });
+  await menuEvent;
+}

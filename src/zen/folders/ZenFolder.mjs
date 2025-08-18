@@ -145,7 +145,7 @@
 
     createSubfolder() {
       gZenFolders.createFolder([], {
-        renameFolder: true,
+        renameFolder: !gZenUIManager.testingEnabled,
         label: 'Subfolder',
         insertAfter: this.querySelector('.tab-group-container').lastElementChild,
       });
