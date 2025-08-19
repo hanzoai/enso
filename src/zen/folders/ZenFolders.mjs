@@ -613,9 +613,13 @@
 
         gBrowser.pinTab(tab);
       }
-      const pinnedContainer = options.workspaceId
-        ? gZenWorkspaces.workspaceElement(options.workspaceId).pinnedTabsContainer
-        : gZenWorkspaces.pinnedTabsContainer;
+      const workspacePinned = gZenWorkspaces.workspaceElement(
+        options.workspaceId
+      )?.pinnedTabsContainer;
+      const pinnedContainer =
+        options.workspaceId && workspacePinned
+          ? workspacePinned
+          : gZenWorkspaces.pinnedTabsContainer;
       const insertBefore =
         options.insertBefore || pinnedContainer.querySelector('.pinned-tabs-container-separator');
       const emptyTab = gBrowser.addTab('about:blank', {
@@ -1327,7 +1331,7 @@
           if (parentWorkingData && parentWorkingData.node) {
             switch (stateData?.prevSiblingInfo?.type) {
               case 'group': {
-                const folder = document.querySelector(`[id="${stateData.prevSiblingInfo.id}"]`);
+                const folder = document.getElementById(stateData.prevSiblingInfo.id);
                 gBrowser.moveTabAfter(node, folder);
                 break;
               }

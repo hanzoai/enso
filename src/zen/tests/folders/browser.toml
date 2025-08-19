@@ -13,5 +13,6 @@ support-files = [
 ["browser_folder_owner_tabs.js"]
 ["browser_folder_density.js"]
 ["browser_folder_max_subfolders.js"]
+["browser_folder_empty_tab.js"]
 
 ["browser_folder_issue_9885.js"]

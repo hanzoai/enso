@@ -245,6 +245,7 @@
       }
 
       const groups = new Map();
+      const pendingTabsInsideGroups = {};
 
       // Third pass: create new tabs for pins that don't have tabs
       for (let pin of pins) {
@@ -260,6 +261,13 @@
               const pinObject = this._pinsCache.find((p) => p.uuid === uuid);
               if (pinObject && pinObject.parentUuid === pin.uuid) {
                 tabs.push(existingTab);
+              }
+            }
+            // We still need to iterate through pending tabs since the database
+            // query doesn't guarantee the order of insertion
+            for (const [parentUuid, folderTabs] of Object.entries(pendingTabsInsideGroups)) {
+              if (parentUuid === pin.uuid) {
+                tabs.push(...folderTabs);
               }
             }
             const group = gZenFolders.createFolder(tabs, {
@@ -338,6 +346,12 @@
             const parentGroup = groups.get(pin.parentUuid);
             if (parentGroup) {
               parentGroup.querySelector('.tab-group-container').appendChild(newTab);
+            } else {
+              if (pendingTabsInsideGroups[pin.parentUuid]) {
+                pendingTabsInsideGroups[pin.parentUuid].push(newTab);
+              } else {
+                pendingTabsInsideGroups[pin.parentUuid] = [newTab];
+              }
             }
           } else {
             if (!pin.isEssential) {
