@@ -320,6 +320,8 @@
       let selectedGroupId = null;
       let itemsAfterSelected = [];
 
+      gBrowser.clearMultiSelectedTabs();
+
       const items = group.childGroupsAndTabs.map((item) => {
         const isSplitView = item.group?.hasAttribute?.('split-view-group');
         const splitGroupId = isSplitView ? item.group.id : null;
