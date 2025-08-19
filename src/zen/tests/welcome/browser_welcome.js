@@ -168,7 +168,12 @@ add_task(async function test_Welcome_Steps() {
       }
       group.delete();
       resolve();
-    }, 5000); // Wait for the transition to complete
+    }, 3000); // Wait for the transition to complete
   });
+  for (const tab of gBrowser.tabs) {
+    if (tab.pinned) {
+      gBrowser.removeTab(tab);
+    }
+  }
   ok(true, 'Welcome process completed successfully');
 });
