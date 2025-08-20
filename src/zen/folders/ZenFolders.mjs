@@ -344,12 +344,14 @@
       // Calculate the height we need to hide until we reach the selected item.
       let heightUntilSelected;
       if (selectedItem) {
-        const selectedContainer = selectedItem.group?.hasAttribute('split-view-group')
-          ? selectedItem.group
-          : selectedItem;
+        const isSplitView = selectedItem.group?.hasAttribute('split-view-group');
+        const selectedContainer = isSplitView ? selectedItem.group : selectedItem;
         heightUntilSelected =
           window.windowUtils.getBoundsWithoutFlushing(selectedContainer).top -
           window.windowUtils.getBoundsWithoutFlushing(groupStart).bottom;
+        if (isSplitView) {
+          heightUntilSelected -= 2;
+        }
       } else {
         heightUntilSelected = window.windowUtils.getBoundsWithoutFlushing(tabsContainer).height;
       }
@@ -521,7 +523,7 @@
     #onNewFolder(event) {
       const isFromToolbar = event.target.id === 'zen-context-menu-new-folder-toolbar';
       const contextMenu = event.target.parentElement;
-      let tabs = TabContextMenu.contextTab.multiselected
+      let tabs = TabContextMenu.contextTab?.multiselected
         ? gBrowser.selectedTabs
         : [TabContextMenu.contextTab];
       let triggerTab =
