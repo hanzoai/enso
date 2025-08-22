@@ -9,6 +9,7 @@
       <hbox class="tab-group-label-container" pack="center">
         <html:div class="tab-group-folder-icon"/>
         <label class="tab-group-label" role="button"/>
+        <image class="tab-reset-button reset-icon" role="button" keyNav="false"/>
       </hbox>
       <html:div class="tab-group-container">
         <html:div class="zen-tab-group-start" />
@@ -80,6 +81,7 @@
         return;
       }
       this.#initialized = true;
+      this._activeTabs = [];
       this.icon.appendChild(ZenFolder.rawIcon.cloneNode(true));
       // Save original values for animations
       this.icon.querySelectorAll('animate, animateTransform, animateMotion').forEach((anim) => {
@@ -208,6 +210,47 @@
 
     get iconURL() {
       return this.icon.querySelector('image')?.getAttribute('href') || '';
+    }
+
+    set activeTabs(tabs) {
+      if (tabs.length) {
+        this._activeTabs = tabs;
+        for (let tab of tabs) {
+          tab.setAttribute('folder-active', 'true');
+        }
+      } else {
+        for (let tab of this._activeTabs) {
+          tab.removeAttribute('folder-active');
+        }
+        this._activeTabs = [];
+      }
+    }
+
+    get activeTabs() {
+      return this._activeTabs;
+    }
+
+    get resetButton() {
+      return this.labelElement.parentElement.querySelector('.tab-reset-button');
+    }
+
+    #unloadAllActiveTabs() {
+      for (const tab of this.activeTabs) {
+        const tabResetButton = tab.querySelector('.tab-reset-button');
+        if (tabResetButton) {
+          tabResetButton.click();
+        }
+      }
+      this.activeTabs = [];
+    }
+
+    on_click(event) {
+      if (event.target === this.resetButton) {
+        event.stopPropagation();
+        this.#unloadAllActiveTabs();
+        return;
+      }
+      super.on_click(event);
     }
   }
 

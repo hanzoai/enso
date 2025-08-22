@@ -776,7 +776,11 @@
                 }, 3000);
               });
             }
-            await gZenFolders.collapseVisibleTab(selectedTab.group, /* only if active */ true);
+            await gZenFolders.collapseVisibleTab(
+              selectedTab.group,
+              /* only if active */ true,
+              selectedTab
+            );
             await gBrowser.explicitUnloadTabs([selectedTab]);
             selectedTab.removeAttribute('discarded');
           }
@@ -1350,8 +1354,8 @@
         gZenWorkspaces.activeWorkspaceIndicator?.removeAttribute('open');
       }
 
-      if (draggedTab) {
-        gZenFolders.ungroupTabFromActiveGroups(draggedTab);
+      if (draggedTab?._dragData?.movingTabs) {
+        gZenFolders.ungroupTabsFromActiveGroups(draggedTab._dragData.movingTabs);
       }
 
       let shouldAddDragOverElement = false;
