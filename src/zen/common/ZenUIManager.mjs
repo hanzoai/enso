@@ -490,6 +490,30 @@ var gZenUIManager = {
       ? 'bottomleft topleft'
       : 'bottomright topright';
   },
+
+  urlStringsDomainMatch(url1, url2) {
+    if (!url1.startsWith('http') || !url2?.startsWith('http')) {
+      return false;
+    }
+    return Services.io.newURI(url1).host === Services.io.newURI(url2).host;
+  },
+
+  getOpenUILinkWhere(url, browser, openUILinkWhere) {
+    try {
+      let tab = gBrowser.getTabForBrowser(browser);
+      if (
+        openUILinkWhere === 'current' &&
+        !this.urlStringsDomainMatch(url, browser.currentURI.spec) &&
+        tab.pinned &&
+        Services.prefs.getBoolPref('zen.tabs.open-pinned-in-new-tab')
+      ) {
+        return 'tab';
+      }
+    } catch (e) {
+      console.error('Error in getOpenUILinkWhere:', e);
+    }
+    return openUILinkWhere;
+  },
 };
 
 var gZenVerticalTabsManager = {

@@ -17,7 +17,7 @@
 }
 
 #urlbar {
-  --urlbarView-separator-color: light-dark(hsl(0, 0%, 74.9%), hsl(0, 0%, 20%));
+  --urlbarView-separator-color: light-dark(hsl(0, 0%, 55%), hsl(0, 0%, 20%));
   --urlbarView-hover-background: var(--toolbarbutton-hover-background);
   --urlbarView-highlight-background: var(--toolbarbutton-hover-background);
   border-radius: calc(var(--toolbarbutton-border-radius) - 2px);
@@ -545,7 +545,7 @@ button.popup-notification-dropmarker {
 .urlbarView-title-separator::before {
   font-size: 14px !important;
   font-weight: 500 !important;
-  color: #aaa !important;
+  color: light-dark(#4f4f4f, #aaa) !important;
 }
 
 .urlbarView-favicon {

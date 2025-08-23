@@ -184,7 +184,7 @@ zen-folder {
   );
   --zen-folder-front-bgcolor: light-dark(
     color-mix(in srgb, var(--zen-primary-color), white 70%),
-    color-mix(in srgb, var(--zen-primary-color), black 20%)
+    color-mix(in srgb, var(--zen-primary-color), black 40%)
   );
   --zen-folder-stroke: light-dark(
     color-mix(in srgb, var(--zen-primary-color) 60%, black),
