@@ -252,6 +252,22 @@
       }
       super.on_click(event);
     }
+
+    /**
+     * Get the root most collapsed folder in the tree.
+     * @returns {ZenFolder|null} The root most collapsed folder, or null if none are collapsed.
+     */
+    get rootMostCollapsedFolder() {
+      let current = this;
+      let rootMost = null;
+      do {
+        if (current.collapsed) {
+          rootMost = current;
+        }
+        current = current.group;
+      } while (current);
+      return rootMost;
+    }
   }
 
   customElements.define('zen-folder', ZenFolder);

@@ -224,14 +224,18 @@
       folder.group.collapsed = false;
     }
 
-    #onTabSelected() {
-      // const tab = event.target;
-      // const prevTab = event.detail.previousTab;
-      // const group = tab?.group;
-      // const isActive = group?.activeGroups?.length > 0;
-      // if (isActive) tab.setAttribute('folder-active', true);
-      // TODO: Figure out what to do with this
-      // if (prevTab.hasAttribute('folder-active')) prevTab.removeAttribute('folder-active');
+    async #onTabSelected() {
+      const tab = event.target;
+      const group = tab?.group;
+      if (!group?.isZenFolder) return;
+
+      const collapsedRoot = group.rootMostCollapsedFolder;
+      if (!collapsedRoot) {
+        return;
+      }
+
+      collapsedRoot.setAttribute('has-active', 'true');
+      await this.expandToSelected(collapsedRoot);
       gBrowser.tabContainer._invalidateCachedTabs();
     }
 
@@ -475,11 +479,12 @@
             }
           }
         }
-        // Folder has been expanded and has no active tabs
-        group.activeTabs = [];
 
         folders.clear();
       }
+
+      // Folder has been expanded and has no active tabs
+      group.activeTabs = [];
 
       const normalizeGroupItems = (items) => {
         const processed = [];
@@ -857,7 +862,10 @@
       }
 
       const activeGroup = event.target.parentElement;
-      if (activeGroup.tabs.filter((tab) => this.#shouldAppearOnTabSearch(tab)).length === 0) {
+      if (
+        activeGroup.tabs.filter((tab) => this.#shouldAppearOnTabSearch(tab, activeGroup)).length ===
+        0
+      ) {
         // If the group has no tabs, we don't show the popup
         return;
       }
@@ -944,15 +952,14 @@
       };
     }
 
-    #shouldAppearOnTabSearch(tab) {
+    #shouldAppearOnTabSearch(tab, group) {
       // Note that tab.visible and tab.hidden act in different ways.
-      // We specifically do tab.visible because we don't want appearing
-      // as 'folder active' in the tab list, it would be rather useless to have
-      // that option as the user. tab.hidden doesn't actually tell translate
-      // to `!tab.visible`, it represents the literally state of it having the
-      // attribute `hidden` set, which doesn't take into account the visibility
-      // of the tab itself.
-      return !(tab.visible || tab.hidden || tab.hasAttribute('zen-empty-tab'));
+      // We don't want to show already visible tabs in the search results.
+      // That's why we need to do the active tab search, tab.hidden doesn't
+      // account for the visibility of the tab itself, it's just a literal
+      // representation of the `hidden` attribute.
+      const tabIsInActiveGroup = group.activeTabs.includes(tab);
+      return !tabIsInActiveGroup && !(tab.hidden || tab.hasAttribute('zen-empty-tab'));
     }
 
     #populateTabsList(group) {
@@ -960,7 +967,7 @@
       tabsList.replaceChildren();
 
       for (const tab of group.tabs) {
-        if (!this.#shouldAppearOnTabSearch(tab)) continue;
+        if (!this.#shouldAppearOnTabSearch(tab, group)) continue;
 
         const item = document.createElement('div');
         item.className = 'folders-tabs-list-item';
@@ -1008,10 +1015,7 @@
         item.setAttribute('data-label', `${tabLabel.toLowerCase()} ${tabURL.toLowerCase()}`);
 
         item.addEventListener('click', () => {
-          group.setAttribute('has-active', 'true');
           gBrowser.selectedTab = tab;
-          this.expandToSelected(group);
-          this.#popup.hidePopup();
         });
 
         item.addEventListener('mouseenter', () => {
@@ -1094,7 +1098,7 @@
       return [];
     }
 
-    setFolderIndentation(tabs, groupElem = undefined, forCollapse = true) {
+    setFolderIndentation(tabs, groupElem = undefined, forCollapse = true, animate = true) {
       if (!gZenPinnedTabManager.expandedSidebarMode) {
         return;
       }
@@ -1129,12 +1133,22 @@
       }
       const tabLevel = tabToAnimate?.group?.level || 0;
       const spacing = (level - tabLevel) * baseSpacing;
+      if (!animate) {
+        for (const tab of tabs) {
+          tab.style.setProperty('transition', 'none', 'important');
+        }
+      }
       for (const tab of tabs) {
         if (gBrowser.isTabGroupLabel(tab) || tab.group?.hasAttribute('split-view-group')) {
           tab.group.style.setProperty('--zen-folder-indent', `${spacing}px`);
           continue;
         }
         tab.style.setProperty('--zen-folder-indent', `${spacing}px`);
+      }
+      if (!animate) {
+        for (const tab of tabs) {
+          tab.style.removeProperty('transition');
+        }
       }
     }
 
@@ -1193,6 +1207,8 @@
           item.removeAttribute('folder-active');
           if (!onlyIfActive) {
             item.setAttribute('was-folder-active', 'true');
+          } else {
+            group.activeTabs = group.activeTabs.filter((t) => t !== item);
           }
         }
       }
@@ -1323,7 +1339,12 @@
           }
 
           for (const tab of activeForGroup) {
-            this.setFolderIndentation([tab], current, /* for collapse = */ true);
+            this.setFolderIndentation(
+              [tab],
+              current,
+              /* for collapse = */ true,
+              /* animate = */ false
+            );
           }
         }
         current = current.group;
