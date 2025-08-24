@@ -685,6 +685,7 @@
       }
 
       const canInsertBefore =
+        !isFromToolbar &&
         !triggerTab.hasAttribute('zen-essential') &&
         !triggerTab?.group?.hasAttribute('split-view-group') &&
         this.canDropElement({ isZenFolder: true }, triggerTab);

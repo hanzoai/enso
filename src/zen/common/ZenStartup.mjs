@@ -173,26 +173,30 @@
         return;
       }
       Services.prefs.setStringPref('zen.updates.last-build-id', appID);
-      if (gReduceMotion) return;
       await gZenWorkspaces.promiseInitialized;
       const appWrapper = document.getElementById('zen-main-app-wrapper');
       const element = document.createElement('div');
       element.id = 'zen-update-animation';
-      appWrapper.appendChild(element);
-      gZenUIManager.motion
-        .animate(
-          '#zen-update-animation',
-          {
-            top: ['100%', '-50%'],
-            opacity: [0.5, 1],
-          },
-          {
-            duration: 0.35,
-          }
-        )
-        .then(() => {
-          element.remove();
-        });
+      requestIdleCallback(() => {
+        if (gReduceMotion) {
+          return;
+        }
+        appWrapper.appendChild(element);
+        gZenUIManager.motion
+          .animate(
+            '#zen-update-animation',
+            {
+              top: ['100%', '-50%'],
+              opacity: [0.5, 1],
+            },
+            {
+              duration: 0.35,
+            }
+          )
+          .then(() => {
+            element.remove();
+          });
+      });
     }
   })();
 
