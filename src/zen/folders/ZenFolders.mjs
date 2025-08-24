@@ -582,7 +582,7 @@
             },
             {
               duration: 0.1,
-              ease: 'linear',
+              ease: 'easeInOut',
             }
           )
           .then(() => {
@@ -598,7 +598,7 @@
                 if (!folders.has(group?.id)) {
                   folders.set(group?.id, group?.activeGroups?.at(-1));
                 }
-                let activeGroup = folders.get(tab?.group?.id);
+                let activeGroup = folders.get(group?.id);
                 // If group has active tabs, we need to update the indentation
                 if (activeGroup) {
                   const activeGroupStart = activeGroup.querySelector('.zen-tab-group-start');
@@ -1252,11 +1252,10 @@
       // But we should be setting the margin only on `folder1`.
       if (!group.activeTabs.includes(selectedTab) && selectedTab) return;
       group._prevActiveTabs = group.activeTabs;
-      for (const item of group.tabs) {
+      for (const item of group._prevActiveTabs) {
         if (
           item.hasAttribute('folder-active') &&
-          (selectedTab ? item === selectedTab : !item.selected || !onlyIfActive) &&
-          group.activeTabs.includes(item)
+          (selectedTab ? item === selectedTab : !item.selected || !onlyIfActive)
         ) {
           item.removeAttribute('folder-active');
           group.activeTabs = group.activeTabs.filter((t) => t !== item);
@@ -1283,14 +1282,14 @@
     expandVisibleTab(group) {
       if (!group?.isZenFolder) return;
 
-      for (const item of group.allItems) {
-        if (item.hasAttribute('was-folder-active')) {
-          item.setAttribute('folder-active', 'true');
-          item.removeAttribute('was-folder-active');
+      group.activeTabs = group._prevActiveTabs || [];
+      for (const tab of group.activeTabs) {
+        if (tab.hasAttribute('was-folder-active')) {
+          tab.setAttribute('folder-active', 'true');
+          tab.removeAttribute('was-folder-active');
         }
       }
 
-      group.activeTabs = group._prevActiveTabs || [];
       this.on_TabGroupExpand({ target: group, forExpandVisible: true });
 
       gBrowser.tabContainer._invalidateCachedVisibleTabs();
@@ -1338,12 +1337,26 @@
           if (activeForGroup.length) {
             if (current.collapsed) {
               if (current.hasAttribute('has-active')) {
-                current.activeTabs = [...new Set([...current.activeTabs, ...activeForGroup])];
+                // It is important to keep the sequence of elements as in the DOM
+                current.activeTabs = [...new Set([...current.activeTabs, ...activeForGroup])].sort(
+                  (a, b) => {
+                    const position = a.compareDocumentPosition(b);
+                    if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
+                    if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1;
+                    return 0;
+                  }
+                );
               } else {
                 current.setAttribute('has-active', 'true');
                 current.activeTabs = activeForGroup;
               }
 
+              // If selectedItems does not have a tab, it is necessary to add it
+              current.activeTabs.forEach((tab) => {
+                if (!selectedItems.includes(tab)) {
+                  selectedItems.push(tab);
+                }
+              });
               const tabsContainer = current.querySelector('.tab-group-container');
               const groupStart = current.querySelector('.zen-tab-group-start');
               const curMarginTop = parseInt(groupStart.style.marginTop) || 0;
@@ -1435,7 +1448,7 @@
             {
               marginTop: [curMarginTop, 0],
             },
-            { duration: 0.1, ease: 'linear' }
+            { duration: 0.1, ease: 'easeInOut' }
           )
           .then(() => {
             tabsContainer.style.overflow = '';

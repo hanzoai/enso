@@ -13,7 +13,7 @@
       // are initialized before we start our own initialization.
       // please, do not remove this line and if you do, make sure to
       // test the startup process.
-      await new Promise((resolve) => resolve());
+      await new Promise((resolve) => setTimeout(resolve, 0));
       this.openWatermark();
       this.#initBrowserBackground();
       this.#changeSidebarLocation();
