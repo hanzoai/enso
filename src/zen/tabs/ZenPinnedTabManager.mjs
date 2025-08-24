@@ -142,7 +142,7 @@
       await ZenPinnedTabsStorage.promiseInitialized;
       await gZenWorkspaces.promiseSectionsInitialized;
       await this.#initializePinsCache();
-      (async () => {
+      setTimeout(async () => {
         // Execute in a separate task to avoid blocking the main thread
         await SessionStore.promiseAllWindowsRestored;
         await gZenWorkspaces.promiseInitialized;
@@ -150,7 +150,7 @@
         if (init) {
           this._hasFinishedLoading = true;
         }
-      })();
+      });
     }
 
     async #initializePinsCache() {

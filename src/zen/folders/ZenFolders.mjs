@@ -236,7 +236,7 @@
       const tab = event.target;
       let group = tab?.group;
       if (group?.hasAttribute('split-view-group')) group = group?.group;
-      if (!group?.isZenFolder || tab.hasAttribute('folder-active')) {
+      if (!group?.isZenFolder) {
         return;
       }
 
@@ -332,6 +332,8 @@
 
       this.cancelPopupTimer();
 
+      const isForCollapseVisible = event.forCollapseVisible;
+
       const tabsContainer = group.querySelector('.tab-group-container');
       const animations = [];
       const groupStart = group.querySelector('.zen-tab-group-start');
@@ -351,7 +353,11 @@
           const splitGroupId = isSplitView ? item.group.id : null;
           if (gBrowser.isTabGroupLabel(item) && !isSplitView) item = item.parentNode;
 
-          if (item.multiselected || item.selected) {
+          if (
+            isForCollapseVisible
+              ? group.activeTabs.includes(item)
+              : item.multiselected || item.selected
+          ) {
             selectedItems.push(item);
             if (splitGroupId) selectedGroupIds.add(splitGroupId);
             if (activeGroupId) activeGroupIds.add(activeGroupId);
@@ -361,19 +367,21 @@
         });
 
       // Calculate the height we need to hide until we reach the selected item.
-      let heightUntilSelected;
+      let heightUntilSelected = groupStart.style.marginTop
+        ? Math.abs(parseInt(groupStart.style.marginTop.slice(0, -2)))
+        : 0;
       if (selectedItems.length) {
         const selectedItem = selectedItems[0];
         const isSplitView = selectedItem.group?.hasAttribute('split-view-group');
         const selectedContainer = isSplitView ? selectedItem.group : selectedItem;
-        heightUntilSelected =
+        heightUntilSelected +=
           window.windowUtils.getBoundsWithoutFlushing(selectedContainer).top -
           window.windowUtils.getBoundsWithoutFlushing(groupStart).bottom;
         if (isSplitView) {
           heightUntilSelected -= 2;
         }
       } else {
-        heightUntilSelected = window.windowUtils.getBoundsWithoutFlushing(tabsContainer).height;
+        heightUntilSelected += window.windowUtils.getBoundsWithoutFlushing(tabsContainer).height;
       }
 
       let selectedIdx = items.length;
@@ -402,8 +410,13 @@
         if (activeGroupId && activeGroupIds.has(activeGroupId)) {
           // If item is tab-group-label-container we should hide it.
           // Other items between tab-group-labe-container and folder-active tab should be visible cuz they are hidden by margin-top
-          if (item.parentElement.id !== activeGroupId && !item.hasAttribute('folder-active'))
+          if (
+            item.parentElement.id !== activeGroupId &&
+            !item.hasAttribute('folder-active') &&
+            !isForCollapseVisible
+          ) {
             continue;
+          }
         }
 
         const itemToHide = splitGroupId ? item.group : item;
@@ -439,7 +452,7 @@
         gZenUIManager.motion.animate(
           groupStart,
           {
-            marginTop: [0, -(heightUntilSelected + 4 * (selectedItems.length === 0 ? 1 : 0))],
+            marginTop: -(heightUntilSelected + 4 * (selectedItems.length === 0 ? 1 : 0)),
           },
           { duration: 0.1, ease: 'easeInOut' }
         )
@@ -1194,15 +1207,12 @@
       }
     }
 
-    collapseVisibleTab(group, onlyIfActive = false, selectedTab) {
+    collapseVisibleTab(group, onlyIfActive = false, selectedTab = null) {
       if (!group?.isZenFolder) return;
 
       if (onlyIfActive && group.activeGroups.length && selectedTab) {
-        for (const activeGroup of group.activeGroups) {
-          activeGroup.removeAttribute('has-active');
-          selectedTab.style.removeProperty('--zen-folder-indent');
-          this.collapseVisibleTab(activeGroup, true, selectedTab);
-        }
+        onlyIfActive = true;
+        group = group.activeGroups[group.activeGroups.length - 1];
       }
       // Only continue from here if we have the active tab for this group.
       // This is important so we dont set the margin to the wrong group.
@@ -1213,54 +1223,33 @@
       // When we collapse folder1 ONLY and reset tab since it's `active`, pinned
       // manager gives originally the direct group of `tab`, which is `folder2`.
       // But we should be setting the margin only on `folder1`.
-      if (!group.activeTabs.includes(selectedTab)) return;
-      const groupStart = group.querySelector('.zen-tab-group-start');
-      groupStart.setAttribute('old-margin', groupStart.style.marginTop);
-      let itemHeight = 0;
-      for (const item of group.allItems) {
-        itemHeight += item.getBoundingClientRect().height;
+      if (!group.activeTabs.includes(selectedTab) && selectedTab) return;
+      group._prevActiveTabs = group.activeTabs;
+      for (const item of group.tabs) {
         if (
           item.hasAttribute('folder-active') &&
-          (!item.selected || !onlyIfActive) &&
-          (selectedTab ? item === selectedTab : true)
+          (selectedTab ? item === selectedTab : !item.selected || !onlyIfActive) &&
+          group.activeTabs.includes(item)
         ) {
           item.removeAttribute('folder-active');
+          group.activeTabs = group.activeTabs.filter((t) => t !== item);
           if (!onlyIfActive) {
             item.setAttribute('was-folder-active', 'true');
-          } else {
-            group.activeTabs = group.activeTabs.filter((t) => t !== item);
           }
         }
       }
-      const newMargin = -(itemHeight + 4);
-      groupStart.setAttribute('new-margin', newMargin);
 
-      if (onlyIfActive) {
-        group.removeAttribute('has-active');
-        this.updateFolderIcon(group, 'close', false);
-      }
-
-      gZenUIManager.motion
-        .animate(
-          groupStart,
-          {
-            marginTop: newMargin,
-          },
-          { duration: 0.1, ease: 'easeInOut' }
-        )
-        .then(() => {
+      this.on_TabGroupCollapse({ target: group, forCollapseVisible: true }).then(() => {
+        if (selectedTab) {
           selectedTab.style.removeProperty('--zen-folder-indent');
-        });
+        }
+      });
 
       gBrowser.tabContainer._invalidateCachedVisibleTabs();
     }
 
     expandVisibleTab(group) {
       if (!group?.isZenFolder) return;
-
-      const groupStart = group.querySelector('.zen-tab-group-start');
-      let oldMargin = groupStart.getAttribute('old-margin');
-      let newMargin = groupStart.getAttribute('new-margin');
 
       for (const item of group.allItems) {
         if (item.hasAttribute('was-folder-active')) {
@@ -1269,15 +1258,8 @@
         }
       }
 
-      gZenUIManager.motion.animate(
-        groupStart,
-        {
-          marginTop: [newMargin, oldMargin],
-        },
-        { duration: 0.1, ease: 'easeInOut' }
-      );
-      groupStart.removeAttribute('old-margin');
-      groupStart.removeAttribute('new-margin');
+      group.activeTabs = group._prevActiveTabs || [];
+      this.on_TabGroupExpand({ target: group, forExpandVisible: true });
 
       gBrowser.tabContainer._invalidateCachedVisibleTabs();
     }
