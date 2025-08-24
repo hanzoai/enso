@@ -1251,11 +1251,10 @@
       // But we should be setting the margin only on `folder1`.
       if (!group.activeTabs.includes(selectedTab) && selectedTab) return;
       group._prevActiveTabs = group.activeTabs;
-      for (const item of group.tabs) {
+      for (const item of group._prevActiveTabs) {
         if (
           item.hasAttribute('folder-active') &&
-          (selectedTab ? item === selectedTab : !item.selected || !onlyIfActive) &&
-          group.activeTabs.includes(item)
+          (selectedTab ? item === selectedTab : !item.selected || !onlyIfActive)
         ) {
           item.removeAttribute('folder-active');
           group.activeTabs = group.activeTabs.filter((t) => t !== item);
@@ -1282,14 +1281,14 @@
     expandVisibleTab(group) {
       if (!group?.isZenFolder) return;
 
-      for (const item of group.allItems) {
-        if (item.hasAttribute('was-folder-active')) {
-          item.setAttribute('folder-active', 'true');
-          item.removeAttribute('was-folder-active');
+      group.activeTabs = group._prevActiveTabs || [];
+      for (const tab of group.activeTabs) {
+        if (tab.hasAttribute('was-folder-active')) {
+          tab.setAttribute('folder-active', 'true');
+          tab.removeAttribute('was-folder-active');
         }
       }
 
-      group.activeTabs = group._prevActiveTabs || [];
       this.on_TabGroupExpand({ target: group, forExpandVisible: true });
 
       gBrowser.tabContainer._invalidateCachedVisibleTabs();

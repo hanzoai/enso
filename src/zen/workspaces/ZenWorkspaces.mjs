@@ -1602,7 +1602,9 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     const emptyTab = this._emptyTab;
     if (emptyTab) {
       emptyTab.setAttribute('zen-workspace-id', this.activeWorkspace);
-      gBrowser.TabStateFlusher.flush(emptyTab.linkedBrowser);
+      if (emptyTab.linkedBrowser) {
+        gBrowser.TabStateFlusher.flush(emptyTab.linkedBrowser);
+      }
       const container = this.activeWorkspaceStrip;
       if (container) {
         container.insertBefore(emptyTab, container.firstChild);
