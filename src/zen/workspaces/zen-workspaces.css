@@ -215,6 +215,11 @@
     font-weight: 600;
     align-items: center;
     margin: 0;
+    max-height: 16px;
+
+    @media (-moz-platform: windows) {
+      margin-top: -3px;
+    }
   }
 
   .zen-workspaces-actions {
