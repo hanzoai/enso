@@ -623,7 +623,7 @@ class nsZenKeyboardShortcutsLoader {
         'C',
         '',
         ZEN_COMPACT_MODE_SHORTCUTS_GROUP,
-        nsKeyShortcutModifiers.fromObject({ accel: true, alt: true }),
+        nsKeyShortcutModifiers.fromObject({ alt: true }),
         'cmd_zenCompactModeToggle',
         'zen-compact-mode-shortcut-toggle'
       )
@@ -668,10 +668,10 @@ class nsZenKeyboardShortcutsLoader {
     newShortcutList.push(
       new KeyShortcut(
         'zen-workspace-forward',
-        'E',
         '',
+        'VK_RIGHT',
         ZEN_WORKSPACE_SHORTCUTS_GROUP,
-        nsKeyShortcutModifiers.fromObject({ accel: true, alt: true }),
+        nsKeyShortcutModifiers.fromObject({ accel: true }),
         'cmd_zenWorkspaceForward',
         'zen-workspace-shortcut-forward'
       )
@@ -679,10 +679,10 @@ class nsZenKeyboardShortcutsLoader {
     newShortcutList.push(
       new KeyShortcut(
         'zen-workspace-backward',
-        'Q',
         '',
+        'VK_LEFT',
         ZEN_WORKSPACE_SHORTCUTS_GROUP,
-        nsKeyShortcutModifiers.fromObject({ accel: true, alt: true }),
+        nsKeyShortcutModifiers.fromObject({ accel: true }),
         'cmd_zenWorkspaceBackward',
         'zen-workspace-shortcut-backward'
       )
