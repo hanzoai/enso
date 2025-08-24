@@ -1286,7 +1286,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     await this.changeWorkspace(
       workspacesData.workspaces.find((workspace) => workspace.uuid !== windowID)
     );
-    this._deleteAllTabsInWorkspace(windowID);
+    await this.#deleteAllTabsInWorkspace(windowID);
     delete this._lastSelectedWorkspaceTabs[windowID];
     await ZenWorkspacesStorage.removeWorkspace(windowID);
     // Remove the workspace from the cache
@@ -1440,20 +1440,23 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
 
   // Workspaces management
 
-  _deleteAllTabsInWorkspace(workspaceID) {
-    gBrowser.removeTabs(
-      Array.from(this.allStoredTabs).filter(
-        (tab) =>
-          tab.getAttribute('zen-workspace-id') === workspaceID &&
-          !tab.hasAttribute('zen-empty-tab') &&
-          !tab.hasAttribute('zen-essential')
-      ),
-      {
-        animate: false,
-        skipSessionStore: true,
-        closeWindowWithLastTab: false,
-      }
+  async #deleteAllTabsInWorkspace(workspaceID) {
+    const tabs = Array.from(this.allStoredTabs).filter(
+      (tab) =>
+        tab.getAttribute('zen-workspace-id') === workspaceID &&
+        !tab.hasAttribute('zen-empty-tab') &&
+        !tab.hasAttribute('zen-essential')
     );
+    for (const tab of tabs) {
+      if (tab.pinned) {
+        await ZenPinnedTabsStorage.removePin(tab.getAttribute('zen-pin-id'));
+      }
+    }
+    gBrowser.removeTabs(tabs, {
+      animate: false,
+      skipSessionStore: true,
+      closeWindowWithLastTab: false,
+    });
   }
 
   moveTabToWorkspace(tab, workspaceID) {

@@ -207,12 +207,14 @@
   }
 
   .zen-current-workspace-indicator-name {
-    display: block;
+    display: flex;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: auto;
     font-weight: 600;
+    align-items: center;
+    margin: 0;
   }
 
   .zen-workspaces-actions {

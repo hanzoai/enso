@@ -1265,6 +1265,11 @@
         }
       }
 
+      if (group.activeTabs.length === 0) {
+        group.removeAttribute('has-active');
+        this.updateFolderIcon(group, 'close', false);
+      }
+
       this.on_TabGroupCollapse({ target: group, forCollapseVisible: true }).then(() => {
         if (selectedTab) {
           selectedTab.style.removeProperty('--zen-folder-indent');

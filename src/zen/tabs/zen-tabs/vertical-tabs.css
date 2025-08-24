@@ -1436,6 +1436,7 @@
   border: none;
   padding: 0;
   outline: none !important;
+  border-radius: 0;
 }
 
 /* ==========================================================================

@@ -6,9 +6,9 @@
     static get markup() {
       return `
         <vbox class="zen-workspace-tabs-section zen-current-workspace-indicator" flex="1" context="zenWorkspaceMoreActions">
-          <hbox class="zen-current-workspace-indicator-icon"></hbox>
-          <hbox class="zen-current-workspace-indicator-name" flex="1"></hbox>
-          <toolbarbutton class="toolbarbutton-1 chromeclass-toolbar-additional zen-workspaces-actions" context="zenWorkspaceMoreActions"></toolbarbutton>
+          <hbox class="zen-current-workspace-indicator-icon" />
+          <label class="zen-current-workspace-indicator-name" flex="1" />
+          <toolbarbutton class="toolbarbutton-1 chromeclass-toolbar-additional zen-workspaces-actions" context="zenWorkspaceMoreActions" />
         </vbox>
         <arrowscrollbox orient="vertical" class="workspace-arrowscrollbox">
           <vbox class="zen-workspace-tabs-section zen-workspace-pinned-tabs-section" hide-separator="true">
