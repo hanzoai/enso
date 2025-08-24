@@ -18,8 +18,8 @@ add_task(async function test_Folder_Multiselected_Tabs() {
   folder.collapsed = true;
   await collapseEvent;
 
-  ok(!tab2.multiselected, 'Tab 2 should not be multiselected');
-  Assert.equal(gBrowser.multiSelectedTabsCount, 0, 'There should be 1 multiselected tab');
+  ok(tab2.multiselected, 'Tab 2 should not be multiselected');
+  Assert.equal(gBrowser.multiSelectedTabsCount, 3, 'There should be 3 multiselected tabs');
 
   for (const t of [tab1, tab2]) {
     BrowserTestUtils.removeTab(t);

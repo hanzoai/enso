@@ -17,5 +17,7 @@ support-files = [
 ["browser_folder_multiselected.js"]
 ["browser_folder_visible_tabs.js"]
 ["browser_folder_level_checks.js"]
+["browser_folder_reset_button.js"]
 
 ["browser_folder_issue_9885.js"]
+["browser_folder_issue_9981.js"]

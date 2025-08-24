@@ -1219,7 +1219,11 @@
       let itemHeight = 0;
       for (const item of group.allItems) {
         itemHeight += item.getBoundingClientRect().height;
-        if (item.hasAttribute('folder-active') && (!item.selected || !onlyIfActive)) {
+        if (
+          item.hasAttribute('folder-active') &&
+          (!item.selected || !onlyIfActive) &&
+          (selectedTab ? item === selectedTab : true)
+        ) {
           item.removeAttribute('folder-active');
           if (!onlyIfActive) {
             item.setAttribute('was-folder-active', 'true');
