@@ -442,7 +442,7 @@
               opacity: 0,
               height: 0,
             },
-            { duration: 0.1, ease: 'easeInOut' }
+            { duration: 0.12, ease: 'easeInOut' }
           )
         );
       });
@@ -454,7 +454,7 @@
           {
             marginTop: -(heightUntilSelected + 4 * (selectedItems.length === 0 ? 1 : 0)),
           },
-          { duration: 0.1, ease: 'easeInOut' }
+          { duration: 0.12, ease: 'easeInOut' }
         )
       );
 
@@ -554,7 +554,7 @@
               opacity: 1,
               height: '',
             },
-            { duration: 0.1, ease: 'easeInOut' }
+            { duration: 0.12, ease: 'easeInOut' }
           )
         );
       });
@@ -567,7 +567,7 @@
               opacity: 0,
               height: 0,
             },
-            { duration: 0.1, ease: 'easeInOut' }
+            { duration: 0.12, ease: 'easeInOut' }
           )
         );
       });
@@ -581,7 +581,7 @@
               marginTop: 0,
             },
             {
-              duration: 0.1,
+              duration: 0.12,
               ease: 'easeInOut',
             }
           )
@@ -685,6 +685,7 @@
       }
 
       const canInsertBefore =
+        !isFromToolbar &&
         !triggerTab.hasAttribute('zen-essential') &&
         !triggerTab?.group?.hasAttribute('split-view-group') &&
         this.canDropElement({ isZenFolder: true }, triggerTab);
@@ -1369,7 +1370,7 @@
                   {
                     marginTop: [curMarginTop, 0],
                   },
-                  { duration: 0.1, ease: 'easeInOut' }
+                  { duration: 0.12, ease: 'easeInOut' }
                 )
               );
               for (const tab of activeForGroup) {
@@ -1421,7 +1422,7 @@
               opacity: 1,
               height: '',
             },
-            { duration: 0.1, ease: 'easeInOut' }
+            { duration: 0.12, ease: 'easeInOut' }
           )
         );
       }
@@ -1434,7 +1435,7 @@
               opacity: 0,
               height: 0,
             },
-            { duration: 0.1, ease: 'easeInOut' }
+            { duration: 0.12, ease: 'easeInOut' }
           )
         );
       }
@@ -1447,7 +1448,7 @@
             {
               marginTop: [curMarginTop, 0],
             },
-            { duration: 0.1, ease: 'easeInOut' }
+            { duration: 0.12, ease: 'easeInOut' }
           )
           .then(() => {
             tabsContainer.style.overflow = '';
