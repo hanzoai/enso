@@ -194,8 +194,8 @@
   --zen-toolbox-min-width: 1px; /* Default minimum width (used when collapsed) */
 
   @media (-moz-platform: windows) {
-    --border-radius-medium: 8px;
-    --tab-border-radius: 6px;
+    --border-radius-medium: 6px;
+    --tab-border-radius: 4px;
   }
 
   @media (-moz-platform: macos) {
