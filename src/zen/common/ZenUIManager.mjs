@@ -531,8 +531,8 @@ var gZenVerticalTabsManager = {
 
     ChromeUtils.defineLazyGetter(this, 'hidesTabsToolbar', () => {
       return (
-        document.documentElement.getAttribute('chromehidden').includes('toolbar') ||
-        document.documentElement.getAttribute('chromehidden').includes('menubar')
+        document.documentElement.getAttribute('chromehidden')?.includes('toolbar') ||
+        document.documentElement.getAttribute('chromehidden')?.includes('menubar')
       );
     });
 
