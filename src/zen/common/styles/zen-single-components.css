@@ -209,7 +209,7 @@ body > #confetti {
   border-radius: var(--zen-native-content-radius);
   background: radial-gradient(
       ellipse 100% 50% at center var(--background-top),
-      rgba(255, 255, 255, 0.8) 80%,
+      rgba(255, 255, 255, 0.7) 80%,
       transparent
     )
     border-box;

@@ -203,7 +203,7 @@
             },
             {
               duration: 0.35,
-              delay: 0.1,
+              delay: 0.08,
             }
           ),
         ]).then(() => {
