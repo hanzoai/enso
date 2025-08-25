@@ -52,7 +52,7 @@
         </rect>
       <!--Icon (g)-->
         <g id="folder-icon" shape-rendering="geometricPrecision" style="fill-opacity: 1; transform-origin: -53.05px 5.399px; fill: var(--zen-folder-stroke);">
-          <image href="" transform="translate(-52.5,2)" height="18px" width="19px"/>
+          <image href="" height="19px" width="20px"/>
           <animateTransform type="skewX" additive="sum" attributeName="transform" values="0;-17" dur="0.15s" fill="freeze" keyTimes="0; 1" calcMode="spline" keySplines="0.42 0 0.58 1"/>
           <animateTransform type="translate" additive="sum" attributeName="transform" values="-10 -9;-7.5 -9" dur="0.15s" fill="freeze" keyTimes="0; 1" calcMode="spline" keySplines="0.42 0 0.58 1"/>
           <animate attributeName="opacity" values="1;1" dur="0.15s" fill="freeze" keyTimes="0; 1" calcMode="spline" keySplines="0.42 0 0.58 1"/>

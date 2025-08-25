@@ -277,6 +277,7 @@ zen-folder {
           fill-opacity: 0.9;
           -moz-context-properties: fill, fill-opacity;
           fill: var(--zen-folder-stroke);
+          transform: translate(-182%, 2.4px);
         }
       }
 

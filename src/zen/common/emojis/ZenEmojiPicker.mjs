@@ -6,7 +6,7 @@
   const SVG_ICONS = [
     "airplane.svg", "baseball.svg", "basket.svg", "bed.svg", 
     "bell.svg", "book.svg", "bookmark.svg", "chat.svg", "checkbox.svg", 
-    "circle.svg", "cloud.svg", "cloud-outline.svg", "code.svg", "coins.svg", 
+    "circle.svg", "cloud.svg", "code.svg", "coins.svg", 
     "cutlery.svg", "egg.svg", "flag.svg", "folder.svg", "globe.svg", 
     "globe-1.svg", "grid-2x2.svg", "grid-3x3.svg", "heart.svg", "inbox.svg",
     "layers.svg", "lightning.svg", "mail.svg", "map.svg", "moon.svg", "music.svg", 
