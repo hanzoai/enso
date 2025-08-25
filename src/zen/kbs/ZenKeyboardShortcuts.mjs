@@ -611,7 +611,9 @@ class nsZenKeyboardShortcutsLoader {
 
     const correctDefaultShortcut = (shortcut) => {
       if (shortcut.getID() === 'key_savePage') {
-        shortcut.setModifiers(nsKeyShortcutModifiers.fromObject({ accel: true, alt: true }));
+        shortcut.setModifiers(
+          nsKeyShortcutModifiers.fromObject({ accel: true, alt: true, shift: true })
+        );
       }
     };
 
