@@ -694,13 +694,11 @@
         !triggerTab?.group?.hasAttribute('split-view-group') &&
         this.canDropElement({ isZenFolder: true }, triggerTab);
 
-      const group = this.createFolder(tabs, {
+      this.createFolder(tabs, {
         insertAfter: !canInsertBefore ? triggerTab?.group : null,
         insertBefore: canInsertBefore ? triggerTab : null,
         renameFolder: true,
       });
-      if (!group) return;
-      this.#groupInit(group);
     }
 
     async #convertFolderToSpace(folder) {
@@ -839,6 +837,8 @@
       if (options.renameFolder) {
         folder.rename();
       }
+
+      this.#groupInit(folder);
       return folder;
     }
 
