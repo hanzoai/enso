@@ -247,6 +247,7 @@
 
     on_click(event) {
       if (event.target === this.resetButton) {
+        event.stopPropagation();
         this.#unloadAllActiveTabs(event);
         return;
       }

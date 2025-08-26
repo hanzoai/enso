@@ -337,6 +337,7 @@
       this.cancelPopupTimer();
 
       const isForCollapseVisible = event.forCollapseVisible;
+      const canInheritMarginTop = event.canInheritMarginTop;
 
       const tabsContainer = group.querySelector('.tab-group-container');
       const animations = [];
@@ -374,18 +375,23 @@
       let heightUntilSelected = groupStart.style.marginTop
         ? Math.abs(parseInt(groupStart.style.marginTop.slice(0, -2)))
         : 0;
-      if (selectedItems.length) {
-        const selectedItem = selectedItems[0];
-        const isSplitView = selectedItem.group?.hasAttribute('split-view-group');
-        const selectedContainer = isSplitView ? selectedItem.group : selectedItem;
-        heightUntilSelected +=
-          window.windowUtils.getBoundsWithoutFlushing(selectedContainer).top -
-          window.windowUtils.getBoundsWithoutFlushing(groupStart).bottom;
-        if (isSplitView) {
-          heightUntilSelected -= 2;
+      if (!isForCollapseVisible) {
+        if (selectedItems.length) {
+          if (!canInheritMarginTop) {
+            heightUntilSelected = 0;
+          }
+          const selectedItem = selectedItems[0];
+          const isSplitView = selectedItem.group?.hasAttribute('split-view-group');
+          const selectedContainer = isSplitView ? selectedItem.group : selectedItem;
+          heightUntilSelected +=
+            window.windowUtils.getBoundsWithoutFlushing(selectedContainer).top -
+            window.windowUtils.getBoundsWithoutFlushing(groupStart).bottom;
+          if (isSplitView) {
+            heightUntilSelected -= 2;
+          }
+        } else {
+          heightUntilSelected += window.windowUtils.getBoundsWithoutFlushing(tabsContainer).height;
         }
-      } else {
-        heightUntilSelected += window.windowUtils.getBoundsWithoutFlushing(tabsContainer).height;
       }
 
       let selectedIdx = items.length;
@@ -402,7 +408,7 @@
         const { item, splitGroupId, activeGroupId } = items[i];
 
         // Dont hide items before the first selected tab
-        if (selectedIdx >= 0 && i < selectedIdx) continue;
+        if (selectedIdx >= 0 && i < selectedIdx && !isForCollapseVisible) continue;
 
         // Skip selected items
         if (selectedItems.includes(item)) continue;
@@ -463,6 +469,7 @@
         )
       );
 
+      gBrowser.tabContainer._invalidateCachedVisibleTabs();
       this.#animationCount += 1;
       await Promise.all(animations);
       // Prevent hiding if we spam the group animations
@@ -606,32 +613,7 @@
                 let activeGroup = folders.get(group?.id);
                 // If group has active tabs, we need to update the indentation
                 if (activeGroup) {
-                  const activeGroupStart = activeGroup.querySelector('.zen-tab-group-start');
-                  const selectedTabs = activeGroup.activeTabs;
-                  if (selectedTabs.length > 0) {
-                    const selectedItem = selectedTabs[0];
-                    const isSplitView = selectedItem.group?.hasAttribute('split-view-group');
-                    const selectedContainer = isSplitView ? selectedItem.group : selectedItem;
-
-                    const heightUntilSelected =
-                      window.windowUtils.getBoundsWithoutFlushing(selectedContainer).top -
-                      window.windowUtils.getBoundsWithoutFlushing(activeGroupStart).bottom;
-
-                    const adjustedHeight = isSplitView
-                      ? heightUntilSelected - 2
-                      : heightUntilSelected;
-
-                    animations.push(
-                      gZenUIManager.motion.animate(
-                        activeGroupStart,
-                        {
-                          marginTop: -(adjustedHeight + 4),
-                        },
-                        { duration: 0, ease: 'linear' }
-                      )
-                    );
-                  }
-
+                  this.on_TabGroupCollapse({ target: activeGroup });
                   this.setFolderIndentation([tab], activeGroup, /* for collapse = */ true);
                 } else {
                   // Since the folder is now expanded, we should remove active attribute
@@ -1242,11 +1224,13 @@
     collapseVisibleTab(group, onlyIfActive = false, selectedTab = null) {
       let tabsToCollapse = [selectedTab];
       if (group?.hasAttribute('split-view-group')) {
-        group = group.group;
         tabsToCollapse = group.tabs;
+        group = group.group;
       }
       if (!group?.isZenFolder) return;
 
+      selectedTab.style.removeProperty('--zen-folder-indent');
+      // We ignore if the flag is set to avoid infinite recursion
       if (onlyIfActive && group.activeGroups.length && selectedTab) {
         onlyIfActive = true;
         group = group.activeGroups[group.activeGroups.length - 1];
@@ -1263,10 +1247,7 @@
       if (!group.activeTabs.includes(selectedTab) && selectedTab) return;
       group._prevActiveTabs = group.activeTabs;
       for (const item of group._prevActiveTabs) {
-        if (
-          item.hasAttribute('folder-active') &&
-          (selectedTab ? tabsToCollapse.includes(item) : !item.selected || !onlyIfActive)
-        ) {
+        if (selectedTab ? tabsToCollapse.includes(item) : !item.selected || !onlyIfActive) {
           item.removeAttribute('folder-active');
           group.activeTabs = group.activeTabs.filter((t) => t !== item);
           if (!onlyIfActive) {
@@ -1280,13 +1261,15 @@
         this.updateFolderIcon(group, 'close', false);
       }
 
-      this.on_TabGroupCollapse({ target: group, forCollapseVisible: true }).then(() => {
+      return this.on_TabGroupCollapse({
+        target: group,
+        forCollapseVisible: true,
+        targetTab: selectedTab,
+      }).then(() => {
         if (selectedTab) {
           selectedTab.style.removeProperty('--zen-folder-indent');
         }
       });
-
-      gBrowser.tabContainer._invalidateCachedVisibleTabs();
     }
 
     expandVisibleTab(group) {
