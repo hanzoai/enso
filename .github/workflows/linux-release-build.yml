@@ -106,7 +106,7 @@ jobs:
         env:
           SURFER_COMPAT: ${{ matrix.arch }}
         run: |
-          . "$HOME/.cargo/env" 
+          . "$HOME/.cargo/env"
           npm run import
 
       - name: Build language packs

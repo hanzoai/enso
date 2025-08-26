@@ -204,6 +204,12 @@
       left: -4px;
       pointer-events: none;
     }
+
+    @media (-moz-platform: windows) {
+      & img {
+        margin-bottom: -4px;
+      }
+    }
   }
 
   .zen-current-workspace-indicator-name {
@@ -215,11 +221,6 @@
     font-weight: 600;
     align-items: center;
     margin: 0;
-    max-height: 16px;
-
-    @media (-moz-platform: windows) {
-      margin-top: -3px;
-    }
   }
 
   .zen-workspaces-actions {
