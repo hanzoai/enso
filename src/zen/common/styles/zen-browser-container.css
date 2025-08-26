@@ -17,7 +17,7 @@
       }
 
       & browser[transparent='true'] {
-        background: light-dark(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+        background: light-dark(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
       }
 
       @media not -moz-pref('layout.css.prefers-color-scheme.content-override', 2) {

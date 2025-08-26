@@ -1019,6 +1019,8 @@
         .setAttribute('disabled', !this.canEssentialBeAdded(contextTab));
       document.getElementById('context_zen-remove-essential').hidden =
         !contextTab.getAttribute('zen-essential');
+      document.getElementById('zen-context-menu-new-folder').hidden =
+        contextTab.getAttribute('zen-essential');
       document.getElementById('context_unpinTab').hidden =
         document.getElementById('context_unpinTab').hidden ||
         contextTab.getAttribute('zen-essential');
