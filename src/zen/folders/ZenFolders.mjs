@@ -1223,13 +1223,15 @@
 
     collapseVisibleTab(group, onlyIfActive = false, selectedTab = null) {
       let tabsToCollapse = [selectedTab];
-      if (group?.hasAttribute('split-view-group')) {
+      if (group?.hasAttribute('split-view-group') && selectedTab && onlyIfActive) {
         tabsToCollapse = group.tabs;
         group = group.group;
       }
       if (!group?.isZenFolder) return;
 
-      selectedTab.style.removeProperty('--zen-folder-indent');
+      if (selectedTab) {
+        selectedTab.style.removeProperty('--zen-folder-indent');
+      }
       // We ignore if the flag is set to avoid infinite recursion
       if (onlyIfActive && group.activeGroups.length && selectedTab) {
         onlyIfActive = true;

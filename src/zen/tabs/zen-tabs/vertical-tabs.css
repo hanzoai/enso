@@ -1475,3 +1475,8 @@
     display: flex !important;
   }
 }
+
+.tabbrowser-tab[zen-dragtarget],
+.tab-group-label-container[zen-dragtarget] {
+  z-index: 9 !important;
+}

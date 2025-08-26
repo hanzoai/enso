@@ -442,7 +442,7 @@
         group.collapsed,
         workspaceId,
         group.getAttribute('zen-pin-id'),
-        group.labelElement.elementIndex
+        group._pPos
       );
       group.setAttribute('zen-pin-id', id);
       await this.refreshPinnedTabs();
@@ -457,7 +457,7 @@
       const pinId = group.getAttribute('zen-pin-id');
       const tabPinId = tab.getAttribute('zen-pin-id');
       const tabPin = this._pinsCache?.find((p) => p.uuid === tabPinId);
-      if (!tabPin) {
+      if (!tabPin || !tabPin.group) {
         return;
       }
       ZenPinnedTabsStorage.addTabToGroup(tabPinId, pinId, /* position */ tab._pPos);
@@ -487,7 +487,7 @@
         groupPin.title = group.name;
         groupPin.folderIcon = group.iconURL;
         groupPin.isFolderCollapsed = group.collapsed;
-        groupPin.position = group.labelElement.elementIndex;
+        groupPin.position = group._pPos;
         groupPin.parentUuid = group.group?.getAttribute('zen-pin-id') || null;
         groupPin.workspaceUuid = group.getAttribute('zen-workspace-id') || null;
         await this.savePin(groupPin);
@@ -515,7 +515,7 @@
       if (!group.isZenFolder) {
         return;
       }
-      const newIndex = group.labelElement.elementIndex;
+      const newIndex = group._pPos;
       const pinId = group.getAttribute('zen-pin-id');
       if (!pinId) {
         return;
@@ -1259,7 +1259,7 @@
     }
 
     getLastTabBound(lastBound, lastTab, isDraggingFolder = false) {
-      if (!gBrowser.isTab(lastTab) || !lastTab.pinned || isDraggingFolder) {
+      if (!lastTab.pinned || isDraggingFolder) {
         return lastBound;
       }
       const shiftedItems = this.dragShiftableItems;

@@ -319,9 +319,7 @@ zen-folder {
       color: var(--sidebar-text-color) !important;
       margin: 0 !important;
       font-weight: 600;
-      display: flex;
-      align-items: center;
-      height: 100% !important;
+      align-self: center !important;
       text-align: start;
 
       :root:not([zen-sidebar-expanded]) & {

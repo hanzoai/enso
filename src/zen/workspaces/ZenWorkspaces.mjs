@@ -1106,9 +1106,12 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     for (let tab of tabs) {
       const workspaceID = tab.getAttribute('zen-workspace-id');
       if (
-        workspaceID &&
-        !tab.hasAttribute('zen-essential') &&
-        !workspaces.workspaces.find((workspace) => workspace.uuid === workspaceID)
+        (workspaceID &&
+          !tab.hasAttribute('zen-essential') &&
+          !workspaces.workspaces.find((workspace) => workspace.uuid === workspaceID)) ||
+        // Also remove empty tabs that are supposed to be from parent folders but
+        // they dont exist anymore
+        (tab.pinned && tab.hasAttribute('zen-empty-tab') && !tab.group)
       ) {
         // Remove any tabs where their workspace doesn't exist anymore
         gBrowser.unpinTab(tab);
@@ -1615,6 +1618,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
   }
 
   #fixTabPositions() {
+    gBrowser.tabContainer._invalidateCachedTabs();
     // Fix tabs _tPos values relative to the actual order
     const tabs = gBrowser.tabs;
     const usedGroups = new Set();
