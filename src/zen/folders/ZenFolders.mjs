@@ -105,6 +105,7 @@
           item.setAttribute('label', name);
           if (iconIsSvg) {
             item.setAttribute('image', workspace.icon);
+            item.classList.add('zen-workspace-context-icon');
           }
           item.addEventListener('command', (event) => {
             if (!this.#lastFolderContextMenu) return;

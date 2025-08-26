@@ -3,12 +3,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 <panel id="zen-folder-tabs-popup" type="arrow" orient="vertical">
-  <hbox class="tabs-list-header">
+  <hbox class="tabs-list-header" flex="1">
     <image class="zen-folder-tabs-list-search-icon" src="chrome://global/skin/icons/search-glass.svg"/>
     <html:input id="zen-folder-tabs-list-search" 
       data-l10n-id="zen-folders-search-placeholder" 
       data-l10n-args="{&quot;folder-name&quot;:&quot;&quot;}"
-      type="search" />
+      type="search" 
+      flex="1" />
   </hbox>
   <scrollbox class="zen-folder-tabs-list-scrollbox" flex="1">
     <vbox id="zen-folder-tabs-list"></vbox>

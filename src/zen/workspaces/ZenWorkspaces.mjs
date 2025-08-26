@@ -1237,6 +1237,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
         item.setAttribute('label', name);
         if (iconIsSvg) {
           item.setAttribute('image', workspace.icon);
+          item.classList.add('zen-workspace-context-icon');
         }
         item.addEventListener('command', (e) => {
           this.changeWorkspaceWithID(e.target.closest('menuitem').getAttribute('zen-workspace-id'));
