@@ -241,9 +241,9 @@
       this.#unloadAllActiveTabs(event, /* noClose */ true);
     }
 
-    #unloadAllActiveTabs(event, noClose = false) {
+    async #unloadAllActiveTabs(event, noClose = false) {
       for (const tab of this.tabs) {
-        gZenPinnedTabManager._onCloseTabShortcut(event, tab, { noClose });
+        await gZenPinnedTabManager._onCloseTabShortcut(event, tab, { noClose });
       }
       this.activeTabs = [];
     }

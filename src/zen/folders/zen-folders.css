@@ -156,11 +156,11 @@ tab-group[split-view-group] .tabbrowser-tab {
 
 tab-group[split-view-group] .tab-group-label-container {
   position: absolute;
-  width: 100%;
-  height: 40px;
+  width: -moz-available;
+  height: 36px;
   visibility: hidden;
   padding: 0 !important;
-  margin: 0 !important;
+  margin: 2px 0 0 0 !important;
 }
 
 tab-group[split-view-group] .tab-close-button {
@@ -329,6 +329,8 @@ zen-folder {
       font-weight: 600;
       align-self: center !important;
       text-align: start;
+      align-content: center;
+      height: 100% !important;
 
       :root:not([zen-sidebar-expanded]) & {
         padding: 0 !important;
