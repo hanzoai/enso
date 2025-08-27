@@ -74,6 +74,11 @@
           folder = target.group;
         } else if (gBrowser.isTabGroupLabel(target.parentElement)) {
           folder = target.parentElement.group;
+        } else if (
+          target.parentElement?.isZenFolder &&
+          target?.classList.contains('tab-group-label-container')
+        ) {
+          folder = target.parentElement;
         }
 
         // We only want to rename zen-folders as firefox groups don't work well with this

@@ -139,6 +139,9 @@
     }
 
     rename() {
+      if (!gZenVerticalTabsManager._hasSetSingleToolbar) {
+        return;
+      }
       gZenVerticalTabsManager.renameTabStart({
         target: this.labelElement,
         explicit: true,

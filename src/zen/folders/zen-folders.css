@@ -470,3 +470,9 @@ zen-folder {
 .tab-group-overflow-count-container {
   display: none !important;
 }
+
+:root:not([zen-sidebar-expanded]) {
+  & #context_zenFolderRename {
+    display: none !important;
+  }
+}
