@@ -242,7 +242,7 @@
     }
 
     async on_TabSelect(event) {
-      const tab = event.target;
+      const tab = gZenGlanceManager.getTabOrGlanceParent(event.target);
       let group = tab?.group;
       if (group?.hasAttribute('split-view-group')) group = group?.group;
       if (!group?.isZenFolder) {

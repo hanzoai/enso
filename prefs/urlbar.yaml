@@ -23,7 +23,7 @@
   value: true
 
 - name: browser.urlbar.maxRichResults
-  value: 5
+  value: 6
 
 # Enable private suggestions
 - name: browser.search.suggest.enabled

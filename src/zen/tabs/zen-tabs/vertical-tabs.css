@@ -295,7 +295,9 @@
         var(--zen-tabbox-element-indent-transition);
     }
 
-    margin-inline-start: var(--zen-folder-indent) !important;
+    :root[zen-sidebar-expanded='true'] & {
+      margin-inline-start: var(--zen-folder-indent) !important;
+    }
 
     /* Hide specific empty tabs (likely placeholders) */
     &[zen-empty-tab] {

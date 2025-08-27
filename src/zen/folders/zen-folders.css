@@ -19,7 +19,9 @@ tab-group[split-view-group] {
     transparent 40%
   );
 
-  margin-inline-start: var(--zen-folder-indent) !important;
+  :root[zen-sidebar-expanded='true'] & {
+    margin-inline-start: var(--zen-folder-indent) !important;
+  }
 
   & .tab-group-label {
     height: 100% !important;
@@ -194,7 +196,9 @@ zen-folder {
   -moz-window-dragging: no-drag;
   transition: var(--zen-tabbox-element-indent-transition);
 
-  margin-inline-start: var(--zen-folder-indent) !important;
+  :root[zen-sidebar-expanded='true'] & {
+    margin-inline-start: var(--zen-folder-indent) !important;
+  }
 
   &[selected] > .tab-group-label-container::before {
     background-color: color-mix(in srgb, var(--zen-colors-border) 60%, transparent);
@@ -243,8 +247,12 @@ zen-folder {
     padding-block-end: 0 !important;
     margin: 0 !important;
     height: calc(var(--tab-block-margin) * 2 + var(--tab-min-height));
-    padding-inline-start: var(--tab-group-label-padding);
-    padding-inline-end: calc(var(--tab-group-label-padding) * 2);
+    padding-inline: var(--tab-group-label-padding);
+
+    :root[zen-sidebar-expanded='true'] & {
+      padding-inline-end: calc(var(--tab-group-label-padding) * 2);
+    }
+
     align-items: center;
     font-weight: 600;
 
@@ -308,7 +316,7 @@ zen-folder {
 
     & > label,
     & > #tab-label-input {
-      padding: 0 0 0 30px !important;
+      padding: 0 0 0 32px !important;
       width: 100%;
     }
 
