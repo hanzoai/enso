@@ -632,16 +632,8 @@
                     const adjustedHeight = isSplitView
                       ? heightUntilSelected - 2
                       : heightUntilSelected;
-
-                    animations.push(
-                      gZenUIManager.motion.animate(
-                        activeGroupStart,
-                        {
-                          marginTop: -(adjustedHeight + 4 * (selectedTabs.length === 0 ? 1 : 0)),
-                        },
-                        { duration: 0, ease: 'linear' }
-                      )
-                    );
+                    activeGroupStart.style.marginTop =
+                      -(adjustedHeight + 4 * (selectedTabs.length === 0 ? 1 : 0)) + 'px';
                   }
                   this.setFolderIndentation([tab], activeGroup, /* for collapse = */ true);
                 } else {
