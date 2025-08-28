@@ -478,7 +478,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     return this.getEssentialsSection(currentWorkspace?.containerTabId);
   }
 
-  async _createWorkspaceTabsSection(workspace, tabs) {
+  async _createWorkspaceTabsSection(workspace, tabs = []) {
     const workspaceWrapper = document.createXULElement('zen-workspace');
     const container = document.getElementById('tabbrowser-arrowscrollbox');
     workspaceWrapper.id = workspace.uuid;
@@ -1354,6 +1354,12 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
           detail: { activeIndex: browser.gZenWorkspaces.activeWorkspace },
         })
       );
+      for (const workspace of workspaces.workspaces) {
+        // Add workspace elements if they dont exist on other windows
+        if (!browser.gZenWorkspaces.workspaceElement(workspace.uuid)) {
+          await browser.gZenWorkspaces._createWorkspaceTabsSection(workspace);
+        }
+      }
     }
     await browser.gZenWorkspaces.workspaceBookmarks();
     if (!ignoreStrip) {
@@ -1499,7 +1505,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     return true;
   }
 
-  _prepareNewWorkspace(window) {
+  #prepareNewWorkspace(window) {
     document.documentElement.setAttribute('zen-workspace-id', window.uuid);
     let tabCount = 0;
     for (let tab of gBrowser.tabs) {
@@ -2320,7 +2326,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
       containerTabId,
     };
     if (moveTabs) {
-      this._prepareNewWorkspace(workspace);
+      this.#prepareNewWorkspace(workspace);
       await this._createWorkspaceTabsSection(workspace, tabs);
       await this._organizeWorkspaceStripLocations(workspace);
     }
