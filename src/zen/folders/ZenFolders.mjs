@@ -761,9 +761,11 @@
       const workspaceElement = gZenWorkspaces.workspaceElement(workspaceId);
       const pinnedTabsContainer = workspaceElement.pinnedTabsContainer;
       pinnedTabsContainer.insertBefore(folder, pinnedTabsContainer.lastChild);
-      folder.setAttribute('zen-workspace-id', workspaceId);
       for (const tab of folder.tabs) {
         tab.setAttribute('zen-workspace-id', workspaceId);
+        // This sets the ID for the current folder and any sub-folder
+        // we may encounter
+        tab.group.setAttribute('zen-workspace-id', workspaceId);
         gBrowser.TabStateFlusher.flush(tab.linkedBrowser);
         if (gZenWorkspaces._lastSelectedWorkspaceTabs[workspaceId] === tab) {
           // This tab is no longer the last selected tab in the previous workspace because it's being moved to a new workspace
@@ -772,7 +774,7 @@
       }
       folder.dispatchEvent(new CustomEvent('ZenFolderChangedWorkspace', { bubbles: true }));
       gZenWorkspaces.changeWorkspaceWithID(workspaceId).then(() => {
-        gBrowser.moveTabTo(folder, { elementIndex: gBrowser.pinnedTabCount, forceUngrouped: true });
+        gBrowser.moveTabTo(folder, { elementIndex: 0, forceUngrouped: true });
       });
     }
 
