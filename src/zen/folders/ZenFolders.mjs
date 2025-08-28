@@ -270,6 +270,7 @@
         gBrowser.pinTab(tab);
         group.addTabs([tab]);
       } else {
+        tab._ignoreUngrouped = true;
         // Otherwise, we must move it to the first tab since it was added in an unpinned state
         gZenWorkspaces._emptyTab.after(tab);
         gBrowser.tabContainer._invalidateCachedTabs();
@@ -279,6 +280,10 @@
     on_TabUngrouped(event) {
       const tab = event.detail;
       const group = event.target;
+      if (tab._ignoreUngrouped) {
+        delete tab._ignoreUngrouped;
+        return;
+      }
       tab.removeAttribute('folder-active');
       if (group.hasAttribute('split-view-group') && tab.hasAttribute('had-zen-pinned-changed')) {
         tab.setAttribute('zen-pinned-changed', true);

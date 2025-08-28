@@ -139,7 +139,7 @@
     }
 
     rename() {
-      if (!gZenVerticalTabsManager._hasSetSingleToolbar) {
+      if (!document.documentElement.hasAttribute('zen-sidebar-expanded')) {
         return;
       }
       gZenVerticalTabsManager.renameTabStart({
