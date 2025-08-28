@@ -447,9 +447,15 @@
       );
       group.setAttribute('zen-pin-id', id);
       for (const tab of group.tabs) {
-        if (tab.pinned && tab.hasAttribute('zen-pin-id')) {
+        // Only add it if the tab is directly under the group
+        if (
+          tab.pinned &&
+          tab.hasAttribute('zen-pin-id') &&
+          tab.group === group &&
+          this.#hasInitializedPins
+        ) {
           const tabPinId = tab.getAttribute('zen-pin-id');
-          ZenPinnedTabsStorage.addTabToGroup(tabPinId, id, /* position */ tab._pPos);
+          await ZenPinnedTabsStorage.addTabToGroup(tabPinId, id, /* position */ tab._pPos);
         }
       }
       await this.refreshPinnedTabs();
