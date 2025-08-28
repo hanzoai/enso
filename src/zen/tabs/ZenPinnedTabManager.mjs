@@ -190,6 +190,7 @@
     async #initializePinnedTabs(init = false) {
       const pins = this._pinsCache;
       if (!pins?.length || !init) {
+        this.#hasInitializedPins = true;
         return;
       }
 
@@ -372,12 +373,12 @@
         }
       }
 
-      gBrowser._updateTabBarForPinnedTabs();
-      gZenUIManager.updateTabsToolbar();
-
       setTimeout(() => {
         this.#hasInitializedPins = true;
       }, 0);
+
+      gBrowser._updateTabBarForPinnedTabs();
+      gZenUIManager.updateTabsToolbar();
     }
 
     _onPinnedTabEvent(action, event) {
@@ -445,6 +446,12 @@
         group._pPos
       );
       group.setAttribute('zen-pin-id', id);
+      for (const tab of group.tabs) {
+        if (tab.pinned && tab.hasAttribute('zen-pin-id')) {
+          const tabPinId = tab.getAttribute('zen-pin-id');
+          ZenPinnedTabsStorage.addTabToGroup(tabPinId, id, /* position */ tab._pPos);
+        }
+      }
       await this.refreshPinnedTabs();
     }
 
@@ -726,6 +733,10 @@
       const existingPin = this._pinsCache.find((p) => p.uuid === pin.uuid);
       if (existingPin) {
         Object.assign(existingPin, pin);
+      } else {
+        // We shouldn't need it, but just in case there's
+        // a race condition while making new pinned tabs.
+        this._pinsCache.push(pin);
       }
       await ZenPinnedTabsStorage.savePin(pin, notifyObservers);
     }

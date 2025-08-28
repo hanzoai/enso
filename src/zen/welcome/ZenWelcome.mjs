@@ -137,7 +137,7 @@
       document.getElementById('zen-welcome-pages').style.display = 'flex';
       document.getElementById('zen-welcome-start').remove();
       window.maximize();
-      animate('#zen-welcome-pages', { opacity: [0, 1] }, { delay: 0.2, duration: 0.2 });
+      animate('#zen-welcome-pages', { opacity: [0, 1] }, { delay: 0.2, duration: 0.1 });
     }
 
     async fadeInTitles(page) {
@@ -238,7 +238,7 @@
           delay: getMotion().stagger(0.05, { startDelay: 0.3 }),
           type: 'spring',
           bounce: 0,
-          duration: 0.2,
+          duration: 0.1,
         }
       );
     }
@@ -271,7 +271,7 @@
       await animate('#zen-welcome-page-content', { x: [0, '100%'] }, { bounce: 0 });
       document.getElementById('zen-welcome-page-content').remove();
       await this.animHeart();
-      this._pinRemainingTabs();
+      await this.#pinRemainingTabs();
       await animate('#zen-welcome-pages', { opacity: [1, 0] });
       document.getElementById('zen-welcome').remove();
       document.documentElement.removeAttribute('zen-welcome-stage');
@@ -288,10 +288,13 @@
       gZenUIManager.showToast('zen-welcome-finished');
     }
 
-    _pinRemainingTabs() {
+    async #pinRemainingTabs() {
       for (const tab of _tabsToPin) {
         tab.setAttribute('zen-workspace-id', gZenWorkspaces.activeWorkspace);
         gBrowser.pinTab(tab);
+        await new Promise((resolve) => {
+          tab.addEventListener('ZenPinnedTabCreated', resolve, { once: true });
+        });
       }
       for (const tab of _tabsToPinEssentials) {
         tab.removeAttribute('pending'); // Make it appear loaded
