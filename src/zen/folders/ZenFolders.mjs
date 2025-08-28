@@ -291,7 +291,7 @@
           if (!folder.activeTabs.length) {
             folder.removeAttribute('has-active');
           }
-          this.collapseVisibleTab(folder);
+          this.collapseVisibleTab(folder, true);
           this.updateFolderIcon(folder, 'close', false);
         }
       }
