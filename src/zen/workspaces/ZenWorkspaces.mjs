@@ -1541,7 +1541,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
 
   async changeWorkspaceWithID(workspaceID, ...args) {
     const workspace = this.getWorkspaceFromId(workspaceID);
-    return await this.changeWorkspace(workspace, ...args);
+    await this.changeWorkspace(workspace, ...args);
   }
 
   async changeWorkspace(workspace, ...args) {
@@ -1624,7 +1624,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
   }
 
   #fixTabPositions() {
-    gBrowser.tabContainer._invalidateCachedTabs();
+    this.tabContainer._invalidateCachedTabs();
     // Fix tabs _tPos values relative to the actual order
     const tabs = gBrowser.tabs;
     const usedGroups = new Set();

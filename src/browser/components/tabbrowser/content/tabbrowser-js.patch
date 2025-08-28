@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index d80a66a01002e78a9c65545d08fe786328ddf124..e644946134c7e5a4b3232f674880eab596d5fa15 100644
+index d80a66a01002e78a9c65545d08fe786328ddf124..c5c079ac5218f051407b27c6edbd4ba6fe685e62 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -422,15 +422,60 @@
@@ -623,11 +623,13 @@ index d80a66a01002e78a9c65545d08fe786328ddf124..e644946134c7e5a4b3232f674880eab5
      }
  
      /**
-@@ -6049,7 +6181,7 @@
+@@ -6048,8 +6180,8 @@
+       }
  
        // Don't allow mixing pinned and unpinned tabs.
-       if (this.isTab(element) && element.pinned) {
+-      if (this.isTab(element) && element.pinned) {
 -        tabIndex = Math.min(tabIndex, this.pinnedTabCount - 1);
++      if (element.pinned) {
 +        tabIndex = element.hasAttribute('zen-essential') ? Math.min(tabIndex, this._numZenEssentials - 1) : Math.min(Math.max(tabIndex, this._numZenEssentials), this.pinnedTabCount - 1);
        } else {
          tabIndex = Math.max(tabIndex, this.pinnedTabCount);

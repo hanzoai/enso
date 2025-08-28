@@ -771,7 +771,9 @@
         }
       }
       folder.dispatchEvent(new CustomEvent('ZenFolderChangedWorkspace', { bubbles: true }));
-      gZenWorkspaces.changeWorkspaceWithID(workspaceId);
+      gZenWorkspaces.changeWorkspaceWithID(workspaceId).then(() => {
+        gBrowser.moveTabTo(folder, { elementIndex: gBrowser.pinnedTabCount, forceUngrouped: true });
+      });
     }
 
     canDropElement(element, targetElement) {
@@ -1304,6 +1306,11 @@
           tab.setAttribute('folder-active', 'true');
           tab.removeAttribute('was-folder-active');
         }
+      }
+
+      if (group.activeTabs.length === 0) {
+        group.removeAttribute('has-active');
+        this.updateFolderIcon(group, 'close', false);
       }
 
       this.on_TabGroupExpand({ target: group, forExpandVisible: true });
