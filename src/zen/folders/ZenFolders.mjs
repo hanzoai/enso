@@ -817,6 +817,7 @@
         pinned: true,
         triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
         _forZenEmptyTab: true,
+        createLazyBrowser: true,
       });
 
       tabs = [emptyTab, ...filteredTabs];
