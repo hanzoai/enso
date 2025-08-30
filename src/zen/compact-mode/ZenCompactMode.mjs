@@ -585,7 +585,6 @@ var gZenCompactModeManager = {
               gZenVerticalTabsManager._hasSetSingleToolbar) ||
             this._hasHoveredUrlbar
           ) {
-            delete this._hasHoveredUrlbar;
             return;
           }
 
@@ -641,6 +640,16 @@ var gZenCompactModeManager = {
           );
         }
       }, this.HOVER_HACK_DELAY);
+    });
+
+    gURLBar.textbox.addEventListener('mouseleave', () => {
+      setTimeout(() => {
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            delete this._hasHoveredUrlbar;
+          });
+        }, 0);
+      }, 0);
     });
   },
 
