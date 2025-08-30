@@ -805,6 +805,10 @@
             if (selectedTab.group?.hasAttribute('split-view-group')) {
               tabsToUnload = selectedTab.group.tabs;
             }
+            const allAreUnloaded = tabsToUnload.every((tab) => tab.hasAttribute('pending'));
+            if (allAreUnloaded) {
+              return await this._onCloseTabShortcut(event, selectedTab, { behavior: 'close' });
+            }
             await gBrowser.explicitUnloadTabs(tabsToUnload);
             selectedTab.removeAttribute('discarded');
           }

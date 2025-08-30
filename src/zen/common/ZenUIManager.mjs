@@ -78,6 +78,9 @@ var gZenUIManager = {
   },
 
   _debloatContextMenus() {
+    if (!Services.prefs.getBoolPref('zen.view.context-menu.refresh', false)) {
+      return;
+    }
     const contextMenusToClean = [
       // Remove the 'new tab below' context menu.
       // reason: It doesn't properly work with zen and it's philosophy of not having
