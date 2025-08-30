@@ -466,6 +466,7 @@
           )
         );
       });
+      1;
 
       animations.push(...this.updateFolderIcon(group));
       const startMargin = -(heightUntilSelected + 4 * (selectedItems.length === 0 ? 1 : 0));

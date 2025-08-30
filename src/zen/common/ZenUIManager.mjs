@@ -132,7 +132,7 @@ var gZenUIManager = {
   },
 
   updateTabsToolbar() {
-    const kUrlbarHeight = 336;
+    const kUrlbarHeight = 388;
     gURLBar.textbox.style.setProperty(
       '--zen-urlbar-top',
       `${window.innerHeight / 2 - Math.max(kUrlbarHeight, gURLBar.textbox.getBoundingClientRect().height) / 2}px`
