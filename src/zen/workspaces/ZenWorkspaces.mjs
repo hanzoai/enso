@@ -1631,7 +1631,10 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
   }
 
   #fixTabPositions() {
-    this.tabContainer._invalidateCachedTabs();
+    // See issue https://github.com/zen-browser/desktop/issues/10157
+    if (this.tabContainer) {
+      this.tabContainer._invalidateCachedTabs();
+    }
     // Fix tabs _tPos values relative to the actual order
     const tabs = gBrowser.tabs;
     const usedGroups = new Set();
