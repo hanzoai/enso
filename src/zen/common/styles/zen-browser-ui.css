@@ -100,7 +100,8 @@
     opacity: var(--zen-grainy-background-opacity, 0);
     mix-blend-mode: overlay;
     :root:not([swipe-gesture='true']) & {
-      transition: opacity 0.3s ease-in-out;
+      /* note: Keep in sync with kGlobalAnimationDuration */
+      transition: opacity 0.2s ease-in-out;
     }
   }
 }

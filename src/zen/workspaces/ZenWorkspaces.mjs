@@ -1807,7 +1807,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     { previousWorkspaceIndex = null, previousWorkspace = null, onInit = false } = {}
   ) {
     gZenUIManager.tabsWrapper.style.scrollbarWidth = 'none';
-    const kGlobalAnimationDuration = 0.3;
+    const kGlobalAnimationDuration = 0.2;
     this._animatingChange = true;
     const animations = [];
     const workspaces = await this._workspaces();
