@@ -708,6 +708,8 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
   _handleSwipeStart(event) {
     if (!this.workspaceEnabled) return;
 
+    gZenFolders.cancelPopupTimer();
+
     document.documentElement.setAttribute('swipe-gesture', 'true');
     document.addEventListener('popupshown', this.popupOpenHandler, { once: true });
 
@@ -1579,6 +1581,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     }
 
     const workspaces = await this._workspaces();
+    gZenFolders.cancelPopupTimer();
 
     // Refresh tab cache
     for (const otherWorkspace of workspaces.workspaces) {
