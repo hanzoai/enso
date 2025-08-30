@@ -820,6 +820,7 @@
         createLazyBrowser: true,
       });
 
+      gBrowser.pinTab(emptyTab);
       tabs = [emptyTab, ...filteredTabs];
 
       const folder = this._createFolderNode(options);
