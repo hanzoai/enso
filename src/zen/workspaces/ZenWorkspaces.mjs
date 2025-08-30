@@ -1485,18 +1485,22 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
         continue;
       }
 
-      tab.setAttribute('zen-workspace-id', workspaceID);
       if (tab.hasAttribute('zen-essential')) {
         continue;
       }
 
       if (container && !justChangeId) {
         if (tab.group?.hasAttribute('split-view-group')) {
-          this.moveTabsToWorkspace(tab.group.tabs, workspaceID, true);
-          container.insertBefore(tab.group, container.lastChild);
+          gBrowser.zenHandleTabMove(tab.group, () => {
+            this.moveTabsToWorkspace(tab.group.tabs, workspaceID, true);
+            container.insertBefore(tab.group, container.lastChild);
+          });
           continue;
         }
-        container.insertBefore(tab, container.lastChild);
+        gBrowser.zenHandleTabMove(tab, () => {
+          tab.setAttribute('zen-workspace-id', workspaceID);
+          container.insertBefore(tab, container.lastChild);
+        });
       }
       // also change glance tab if it's the same tab
       const glanceTab = tab.querySelector('.tabbrowser-tab[zen-glance-tab]');
@@ -2629,7 +2633,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
 
     menu.appendChild(menuPopup);
 
-    document.getElementById('context_closeDuplicateTabs').after(menu);
+    document.getElementById('context_moveTabOptions').after(menu);
   }
 
   async changeTabWorkspace(workspaceID) {
