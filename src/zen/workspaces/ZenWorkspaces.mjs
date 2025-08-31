@@ -1475,7 +1475,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     return this.moveTabsToWorkspace([tab], workspaceID);
   }
 
-  moveTabsToWorkspace(tabs, workspaceID, justChangeId = false) {
+  moveTabsToWorkspace(tabs, workspaceID) {
     for (let tab of tabs) {
       const workspaceContainer = this.workspaceElement(workspaceID);
       const container = tab.pinned
@@ -1489,10 +1489,12 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
         continue;
       }
 
-      if (container && !justChangeId) {
+      if (container) {
         if (tab.group?.hasAttribute('split-view-group')) {
           gBrowser.zenHandleTabMove(tab.group, () => {
-            this.moveTabsToWorkspace(tab.group.tabs, workspaceID, true);
+            for (const tab of tab.group.tabs) {
+              tab.setAttribute('zen-workspace-id', workspaceID);
+            }
             container.insertBefore(tab.group, container.lastChild);
           });
           continue;
