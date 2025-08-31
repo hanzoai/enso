@@ -533,11 +533,13 @@
       if (!pinId) {
         return;
       }
-      for (const tab of group.tabs) {
+      for (const tab of group.allItemsRecursive) {
         if (tab.pinned && tab.getAttribute('zen-pin-id') === pinId) {
           const pin = this._pinsCache.find((p) => p.uuid === pinId);
           if (pin) {
             pin.position = tab._pPos;
+            pin.parentUuid = tab.group?.getAttribute('zen-pin-id') || null;
+            pin.workspaceUuid = group.getAttribute('zen-workspace-id');
             await this.savePin(pin, false);
           }
           break;
@@ -547,6 +549,7 @@
       if (groupPin) {
         groupPin.position = newIndex;
         groupPin.parentUuid = group.group?.getAttribute('zen-pin-id');
+        groupPin.workspaceUuid = group.getAttribute('zen-workspace-id');
         await this.savePin(groupPin);
       }
     }
