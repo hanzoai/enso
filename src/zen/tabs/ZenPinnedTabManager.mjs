@@ -603,7 +603,7 @@
     async _onTabClick(e) {
       const tab = e.target?.closest('tab');
       if (e.button === 1 && tab) {
-        await this._onCloseTabShortcut(e, tab);
+        await this._onCloseTabShortcut(e, tab, { closeIfPending: true });
       }
     }
 
@@ -750,7 +750,11 @@
     async _onCloseTabShortcut(
       event,
       selectedTab = gBrowser.selectedTab,
-      { behavior = lazy.zenPinnedTabCloseShortcutBehavior, noClose = false } = {}
+      {
+        behavior = lazy.zenPinnedTabCloseShortcutBehavior,
+        noClose = false,
+        closeIfPending = false,
+      } = {}
     ) {
       if (!selectedTab?.pinned) {
         return;
@@ -806,7 +810,7 @@
               tabsToUnload = selectedTab.group.tabs;
             }
             const allAreUnloaded = tabsToUnload.every((tab) => tab.hasAttribute('pending'));
-            if (allAreUnloaded) {
+            if (allAreUnloaded && closeIfPending) {
               return await this._onCloseTabShortcut(event, selectedTab, { behavior: 'close' });
             }
             await gBrowser.explicitUnloadTabs(tabsToUnload);
