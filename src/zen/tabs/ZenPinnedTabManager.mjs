@@ -882,7 +882,7 @@
         existingEntry.title = pin.title;
         state.entries = [existingEntry];
       }
-      state.image = pin.iconUrl || null;
+      state.image = pin.iconUrl || state.image;
       state.index = 0;
 
       SessionStore.setTabState(tab, state);
