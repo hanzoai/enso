@@ -337,7 +337,9 @@
         clearTimeout(this.#mouseTimer);
         this.#mouseTimer = null;
       }
-      this.#popup.hidePopup();
+      if (this.#popup) {
+        this.#popup.hidePopup();
+      }
     }
 
     async on_TabGroupCollapse(event) {
