@@ -2633,7 +2633,10 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
         'zen-context-menu-new-folder-toolbar',
       ];
       commandsToDisable.forEach((cmd) => {
-        document.getElementById(cmd).setAttribute('disabled', true);
+        const element = document.getElementById(cmd);
+        if (element) {
+          element.setAttribute('disabled', true);
+        }
       });
       return;
     }
