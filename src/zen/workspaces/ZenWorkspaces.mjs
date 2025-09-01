@@ -2626,7 +2626,15 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
 
   _initializeWorkspaceTabContextMenus() {
     if (this.privateWindowOrDisabled) {
-      document.getElementById('cmd_zenOpenWorkspaceCreation').setAttribute('disabled', true);
+      const commandsToDisable = [
+        'cmd_zenOpenFolderCreation',
+        'cmd_zenOpenWorkspaceCreation',
+        'zen-context-menu-new-folder',
+        'zen-context-menu-new-folder-toolbar',
+      ];
+      commandsToDisable.forEach((cmd) => {
+        document.getElementById(cmd).setAttribute('disabled', true);
+      });
       return;
     }
     const menu = document.createXULElement('menu');
