@@ -812,7 +812,9 @@
             if (selectedTab.group?.hasAttribute('split-view-group')) {
               tabsToUnload = selectedTab.group.tabs;
             }
-            const allAreUnloaded = tabsToUnload.every((tab) => tab.hasAttribute('pending'));
+            const allAreUnloaded = tabsToUnload.every(
+              (tab) => tab.hasAttribute('pending') && !tab.hasAttribute('zen-essential')
+            );
             if (allAreUnloaded && closeIfPending) {
               return await this._onCloseTabShortcut(event, selectedTab, { behavior: 'close' });
             }
@@ -897,7 +899,7 @@
         const faviconData = await PlacesUtils.favicons.getFaviconForPage(pageUrl);
         if (!faviconData) {
           // empty favicon
-          return 'data:image/png;base64,';
+          return null;
         }
         return faviconData.dataURI;
       } catch (ex) {
@@ -1205,7 +1207,7 @@
       } else {
         tab.setAttribute('zen-pinned-changed', 'true');
       }
-      tab.style.setProperty('--zen-original-tab-icon', `url(${pin.iconUrl.spec})`);
+      tab.style.setProperty('--zen-original-tab-icon', `url(${pin.iconUrl?.spec})`);
     }
 
     removeTabContainersDragoverClass(hideIndicator = true) {

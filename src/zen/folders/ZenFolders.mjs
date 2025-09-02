@@ -1054,7 +1054,7 @@
           // We don't need to do anything if the URL is invalid. e.g. about:blank
         }
         let tabLabel = tab.label || '';
-        let iconURL = gBrowser.getIcon(tab) || PlacesUtils.favicons.defaultFavicon;
+        let iconURL = gBrowser.getIcon(tab) || PlacesUtils.favicons.defaultFavicon.spec;
 
         icon.src = iconURL;
 

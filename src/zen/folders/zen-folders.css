@@ -393,6 +393,8 @@ zen-folder {
   border: none !important;
   outline: none !important;
   flex: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #zen-folder-tabs-list {
@@ -416,6 +418,8 @@ zen-folder {
   flex-shrink: 0;
   margin-inline-end: 10px;
   margin-inline-start: 4px;
+  fill: currentColor;
+  -moz-context-properties: fill;
 }
 
 .folders-tabs-list-item-labels {
