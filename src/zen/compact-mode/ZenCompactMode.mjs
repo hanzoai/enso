@@ -48,8 +48,7 @@ var gZenCompactModeManager = {
       xulStoreValue = false;
     }
     this._wasInCompactMode =
-      xulStoreValue ||
-      Services.prefs.getBoolPref('zen.view.compact.should-enable-at-startup', false);
+      xulStoreValue || Services.prefs.getBoolPref('zen.view.compact.enable-at-startup', false);
     lazyCompactMode.mainAppWrapper.removeAttribute('zen-compact-mode');
 
     this._canDebugLog = Services.prefs.getBoolPref('zen.view.compact.debug', false);
@@ -136,7 +135,7 @@ var gZenCompactModeManager = {
     document.documentElement.setAttribute('zen-compact-mode', value);
     Services.xulStore.persist(lazyCompactMode.mainAppWrapper, 'zen-compact-mode');
     if (typeof this._wasInCompactMode === 'undefined') {
-      Services.prefs.setBoolPref('zen.view.compact.should-enable-at-startup', value);
+      Services.prefs.setBoolPref('zen.view.compact.enable-at-startup', value);
     }
     this._updateEvent();
   },
