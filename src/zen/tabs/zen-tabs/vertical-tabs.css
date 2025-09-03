@@ -156,25 +156,25 @@
    Pinned Tabs Separator
    ========================================================================== */
 .pinned-tabs-container-separator {
-  background: light-dark(rgba(1, 1, 1, 0.075), rgba(255, 255, 255, 0.1));
+  background: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
   margin: 8px auto;
   border: none;
   height: 1px;
   max-height: 1px;
   width: 98%; /* Slightly less than full width */
   transition:
-    margin 0.2s ease-in-out,
-    background 0.2s ease-in-out,
-    max-height 0.2s ease-in-out;
+    margin 0.1s ease-in-out,
+    background 0.1s ease-in-out,
+    max-height 0.1s ease-in-out;
   overflow: hidden;
   position: relative;
   opacity: 1;
 
   #tabbrowser-tabs[movingtab] & {
     transition:
-      margin 0.2s ease-in-out,
-      background 0.2s ease-in-out,
-      max-height 0.2s ease-in-out,
+      margin 0.1s ease-in-out,
+      background 0.1s ease-in-out,
+      max-height 0.1s ease-in-out,
       transform 0.1s ease-in-out;
   }
 

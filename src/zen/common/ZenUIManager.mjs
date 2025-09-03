@@ -646,7 +646,7 @@ var gZenVerticalTabsManager = {
             marginBottom: isLastItem() ? [] : [transform, '0px'],
           },
           {
-            duration: 0.12,
+            duration: 0.11,
             easing: 'ease-out',
           }
         )
@@ -668,7 +668,7 @@ var gZenVerticalTabsManager = {
             filter: ['blur(1px)', 'blur(0px)'],
           },
           {
-            duration: 0.12,
+            duration: 0.11,
             easing: 'ease-out',
           }
         )
@@ -682,6 +682,27 @@ var gZenVerticalTabsManager = {
     } catch (e) {
       console.error(e);
     }
+  },
+
+  animateTabClose(aTab, animate) {
+    if (!animate) {
+      return new Promise((resolve) => {
+        resolve();
+      });
+    }
+    const height = aTab.getBoundingClientRect().height;
+    return gZenUIManager.motion.animate(
+      aTab,
+      {
+        opacity: [1, 0],
+        transform: ['scale(1)', 'scale(0.95)'],
+        marginBottom: [`0px`, `-${height}px`],
+      },
+      {
+        duration: 0.075,
+        easing: 'ease-out',
+      }
+    );
   },
 
   get actualWindowButtons() {

@@ -235,6 +235,10 @@ body > #confetti {
   mask-composite: exclude;
 }
 
+#TabsToolbar {
+  -moz-window-dragging: unset;
+}
+
 /* Status panel */
 
 @media (-moz-pref('zen.theme.styled-status-panel')) {

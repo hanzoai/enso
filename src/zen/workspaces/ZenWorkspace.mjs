@@ -27,6 +27,7 @@
             </hbox>
           </vbox>
         </arrowscrollbox>
+        <vbox class="zen-workspace-empty-space" flex="1" />
       `;
     }
 

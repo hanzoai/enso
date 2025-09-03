@@ -873,9 +873,13 @@
       // note: We set if the folder is collapsed some time after creation.
       //   we do this to ensure marginBottom is set correctly in the case
       //   that we want it to initially be collapsed.
-      requestAnimationFrame(() => {
-        folder.collapsed = !!options.collapsed;
-      });
+      setTimeout(
+        (folder) => {
+          folder.collapsed = !!options.collapsed;
+        },
+        0,
+        folder
+      );
       return folder;
     }
 

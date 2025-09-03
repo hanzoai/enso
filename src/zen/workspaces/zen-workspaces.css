@@ -317,12 +317,11 @@ zen-workspace {
         opacity: 1;
       }
     }
-
-    &,
-    & .zen-workspace-normal-tabs-section {
-      height: 100%;
-    }
   }
+}
+
+.zen-workspace-empty-space {
+  -moz-window-dragging: drag;
 }
 
 /** Customiable UI, this is an auto generated ID */
