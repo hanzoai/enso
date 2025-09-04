@@ -37,20 +37,10 @@ var gZenCompactModeManager = {
   HOVER_HACK_DELAY: Services.prefs.getIntPref('zen.view.compact.hover-hack-delay', 0),
 
   preInit() {
-    // Remove it before initializing so we can properly calculate the width
-    // of the sidebar at startup and avoid overflowing items not being hidden
-    let xulStoreValue = Services.xulStore.getValue(
-      AppConstants.BROWSER_CHROME_URL,
-      'zen-main-app-wrapper',
-      'zen-compact-mode'
+    this._wasInCompactMode = Services.prefs.getBoolPref(
+      'zen.view.compact.enable-at-startup',
+      false
     );
-    if (xulStoreValue === '-moz-missing\n' || !xulStoreValue) {
-      xulStoreValue = false;
-    }
-    this._wasInCompactMode =
-      xulStoreValue || Services.prefs.getBoolPref('zen.view.compact.enable-at-startup', false);
-    lazyCompactMode.mainAppWrapper.removeAttribute('zen-compact-mode');
-
     this._canDebugLog = Services.prefs.getBoolPref('zen.view.compact.debug', false);
 
     this.addContextMenu();
@@ -133,7 +123,6 @@ var gZenCompactModeManager = {
     // main-window can't store attributes other than window sizes, so we use this instead
     lazyCompactMode.mainAppWrapper.setAttribute('zen-compact-mode', value);
     document.documentElement.setAttribute('zen-compact-mode', value);
-    Services.xulStore.persist(lazyCompactMode.mainAppWrapper, 'zen-compact-mode');
     if (typeof this._wasInCompactMode === 'undefined') {
       Services.prefs.setBoolPref('zen.view.compact.enable-at-startup', value);
     }
