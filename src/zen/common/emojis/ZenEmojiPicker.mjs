@@ -12,7 +12,8 @@
     "layers.svg", "lightning.svg", "mail.svg", "map.svg", "moon.svg", "music.svg", 
     "page.svg", "palette.svg", "paw.svg", "people.svg", "pizza.svg", "planet.svg", 
     "present.svg", "shapes.svg", "skull.svg", "square.svg", "squares.svg", "star.svg", 
-    "star-1.svg", "sun.svg", "terminal.svg", "triangle.svg", "video.svg", "weight.svg",
+    "star-1.svg", "sun.svg", "tada.svg", "terminal.svg", "triangle.svg", "video.svg",
+    "weight.svg",
   ];
 
   class nsZenEmojiPicker extends nsZenDOMOperatedFeature {
