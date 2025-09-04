@@ -318,13 +318,13 @@ zen-workspace {
       }
     }
   }
+
+  &[active] .zen-workspace-empty-space {
+    -moz-window-dragging: drag;
+  }
 }
 
-.zen-workspace-empty-space {
-  -moz-window-dragging: drag;
-}
-
-/** Customiable UI, this is an auto generated ID */
+/** Customizable UI, this is an auto generated ID */
 #wrapper-zen-workspaces-button {
   width: 100%;
 }

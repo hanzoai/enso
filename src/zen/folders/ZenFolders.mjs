@@ -906,6 +906,7 @@
     }
 
     handleTabUnpin(tab) {
+      tab.style.removeProperty('--zen-folder-indent');
       const group = tab.group;
       if (!group) {
         return false;
