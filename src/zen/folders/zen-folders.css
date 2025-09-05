@@ -269,7 +269,7 @@ zen-folder {
       pointer-events: none;
 
       :root[zen-sidebar-expanded] & {
-        left: 2px;
+        left: 4px;
       }
 
       & svg {
