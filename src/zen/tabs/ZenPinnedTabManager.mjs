@@ -678,6 +678,7 @@
         workspaceUuid: tab.getAttribute('zen-workspace-id'),
         isEssential: tab.getAttribute('zen-essential') === 'true',
         parentUuid: tab.group?.getAttribute('zen-pin-id') || null,
+        position: tab._pPos,
       });
 
       tab.setAttribute('zen-pin-id', uuid);
