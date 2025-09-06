@@ -875,7 +875,9 @@
       //   that we want it to initially be collapsed.
       setTimeout(
         (folder) => {
-          folder.collapsed = !!options.collapsed;
+          gZenPinnedTabManager.promiseInitializedPinned.then(() => {
+            folder.collapsed = !!options.collapsed;
+          });
         },
         0,
         folder

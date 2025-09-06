@@ -69,6 +69,9 @@
     MAX_ESSENTIALS_TABS = 12;
 
     #hasInitializedPins = false;
+    promiseInitializedPinned = new Promise((resolve) => {
+      this._resolvePinnedInitializedInternal = resolve;
+    });
 
     async init() {
       if (!this.enabled) {
@@ -187,10 +190,16 @@
       return this._pinsCache;
     }
 
+    #finishedInitializingPins() {
+      this._resolvePinnedInitializedInternal();
+      delete this._resolvePinnedInitializedInternal;
+      this.#hasInitializedPins = true;
+    }
+
     async #initializePinnedTabs(init = false) {
       const pins = this._pinsCache;
       if (!pins?.length || !init) {
-        this.#hasInitializedPins = true;
+        this.#finishedInitializingPins();
         return;
       }
 
@@ -374,7 +383,7 @@
       }
 
       setTimeout(() => {
-        this.#hasInitializedPins = true;
+        this.#finishedInitializingPins();
       }, 0);
 
       gBrowser._updateTabBarForPinnedTabs();
