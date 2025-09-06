@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index e2b27db6c13278defea3bcc7606a8da54e7d001c..3033f5c98c94cf4b048432dfee72e20f4d8e37b6 100644
+index e2b27db6c13278defea3bcc7606a8da54e7d001c..91e772ab0fed5be50e6dfee40eaa24888de67ccb 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -332,7 +332,7 @@
@@ -7,7 +7,7 @@ index e2b27db6c13278defea3bcc7606a8da54e7d001c..3033f5c98c94cf4b048432dfee72e20f
        if (
          event.button != 0 ||
 -        event.target != this.arrowScrollbox ||
-+        !event.target.classList.contains("zen-workspace-normal-tabs-section") ||
++        !event.target.classList.contains("zen-workspace-empty-space") ||
          event.composedTarget.localName == "toolbarbutton"
        ) {
          return;

@@ -1493,8 +1493,8 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
       if (container) {
         if (tab.group?.hasAttribute('split-view-group')) {
           gBrowser.zenHandleTabMove(tab.group, () => {
-            for (const tab of tab.group.tabs) {
-              tab.setAttribute('zen-workspace-id', workspaceID);
+            for (const subTab of tab.group.tabs) {
+              subTab.setAttribute('zen-workspace-id', workspaceID);
             }
             container.insertBefore(tab.group, container.lastChild);
           });
