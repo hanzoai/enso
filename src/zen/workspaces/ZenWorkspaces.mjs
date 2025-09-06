@@ -926,7 +926,6 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     await this.initializeTabsStripSections();
     this._initializeEmptyTab();
     await gZenPinnedTabManager.refreshPinnedTabs({ init: true });
-    this._invalidateBookmarkContainers();
     await this.changeWorkspace(activeWorkspace, { onInit: true });
     this.#fixTabPositions();
     this.onWindowResize();
