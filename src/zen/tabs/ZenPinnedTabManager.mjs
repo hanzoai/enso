@@ -615,7 +615,11 @@
     async _onTabClick(e) {
       const tab = e.target?.closest('tab');
       if (e.button === 1 && tab) {
-        await this._onCloseTabShortcut(e, tab, { closeIfPending: true });
+        await this._onCloseTabShortcut(e, tab, {
+          closeIfPending: Services.prefs.getBoolPref(
+            'zen.pinned-tab-manager.wheel-close-if-pending'
+          ),
+        });
       }
     }
 
