@@ -773,7 +773,7 @@ class nsZenKeyboardShortcutsLoader {
 }
 
 class nsZenKeyboardShortcutsVersioner {
-  static LATEST_KBS_VERSION = 9;
+  static LATEST_KBS_VERSION = 10;
 
   constructor() {}
 
@@ -838,7 +838,14 @@ class nsZenKeyboardShortcutsVersioner {
   }
 
   fixedKeyboardShortcuts(data) {
-    return this.fillDefaultIfNotPresent(this.migrateIfNeeded(data));
+    // Apply migrations and ensure defaults exist
+    let out = this.fillDefaultIfNotPresent(this.migrateIfNeeded(data));
+
+    // Hard-remove deprecated or conflicting defaults regardless of version
+    // - Remove the built-in "Open File" keybinding; menu item remains available
+    out = out.filter((shortcut) => shortcut.getAction?.() !== 'Browser:OpenFile');
+
+    return out;
   }
 
   migrate(data, version) {
@@ -992,6 +999,24 @@ class nsZenKeyboardShortcutsVersioner {
           }
         }
       }
+    }
+    if (version < 10) {
+      // Migrate from version 9 to 10
+      // 1) Add shortcut to expand Glance into a full tab: Default Accel+O
+      data.push(
+        new KeyShortcut(
+          'zen-glance-expand',
+          'O',
+          '',
+          ZEN_OTHER_SHORTCUTS_GROUP,
+          nsKeyShortcutModifiers.fromObject({ accel: true }),
+          'cmd_zenGlanceExpand',
+          ''
+        )
+      );
+
+      // 2) Remove default Open File keybinding entirely (menu item remains available)
+      data = data.filter((shortcut) => shortcut.getAction?.() !== 'Browser:OpenFile');
     }
     return data;
   }
