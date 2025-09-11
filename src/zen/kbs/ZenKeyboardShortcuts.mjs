@@ -843,7 +843,13 @@ class nsZenKeyboardShortcutsVersioner {
 
     // Hard-remove deprecated or conflicting defaults regardless of version
     // - Remove the built-in "Open File" keybinding; menu item remains available
-    out = out.filter((shortcut) => shortcut.getAction?.() !== 'Browser:OpenFile');
+    // - Remove default "Bookmark All Tabs" keybinding (Ctrl+Shift+D) to avoid conflict
+    out = out.filter(
+      (shortcut) =>
+        shortcut.getAction?.() !== 'Browser:OpenFile' &&
+        shortcut.getAction?.() !== 'Browser:BookmarkAllTabs' &&
+        shortcut.getAction?.() !== 'key_stop'
+    );
 
     return out;
   }
@@ -1002,7 +1008,20 @@ class nsZenKeyboardShortcutsVersioner {
     }
     if (version < 10) {
       // Migrate from version 9 to 10
-      // 1) Add shortcut to expand Glance into a full tab: Default Accel+O
+      // 1) Add the new pin/unpin tab toggle shortcut with Ctrl+Shift+D
+      data.push(
+        new KeyShortcut(
+          'zen-toggle-pin-tab',
+          'D',
+          '',
+          ZEN_OTHER_SHORTCUTS_GROUP,
+          nsKeyShortcutModifiers.fromObject({ accel: true, shift: true }),
+          'cmd_zenTogglePinTab',
+          'zen-toggle-pin-tab-shortcut'
+        )
+      );
+
+      // 2) Add shortcut to expand Glance into a full tab: Default Accel+O
       data.push(
         new KeyShortcut(
           'zen-glance-expand',
