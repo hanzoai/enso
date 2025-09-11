@@ -293,6 +293,7 @@ zen-close-tab-shortcut = Close Tab
 zen-compact-mode-shortcut-show-sidebar = Toggle Floating Sidebar
 zen-compact-mode-shortcut-show-toolbar = Toggle Floating Toolbar
 zen-compact-mode-shortcut-toggle = Toggle Compact Mode
+zen-glance-expand = Expand Glance
 zen-workspace-shortcut-switch-1 = Switch to Workspace 1
 zen-workspace-shortcut-switch-2 = Switch to Workspace 2
 zen-workspace-shortcut-switch-3 = Switch to Workspace 3

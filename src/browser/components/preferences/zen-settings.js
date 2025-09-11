@@ -770,11 +770,12 @@ var zenMissingKeyboardShortcutL10n = {
   key_enterFullScreen: 'zen-key-enter-full-screen',
   key_exitFullScreen: 'zen-key-exit-full-screen',
   key_aboutProcesses: 'zen-key-about-processes',
-  key_stop: 'zen-key-stop',
   key_sanitize: 'zen-key-sanitize',
   key_wrCaptureCmd: 'zen-key-wr-capture-cmd',
   key_wrToggleCaptureSequenceCmd: 'zen-key-wr-toggle-capture-sequence-cmd',
   key_undoCloseWindow: 'zen-key-undo-close-window',
+
+  'zen-glance-expand': 'zen-glance-expand',
 
   key_selectTab1: 'zen-key-select-tab-1',
   key_selectTab2: 'zen-key-select-tab-2',
