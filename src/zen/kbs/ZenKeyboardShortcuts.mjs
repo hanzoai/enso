@@ -1014,9 +1014,6 @@ class nsZenKeyboardShortcutsVersioner {
           ''
         )
       );
-
-      // 2) Remove default Open File keybinding entirely (menu item remains available)
-      data = data.filter((shortcut) => shortcut.getAction?.() !== 'Browser:OpenFile');
     }
     return data;
   }
