@@ -133,8 +133,8 @@ const VALID_SHORTCUT_GROUPS = [
   ZEN_COMPACT_MODE_SHORTCUTS_GROUP,
   ZEN_WORKSPACE_SHORTCUTS_GROUP,
   ZEN_SPLIT_VIEW_SHORTCUTS_GROUP,
-  ...Object.keys(defaultKeyboardGroups),
   ZEN_OTHER_SHORTCUTS_GROUP,
+  ...Object.keys(defaultKeyboardGroups),
   'other',
 ];
 
@@ -847,8 +847,8 @@ class nsZenKeyboardShortcutsVersioner {
     out = out.filter(
       (shortcut) =>
         shortcut.getAction?.() !== 'Browser:OpenFile' &&
-        shortcut.getAction?.() !== 'Browser:BookmarkAllTabs' &&
-        shortcut.getAction?.() !== 'key_stop'
+        shortcut.getID?.() !== 'bookmarkAllTabsKb' &&
+        shortcut.getID?.() !== 'key_stop'
     );
 
     return out;
