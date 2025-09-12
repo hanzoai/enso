@@ -1326,6 +1326,12 @@
             browser.document.documentElement.style.getPropertyValue('--zen-main-browser-background')
           );
           browser.document.documentElement.style.setProperty(
+            '--zen-main-browser-background-toolbar-old',
+            browser.document.documentElement.style.getPropertyValue(
+              '--zen-main-browser-background-toolbar'
+            )
+          );
+          browser.document.documentElement.style.setProperty(
             '--zen-background-opacity',
             browser.gZenThemePicker.previousBackgroundOpacity ?? 1
           );
@@ -1648,6 +1654,7 @@
       this.currentOpacity = theme.opacity ?? 0.5;
       this.#currentLightness = theme.lightness ?? 50;
       const gradient = this.getGradient(theme.gradientColors);
+      const toolbarGradient = this.getGradient(theme.gradientColors, true);
       let dominantColor = this.getMostDominantColor(theme.gradientColors);
       const isDefaultTheme = !dominantColor;
       if (isDefaultTheme) {
@@ -1662,6 +1669,7 @@
       }
       this.#gradientsCache[uuid] = {
         gradient,
+        toolbarGradient,
         grain: theme.texture ?? 0,
         isDarkMode,
         isExplicitMode,

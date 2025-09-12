@@ -742,6 +742,7 @@
 
   /* Center items in essentials container */
   & .zen-essentials-container {
+    will-change: transform;
     justify-content: center;
     grid-template-columns: 1fr !important;
     padding: 0 !important;

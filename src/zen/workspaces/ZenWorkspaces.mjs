@@ -1747,8 +1747,11 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
       // Find the next workspace we are scrolling to
       const nextWorkspace = workspaces.workspaces[workspaceIndex + (offsetPixels > 0 ? -1 : 1)];
       if (nextWorkspace) {
-        const { gradient: nextGradient, grain: nextGrain } =
-          gZenThemePicker.getGradientForWorkspace(nextWorkspace);
+        const {
+          gradient: nextGradient,
+          grain: nextGrain,
+          toolbarGradient: nextToolbarGradient,
+        } = gZenThemePicker.getGradientForWorkspace(nextWorkspace);
         const existingGrain = gZenThemePicker.getGradientForWorkspace(workspace).grain;
         const percentage = Math.abs(offsetPixels) / 200;
         await new Promise((resolve) => {
@@ -1760,6 +1763,11 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
                 '--zen-main-browser-background-old',
                 nextGradient
               );
+              document.documentElement.style.setProperty(
+                '--zen-main-browser-background-toolbar-old',
+                nextToolbarGradient
+              );
+              document.documentElement.setAttribute('animating-background', 'true');
             }
             resolve();
           });

@@ -36,7 +36,7 @@
   width: 100%;
 }
 
-#zen-browser-background {
+.zen-browser-generic-background {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -44,6 +44,7 @@
   left: 0;
   z-index: 0;
   pointer-events: none;
+  overflow: clip;
 
   isolation: isolate;
   background: var(--zen-themed-toolbar-bg-transparent);
@@ -64,6 +65,12 @@
       transition: 0s;
     }
 
+    &:is(#zen-toolbar-background) {
+      &::after {
+        background: var(--zen-main-browser-background-toolbar);
+      }
+    }
+
     @media (-moz-pref('zen.view.grey-out-inactive-windows')) {
       &:-moz-window-inactive {
         background: InactiveCaption;
@@ -76,8 +83,15 @@
       transition: 0s;
     }
 
-    :root[animating-background='true'] &::after {
-      mix-blend-mode: normal;
+    &:is(#zen-toolbar-background) {
+      &::before {
+        background: var(--zen-main-browser-background-toolbar-old);
+      }
+    }
+
+    :root[animating-background='true'] &::after,
+    :root[animating-background='true'] &::before {
+      mix-blend-mode: plus-lighter;
     }
   }
 
@@ -85,11 +99,11 @@
     transition: background-color var(--inactive-window-transition);
   }
 
-  & #zen-browser-grain {
+  & .zen-browser-grain {
     display: none;
   }
 
-  :root[zen-show-grainy-background='true'] & #zen-browser-grain {
+  :root[zen-show-grainy-background='true'] & .zen-browser-grain {
     display: flex;
     width: 100%;
     height: 100%;

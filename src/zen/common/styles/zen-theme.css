@@ -208,7 +208,7 @@
   --input-border-color: var(--zen-input-border-color) !important;
   --zen-themed-toolbar-bg-transparent: light-dark(var(--zen-branding-bg), #171717);
 
-  --zen-workspace-indicator-height: 48px;
+  --zen-workspace-indicator-height: 46px;
 
   --toolbar-field-color: var(--toolbox-textcolor) !important;
 
@@ -277,7 +277,7 @@
   &,
   & panel,
   & menupopup,
-  & #zen-browser-background,
+  & .zen-browser-generic-background,
   & #urlbar[breakout-extend='true'],
   & #tabbrowser-tabpanels browser[type='content'],
   &:not([zen-should-be-dark-mode]) #zen-toast-container {
