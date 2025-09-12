@@ -19,6 +19,8 @@ tab-group[split-view-group] {
     transparent 40%
   );
 
+  --tab-collapsed-background-width: none;
+
   :root[zen-sidebar-expanded='true'] & {
     margin-inline-start: var(--zen-folder-indent) !important;
   }

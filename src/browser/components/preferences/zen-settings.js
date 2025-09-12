@@ -880,7 +880,7 @@ var gZenCKSSettings = {
 
       const labelValue = zenMissingKeyboardShortcutL10n[keyID] ?? l10nID;
 
-      if (zenIgnoreKeyboardShortcutL10n.includes(labelValue)) {
+      if (zenIgnoreKeyboardShortcutL10n.includes(labelValue) || shortcut.shouldBeEmpty) {
         continue;
       }
 

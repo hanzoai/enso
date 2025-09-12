@@ -533,6 +533,12 @@ var gZenCompactModeManager = {
 
     for (let i = 0; i < this.hoverableElements.length; i++) {
       let target = this.hoverableElements[i].element;
+
+      // Add the attribute on startup if the mouse is already over the element
+      if (target.matches(':hover')) {
+        target.setAttribute('zen-has-hover', 'true');
+      }
+
       const onEnter = (event) => {
         setTimeout(() => {
           if (event.type === 'mouseenter' && !event.target.matches(':hover')) return;

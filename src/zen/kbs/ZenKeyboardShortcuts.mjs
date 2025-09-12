@@ -296,6 +296,7 @@ class KeyShortcut {
   #disabled = false;
   #reserved = false;
   #internal = false;
+  #shouldBeEmpty = false;
 
   constructor(
     id,
@@ -394,6 +395,17 @@ class KeyShortcut {
       return fixedL10nIds[action];
     }
     return `zen-${id}`;
+  }
+
+  set shouldBeEmpty(value) {
+    this.#shouldBeEmpty = value;
+    if (value) {
+      this.clearKeybind();
+    }
+  }
+
+  get shouldBeEmpty() {
+    return this.#shouldBeEmpty;
   }
 
   toXHTMLElement(window) {
@@ -844,12 +856,13 @@ class nsZenKeyboardShortcutsVersioner {
     // Hard-remove deprecated or conflicting defaults regardless of version
     // - Remove the built-in "Open File" keybinding; menu item remains available
     // - Remove default "Bookmark All Tabs" keybinding (Ctrl+Shift+D) to avoid conflict
-    out = out.filter(
-      (shortcut) =>
-        shortcut.getAction?.() !== 'Browser:OpenFile' &&
-        shortcut.getID?.() !== 'bookmarkAllTabsKb' &&
-        shortcut.getID?.() !== 'key_stop'
-    );
+    // - Remove "Stop" keybinding to avoid conflict with Firefox's built-in binding
+    const shouldBeEmptyShortcuts = ['openFileKb', 'bookmarkAllTabsKb', 'key_stop'];
+    for (let shortcut of out) {
+      if (shouldBeEmptyShortcuts.includes(shortcut.getID?.())) {
+        shortcut.shouldBeEmpty = true;
+      }
+    }
 
     return out;
   }

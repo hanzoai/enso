@@ -256,3 +256,8 @@ body > #confetti {
     }
   }
 }
+
+/* Customizable modes */
+#customization-container {
+  --toolbar-bgcolor: var(--zen-dialog-background);
+}
