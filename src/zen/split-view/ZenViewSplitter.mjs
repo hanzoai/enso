@@ -332,7 +332,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
                 paddingLeft: 0,
               },
           {
-            duration: 0.08,
+            duration: 0.1,
             easing: 'ease-out',
           }
         ),
@@ -347,7 +347,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
               : {}),
           },
           {
-            duration: 0.08,
+            duration: 0.1,
             easing: 'ease-out',
           }
         ),
