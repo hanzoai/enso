@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 3204f253c23551650991d3385dd256d55892a012..78727727a0c623e0213177700124869b2163b89c 100644
+index 3204f253c23551650991d3385dd256d55892a012..0285b0bcf1e5ba769011c82729e010eedf8dcc29 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -427,15 +427,64 @@
@@ -804,7 +804,15 @@ index 3204f253c23551650991d3385dd256d55892a012..78727727a0c623e0213177700124869b
            window.focus();
            aEvent.preventDefault();
            break;
-@@ -8199,6 +8376,7 @@
+@@ -7264,7 +7441,6 @@
+         }
+         case "TabGroupCollapse":
+           aEvent.target.tabs.forEach(tab => {
+-            this.removeFromMultiSelectedTabs(tab);
+           });
+           break;
+         case "TabGroupCreateByUser":
+@@ -8199,6 +8375,7 @@
              aWebProgress.isTopLevel
            ) {
              this.mTab.setAttribute("busy", "true");
@@ -812,7 +820,7 @@ index 3204f253c23551650991d3385dd256d55892a012..78727727a0c623e0213177700124869b
              gBrowser._tabAttrModified(this.mTab, ["busy"]);
              this.mTab._notselectedsinceload = !this.mTab.selected;
            }
-@@ -9200,7 +9378,7 @@ var TabContextMenu = {
+@@ -9200,7 +9377,7 @@ var TabContextMenu = {
      );
      contextUnpinSelectedTabs.hidden =
        !this.contextTab.pinned || !this.multiselected;
@@ -821,7 +829,7 @@ index 3204f253c23551650991d3385dd256d55892a012..78727727a0c623e0213177700124869b
      // Build Ask Chat items
      TabContextMenu.GenAI.buildTabMenu(
        document.getElementById("context_askChat"),
-@@ -9520,6 +9698,7 @@ var TabContextMenu = {
+@@ -9520,6 +9697,7 @@ var TabContextMenu = {
          )
        );
      } else {

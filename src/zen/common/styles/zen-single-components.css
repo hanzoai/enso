@@ -38,7 +38,7 @@ body > #confetti {
 }
 
 /* Bookmarks */
-#PersonalToolbar:not([collapsed='true']) {
+#PersonalToolbar:not([collapsed]) {
   min-height: 30px;
 }
 
