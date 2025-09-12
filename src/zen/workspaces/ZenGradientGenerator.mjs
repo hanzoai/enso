@@ -1400,9 +1400,14 @@
               ? workspaceTheme.gradientColors.length >= nsZenThemePicker.MAX_DOTS
               : false);
         }
-        document
-          .getElementById('PanelUI-zen-gradient-generator-color-click-to-add')
-          .toggleAttribute('hidden', workspaceTheme.gradientColors.length > 0);
+        const clickToAdd = browser.document.getElementById(
+          'PanelUI-zen-gradient-generator-color-click-to-add'
+        );
+        if (workspaceTheme.gradientColors.length > 0) {
+          clickToAdd.setAttribute('hidden', 'true');
+        } else {
+          clickToAdd.removeAttribute('hidden');
+        }
 
         opacitySlider.value = browser.gZenThemePicker.currentOpacity;
         const textureSelectWrapper = browser.document.getElementById(
