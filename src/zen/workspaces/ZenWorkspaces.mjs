@@ -1808,7 +1808,9 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
         const grainValue =
           minGrain +
           (maxGrain - minGrain) * (existingGrain > nextGrain ? 1 - percentage : percentage);
-        gZenThemePicker.updateNoise(grainValue);
+        if (!this._inChangingWorkspace) {
+          gZenThemePicker.updateNoise(grainValue);
+        }
       }
     } else {
       delete this._hasAnimatedBackgrounds;
