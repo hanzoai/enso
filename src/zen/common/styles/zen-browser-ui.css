@@ -89,8 +89,8 @@
       }
     }
 
-    :root[animating-background='true'] &::after,
-    :root[animating-background='true'] &::before {
+    &::after,
+    &::before {
       mix-blend-mode: plus-lighter;
     }
   }

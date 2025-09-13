@@ -1089,7 +1089,10 @@
         return color.c;
       }
       let opacity = this.currentOpacity;
-      if (forToolbar && !this.#allowTransparencyOnSidebar) {
+      if (
+        (forToolbar && !this.#allowTransparencyOnSidebar) ||
+        (!forToolbar && !this.canBeTransparent)
+      ) {
         color = this.blendColors(
           color.c,
           this.getToolbarModifiedBaseRaw().slice(0, 3),
@@ -1140,11 +1143,13 @@
 
       const rotation = -45; // TODO: Detect rotation based on the accent color
       if (themedColors.length === 0) {
-        return forToolbar
-          ? this.getToolbarModifiedBase()
-          : this.isDarkMode
-            ? 'rgba(0, 0, 0, 0.4)'
-            : 'transparent';
+        const getBrowserBg = () => {
+          if (this.canBeTransparent) {
+            return this.isDarkMode ? 'rgba(0, 0, 0, 0.4)' : 'transparent';
+          }
+          return this.isDarkMode ? '#131313' : '#e9e9e9';
+        };
+        return forToolbar ? this.getToolbarModifiedBase() : getBrowserBg();
       } else if (themedColors.length === 1) {
         return this.getSingleRGBColor(themedColors[0], forToolbar);
       } else {
@@ -1400,9 +1405,14 @@
               ? workspaceTheme.gradientColors.length >= nsZenThemePicker.MAX_DOTS
               : false);
         }
-        document
-          .getElementById('PanelUI-zen-gradient-generator-color-click-to-add')
-          .toggleAttribute('hidden', workspaceTheme.gradientColors.length > 0);
+        const clickToAdd = browser.document.getElementById(
+          'PanelUI-zen-gradient-generator-color-click-to-add'
+        );
+        if (workspaceTheme.gradientColors.length > 0) {
+          clickToAdd.setAttribute('hidden', 'true');
+        } else {
+          clickToAdd.removeAttribute('hidden');
+        }
 
         opacitySlider.value = browser.gZenThemePicker.currentOpacity;
         const textureSelectWrapper = browser.document.getElementById(

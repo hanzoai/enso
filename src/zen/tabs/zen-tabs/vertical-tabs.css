@@ -200,7 +200,7 @@
 
   @media (-moz-platform: macos) {
     --border-radius-medium: 12px;
-    --tab-border-radius: 10px;
+    --tab-border-radius: 8px;
   }
 
   min-width: var(--zen-toolbox-min-width);

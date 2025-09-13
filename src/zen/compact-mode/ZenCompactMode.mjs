@@ -189,10 +189,11 @@ var gZenCompactModeManager = {
   updateCompactModeContext(isSingleToolbar) {
     const menuitem = document.getElementById('zen-context-menu-compact-mode-toggle');
     const menu = document.getElementById('zen-context-menu-compact-mode');
-    menu.setAttribute('hidden', isSingleToolbar);
     if (isSingleToolbar) {
+      menu.setAttribute('hidden', 'true');
       menu.before(menuitem);
     } else {
+      menu.removeAttribute('hidden');
       menu.querySelector('menupopup').prepend(menuitem);
     }
   },

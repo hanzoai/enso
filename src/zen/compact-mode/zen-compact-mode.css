@@ -147,12 +147,22 @@
 
         & #zen-toolbar-background {
           display: flex;
-          outline: 1px solid rgba(255, 255, 255, .15);
-          border-radius: calc(var(--zen-native-inner-radius) + var(--zen-element-separation) / 4 - var(--zen-compact-mode-no-padding-radius-fix, 0px));
+          overflow: clip;
+          background: transparent;
           z-index: -1;
           box-shadow: var(--zen-big-shadow);
           @media -moz-pref('zen.theme.acrylic-elements') {
             backdrop-filter: blur(42px) saturate(110%) brightness(0.25) contrast(100%) !important;
+          }
+          &::before,
+          &::after {
+            outline: 1px solid rgba(255, 255, 255, .15);
+            outline-offset: -1px;
+          }
+          &,
+          &::before,
+          &::after {
+            border-radius: calc(var(--zen-native-inner-radius) + var(--zen-element-separation) / 4 - var(--zen-compact-mode-no-padding-radius-fix, 0px));
           }
         }
       }
