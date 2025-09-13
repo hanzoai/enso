@@ -1136,11 +1136,6 @@ Preferences.addAll([
     default: 'float',
   },
   {
-    id: 'zen.view.compact.color-sidebar',
-    type: 'bool',
-    default: true,
-  },
-  {
     id: 'zen.workspaces.separate-essentials',
     type: 'bool',
     default: false,
