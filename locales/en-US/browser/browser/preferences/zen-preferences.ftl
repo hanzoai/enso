@@ -57,8 +57,6 @@ zen-tabs-unloader-enabled =
 
 zen-look-and-feel-compact-toolbar-themed =
     .label = Use themed background for compact toolbar
-zen-look-and-feel-compact-sidebar-themed =
-    .label = Use themed background for compact sidebar
 
 zen-workspace-continue-where-left-off =
     .label = Continue where you left off
