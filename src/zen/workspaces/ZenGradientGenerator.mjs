@@ -1089,7 +1089,10 @@
         return color.c;
       }
       let opacity = this.currentOpacity;
-      if (forToolbar && !this.#allowTransparencyOnSidebar) {
+      if (
+        (forToolbar && !this.#allowTransparencyOnSidebar) ||
+        (!forToolbar && !this.canBeTransparent)
+      ) {
         color = this.blendColors(
           color.c,
           this.getToolbarModifiedBaseRaw().slice(0, 3),
@@ -1140,11 +1143,13 @@
 
       const rotation = -45; // TODO: Detect rotation based on the accent color
       if (themedColors.length === 0) {
-        return forToolbar
-          ? this.getToolbarModifiedBase()
-          : this.isDarkMode
-            ? 'rgba(0, 0, 0, 0.4)'
-            : 'transparent';
+        const getBrowserBg = () => {
+          if (this.canBeTransparent) {
+            return this.isDarkMode ? 'rgba(0, 0, 0, 0.4)' : 'transparent';
+          }
+          return this.isDarkMode ? '#131313' : '#e9e9e9';
+        };
+        return forToolbar ? this.getToolbarModifiedBase() : getBrowserBg();
       } else if (themedColors.length === 1) {
         return this.getSingleRGBColor(themedColors[0], forToolbar);
       } else {

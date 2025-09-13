@@ -206,7 +206,7 @@
   --tab-close-button-padding: 5px !important;
 
   --input-border-color: var(--zen-input-border-color) !important;
-  --zen-themed-toolbar-bg-transparent: light-dark(var(--zen-branding-bg), #171717);
+  --zen-themed-toolbar-bg-transparent: transparent;
 
   --zen-workspace-indicator-height: 46px;
 
@@ -265,13 +265,9 @@
 #main-window:not([chromehidden~='toolbar']) {
   min-height: 495px !important;
 
-  @media (-moz-windows-mica) or (-moz-platform: macos) or ((-moz-platform: linux) and -moz-pref('zen.widget.linux.transparency')) {
-    background: transparent;
-    --zen-themed-toolbar-bg-transparent: transparent;
-
-    @media (-moz-windows-mica) and (not (-moz-pref('widget.windows.mica.toplevel-backdrop', 1))) and (not (-moz-pref('widget.windows.mica.toplevel-backdrop', 2))) {
-      --zen-themed-toolbar-bg-transparent: rgba(255, 255, 255, 0.2);
-    }
+  background: transparent;
+  @media (-moz-windows-mica) and (not (-moz-pref('widget.windows.mica.toplevel-backdrop', 1))) and (not (-moz-pref('widget.windows.mica.toplevel-backdrop', 2))) {
+    --zen-themed-toolbar-bg-transparent: rgba(255, 255, 255, 0.2);
   }
 
   &,

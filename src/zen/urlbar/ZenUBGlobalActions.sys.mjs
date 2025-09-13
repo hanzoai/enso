@@ -7,6 +7,7 @@ export const globalActions = [
     label: 'Toggle Compact Mode',
     command: 'cmd_zenCompactModeToggle',
     icon: 'chrome://browser/skin/zen-icons/sidebar.svg',
+    suggestedIndex: 0,
   },
   {
     label: 'Open Theme Picker',

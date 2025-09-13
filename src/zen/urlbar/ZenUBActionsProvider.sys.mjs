@@ -12,7 +12,7 @@ const DYNAMIC_TYPE_NAME = 'zen-actions';
 
 // The suggestion index of the actions row within the urlbar results.
 const MAX_RECENT_ACTIONS = 5;
-const MINIMUM_QUERY_SCORE = 93;
+const MINIMUM_QUERY_SCORE = 92;
 
 const EN_LOCALE_MATCH = /^en(-.*)$/;
 
@@ -42,7 +42,7 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
    * @returns {Values<typeof UrlbarUtils.PROVIDER_TYPE>}
    */
   get type() {
-    return UrlbarUtils.PROVIDER_TYPE.PROFILE;
+    return UrlbarUtils.PROVIDER_TYPE.HEURISTIC;
   }
 
   /**
@@ -118,14 +118,6 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
     if (targetLower.startsWith(queryLower)) {
       return 100 + queryLen;
     }
-    // 3. Exact abbreviation (e.g., 'tcm' for 'Toggle Compact Mode')
-    const initials = targetLower
-      .split(/[\s-_]+/)
-      .map((word) => word[0])
-      .join('');
-    if (initials === queryLower) {
-      return 90 + queryLen;
-    }
     let score = 0;
     let queryIndex = 0;
     let lastMatchIndex = -1;
@@ -176,6 +168,7 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
         query: queryContext.searchString,
         zenCommand: action.command,
         dynamicType: DYNAMIC_TYPE_NAME,
+        zenAction: true,
         icon: action.icon || 'chrome://browser/skin/trending.svg',
         shortcutContent: ownerGlobal.gZenKeyboardShortcutsManager.getShortcutDisplayFromCommand(
           action.command
@@ -188,7 +181,7 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
         payload,
         payloadHighlights
       );
-      if (action.suggestedIndex) {
+      if (typeof action.suggestedIndex === 'number') {
         result.suggestedIndex = action.suggestedIndex;
       }
       addCallback(this, result);
