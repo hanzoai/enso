@@ -5,7 +5,6 @@
 import { XPCOMUtils } from 'resource://gre/modules/XPCOMUtils.sys.mjs';
 import { UrlbarProvider, UrlbarUtils } from 'resource:///modules/UrlbarUtils.sys.mjs';
 import { globalActions } from 'resource:///modules/ZenUBGlobalActions.sys.mjs';
-import { ExtensionCommon } from 'resource://gre/modules/ExtensionCommon.sys.mjs';
 
 const lazy = {};
 
@@ -31,8 +30,6 @@ XPCOMUtils.defineLazyPreferenceGetter(
   'zen.urlbar.suggestions.quick-actions',
   true
 );
-
-let { makeWidgetId } = ExtensionCommon;
 
 /**
  * A provider that lets the user view all available global actions for a query.
@@ -104,7 +101,7 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
         (addon) =>
           addon.isActive &&
           !addon.isSystem &&
-          window.document.getElementById(makeWidgetId(addon.id) + '-BAP')
+          window.gUnifiedExtensions.browserActionFor(window.WebExtensionPolicy.getByID(addon.id))
       )
       .map((addon) => {
         return {
@@ -370,10 +367,11 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
       return;
     }
     if (payload.extensionId) {
-      const widgetId = makeWidgetId(payload.extensionId) + '-BAP';
-      const node = ownerGlobal.document.getElementById(widgetId);
-      if (node) {
-        node.doCommand();
+      const action = ownerGlobal.gUnifiedExtensions.browserActionFor(
+        ownerGlobal.WebExtensionPolicy.getByID(payload.extensionId)
+      );
+      if (action) {
+        action.openPopup(ownerGlobal, /* without user interaction = */ true);
       }
       return;
     }
