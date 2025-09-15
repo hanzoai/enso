@@ -96,6 +96,10 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
 
   async #getExtensionActions(window) {
     const addons = await lazy.AddonManager.getAddonsByTypes(['extension']);
+    if (window.gBrowser.selectedTab.hasAttribute('zen-empty-tab')) {
+      // Don't show extension actions on empty tabs, as extensions can't run there.
+      return [];
+    }
     return addons
       .filter(
         (addon) =>

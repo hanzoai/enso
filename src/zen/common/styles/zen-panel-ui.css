@@ -6,7 +6,7 @@
 panel[type='arrow'] {
   @media (-moz-platform: macos) and (-moz-panel-animations) {
     &[animate='open'] {
-      animation: zen-jello-animation-macos 0.3s ease-out forwards;
+      animation: zen-jello-animation-macos 0.2s ease-out forwards;
       &[side='bottom'] {
         /* Animate from the bottom */
         -zen-window-transform-origin: 0 100%;

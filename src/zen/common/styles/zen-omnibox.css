@@ -651,6 +651,14 @@ button.popup-notification-dropmarker {
   }
 }
 
-#urlbar-results .action-contextualidentity {
-  display: none;
+#urlbar-results {
+  max-height: 262px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  margin-block: var(--urlbarView-results-padding);
+  padding-block: 0 !important;
+
+  & .action-contextualidentity {
+    display: none;
+  }
 }
