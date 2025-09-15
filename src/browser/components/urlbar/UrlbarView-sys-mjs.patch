@@ -11,24 +11,21 @@ index fdbab8806fd320f4aacec46a42c8ef953580d00c..5501c329a9fd12bcc8e12de396113497
          // Try to reuse the cached top-sites context. If it's not cached, then
          // there will be a gap of time between when the input is focused and
          // when the view opens that can be perceived as flicker.
-@@ -823,6 +823,19 @@ export class UrlbarView {
+@@ -823,7 +823,16 @@ export class UrlbarView {
          // them, resembling tab-to-search. In that case, the input value is
          // still associated with the first result.
          this.input.setResultForCurrentValue(firstResult);
-+      } else if (firstResult.payload.zenAction) {
-+        this.#selectElement(this.getFirstSelectableElement(), {
-+          updateInput: false,
-+          setAccessibleFocus:
-+            this.controller._userSelectionBehavior == "arrow",
-+        });
-+        this.window.setTimeout(() => {
+-      }
++      } 
++      this.window.setTimeout(() => {
++        if (queryContext.results[0].payload.zenAction) {
 +          this.#selectElement(this.getFirstSelectableElement(), {
 +            updateInput: false,
 +            setAccessibleFocus:
 +              this.controller._userSelectionBehavior == "arrow",
 +          });
-+        }, 150);
-       }
++        }
++      }, 10);
      }
  
 @@ -3189,7 +3202,7 @@ export class UrlbarView {
