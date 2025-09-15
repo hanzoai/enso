@@ -99,15 +99,17 @@
   position: relative;
 }
 
-
-  #identity-icon-box,
-  #identity-permission-box {
-    margin-top: auto;
+#identity-icon-box,
+#identity-permission-box {
+  margin-top: auto;
   outline: none !important;
 
-    margin-bottom: auto;
-    padding: 6px 8px !important;
+  margin-bottom: auto;
+  padding: 6px 8px !important;
+  :root:not([zen-single-toolbar='true']) & {
+    padding-block: 2px !important;
   }
+}
 
 #urlbar .urlbar-input {
   border-radius: 0 !important;
