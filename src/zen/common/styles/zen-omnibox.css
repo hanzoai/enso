@@ -40,8 +40,10 @@
   text-overflow: ellipsis;
 }
 
+/* Consolidated focus visuals */
 #searchbar:focus-within {
   border-color: transparent !important;
+  background: var(--urlbar-box-bgcolor);
 }
 
 .urlbar-background {
@@ -89,10 +91,6 @@
   background: transparent !important;
 }
 
-#searchbar:focus-within {
-  background: var(--urlbar-box-bgcolor);
-}
-
 #identity-box:not(.chromeUI) #identity-icon-label {
   padding-inline-start: 8px !important;
 }
@@ -101,9 +99,15 @@
   position: relative;
 }
 
-#identity-icon-box {
+
+  #identity-icon-box,
+  #identity-permission-box {
+    margin-top: auto;
   outline: none !important;
-}
+
+    margin-bottom: auto;
+    padding: 6px 8px !important;
+  }
 
 #urlbar .urlbar-input {
   border-radius: 0 !important;
@@ -472,8 +476,6 @@ button.popup-notification-dropmarker {
   }
 }
 
- {
-
 .urlbarView-title {
   font-size: 14px !important;
   font-weight: 500 !important;
@@ -585,13 +587,9 @@ button.popup-notification-dropmarker {
     --zen-selected-bg: color-mix(
       in srgb,
       var(--zen-primary-color) 50%,
-      light-dark(rgba(0,0,0,.3), rgba(255, 255, 255, 0.2)) 50%
+      light-dark(rgba(0, 0, 0, 0.3), rgba(255, 255, 255, 0.2)) 50%
     );
-    --zen-selected-color: color-mix(
-      in srgb,
-      var(--zen-selected-bg),
-      light-dark(white, black) 20%
-    );
+    --zen-selected-color: color-mix(in srgb, var(--zen-selected-bg), light-dark(white, black) 20%);
     background-color: var(--zen-selected-bg) !important;
 
     & *,
@@ -607,7 +605,7 @@ button.popup-notification-dropmarker {
       color: var(--zen-selected-color) !important;
     }
 
-    &:is([type="switchtab"], [type="dynamic"]) .urlbarView-favicon,
+    &:is([type='switchtab'], [type='dynamic']) .urlbarView-favicon,
     & .urlbarView-shortcutContent {
       fill: var(--zen-selected-color) !important;
       background-color: rgba(255, 255, 255, 0.9) !important;
