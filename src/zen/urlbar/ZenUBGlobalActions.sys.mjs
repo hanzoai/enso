@@ -13,7 +13,6 @@ const globalActionsTemplate = [
     label: 'Open Theme Picker',
     command: 'cmd_zenOpenZenThemePicker',
     icon: 'chrome://browser/skin/zen-icons/edit-theme.svg',
-    suggestedIndex: 4,
   },
   {
     label: 'New Split View',

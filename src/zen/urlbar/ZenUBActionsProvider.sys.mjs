@@ -234,6 +234,7 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
         shortcutContent: ownerGlobal.gZenKeyboardShortcutsManager.getShortcutDisplayFromCommand(
           action.command
         ),
+        keywords: action.label.split(' '),
         ...action.extraPayload,
       });
 

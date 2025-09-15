@@ -179,7 +179,7 @@
   & .urlbar-background {
     --zen-urlbar-background-base: light-dark(
       white,
-      color-mix(in srgb, hsl(0, 0%, 11%), var(--zen-colors-primary) 40%)
+      color-mix(in srgb, hsl(0, 0%, 5%), var(--zen-colors-primary) 20%)
     );
     @media -moz-pref('zen.theme.acrylic-elements') {
       --zen-urlbar-background-transparent: color-mix(
@@ -235,7 +235,7 @@
 
   #urlbar[open]
     :is(#tracking-protection-icon-container, .urlbar-page-action, .identity-box-button):not(
-      [hidden='true']
+      [hidden]
     ):not(#identity-permission-box),
   #urlbar:hover #identity-icon-box {
     opacity: 1 !important;
@@ -305,15 +305,9 @@
   height: calc(var(--urlbar-min-height) - 4 * var(--urlbar-container-padding)) !important;
 }
 
-button.popup-notification-dropmarker {
+.popup-notification-dropmarker {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
-}
-
-.panel-footer:has(button.popup-notification-dropmarker:not([hidden='true']))
-  button.popup-notification-secondary-button {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
 }
 
 .searchbar-engine-one-off-item {
@@ -655,7 +649,8 @@ button.popup-notification-dropmarker {
   max-height: 262px;
   overflow-y: auto;
   scrollbar-width: none;
-  margin-block: var(--urlbarView-results-padding);
+  margin-block-start: var(--urlbarView-results-padding);
+  margin-block-end: calc(var(--urlbarView-results-padding) + 2px);
   padding-block: 0 !important;
 
   & .action-contextualidentity {

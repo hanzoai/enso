@@ -876,7 +876,7 @@ var gZenCKSSettings = {
       const action = shortcut.getAction();
       const l10nID = shortcut.getL10NID();
       const group = shortcut.getGroup();
-      const keyInString = shortcut.toUserString();
+      const keyInString = shortcut.toDisplayString();
 
       const labelValue = zenMissingKeyboardShortcutL10n[keyID] ?? l10nID;
 
@@ -1069,7 +1069,7 @@ var gZenCKSSettings = {
     this._hasSafed = false;
     input.classList.remove(`${ZEN_CKS_INPUT_FIELD_CLASS}-invalid`);
     input.classList.remove(`${ZEN_CKS_INPUT_FIELD_CLASS}-not-set`);
-    input.value = modifiers.toUserString() + shortcut;
+    input.value = modifiers.toDisplayString() + shortcut;
     this._latestValidKey = shortcut;
   },
 };
