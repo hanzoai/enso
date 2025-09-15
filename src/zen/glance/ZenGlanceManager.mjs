@@ -172,21 +172,12 @@
           const parentSidebarContainer = this.#currentParentTab.linkedBrowser.closest(
             '.browserSidebarContainer'
           );
-          const isWindows = AppConstants.platform === 'win';
-          const backgroundOpenAnimationProps = isWindows
-            ? {
-                // Skip blur on Windows, keep a subtle dim/scale to preserve the visual cue
-                scale: [1, 0.98],
-                opacity: [1, 0.85],
-              }
-            : {
-                scale: [1, 0.98],
-                backdropFilter: ['blur(0px)', 'blur(5px)'],
-                opacity: [1, 0.5],
-              };
           gZenUIManager.motion.animate(
             parentSidebarContainer,
-            backgroundOpenAnimationProps,
+            {
+              scale: [1, 0.98],
+              opacity: [1, 0.8],
+            },
             {
               duration: 0.4,
               type: 'spring',
@@ -331,22 +322,13 @@
             sidebarButtons.remove();
           });
       }
-      const isWindows = AppConstants.platform === 'win';
-      const backgroundCloseAnimationProps = isWindows
-        ? {
-            // Mirror open animation without blur on Windows
-            scale: [0.98, 1],
-            opacity: [0.85, 1],
-          }
-        : {
-            scale: [0.98, 1],
-            backdropFilter: ['blur(5px)', 'blur(0px)'],
-            opacity: [0.5, 1],
-          };
       gZenUIManager.motion
         .animate(
           browserSidebarContainer,
-          backgroundCloseAnimationProps,
+          {
+            scale: [0.98, 1],
+            opacity: [0.8, 1],
+          },
           {
             duration: 0.4,
             type: 'spring',
