@@ -46,6 +46,30 @@ const globalActionsTemplate = [
     command: 'Tools:PrivateBrowsing',
     icon: 'chrome://browser/skin/zen-icons/private-window.svg',
   },
+  {
+    label: 'Toggle Pinned Tab',
+    command: 'cmd_zenTogglePinTab',
+    icon: 'chrome://browser/skin/zen-icons/pin.svg',
+    isAvailable: (window) => {
+      return !window.gBrowser.selectedTab.hasAttribute('zen-empty-tab');
+    },
+  },
+  {
+    label: 'Next Workspace',
+    command: 'cmd_zenWorkspaceForward',
+    icon: 'chrome://browser/skin/zen-icons/forward.svg',
+  },
+  {
+    label: 'Previous Workspace',
+    command: 'cmd_zenWorkspaceBackward',
+    icon: 'chrome://browser/skin/zen-icons/back.svg',
+  },
+  {
+    label: 'Close Tab',
+    command: 'cmd_close',
+    icon: 'chrome://browser/skin/zen-icons/close.svg',
+    suggestedIndex: 1,
+  },
 ];
 
 export const globalActions = globalActionsTemplate.map((action) => ({
