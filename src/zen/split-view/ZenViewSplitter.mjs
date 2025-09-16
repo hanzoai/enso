@@ -1951,8 +1951,9 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
             cleanup();
             return;
           }
-          gBrowser.selectedTab = selectedTab;
           this.removeTabFromGroup(emptyTab, groupIndex, { forUnsplit: true });
+          gBrowser.selectedTab = selectedTab;
+          this.resetTabState(emptyTab, false);
           this.splitTabs([selectedTab, newSelectedTab], 'grid', 1);
         } else {
           gBrowser.selectedTab = selectedTab;

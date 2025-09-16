@@ -693,7 +693,12 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
 
   _handleSwipeMayStart(event) {
     if (this.privateWindowOrDisabled || this._inChangingWorkspace) return;
-    if (event.target.closest('#zen-sidebar-foot-buttons')) return;
+    if (
+      event.target.closest('#zen-sidebar-foot-buttons') ||
+      event.target.closest('#urlbar[zen-floating-urlbar="true"]')
+    ) {
+      return;
+    }
 
     // Only handle horizontal swipes
     if (event.direction === event.DIRECTION_LEFT || event.direction === event.DIRECTION_RIGHT) {
