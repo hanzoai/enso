@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabs.js b/browser/components/tabbrowser/content/tabs.js
-index c7557dad38db9ef02b981c46de9595df77cb67db..c2001aac234d1575498df82db21da2374efe9697 100644
+index c7557dad38db9ef02b981c46de9595df77cb67db..510cf06c69253ef25d1d411ad424d892fc91a208 100644
 --- a/browser/components/tabbrowser/content/tabs.js
 +++ b/browser/components/tabbrowser/content/tabs.js
 @@ -44,6 +44,9 @@
@@ -415,7 +415,7 @@ index c7557dad38db9ef02b981c46de9595df77cb67db..c2001aac234d1575498df82db21da237
 -        (lastMovingTabScreenX + tabWidth);
 -      let lastBoundY = periphery.screenY - (lastMovingTabScreenY + tabHeight);
 +        (lastMovingTabScreenX + tabWidth) + 4;
-+      let lastBoundY = 0;
++      let lastBoundY = lastTab.screenY - lastMovingTabScreenY;
        translateX = Math.min(Math.max(translateX, firstBoundX), lastBoundX);
        translateY = Math.min(Math.max(translateY, firstBoundY), lastBoundY);
  

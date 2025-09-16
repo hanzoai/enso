@@ -145,7 +145,10 @@ var gZenUIManager = {
       '--zen-urlbar-top',
       `${window.innerHeight / 2 - Math.max(kUrlbarHeight, gURLBar.textbox.getBoundingClientRect().height) / 2}px`
     );
-    gURLBar.textbox.style.setProperty('--zen-urlbar-width', `${window.innerWidth / 2}px`);
+    gURLBar.textbox.style.setProperty(
+      '--zen-urlbar-width',
+      `${Math.min(window.innerWidth / 2, 800)}px`
+    );
     gZenVerticalTabsManager.actualWindowButtons.removeAttribute('zen-has-hover');
     gZenVerticalTabsManager.recalculateURLBarHeight();
     if (!this._preventToolbarRebuild) {
@@ -328,8 +331,8 @@ var gZenUIManager = {
 
     // Open location command
     try {
-      document.getElementById('Browser:OpenLocation').doCommand();
       gURLBar.search(this._lastSearch || '');
+      document.getElementById('Browser:OpenLocation').doCommand();
     } catch (e) {
       console.error('Error opening location in new tab:', e);
       this.handleUrlbarClose(false);
@@ -699,12 +702,18 @@ var gZenVerticalTabsManager = {
 
   animateTabClose(aTab) {
     const height = aTab.getBoundingClientRect().height;
+    const visibleItems = gBrowser.tabContainer.ariaFocusableItems;
+    const isLastItem = visibleItems[visibleItems.length - 1] === aTab;
     return gZenUIManager.motion.animate(
       aTab,
       {
         opacity: [1, 0],
         transform: ['scale(1)', 'scale(0.95)'],
-        marginBottom: [`0px`, `-${height}px`],
+        ...(isLastItem
+          ? {}
+          : {
+              marginBottom: [`0px`, `-${height}px`],
+            }),
       },
       {
         duration: 0.075,

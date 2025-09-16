@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 1c447bd31de854d1522dbcfb5d7ad557c84f1388..ff09a4c158b0f4a37dc3b01a5de9cb1062e526fe 100644
+index 1c447bd31de854d1522dbcfb5d7ad557c84f1388..bb0934cf5f170e82de9876642833dc6e9910668c 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -74,6 +74,13 @@ ChromeUtils.defineLazyGetter(lazy, "logger", () =>
@@ -70,7 +70,7 @@ index 1c447bd31de854d1522dbcfb5d7ad557c84f1388..ff09a4c158b0f4a37dc3b01a5de9cb10
 +      if (this._zenHandleUrlbarClose) {
 +        this._zenHandleUrlbarClose(true, true);
 +      } else {
-+        this.view.close({ elementPicked: true });
++        this.window.setTimeout(() => this.view.close({ elementPicked: true }), 0);
 +      }
      }
  

@@ -625,7 +625,7 @@
 
     openTabsPopup(event) {
       event.stopPropagation();
-      if (document.documentElement.getAttribute('zen-renaming-tab')) {
+      if (document.documentElement.getAttribute('zen-renaming-tab') || gURLBar.focused) {
         return;
       }
 

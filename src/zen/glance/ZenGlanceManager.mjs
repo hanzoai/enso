@@ -148,7 +148,6 @@
       const initialHeight = data.height;
 
       this.browserWrapper?.removeAttribute('animate');
-      this.browserWrapper?.removeAttribute('animate-end');
       this.browserWrapper?.removeAttribute('has-finished-animation');
       this.overlay?.removeAttribute('post-fade-out');
 
@@ -160,7 +159,6 @@
 
       this.overlay.classList.add('zen-glance-overlay');
 
-      this.browserWrapper.removeAttribute('animate-end');
       return new Promise((resolve) => {
         window.requestAnimationFrame(() => {
           this.quickOpenGlance();
@@ -184,7 +182,6 @@
               bounce: 0.2,
             }
           );
-          this.#currentBrowser.setAttribute('animate-glance-open', true);
           this.overlay.removeAttribute('fade-out');
           this.browserWrapper.setAttribute('animate', true);
           const top = initialY + initialHeight / 2;
@@ -220,10 +217,8 @@
             )
             .then(() => {
               gBrowser.tabContainer._invalidateCachedTabs();
-              this.#currentBrowser.removeAttribute('animate-glance-open');
               this.overlay.style.removeProperty('overflow');
               this.browserWrapper.removeAttribute('animate');
-              this.browserWrapper.setAttribute('animate-end', true);
               this.browserWrapper.setAttribute('has-finished-animation', true);
               this._animating = false;
               this.animatingOpen = false;
@@ -351,7 +346,6 @@
           )
           .then(() => {
             this.browserWrapper.removeAttribute('animate');
-            this.browserWrapper.removeAttribute('animate-end');
             if (!this.#currentParentTab) {
               return;
             }
@@ -669,7 +663,7 @@
           height: ['100%', '100%'],
         },
         {
-          duration: 0.4,
+          duration: 0.3,
           type: 'spring',
           bounce: 0,
         }

@@ -148,10 +148,11 @@
         & #zen-toolbar-background {
           display: flex;
           overflow: clip;
-          background: transparent;
           z-index: -1;
+          background: var(--zen-dialog-background);
           box-shadow: var(--zen-big-shadow);
           @media -moz-pref('zen.theme.acrylic-elements') {
+            background: transparent;
             backdrop-filter: blur(42px) saturate(110%) brightness(0.25) contrast(100%) !important;
           }
 
