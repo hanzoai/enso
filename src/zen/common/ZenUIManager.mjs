@@ -147,7 +147,7 @@ var gZenUIManager = {
     );
     gURLBar.textbox.style.setProperty(
       '--zen-urlbar-width',
-      `${Math.min(window.innerWidth / 2, 800)}px`
+      `${Math.min(window.innerWidth / 2, 700)}px`
     );
     gZenVerticalTabsManager.actualWindowButtons.removeAttribute('zen-has-hover');
     gZenVerticalTabsManager.recalculateURLBarHeight();
