@@ -188,7 +188,11 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
    * @param {boolean} [forUnsplit=false] - Whether the removal is for unsplitting.
    * @param {boolean} [dontRebuildGrid=false] - Whether to skip rebuilding the grid layout.
    */
-  removeTabFromGroup(tab, groupIndex, { forUnsplit = false, dontRebuildGrid = false } = {}) {
+  removeTabFromGroup(
+    tab,
+    groupIndex,
+    { forUnsplit = false, dontRebuildGrid = false, changeTab = true } = {}
+  ) {
     const group = this._data[groupIndex];
     const tabIndex = group.tabs.indexOf(tab);
     group.tabs.splice(tabIndex, 1);
@@ -206,7 +210,9 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
         }
       }
       this.removeGroup(groupIndex);
-      gBrowser.selectedTab = remainingTabs[remainingTabs.length - 1];
+      if (changeTab) {
+        gBrowser.selectedTab = remainingTabs[remainingTabs.length - 1];
+      }
     } else {
       const node = this.getSplitNodeFromTab(tab);
       const toUpdate = this.removeNode(node);
@@ -1940,14 +1946,19 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
     window.addEventListener(
       'ZenURLBarClosed',
       (event) => {
-        const { onElementPicked } = event.detail;
+        const { onElementPicked, onSwitch } = event.detail;
         const groupIndex = this._data.findIndex((group) => group.tabs.includes(emptyTab));
         const newSelectedTab = gBrowser.selectedTab;
         const cleanup = () => {
-          this.removeTabFromGroup(emptyTab, groupIndex);
+          this.removeTabFromGroup(emptyTab, groupIndex, { changeTab: false });
         };
         if (onElementPicked) {
-          if (newSelectedTab === emptyTab || newSelectedTab === selectedTab) {
+          if (
+            newSelectedTab === emptyTab ||
+            newSelectedTab === selectedTab ||
+            selectedTab.getAttribute('zen-workspace-id') !==
+              newSelectedTab.getAttribute('zen-workspace-id')
+          ) {
             cleanup();
             return;
           }
@@ -1956,7 +1967,9 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
           this.resetTabState(emptyTab, false);
           this.splitTabs([selectedTab, newSelectedTab], 'grid', 1);
         } else {
-          gBrowser.selectedTab = selectedTab;
+          if (!onSwitch) {
+            gBrowser.selectedTab = selectedTab;
+          }
           cleanup();
         }
       },

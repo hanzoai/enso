@@ -174,7 +174,7 @@
             parentSidebarContainer,
             {
               scale: [1, 0.98],
-              opacity: [1, 0.8],
+              opacity: [1, 0.7],
             },
             {
               duration: 0.4,
@@ -322,7 +322,7 @@
           browserSidebarContainer,
           {
             scale: [0.98, 1],
-            opacity: [0.8, 1],
+            opacity: [0.7, 1],
           },
           {
             duration: 0.4,

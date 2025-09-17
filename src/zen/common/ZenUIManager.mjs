@@ -701,6 +701,9 @@ var gZenVerticalTabsManager = {
   },
 
   animateTabClose(aTab) {
+    if (aTab.hasAttribute('zen-essential') || aTab.group?.hasAttribute('split-view-group')) {
+      return Promise.resolve();
+    }
     const height = aTab.getBoundingClientRect().height;
     const visibleItems = gBrowser.tabContainer.ariaFocusableItems;
     const isLastItem = visibleItems[visibleItems.length - 1] === aTab;
@@ -816,16 +819,19 @@ var gZenVerticalTabsManager = {
   },
 
   recalculateURLBarHeight() {
-    document.getElementById('urlbar').removeAttribute('--urlbar-height');
-    let height;
-    if (!this._hasSetSingleToolbar) {
-      height = 32;
-    } else if (gURLBar.getAttribute('breakout-extend') !== 'true') {
-      height = 40;
-    }
-    if (typeof height !== 'undefined') {
-      document.getElementById('urlbar').style.setProperty('--urlbar-height', `${height}px`);
-    }
+    requestAnimationFrame(() => {
+      document.getElementById('urlbar').removeAttribute('--urlbar-height');
+      let height;
+      if (!this._hasSetSingleToolbar) {
+        height = 32;
+      } else if (gURLBar.getAttribute('breakout-extend') !== 'true') {
+        height = 40;
+      }
+      if (typeof height !== 'undefined') {
+        document.getElementById('urlbar').style.setProperty('--urlbar-height', `${height}px`);
+      }
+      gURLBar.valueFormatter._formatURL();
+    });
   },
 
   _updateEvent({ forCustomizableMode = false, dontRebuildAreas = false } = {}) {
