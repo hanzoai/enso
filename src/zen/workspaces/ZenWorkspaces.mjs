@@ -2555,12 +2555,14 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     }
   }
 
+  #changeToEmptyTab() {
+    const isEmpty = gBrowser.selectedTab.hasAttribute('zen-empty-tab');
+    gZenCompactModeManager.sidebar.toggleAttribute('zen-has-empty-tab', isEmpty);
+  }
+
   async onLocationChange(event) {
     let tab = event.target;
-    gZenCompactModeManager.sidebar.toggleAttribute(
-      'zen-has-empty-tab',
-      gBrowser.selectedTab.hasAttribute('zen-empty-tab')
-    );
+    this.#changeToEmptyTab();
     if (!this.workspaceEnabled || this._inChangingWorkspace || this._isClosingWindow) {
       return;
     }
