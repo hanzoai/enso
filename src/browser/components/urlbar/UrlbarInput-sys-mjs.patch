@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 1c447bd31de854d1522dbcfb5d7ad557c84f1388..74c5fbd66d205f932424224d88135fefdae79d50 100644
+index 1c447bd31de854d1522dbcfb5d7ad557c84f1388..2341d04c5afee303ce4150c3c2c563851ae89385 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -74,6 +74,13 @@ ChromeUtils.defineLazyGetter(lazy, "logger", () =>
@@ -58,7 +58,7 @@ index 1c447bd31de854d1522dbcfb5d7ad557c84f1388..74c5fbd66d205f932424224d88135fef
      this.handleNavigation({ event });
 +    this.document.ownerGlobal.setTimeout(() => {
 +      this.window.document.documentElement.removeAttribute("supress-primary-adjustment");
-+    }, 0);
++    }, 100);
    }
  
    /**
@@ -106,7 +106,7 @@ index 1c447bd31de854d1522dbcfb5d7ad557c84f1388..74c5fbd66d205f932424224d88135fef
 +    this.window.gBrowser.selectedBrowser.focus();
 +    this.document.ownerGlobal.setTimeout(() => {
 +      this.window.document.documentElement.removeAttribute("supress-primary-adjustment");
-+    }, 0);
++    }, 100);
 +    
 +    this.removeAttribute("zen-floating-urlbar");
 +

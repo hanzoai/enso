@@ -1558,7 +1558,11 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
   }
 
   async changeWorkspace(workspace, ...args) {
-    if (!this.workspaceEnabled || this._inChangingWorkspace) {
+    if (
+      !this.workspaceEnabled ||
+      this._inChangingWorkspace ||
+      gNavToolbox.hasAttribute('movingtab')
+    ) {
       return;
     }
     this._inChangingWorkspace = true;
