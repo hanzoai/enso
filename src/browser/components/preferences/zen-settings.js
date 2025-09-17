@@ -1126,11 +1126,6 @@ Preferences.addAll([
     default: true,
   },
   {
-    id: 'zen.view.compact.color-toolbar',
-    type: 'bool',
-    default: true,
-  },
-  {
     id: 'zen.urlbar.behavior',
     type: 'string',
     default: 'float',

@@ -99,8 +99,8 @@
       }
 
       /* When we have multiple toolbars and the top-toolbar is NOT being hidden,
-          * we need to adjust the top-padding of the toolbox to account for the
-          * extra toolbar height. */
+       * we need to adjust the top-padding of the toolbox to account for the
+       * extra toolbar height. */
       @media not -moz-pref('zen.view.compact.hide-toolbar') {
         &:not([zen-single-toolbar='true']) {
           #navigator-toolbox:not([animate='true']) {
@@ -149,7 +149,7 @@
           display: flex;
           overflow: clip;
           z-index: -1;
-          background: var(--zen-dialog-background);
+          background: black; /* Any color thats not white */
           box-shadow: var(--zen-big-shadow);
           @media -moz-pref('zen.theme.acrylic-elements') {
             background: transparent;
@@ -358,12 +358,6 @@
           & > * {
             position: relative !important;
           }
-
-          @media -moz-pref('zen.view.compact.color-toolbar') {
-            background-attachment: fixed;
-            background: var(--zen-main-browser-background-toolbar);
-            background-size: 100% 100vh;
-          }
         }
       }
 
@@ -390,7 +384,7 @@
             transition: opacity 0.3s ease-in-out;
           }
         }
-        border-top-width: 1px;
+        border-top-width: 0px;
 
         top: -1px;
         overflow: initial;
