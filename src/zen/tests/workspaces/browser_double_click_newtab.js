@@ -20,7 +20,6 @@ add_task(async function test_Check_Creation() {
   ok(placeToDoubleClick, 'We should have found the place to double click.');
   EventUtils.sendMouseEvent({ type: 'dblclick' }, placeToDoubleClick, window);
   await TestUtils.waitForCondition(() => gBrowser.tabs.length === 3, 'New tab should be opened.');
-
   ok(true, 'New tab should be opened.');
   await BrowserTestUtils.removeTab(gBrowser.tabs[1]);
   ok(gBrowser.tabs.length === 2, 'There should be one tab.');

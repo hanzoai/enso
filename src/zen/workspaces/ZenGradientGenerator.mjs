@@ -1183,7 +1183,7 @@
           let color2 = this.getSingleRGBColor(themedColors[0], forToolbar);
           let color3 = this.getSingleRGBColor(themedColors[1], forToolbar);
           return [
-            `linear-gradient(to top, ${color1} -50%, transparent 110%)`,
+            `linear-gradient(to top, ${color1} -50%, transparent 125%)`,
             `radial-gradient(circle at 0% 0%, ${color2} 10%, transparent 80%)`,
             `radial-gradient(circle at 100% -100%, ${color3} -100%, transparent 400%)`,
           ].join(', ');

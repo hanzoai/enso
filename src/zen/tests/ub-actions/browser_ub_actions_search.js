@@ -18,10 +18,12 @@ add_task(async function test_Ub_Actions_Search() {
     });
     await new Promise((resolve) =>
       setTimeout(async () => {
-        let { result } = await UrlbarTestUtils.getRowAt(window, Math.min(action.suggestedIndex, 1));
+        let index = typeof action.suggestedIndex === 'number' ? action.suggestedIndex : Infinity;
+        let { result } = await UrlbarTestUtils.getRowAt(window, Math.min(index, 1));
         Assert.equal(result.providerName, 'ZenUrlbarProviderGlobalActions');
         Assert.equal(result.payload.title, label);
-      }, 100)
+        resolve();
+      }, 0)
     );
   }
 });
