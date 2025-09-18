@@ -279,6 +279,14 @@ zen-folder {
       & svg {
         filter: contrast(125%);
 
+        :root:not([zen-sidebar-expanded]) & {
+          transition: transform 0.1s ease;
+
+          &[state='open'] {
+            transform: translate(-2px);
+          }
+        }
+
         & image {
           fill-opacity: 0.9;
           -moz-context-properties: fill, fill-opacity;
