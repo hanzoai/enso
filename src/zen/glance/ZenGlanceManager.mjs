@@ -210,9 +210,9 @@
                 opacity: 1,
               },
               {
-                duration: 0.4,
+                duration: 0.3,
                 type: 'spring',
-                bounce: 0.25,
+                bounce: 0.2,
               }
             )
             .then(() => {
