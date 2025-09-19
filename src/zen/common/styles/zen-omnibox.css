@@ -659,4 +659,8 @@
   & .action-contextualidentity {
     display: none;
   }
+
+  .urlbarView[noresults] > .urlbarView-body-outer > .urlbarView-body-inner > & {
+    display: none;
+  }
 }
