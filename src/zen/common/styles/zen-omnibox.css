@@ -586,6 +586,7 @@
 
 .urlbarView-no-wrap {
   align-items: center !important;
+  position: relative;
 }
 
 #urlbar-label-box,
