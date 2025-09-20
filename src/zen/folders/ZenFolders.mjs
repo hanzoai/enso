@@ -1273,7 +1273,7 @@
           const activeFolderId = lastActiveFolder?.id;
           const splitViewId = isSplitView ? item?.group?.id : null;
 
-          if (item.multiselected || item.selected || item.hasAttribute('folder-active')) {
+          if (item.multiselected || item.selected) {
             selectedTabs.push(item);
             if (splitViewId) splitViewIds.add(splitViewId);
             if (activeFolderId) activeFoldersIds.add(activeFolderId);
@@ -1298,7 +1298,7 @@
       );
     }
 
-    #calculateHeightShift(tabsContainer, selectedTabs) {
+    #calculateHeightShift(tabsContainer, selectedTabs = []) {
       let heightShift = 0;
       if (selectedTabs.length) {
         return heightShift;
@@ -1330,7 +1330,9 @@
           const { item, splitViewId, activeFolderId } = groupItems[i];
 
           // Skip selected items
-          if (selectedTabs.includes(item)) continue;
+          if (selectedTabs.includes(item)) {
+            continue;
+          }
 
           // Skip items from selected split-view groups
           if (splitViewId && splitViewIds.has(splitViewId)) continue;
@@ -1360,7 +1362,7 @@
       animations.push(
         ...this.#createAnimation(
           itemsToHide,
-          { opacity: 0, height: 0 },
+          { opacity: [1, 0], height: 0 },
           { duration: 0.12, ease: 'easeInOut' }
         ),
         ...this.updateFolderIcon(group),
@@ -1474,7 +1476,7 @@
       animations.push(
         ...this.#createAnimation(
           itemsToShow,
-          { opacity: '', height: '' },
+          { opacity: 1, height: '' },
           { duration: 0.12, ease: 'easeInOut' }
         ),
         ...this.#createAnimation(
@@ -1520,7 +1522,7 @@
         tabsContainer.offsetHeight;
         // tabsContainer.setAttribute('hidden', true);
 
-        const heightUntilSelected = this.#calculateHeightShift(tabsContainer, []);
+        const heightUntilSelected = this.#calculateHeightShift(tabsContainer);
 
         // Collect animations for this specific folder becoming inactive
         animations.push(
@@ -1565,7 +1567,7 @@
             tabsContainer.offsetHeight;
             tabsContainer.setAttribute('hidden', true);
 
-            const heightUntilSelected = this.#calculateHeightShift(tabsContainer, []);
+            const heightUntilSelected = this.#calculateHeightShift(tabsContainer);
 
             // Collect animations for this specific folder becoming inactive
             const folderAnimation = [
@@ -1750,7 +1752,7 @@
       if (!group?.isZenFolder) return;
       const groupStart = group.querySelector('.zen-tab-group-start');
       const tabsContainer = group.querySelector('.tab-group-container');
-      const heightContainer = expand ? 0 : this.#calculateHeightShift(tabsContainer, []);
+      const heightContainer = expand ? 0 : this.#calculateHeightShift(tabsContainer);
       tabsContainer.style.overflow = expand ? '' : 'clip';
 
       this.#createAnimation(
