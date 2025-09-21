@@ -381,7 +381,7 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
         ownerGlobal.WebExtensionPolicy.getByID(payload.extensionId)
       );
       if (action) {
-        action.openPopup(ownerGlobal, /* without user interaction = */ true);
+        action.triggerAction(ownerGlobal);
       }
       return;
     }
