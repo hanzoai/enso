@@ -367,6 +367,7 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
     const payload = result.payload;
     const command = payload.zenCommand;
     const ownerGlobal = details.element.ownerGlobal;
+    ownerGlobal.gBrowser.selectedBrowser.focus();
     if (typeof command === 'function') {
       command(ownerGlobal);
       return;
@@ -390,7 +391,6 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
     }
     const commandToRun = ownerGlobal.document.getElementById(command);
     if (commandToRun) {
-      ownerGlobal.gBrowser.selectedBrowser.focus();
       commandToRun.doCommand();
     }
   }
