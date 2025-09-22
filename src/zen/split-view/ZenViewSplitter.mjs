@@ -889,7 +889,9 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
   removeGroup(groupIndex) {
     const group = this._data[groupIndex];
     for (const tab of group.tabs.reverse()) {
-      gBrowser.ungroupTab(tab);
+      if (tab.group?.hasAttribute('split-view-group')) {
+        gBrowser.ungroupTab(tab);
+      }
     }
     if (this.currentView === groupIndex) {
       this.deactivateCurrentSplitView();
@@ -1951,7 +1953,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
         const groupIndex = this._data.findIndex((group) => group.tabs.includes(emptyTab));
         const newSelectedTab = gBrowser.selectedTab;
         const cleanup = () => {
-          this.removeTabFromGroup(emptyTab, groupIndex, { changeTab: !onSwitch });
+          this.removeTabFromGroup(emptyTab, groupIndex, { changeTab: !onSwitch, forUnsplit: true });
           const command = document.getElementById('cmd_zenNewEmptySplit');
           command.removeAttribute('disabled');
         };

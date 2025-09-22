@@ -3082,7 +3082,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
   }
 
   handleTabCloseWindow() {
-    if (this.shouldCloseWindow()) {
+    if (Services.prefs.getBoolPref('zen.tabs.close-window-with-empty')) {
       document.getElementById('cmd_closeWindow').doCommand();
     }
   }

@@ -643,7 +643,8 @@ var gZenVerticalTabsManager = {
       !aItem.isConnected ||
       gZenUIManager.testingEnabled ||
       !gZenStartup.isReady ||
-      !gZenPinnedTabManager.hasInitializedPins
+      !gZenPinnedTabManager.hasInitializedPins ||
+      aItem.group?.hasAttribute('split-view-group')
     ) {
       return;
     }
