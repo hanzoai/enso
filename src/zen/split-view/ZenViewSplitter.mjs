@@ -212,6 +212,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
       this.removeGroup(groupIndex);
       if (changeTab) {
         gBrowser.selectedTab = remainingTabs[remainingTabs.length - 1];
+        document.getElementById('cmd_zenNewEmptySplit').removeAttribute('disabled');
       }
     } else {
       const node = this.getSplitNodeFromTab(tab);
@@ -1950,7 +1951,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
         const groupIndex = this._data.findIndex((group) => group.tabs.includes(emptyTab));
         const newSelectedTab = gBrowser.selectedTab;
         const cleanup = () => {
-          this.removeTabFromGroup(emptyTab, groupIndex, { changeTab: false });
+          this.removeTabFromGroup(emptyTab, groupIndex, { changeTab: !onSwitch });
           const command = document.getElementById('cmd_zenNewEmptySplit');
           command.removeAttribute('disabled');
         };
@@ -1969,9 +1970,6 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
           this.resetTabState(emptyTab, false);
           this.splitTabs([selectedTab, newSelectedTab], 'grid', 1);
         } else {
-          if (!onSwitch) {
-            gBrowser.selectedTab = selectedTab;
-          }
           cleanup();
         }
       },
