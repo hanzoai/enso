@@ -6,6 +6,8 @@
 
 tab-group[split-view-group] {
   display: block;
+  min-width: 100%;
+
   @media (prefers-reduced-motion: no-preference) {
     transition: var(--zen-tabbox-element-indent-transition);
 
