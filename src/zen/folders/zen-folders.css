@@ -6,7 +6,6 @@
 
 tab-group[split-view-group] {
   display: block;
-  min-width: 100%;
 
   @media (prefers-reduced-motion: no-preference) {
     transition: var(--zen-tabbox-element-indent-transition);
@@ -151,6 +150,10 @@ tab-group[split-view-group] {
   tab-group .tab-group-container {
     flex-direction: column;
   }
+
+  tab-group[split-view-group] {
+    min-width: 100%;
+  }
 }
 
 tab-group[split-view-group] .tabbrowser-tab {
@@ -294,6 +297,38 @@ zen-folder {
           -moz-context-properties: fill, fill-opacity;
           fill: var(--zen-folder-stroke);
           transform: translate(4px, 6.5px);
+        }
+
+        & g,
+        & rect,
+        & path {
+          transition:
+            transform 0.3s cubic-bezier(0.42, 0, 0, 1),
+            opacity 0.3s cubic-bezier(0.42, 0, 0, 1);
+        }
+
+        &[state='open'] .back {
+          transform: skewX(16deg) translate(-2px, 3.4px) scale(0.85);
+        }
+
+        &[state='open'] :is(.front, .dots, .icon) {
+          transform: skewX(-16deg) translate(11.1px, 3.4px) scale(0.85);
+        }
+
+        & .icon {
+          opacity: 1;
+        }
+
+        & .dots {
+          opacity: 0;
+        }
+
+        &[active='true'] .icon {
+          opacity: 0;
+        }
+
+        &[active='true'] .dots {
+          opacity: 1;
         }
       }
     }
