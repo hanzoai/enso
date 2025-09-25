@@ -20,6 +20,11 @@
   width: 100%;
 }
 
+#pinned-drop-indicator {
+  /* We dont use this firefox feature */
+  display: none !important;
+}
+
 /* ==========================================================================
    Single Toolbar Mode Specific Styles (`zen-single-toolbar='true'`)
    ========================================================================== */
