@@ -2258,7 +2258,6 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
 
     // Update workspace UI
     await this._updateWorkspacesChangeContextMenu();
-    // gZenUIManager.updateTabsToolbar();
     await this._propagateWorkspaceData({ clearCache: false, onInit });
 
     gZenThemePicker.onWorkspaceChange(workspace);
