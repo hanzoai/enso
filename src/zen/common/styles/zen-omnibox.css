@@ -541,10 +541,6 @@
     fill: currentColor;
     width: 16px;
     height: 16px;
-
-    &[workspaceIcon] {
-      scale: 1.4;
-    }
   }
 
   &[hidden] {

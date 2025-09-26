@@ -335,7 +335,6 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
         attributes: {
           src: result.payload.prettyIcon || '',
           hidden: !prettyIconIsSvg || !result.payload.prettyIcon,
-          workspaceIcon: !!result.payload.workspaceId,
         },
       },
     };
