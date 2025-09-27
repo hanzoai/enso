@@ -250,11 +250,9 @@ var gZenUIManager = {
     const input = gURLBar.textbox;
     if (gURLBar.hasAttribute('breakout-extend') && !this._animatingSearchMode) {
       this._animatingSearchMode = true;
-      this.motion
-        .animate(input, { scale: [1, 0.98, 1] }, { duration: 0.25, delay: 0.1 })
-        .then(() => {
-          delete this._animatingSearchMode;
-        });
+      this.motion.animate(input, { scale: [1, 0.98, 1] }, { duration: 0.25 }).then(() => {
+        delete this._animatingSearchMode;
+      });
       if (searchMode) {
         gURLBar.setAttribute('animate-searchmode', 'true');
         this._animatingSearchModeTimeout = setTimeout(() => {

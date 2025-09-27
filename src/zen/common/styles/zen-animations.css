@@ -103,7 +103,7 @@
 /* Mark: URL Bar */
 @keyframes zen-urlbar-searchmode {
   0% {
-    box-shadow: 0 0 20px color-mix(in srgb, var(--zen-primary-color), var(--toolbox-textcolor) 40%);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--zen-primary-color), var(--toolbox-textcolor) 20%);
   }
 
   100% {
