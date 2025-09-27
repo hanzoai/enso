@@ -172,8 +172,8 @@
 
   & .urlbar-background {
     --zen-urlbar-background-base: light-dark(
-      white,
-      color-mix(in srgb, hsl(0, 0%, 1%), var(--zen-colors-primary) 25%)
+      #fbfbfb,
+      color-mix(in srgb, hsl(0, 0%, 1%), var(--zen-colors-primary) 30%)
     );
     @media -moz-pref('zen.theme.acrylic-elements') {
       --zen-urlbar-background-transparent: color-mix(
@@ -186,7 +186,7 @@
       --zen-urlbar-background-transparent,
       var(--zen-urlbar-background-base)
     ) !important;
-    box-shadow: 0px 0px 90px -10px light-dark(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.75)) !important;
+    box-shadow: 0px 30px 140px -15px light-dark(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6)) !important;
     backdrop-filter: none !important;
     outline: 0.5px solid light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.2)) !important;
     outline-offset: var(--zen-urlbar-outline-offset) !important;
@@ -208,7 +208,7 @@
     height: 100%;
     border-radius: inherit;
     pointer-events: none;
-    animation: zen-urlbar-searchmode ease-out 0.7s forwards;
+    animation: zen-urlbar-searchmode ease-out 1s forwards;
   }
 }
 
@@ -678,4 +678,5 @@
 
 #urlbar-search-mode-indicator-title {
   font-weight: 600;
+  padding: 0px;
 }

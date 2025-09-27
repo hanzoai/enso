@@ -260,7 +260,7 @@ var gZenUIManager = {
             gURLBar.removeAttribute('animate-searchmode');
             delete this._animatingSearchModeTimeout;
           });
-        }, 700);
+        }, 1000);
       }
     }
   },
