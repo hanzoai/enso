@@ -1495,6 +1495,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
         continue;
       }
 
+      tab.owner = null;
       if (container) {
         if (tab.group?.hasAttribute('split-view-group')) {
           gBrowser.zenHandleTabMove(tab.group, () => {
@@ -2751,14 +2752,12 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
 
   getTabsToExclude(aTab) {
     const tabWorkspaceId = aTab.getAttribute('zen-workspace-id');
+    const containerId = aTab.getAttribute('usercontextid') ?? '0';
     // Return all tabs that are not on the same workspace
     return this.allStoredTabs.filter(
       (tab) =>
         tab.getAttribute('zen-workspace-id') !== tabWorkspaceId &&
-        !(
-          this.containerSpecificEssentials &&
-          tab.getAttribute('container') !== aTab.getAttribute('container')
-        ) &&
+        !this._shouldShowTab(tab, tabWorkspaceId, containerId, this._workspaceCache) &&
         !tab.hasAttribute('zen-empty-tab')
     );
   }
