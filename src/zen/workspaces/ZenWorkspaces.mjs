@@ -2996,6 +2996,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
 
   onWindowResize(event = undefined) {
     if (!(!event || event.target === window)) return;
+    gZenUIManager.updateTabsToolbar();
     // Check if workspace icons overflow the parent container
     const parent = this.workspaceIcons;
     if (!parent || this._processingResize) {
