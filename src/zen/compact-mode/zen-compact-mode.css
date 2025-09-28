@@ -322,9 +322,9 @@
       }
 
       & #zen-appcontent-navbar-wrapper {
-                  & .zen-toolbar-background {
-            display: flex;
-          }
+        & .zen-toolbar-background {
+          display: flex;
+        }
         --zen-compact-toolbar-offset: 5px;
         position: absolute;
         top: calc(-1 * var(--zen-toolbar-height) + 1px);
