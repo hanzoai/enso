@@ -322,6 +322,9 @@
       }
 
       & #zen-appcontent-navbar-wrapper {
+                  & .zen-toolbar-background {
+            display: flex;
+          }
         --zen-compact-toolbar-offset: 5px;
         position: absolute;
         top: calc(-1 * var(--zen-toolbar-height) + 1px);
@@ -360,9 +363,6 @@
         ) {
         & #zen-appcontent-navbar-container {
           visibility: visible !important;
-          & .zen-toolbar-background {
-            display: flex;
-          }
         }
         border-top-width: 0px;
 
