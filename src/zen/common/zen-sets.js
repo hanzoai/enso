@@ -122,6 +122,10 @@ document.addEventListener(
             }
             break;
           }
+          case 'cmd_zenUnloadWorkspace': {
+            gZenWorkspaces.unloadWorkspace();
+            break;
+          }
           default:
             gZenGlanceManager.handleMainCommandSet(event);
             if (event.target.id.startsWith('cmd_zenWorkspaceSwitch')) {
