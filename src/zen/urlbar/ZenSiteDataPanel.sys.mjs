@@ -357,6 +357,23 @@ export class nsZenSiteDataPanel {
         this.window.BookmarkingUI.onStarCommand(event);
         break;
       }
+      case 'zen-site-data-header-share': {
+        if (Services.zen.canShare()) {
+          const buttonRect = event.target.getBoundingClientRect();
+          const currentUrl = this.window.gBrowser.currentURI;
+          Services.zen.share(
+            currentUrl,
+            '',
+            '',
+            buttonRect.left,
+            this.window.innerHeight - buttonRect.bottom,
+            buttonRect.width,
+            buttonRect.height
+          );
+        } else {
+          this.window.gZenCommonActions.copyCurrentURLToClipboard();
+        }
+      }
     }
   }
 

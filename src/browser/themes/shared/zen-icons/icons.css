@@ -471,6 +471,11 @@
 }
 
 /* permissions */
+
+#zen-site-data-icon-button {
+  display: flex !important;
+}
+
 #identity-permission-box,
 #identity-box:not([pageproxystate='invalid']) #identity-icon-box,
 #identity-box[pageproxystate='invalid'] #zen-site-data-icon-button {
