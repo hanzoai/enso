@@ -254,7 +254,7 @@
 
   #urlbar:not([breakout-extend='true']) {
     #identity-box:not([pageproxystate='invalid']) {
-      order: 2;
+      order: 9;
     }
   }
 
