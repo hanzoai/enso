@@ -1496,7 +1496,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
 
     this.log('Unloading workspace', workspaceId);
 
-    await gBrowser.explicitUnloadTabs(tabsToUnload);  // TODO: unit test this
+    await gBrowser.explicitUnloadTabs(tabsToUnload); // TODO: unit test this
   }
 
   moveTabToWorkspace(tab, workspaceID) {

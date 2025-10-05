@@ -20,7 +20,8 @@
   width: 100%;
 }
 
-#pinned-drop-indicator {
+#pinned-drop-indicator,
+#drag-to-pin-promo-card {
   /* We dont use this firefox feature */
   display: none !important;
 }
@@ -61,10 +62,6 @@
     &:root[zen-right-side='true'] #zen-sidebar-top-buttons .titlebar-buttonbox-container {
       margin-right: calc(-1 * var(--zen-toolbox-padding));
     }
-  }
-
-  #tabbrowser-arrowscrollbox {
-    min-height: fit-content !important;
   }
 }
 

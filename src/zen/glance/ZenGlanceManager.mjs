@@ -623,6 +623,9 @@
       browserElement.style.minWidth = '';
       browserElement.style.minHeight = '';
 
+      this.browserWrapper.style.height = '100%';
+      this.browserWrapper.style.width = '85%';
+
       gBrowser.tabContainer._invalidateCachedTabs();
       this.overlay.style.removeProperty('overflow');
       this.browserWrapper.removeAttribute('animate');
