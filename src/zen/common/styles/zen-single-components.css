@@ -177,7 +177,7 @@ body > #confetti {
   #zen-sidebar-foot-buttons & {
     --tab-border-radius: 6px;
     --toolbarbutton-border-radius: var(--tab-border-radius);
-    --toolbarbutton-inner-padding: 6px;
+    --toolbarbutton-inner-padding: 7px;
     --toolbarbutton-outer-padding: 2px;
   }
 
