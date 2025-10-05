@@ -29,6 +29,8 @@
 
   &[breakout-extend='true'] {
     --urlbar-container-padding: 0px;
+    /* See issue https://github.com/zen-browser/desktop/issues/5229 */
+    visibility: visible;
   }
 
   :root[zen-single-toolbar='true'] &[breakout-extend='true'],
