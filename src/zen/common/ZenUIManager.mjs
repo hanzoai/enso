@@ -1049,7 +1049,7 @@ var gZenVerticalTabsManager = {
         topButtons.prepend(windowButtons);
       }
 
-      if (!isSingleToolbar && isCompactMode) {
+      if ((!isSingleToolbar && isCompactMode) || !isSidebarExpanded) {
         navBar.prepend(topButtons);
       }
 
@@ -1091,6 +1091,7 @@ var gZenVerticalTabsManager = {
         appContentNavbarContaienr.append(windowButtons);
       }
 
+      gZenCompactModeManager.updateCompactModeContext(isSingleToolbar);
       this.recalculateURLBarHeight();
 
       // Always move the splitter next to the sidebar

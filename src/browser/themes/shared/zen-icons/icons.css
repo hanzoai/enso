@@ -56,7 +56,7 @@
 #sidebar-button:-moz-locale-dir(ltr):not([positionend]),
 #sidebar-button:-moz-locale-dir(rtl)[positionend],
 #zen-toggle-compact-mode {
-  list-style-image: url('chrome://browser/skin/sidebars.svg') !important;
+  list-style-image: url('sidebar.svg') !important;
 }
 
 #downloads-button,

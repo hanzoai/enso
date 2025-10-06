@@ -124,10 +124,6 @@
   }
 }
 
-:root:not([zen-single-toolbar='true']) #tabbrowser-tabs {
-  margin-top: -2px;
-}
-
 /* ==========================================================================
    Pinned Tabs Separator
    ========================================================================== */
@@ -708,7 +704,6 @@
 
   & #titlebar {
     display: grid;
-    grid-template-rows: auto 1fr;
     overflow: clip;
   }
 
@@ -975,14 +970,8 @@
     height: 100%;
     align-items: center;
 
-    :root:not([zen-sidebar-expanded='true']):not([zen-right-side='true']) {
-      padding-inline-start: var(--zen-toolbox-padding);
-    }
     #nav-bar & {
-      padding-inline-start: var(--toolbarbutton-outer-padding);
-    }
-    :root[zen-right-side='true']:not([zen-window-buttons-reversed='true']) {
-      padding-inline-end: var(--zen-toolbox-padding);
+      padding-inline-end: var(--toolbarbutton-outer-padding);
     }
 
     :root:not([zen-sidebar-expanded='true']) & toolbarspring {

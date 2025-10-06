@@ -70,7 +70,8 @@ export var ZenCustomizableUI = new (class {
           <toolbarbutton id="zen-toggle-compact-mode"
             class="toolbarbutton-1"
             command="cmd_toggleCompactModeIgnoreHover"
-            data-l10n-id="zen-toggle-compact-mode-button" />
+            data-l10n-id="zen-toggle-compact-mode-button"
+            removable="true" />
           <html:div id="zen-sidebar-top-buttons-separator" skipintoolbarset="true" overflows="false"></html:div>
         </hbox>
       </toolbar>

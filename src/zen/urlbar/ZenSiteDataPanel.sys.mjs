@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import { AppConstants } from 'resource://gre/modules/AppConstants.sys.mjs';
+
 export class nsZenSiteDataPanel {
   #iconMap = {
     install: 'extension',
@@ -372,6 +374,9 @@ export class nsZenSiteDataPanel {
           );
         } else {
           this.window.gZenCommonActions.copyCurrentURLToClipboard();
+        }
+        if (AppConstants.platform !== 'macosx') {
+          this.panel.hidePopup();
         }
       }
     }

@@ -210,6 +210,10 @@
 
   --zen-workspace-indicator-height: 46px;
 
+  &:not([zen-sidebar-expanded='true']) {
+    --zen-workspace-indicator-height: 38px;
+  }
+
   --toolbar-field-color: var(--toolbox-textcolor) !important;
 
   &[zen-private-window='true'] {

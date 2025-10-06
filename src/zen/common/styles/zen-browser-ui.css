@@ -311,3 +311,10 @@
     opacity: 1;
   }
 }
+
+#zen-appcontent-navbar-wrapper #zen-sidebar-top-buttons {
+  max-width: fit-content;
+  :root[zen-right-side='true'] & {
+    order: 999;
+  }
+}
