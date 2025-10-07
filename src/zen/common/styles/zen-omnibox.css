@@ -29,6 +29,9 @@
 
   &[breakout-extend='true'] {
     --urlbar-container-padding: 0px;
+  }
+
+  :root[inDOMFullscreen] & {
     /* See issue https://github.com/zen-browser/desktop/issues/5229 */
     visibility: visible;
   }
