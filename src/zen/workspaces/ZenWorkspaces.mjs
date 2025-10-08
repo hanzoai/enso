@@ -2563,7 +2563,9 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
         this._lastSelectedWorkspaceTabs[workspaceID] = gZenGlanceManager.getTabOrGlanceParent(tab);
         tab.removeAttribute('change-workspace');
         const workspace = this.getWorkspaceFromId(workspaceID);
-        await this.changeWorkspace(workspace);
+        setTimeout(() => {
+          this.changeWorkspace(workspace);
+        }, 0);
       }
       return;
     }
