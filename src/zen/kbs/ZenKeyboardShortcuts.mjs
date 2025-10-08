@@ -1343,11 +1343,16 @@ var gZenKeyboardShortcutsManager = {
         targetShortcut.getModifiers().equals(modifiers) &&
         targetShortcut.getKeyNameOrCode()?.toLowerCase() == realShortcut
       ) {
-        return true;
+        return {
+          hasConflicts: true,
+          conflictShortcut: targetShortcut,
+        };
       }
     }
 
-    return false;
+    return {
+      hasConflicts: false,
+    };
   },
 
   getShortcutFromCommand(command) {
