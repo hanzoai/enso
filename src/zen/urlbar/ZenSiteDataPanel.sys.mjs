@@ -4,9 +4,16 @@
 
 import { AppConstants } from 'resource://gre/modules/AppConstants.sys.mjs';
 
+const lazy = {};
+
+ChromeUtils.defineESModuleGetters(lazy, {
+  FeatureCallout: 'resource:///modules/asrouter/FeatureCallout.sys.mjs',
+});
+
 export class nsZenSiteDataPanel {
   #iconMap = {
     install: 'extension',
+    'site-protection': 'shield',
   };
 
   constructor(window) {
@@ -25,7 +32,7 @@ export class nsZenSiteDataPanel {
       </box>
     `);
     this.anchor = button.querySelector('#zen-site-data-icon-button');
-    this.document.getElementById('identity-icon-box').after(button);
+    this.document.getElementById('identity-icon-box').before(button);
     this.window.gUnifiedExtensions._button = this.anchor;
 
     this.document
@@ -36,6 +43,7 @@ export class nsZenSiteDataPanel {
     this.document.getElementById('unified-extensions-panel-template').remove();
 
     this.#initEventListeners();
+    this.#maybeShowFeatureCallout();
   }
 
   #initEventListeners() {
@@ -159,7 +167,7 @@ export class nsZenSiteDataPanel {
       permissions
         .map(function (permission) {
           let [id, key] = permission.id.split(SitePermissions.PERM_KEY_DELIMITER);
-          if (id == '3rdPartyFrameStorage') {
+          if (id == '3rdPartyFrameStorage' || id == '3rdPartyStorage') {
             return key;
           }
           return null;
@@ -237,6 +245,20 @@ export class nsZenSiteDataPanel {
       }
     }
 
+    // Add site protection permissions if needed.
+    const { gProtectionsHandler } = this.window;
+    if (
+      gBrowser.currentURI.schemeIs('http') ||
+      gBrowser.currentURI.schemeIs('https') ||
+      gBrowser.currentURI.schemeIs('ftp')
+    ) {
+      permissions.push({
+        id: 'site-protection',
+        state: gProtectionsHandler.hasException ? SitePermissions.BLOCK : SitePermissions.ALLOW,
+        scope: SitePermissions.SCOPE_PERSISTENT,
+      });
+    }
+
     list.innerHTML = '';
     for (let permission of permissions) {
       let [id, key] = permission.id.split(SitePermissions.PERM_KEY_DELIMITER);
@@ -307,10 +329,11 @@ export class nsZenSiteDataPanel {
     nameLabel.setAttribute('flex', '1');
     nameLabel.setAttribute('class', 'permission-popup-permission-label');
     let label = SitePermissions.getPermissionLabel(permission.id);
-    if (label === null) {
-      return null;
+    if (label) {
+      nameLabel.textContent = label;
+    } else {
+      this.document.l10n.setAttributes(nameLabel, 'zen-site-data-setting-' + idNoSuffix);
     }
-    nameLabel.textContent = label;
     labelContainer.appendChild(nameLabel);
 
     let stateLabel = this.document.createXULElement('label');
@@ -338,7 +361,7 @@ export class nsZenSiteDataPanel {
         break;
       }
       case 'zen-site-data-security-info': {
-        this.window.displaySecurityInfo();
+        this.window.gIdentityHandler._openPopup(event);
         break;
       }
       case 'zen-site-data-actions': {
@@ -399,7 +422,16 @@ export class nsZenSiteDataPanel {
         return;
     }
 
-    SitePermissions.setForPrincipal(gBrowser.contentPrincipal, permission.id, newState);
+    if (permission.id === 'site-protection') {
+      const { gProtectionsHandler } = this.window;
+      if (newState === SitePermissions.BLOCK) {
+        gProtectionsHandler.disableForCurrentPage();
+      } else {
+        gProtectionsHandler.enableForCurrentPage();
+      }
+    } else {
+      SitePermissions.setForPrincipal(gBrowser.contentPrincipal, permission.id, newState);
+    }
 
     label.parentNode.setAttribute('state', newState == SitePermissions.ALLOW ? 'allow' : 'block');
     label
@@ -444,5 +476,86 @@ export class nsZenSiteDataPanel {
         this.#preparePanel();
         break;
     }
+  }
+
+  async #maybeShowFeatureCallout() {
+    const kPref = 'zen.site-data-panel.show-callout';
+    if (!Services.prefs.getBoolPref(kPref, false)) {
+      return;
+    }
+    Services.prefs.setBoolPref(kPref, false);
+    const { FeatureCallout } = lazy;
+    const { gBrowser, gZenWorkspaces } = this.window;
+    await gZenWorkspaces.promiseInitialized;
+    await new Promise((resolve) => {
+      const checkEmptyTab = () => {
+        if (!gBrowser.selectedTab.hasAttribute('zen-empty-tab')) {
+          resolve();
+          return;
+        }
+        this.window.addEventListener('TabSelect', checkEmptyTab, { once: true });
+      };
+      checkEmptyTab();
+    });
+    this.anchor.setAttribute('open', 'true');
+    const callout = new FeatureCallout({
+      win: this.window,
+      location: 'chrome',
+      context: 'chrome',
+      browser: gBrowser.selectedBrowser,
+      theme: { preset: 'chrome' },
+    });
+    this.window.setTimeout(() => {
+      callout.showFeatureCallout({
+        id: 'ZEN_EXTENSIONS_PANEL_MOVE_CALLOUT',
+        template: 'feature_callout',
+        groups: ['cfr'],
+        content: {
+          id: 'ZEN_EXTENSIONS_PANEL_MOVE_CALLOUT',
+          template: 'multistage',
+          backdrop: 'transparent',
+          transitions: false,
+          screens: [
+            {
+              id: 'ZEN_EXTENSIONS_PANEL_MOVE_CALLOUT_HORIZONTAL',
+              anchors: [
+                {
+                  selector: '#zen-site-data-icon-button',
+                  panel_position: {
+                    anchor_attachment: 'bottomcenter',
+                    callout_attachment: 'topleft',
+                  },
+                },
+                {
+                  selector: '#identity-icon-box',
+                  panel_position: {
+                    anchor_attachment: 'bottomcenter',
+                    callout_attachment: 'topleft',
+                  },
+                },
+              ],
+              content: {
+                position: 'callout',
+                width: '355px',
+                padding: 16,
+                title: {
+                  string_id: 'zen-site-data-panel-feature-callout-title',
+                },
+                subtitle: {
+                  string_id: 'zen-site-data-panel-feature-callout-subtitle',
+                },
+                dismiss_button: {
+                  action: {
+                    dismiss: true,
+                  },
+                  background: true,
+                  size: 'small',
+                },
+              },
+            },
+          ],
+        },
+      });
+    }, 500);
   }
 }

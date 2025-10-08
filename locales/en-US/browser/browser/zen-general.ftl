@@ -89,3 +89,8 @@ zen-site-data-get-addons =
     .label = Add Extensions
 zen-site-data-site-settings =
     .label = All Site Settings
+
+zen-site-data-setting-site-protection = Site Protection
+
+zen-site-data-panel-feature-callout-title = A new home for add-ons, permissions, and more
+zen-site-data-panel-feature-callout-subtitle = Click the icon to manage site settings, view security info, access extensions, and perform common actions.

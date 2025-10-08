@@ -6,7 +6,7 @@ const { AppConstants } = ChromeUtils.importESModule('resource://gre/modules/AppC
 
 class nsZenUIMigration {
   PREF_NAME = 'zen.ui.migration.version';
-  MIGRATION_VERSION = 4;
+  MIGRATION_VERSION = 5;
 
   init(isNewProfile) {
     if (!isNewProfile) {
@@ -84,6 +84,10 @@ class nsZenUIMigration {
       'zen.theme.use-system-colors',
       Services.prefs.getBoolPref('zen.theme.use-sysyem-colors', false)
     );
+  }
+
+  _migrateV5() {
+    Services.prefs.setBoolPref('zen.site-data-panel.show-callout', true);
   }
 }
 
