@@ -622,7 +622,7 @@ var gZenCompactModeManager = {
           }
 
           if (
-            event.explicitOriginalTarget.closest('#urlbar[zen-floating-urlbar]') ||
+            event.explicitOriginalTarget?.closest?.('#urlbar[zen-floating-urlbar]') ||
             (document.documentElement.getAttribute('supress-primary-adjustment') === 'true' &&
               gZenVerticalTabsManager._hasSetSingleToolbar) ||
             this._hasHoveredUrlbar ||
