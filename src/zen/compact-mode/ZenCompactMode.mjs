@@ -339,6 +339,8 @@ var gZenCompactModeManager = {
           this.getAndApplySidebarWidth({});
           this._ignoreNextResize = true;
 
+          delete this._ignoreNextHover;
+
           resolve();
           return;
         }
@@ -577,7 +579,8 @@ var gZenCompactModeManager = {
             if (
               document.documentElement.getAttribute('supress-primary-adjustment') === 'true' ||
               this._hasHoveredUrlbar ||
-              this._ignoreNextHover
+              this._ignoreNextHover ||
+              target.hasAttribute('zen-has-hover')
             ) {
               return;
             }
