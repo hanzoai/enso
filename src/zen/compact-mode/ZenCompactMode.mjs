@@ -443,6 +443,7 @@ var gZenCompactModeManager = {
         } else {
           this.sidebar.removeAttribute('animate'); // remove the attribute if we are not animating
           document.documentElement.removeAttribute('zen-compact-animating');
+          resolve();
         }
       });
     });
