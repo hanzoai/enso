@@ -373,9 +373,10 @@
     /**
      * Handle element preview if provided
      * @param {Object} data - Glance data
+     * @param {Object} rect - The rectangle data
      * @returns {Element|null} The preview element or null
      */
-    #handleElementPreview(data) {
+    #handleElementPreview(data, rect) {
       if (!data.elementData) {
         return null;
       }
@@ -383,9 +384,11 @@
       const imageDataElement = document.createXULElement('image');
       imageDataElement.setAttribute('src', data.elementData);
       imageDataElement.classList.add('zen-glance-element-preview');
+      imageDataElement.style.width = `${data.width}px`;
+      imageDataElement.style.height = `${data.height}px`;
+
       this.browserWrapper.prepend(imageDataElement);
       this.#glances.get(this.#currentGlanceID).elementImageData = data.elementData;
-
       return imageDataElement;
     }
 
@@ -834,7 +837,7 @@
         const originalPosition = this.#glances.get(this.#currentGlanceID).originalPosition;
         const elementImageData = this.#glances.get(this.#currentGlanceID).elementImageData;
 
-        this.#addElementPreview(elementImageData);
+        this.#addElementPreview(elementImageData, originalPosition);
 
         // Create curved closing animation sequence
         const closingData = this.#createClosingDataFromOriginalPosition(originalPosition);
@@ -876,12 +879,15 @@
     /**
      * Add element preview if available
      * @param {string} elementImageData - The element image data
+     * @param {Object} rect - The rectangle data
      */
-    #addElementPreview(elementImageData) {
+    #addElementPreview(elementImageData, rect) {
       if (elementImageData) {
         const imageDataElement = document.createXULElement('image');
         imageDataElement.setAttribute('src', elementImageData);
         imageDataElement.classList.add('zen-glance-element-preview');
+        imageDataElement.style.width = rect.width;
+        imageDataElement.style.height = rect.height;
         this.browserWrapper.prepend(imageDataElement);
       }
     }
