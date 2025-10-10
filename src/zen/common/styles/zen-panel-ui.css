@@ -32,7 +32,7 @@ panel[type='arrow'] {
 }
 
 menupopup,
-panel[type='arrow'] {
+panel[type='arrow']:not(#feature-callout) {
   @media (-moz-windows-mica-popups) {
     appearance: auto !important;
     -moz-default-appearance: menupopup;

@@ -556,6 +556,6 @@ export class nsZenSiteDataPanel {
           ],
         },
       });
-    }, 500);
+    }, 1000);
   }
 }
