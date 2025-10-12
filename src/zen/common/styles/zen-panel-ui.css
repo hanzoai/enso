@@ -51,7 +51,6 @@ panel[type='arrow']:not(#feature-callout) {
   }
 
   @media (-moz-platform: macos) {
-    border: 0px transparent !important;
     appearance: auto !important;
     -moz-default-appearance: menupopup;
     /* We set the default background here, rather than on ::part(content),
