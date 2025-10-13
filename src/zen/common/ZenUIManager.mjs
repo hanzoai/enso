@@ -527,6 +527,9 @@ var gZenUIManager = {
     this._toastContainer.removeAttribute('hidden');
     this._toastContainer.appendChild(toast);
     const timeoutFunction = () => {
+      if (Services.prefs.getBoolPref('ui.popup.disable_autohide')) {
+        return;
+      }
       this.motion
         .animate(toast, { opacity: [1, 0], scale: [1, 0.5] }, { duration: 0.2, bounce: 0 })
         .then(() => {

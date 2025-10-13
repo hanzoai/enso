@@ -23,12 +23,6 @@ panel[type='arrow'] {
       animation: zen-jello-animation-macos 0.2s ease-in-out forwards !important;
     }
   }
-  @media (-moz-platform: linux) or ((-moz-platform: windows) and (not (-moz-windows-mica-popups))) and (-moz-panel-animations) {
-    /* Mica popups have a weird background while the animation is running */
-    &::part(content) {
-      animation: zen-jello-animation 0.35s ease;
-    }
-  }
 }
 
 menupopup,

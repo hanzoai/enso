@@ -944,3 +944,7 @@
     display: none;
   }
 }
+
+#zen-copy-url-button image {
+  list-style-image: url('link.svg');
+}

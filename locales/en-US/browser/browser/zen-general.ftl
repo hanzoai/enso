@@ -90,6 +90,9 @@ zen-site-data-get-addons =
 zen-site-data-site-settings =
     .label = All Site Settings
 
+zen-urlbar-copy-url-button =
+  .tooltiptext = Copy URL
+
 zen-site-data-setting-site-protection = Site Protection
 
 zen-site-data-panel-feature-callout-title = A new home for add-ons, permissions, and more
