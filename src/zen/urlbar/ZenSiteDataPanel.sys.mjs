@@ -554,10 +554,10 @@ export class nsZenSiteDataPanel {
           id: 'ZEN_EXTENSIONS_PANEL_MOVE_CALLOUT',
           template: 'multistage',
           backdrop: 'transparent',
-          transitions: false,
+          transitions: true,
           screens: [
             {
-              id: 'ZEN_EXTENSIONS_PANEL_MOVE_CALLOUT_HORIZONTAL',
+              id: 'ZEN_EXTENSIONS_PANEL_MOVE_CALLOUT',
               anchors: [
                 {
                   selector: '#zen-site-data-icon-button',
@@ -577,7 +577,6 @@ export class nsZenSiteDataPanel {
               content: {
                 position: 'callout',
                 width: '355px',
-                padding: 16,
                 title: {
                   string_id: 'zen-site-data-panel-feature-callout-title',
                 },

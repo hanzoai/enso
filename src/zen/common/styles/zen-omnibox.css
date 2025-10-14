@@ -238,6 +238,10 @@
     pointer-events: none;
     animation: zen-urlbar-searchmode ease-out 1s forwards;
   }
+
+  & #zen-copy-url-button {
+    display: none;
+  }
 }
 
 #urlbar-go-button {
