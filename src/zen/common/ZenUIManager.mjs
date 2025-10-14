@@ -58,8 +58,6 @@ var gZenUIManager = {
       this.onUrlbarSearchModeChanged.bind(this)
     );
 
-    document.getElementById('stop-reload-button').removeAttribute('overflows');
-
     gZenMediaController.init();
     gZenVerticalTabsManager.init();
 
