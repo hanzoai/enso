@@ -26,7 +26,7 @@
 
     // Arc animation configuration
     #ARC_CONFIG = Object.freeze({
-      ARC_STEPS: 40, // Increased for smoother bounce
+      ARC_STEPS: 60, // Increased for smoother bounce
       MAX_ARC_HEIGHT: 30,
       ARC_HEIGHT_RATIO: 0.2, // Arc height = distance * ratio (capped at MAX_ARC_HEIGHT)
     });
@@ -609,7 +609,7 @@
       }
 
       let scale = 1;
-      const bounceSteps = 50;
+      const bounceSteps = 60;
       if (direction === 'opening') {
         for (let i = 0; i < bounceSteps; i++) {
           const progress = i / bounceSteps;
