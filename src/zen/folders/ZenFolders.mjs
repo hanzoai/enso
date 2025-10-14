@@ -1309,7 +1309,7 @@
       animations.push(
         ...this.#createAnimation(
           itemsToHide,
-          { opacity: 0, height: 0 },
+          { opacity: [1, 0], height: ['auto', 0] },
           { duration: 0.12, ease: 'easeInOut' }
         ),
         ...this.updateFolderIcon(group),

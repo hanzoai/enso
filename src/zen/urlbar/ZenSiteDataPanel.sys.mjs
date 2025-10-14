@@ -82,7 +82,7 @@ export class nsZenSiteDataPanel {
     container.appendChild(fragment);
 
     const aElement = this.document.getElementById('zen-copy-url-button');
-    aElement.addEventListener('click', (event) => {
+    aElement.addEventListener('click', () => {
       this.document.getElementById('cmd_zenCopyCurrentURL').doCommand();
     });
 

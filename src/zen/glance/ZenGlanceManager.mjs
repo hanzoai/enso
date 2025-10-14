@@ -315,6 +315,10 @@
      * @returns {Promise<Tab>} Promise that resolves to the glance tab
      */
     #animateGlanceOpening(data, browserElement) {
+      // FIXME(cheffy): We *must* have the call back async (at least,
+      // until a better solution is found). If we do it inside the requestAnimationFrame,
+      // we see flashing and if we do it directly, the animation does not play at all.
+      // eslint-disable-next-line no-async-promise-executor
       return new Promise(async (resolve) => {
         this.#prepareGlanceAnimation(data, browserElement);
         if (data.width && data.height) {
