@@ -485,6 +485,7 @@
       // nice fade-in effect to the content. But if it doesn't exist,
       // we just fall back to always showing the browser directly.
       if (data.elementData) {
+        this.contentWrapper.style.opacity = 0;
         gZenUIManager.motion
           .animate(
             this.contentWrapper,
