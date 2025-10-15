@@ -1149,11 +1149,28 @@
       position: relative;
       --zen-essential-bg-margin: 2px;
 
-      &::before {
-        background: light-dark(
+      --zen-essential-tab-selected-bg: light-dark(
+        rgba(255, 255, 255, 0.85),
+        color-mix(in srgb, var(--zen-primary-color), rgba(68, 64, 64, 0.85) 40%)
+      );
+      --zen-essential-tab-selected-bg-hover: light-dark(
+        rgba(255, 255, 255, 0.8),
+        color-mix(in srgb, var(--zen-primary-color), rgba(68, 64, 64, 0.85) 50%)
+      );
+
+      :root[zen-default-theme='true'] & {
+        --zen-essential-tab-selected-bg: light-dark(
           rgba(255, 255, 255, 0.85),
-          color-mix(in srgb, var(--zen-primary-color), rgba(68, 64, 64, 0.85) 40%)
+          rgba(68, 64, 64, 0.85)
         );
+        --zen-essential-tab-selected-bg-hover: light-dark(
+          rgba(255, 255, 255, 0.8),
+          rgba(68, 64, 64, 0.75)
+        );
+      }
+
+      &::before {
+        background: var(--zen-essential-tab-selected-bg);
         margin: var(--zen-essential-bg-margin);
         border-radius: calc(var(--border-radius-medium) - var(--zen-essential-bg-margin));
         position: absolute;
@@ -1165,10 +1182,7 @@
     }
 
     &[visuallyselected]:hover .tab-background::before {
-      background: light-dark(
-        rgba(255, 255, 255, 0.8),
-        color-mix(in srgb, var(--zen-primary-color), rgba(68, 64, 64, 0.85) 50%)
-      );
+      background: var(--zen-essential-tab-selected-bg-hover);
     }
   }
 }
