@@ -1091,10 +1091,7 @@ var gZenVerticalTabsManager = {
         ((!this.isWindowsStyledButtons && !isRightSide) ||
           (this.isWindowsStyledButtons && isRightSide));
       if (
-        (!isSingleToolbar &&
-          isCompactMode &&
-          !captionsShouldStayOnSidebar &&
-          this.isWindowsStyledButtons === isRightSide) ||
+        (!isSingleToolbar && isCompactMode && !captionsShouldStayOnSidebar) ||
         !isSidebarExpanded
       ) {
         navBar.prepend(topButtons);
