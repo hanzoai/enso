@@ -23,16 +23,16 @@ pictureinpicture-minimize-btn =
     .aria-label = Minimitza
     .tooltip = Minimitza
 zen-panel-ui-gradient-generator-custom-color = Color personalitzat
-zen-panel-ui-gradient-generator-saved-message = El degradat s'ha desat correctament!
-zen-copy-current-url-confirmation = Copied current URL!
+zen-panel-ui-gradient-generator-saved-message = El degradat s'ha desat correctament
+zen-copy-current-url-confirmation = L'URL actual s'ha copiat.
 zen-general-cancel-label = 
     .label = Cancel·la
 zen-general-confirm = 
     .label = Confirma
 zen-pinned-tab-replaced = L'URL de la pestanya fixada s'ha substituït per l'URL actual.
-zen-tabs-renamed = S'ha canviat el nom de la pestanya correctament!
-zen-background-tab-opened-toast = S'ha obert una nova pestanya de fons!
-zen-workspace-renamed-toast = S'ha canviat el nom de l'espai de treball correctament!
+zen-tabs-renamed = S'ha canviat el nom de la pestanya correctament
+zen-background-tab-opened-toast = S'ha obert una nova pestanya de fons
+zen-workspace-renamed-toast = S'ha canviat el nom de l'espai de treball correctament
 zen-library-sidebar-workspaces = 
     .label = Espais
 zen-library-sidebar-mods = 
@@ -59,6 +59,7 @@ zen-generic-next = Següent
 # These labels will be used for the site data panel settings
 zen-site-data-setting-allow = Permès
 zen-site-data-setting-block = Bloquejat
+zen-site-data-setting-cross-site = Cross-Site cookie
 zen-site-data-security-info-extension = 
     .label = Extensió
 zen-site-data-security-info-secure = 
@@ -72,10 +73,10 @@ zen-site-data-get-addons =
 zen-site-data-site-settings = 
     .label = Totes les configuracions del lloc
 zen-site-data-share = 
-    .label = Share This Page
+    .label = Comparteix aquesta pàgina
 zen-urlbar-copy-url-button = 
     .tooltiptext = Copia l'URL
-zen-site-data-setting-site-protection = Protecció del lloc
+zen-site-data-setting-site-protection = Tracking Protection
 
 # Section: Feature callouts
 
