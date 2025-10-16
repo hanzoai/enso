@@ -30,8 +30,6 @@
    Single Toolbar Mode Specific Styles (`zen-single-toolbar='true'`)
    ========================================================================== */
 :root[zen-single-toolbar='true'] {
-  --zen-toolbar-height: 32px;
-
   @media (-moz-platform: macos) and (not -moz-pref('zen.view.mac.show-three-dot-menu')) {
     &:not([customizing]) #PanelUI-button:not([open]):not([panelopen]) {
       position: absolute;
@@ -117,7 +115,7 @@
   }
 
   & #zen-sidebar-top-buttons {
-    margin: var(--zen-toolbox-padding) 0;
+    margin: var(--zen-toolbox-padding) 0 calc(var(--zen-toolbox-padding) / 2) 0;
   }
 
   & #PanelUI-menu-button {
