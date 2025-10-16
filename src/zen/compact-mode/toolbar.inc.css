@@ -15,6 +15,12 @@
     }
   }
 
+  &[zen-right-side='true'][zen-window-buttons-reversed='true'] #titlebar,
+  &:not([zen-right-side='true']):not([zen-window-buttons-reversed='true']) #titlebar {
+    /* The same as the expression above */
+    margin-top: var(--zen-element-separation) !important;
+  }
+
   & #zen-appcontent-wrapper {
     z-index: 3 !important;
   }
@@ -23,28 +29,22 @@
     & .zen-toolbar-background {
       display: flex;
     }
-    transition: height 0.1s ease;
-
+    transition: height var(--zen-hidden-toolbar-transition);
+    
     height: var(--zen-element-separation);
     overflow: clip;
 
     & #urlbar:not([breakout-extend='true']) {
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.1s ease;
+      transition: opacity var(--zen-hidden-toolbar-transition);
     }
 
-    & .titlebar-buttonbox-container {
-      visibility: hidden;
-      /* We need to hide them since on Windows the native
-       * panels when hovering over them can interfere with the
-       * web content */
-      transition: visibility 0.1s ease;
-    }
+%include windows-captions-fix-default.inc.css
 
     & #zen-appcontent-navbar-container {
       opacity: 0;
-      transition: opacity 0.1s ease;
+      transition: opacity var(--zen-hidden-toolbar-transition);
     }
   }
 
@@ -61,10 +61,7 @@
     height: var(--zen-toolbar-height-with-bookmarks);
     overflow: inherit;
 
-    & .titlebar-buttonbox-container {
-      visibility: visible;
-      transition: none;
-    }
+%include windows-captions-fix-active.inc.css
 
     & #urlbar {
       opacity: 1;
@@ -73,7 +70,6 @@
 
     & #zen-appcontent-navbar-container {
       opacity: 1;
-      transition: none;
     }
   }
 }

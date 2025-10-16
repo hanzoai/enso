@@ -12,10 +12,12 @@ z-index: 1;
 }
 
 @media -moz-pref('zen.view.hide-window-controls') {
-  transition: height 0.1s ease, opacity 0.1s ease;
+  transition: height var(--zen-hidden-toolbar-transition), opacity var(--zen-hidden-toolbar-transition);
   will-change: height, opacity;
   transition-delay: 0.2s;
   overflow: clip;
+
+%include ../../compact-mode/windows-captions-fix-active.inc.css
 
   &:not([zen-has-hover='true']):not([has-popup-menu]):not(:focus-within):not(
       :has(*:is([panelopen='true'], [open='true']))
@@ -25,6 +27,8 @@ z-index: 1;
     & #zen-appcontent-navbar-container {
       pointer-events: none;
     }
+
+%include ../../compact-mode/windows-captions-fix-default.inc.css
 
     & .titlebar-button {
       padding-top: 0 !important;

@@ -1531,6 +1531,13 @@
           'color'
         ];
         rgb = rawRgb.match(/\d+/g).map(Number);
+        // Match our theme a bit more, since we can't always expect the OS
+        // to give us a color matching our theme scheme
+        rgb = this.blendColors(
+          rgb,
+          this.getToolbarModifiedBaseRaw().slice(0, 3),
+          this.isDarkMode ? 80 : 50
+        );
       } else {
         rgb = this.hexToRgb(accentColor);
       }
