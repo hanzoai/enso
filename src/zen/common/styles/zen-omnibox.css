@@ -147,6 +147,22 @@
   }
 }
 
+:root:not([zen-single-toolbar='true'])
+  #urlbar:not([breakout-extend='true'])
+  .urlbar-input-container:not([pageproxystate='invalid']) {
+  flex-direction: row-reverse;
+  gap: 2px;
+  padding: 2px;
+
+  & .urlbar-page-action {
+    height: 100%;
+  }
+
+  & #identity-box {
+    margin: 0px !important;
+  }
+}
+
 .urlbar-page-action,
 #tracking-protection-icon-container {
   padding: 0 !important;
@@ -196,6 +212,7 @@
 
   & #identity-box {
     margin-right: calc(var(--urlbar-margin-inline) - 1px);
+    height: 100%;
   }
 
   & .urlbar-background {
