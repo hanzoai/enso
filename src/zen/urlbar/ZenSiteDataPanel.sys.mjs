@@ -337,7 +337,7 @@ export class nsZenSiteDataPanel {
     }
 
     separator.hidden = !settingElements.length || !crossSiteCookieElements.length;
-    section.hidden = list.childElementCount == 0;
+    section.hidden = list.childElementCount < 2; // only the separator
   }
 
   #getPermissionStateLabelId(permission) {

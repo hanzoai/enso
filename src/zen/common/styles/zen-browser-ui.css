@@ -336,6 +336,10 @@
 #zen-appcontent-navbar-wrapper #zen-sidebar-top-buttons {
   max-width: fit-content;
   :root[zen-right-side='true'] & {
-    order: 999;
+    order: 1;
   }
+}
+
+:root[zen-right-side='true'] #zen-appcontent-navbar-wrapper #PanelUI-button {
+  order: 2;
 }
