@@ -138,7 +138,7 @@
 
 :root[zen-single-toolbar='true'] #nav-bar {
   border-top: none !important;
-  --zen-toolbar-height: 38px;
+  --zen-toolbar-height: 37px;
 }
 
 #zen-main-app-wrapper {
