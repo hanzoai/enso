@@ -1355,11 +1355,15 @@
      * @param {Tab} tab - The tab to open glance for
      */
     #openGlanceForTab(tab) {
-      const browserRect = window.windowUtils.getBoundsWithoutFlushing(gBrowser.tabbox);
+      const browserRect = window.windowUtils.getBoundsWithoutFlushing(gBrowser.tabpanels);
       const clickPosition = gZenUIManager._lastClickPosition || {
         clientX: browserRect.width / 2,
         clientY: browserRect.height / 2,
       };
+
+      // Make it relative to the tabpanels
+      clickPosition.clientX -= browserRect.left;
+      clickPosition.clientY -= browserRect.top;
 
       this.openGlance(
         {
