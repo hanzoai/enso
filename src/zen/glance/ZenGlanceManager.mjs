@@ -328,9 +328,7 @@
           data.elementData = await this.#getElementPreviewData(data);
         }
         this.#glances.get(this.#currentGlanceID).elementData = data.elementData;
-        window.requestAnimationFrame(() => {
-          this.#executeGlanceAnimation(data, browserElement, resolve);
-        });
+        this.#executeGlanceAnimation(data, browserElement, resolve);
       });
     }
 
