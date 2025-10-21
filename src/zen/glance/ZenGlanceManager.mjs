@@ -448,9 +448,6 @@
       imageDataElement.setAttribute('src', data.elementData);
       imageDataElement.classList.add('zen-glance-element-preview');
 
-      // set an aspect ratio to prevent stretching during animation
-      imageDataElement.style.aspectRatio = `${data.width} / ${data.height}`;
-
       this.browserWrapper.prepend(imageDataElement);
       this.#glances.get(this.#currentGlanceID).elementImageData = data.elementData;
 
@@ -948,7 +945,7 @@
         const originalPosition = this.#glances.get(this.#currentGlanceID).originalPosition;
         const elementImageData = this.#glances.get(this.#currentGlanceID).elementImageData;
 
-        this.#addElementPreview(elementImageData, originalPosition);
+        this.#addElementPreview(elementImageData);
 
         // Create curved closing animation sequence
         const closingData = this.#createClosingDataFromOriginalPosition(originalPosition);
@@ -990,16 +987,12 @@
     /**
      * Add element preview if available, used for the closing animation
      * @param {string} elementImageData - The element image data
-     * @param {Object} rect - The rectangle data
      */
-    #addElementPreview(elementImageData, rect) {
+    #addElementPreview(elementImageData) {
       if (elementImageData) {
         const imageDataElement = document.createXULElement('image');
         imageDataElement.setAttribute('src', elementImageData);
         imageDataElement.classList.add('zen-glance-element-preview');
-
-        // set an aspect ratio to prevent stretching during animation
-        imageDataElement.style.aspectRatio = `${parseFloat(rect.width)} / ${parseFloat(rect.height)}`;
 
         this.browserWrapper.prepend(imageDataElement);
       }

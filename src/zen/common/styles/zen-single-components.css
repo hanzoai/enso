@@ -290,10 +290,6 @@ body > #confetti {
   --arrowpanel-menuitem-border-radius: 10px;
 }
 
-#unified-extensions-messages-container {
-  display: none;
-}
-
 #zen-site-data-addons {
   display: flex;
   flex-wrap: wrap;
