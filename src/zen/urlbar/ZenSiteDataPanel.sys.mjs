@@ -580,7 +580,6 @@ export class nsZenSiteDataPanel {
       };
       checkEmptyTab();
     });
-    this.anchor.setAttribute('open', 'true');
     const callout = new FeatureCallout({
       win: this.window,
       location: 'chrome',

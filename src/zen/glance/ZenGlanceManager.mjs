@@ -457,7 +457,7 @@
           opacity: [1, 0],
         },
         {
-          duration: 0.3,
+          duration: 0.25,
           easing: 'easeInOut',
         }
       );
