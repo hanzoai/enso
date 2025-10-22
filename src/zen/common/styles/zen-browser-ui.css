@@ -133,7 +133,7 @@
 }
 
 :root:not([zen-single-toolbar='true']) #zen-appcontent-wrapper {
-  z-index: 2;
+  z-index: 3;
 }
 
 #nav-bar {

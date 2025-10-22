@@ -275,14 +275,12 @@ var gZenUIManager = {
   // Section: URL bar
 
   onUrlbarOpen() {
-    gURLBar.setAttribute('had-proxystate', gURLBar.getAttribute('pageproxystate'));
     gURLBar.setPageProxyState('invalid', false);
   },
 
   onUrlbarClose() {
-    if (gURLBar.hasAttribute('had-proxystate')) {
-      gURLBar.setURI();
-      gURLBar.removeAttribute('had-proxystate');
+    if (!gURLBar.valueIsTyped && gURLBar._untrimmedValue !== gURLBar.value) {
+      gURLBar.handleRevert();
     }
   },
 
