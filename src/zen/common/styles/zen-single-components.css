@@ -570,6 +570,10 @@ body > #confetti {
   margin: 6px 0;
 }
 
+#unified-extensions-messages-container:empty {
+  display: none;
+}
+
 /* Overflow panel */
 #widget-overflow-mainView {
   --menu-panel-width-wide: 200px;
