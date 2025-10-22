@@ -302,6 +302,12 @@ body > #confetti {
   gap: 8px;
   overflow: visible;
 
+  &[overflowing='true'] {
+    overflow-x: auto;
+    max-height: 420px;
+    mask-image: linear-gradient(to top, transparent, black 5%);
+  }
+
   .unified-extensions-item-name,
   .unified-extensions-item-message,
   .unified-extensions-item-message-hover,
