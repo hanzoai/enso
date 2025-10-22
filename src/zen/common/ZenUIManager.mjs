@@ -275,7 +275,9 @@ var gZenUIManager = {
   // Section: URL bar
 
   onUrlbarOpen() {
-    gURLBar.setPageProxyState('invalid', false);
+    setTimeout(() => {
+      gURLBar.setPageProxyState('invalid', false);
+    }, 0);
   },
 
   onUrlbarClose() {
