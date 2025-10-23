@@ -121,7 +121,7 @@
        * words, the first of the two selectors above.
        */
       :root:not([zen-window-buttons-reversed='true']) & {
-        margin-left: calc(-1 * var(--zen-toolbox-max-width) + var(--zen-element-separation));
+        margin-left: calc(-1 * var(--zen-toolbox-max-width) + var(--zen-element-separation) + 4px);
       }
     }
   }

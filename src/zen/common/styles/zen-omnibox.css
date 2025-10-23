@@ -296,13 +296,6 @@
 :root[zen-single-toolbar='true'] {
   --urlbar-icon-border-radius: 8px !important;
 
-  .urlbar-page-action:not([open]):not([showing]):not(
-      :is(#zen-copy-url-button, #identity-permission-box)
-    ),
-  #tracking-protection-icon-container {
-    display: none;
-  }
-
   #identity-permission-box > *:not(#zen-site-data-icon-button) {
     visibility: collapse;
   }
@@ -313,7 +306,7 @@
 
   #urlbar:not([breakout-extend='true']) {
     #identity-box:not([pageproxystate='invalid']) {
-      order: 9;
+      order: 2;
     }
   }
 
