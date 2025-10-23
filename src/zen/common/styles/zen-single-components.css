@@ -302,6 +302,11 @@ body > #confetti {
   gap: 8px;
   overflow: visible;
 
+  unified-extensions-item-messagebar-wrapper,
+  .unified-extensions-item-contents {
+    display: none !important;
+  }
+
   &[overflowing='true'] {
     overflow-x: auto;
     max-height: 420px;
