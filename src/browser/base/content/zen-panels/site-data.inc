@@ -22,6 +22,7 @@
         <toolbarbutton id="zen-site-data-header-reader-mode"
                         data-l10n-id="zen-site-data-header-reader-mode"
                         command="View:ReaderView"
+                        tooltip="dynamic-shortcut-tooltip"
                         flex="1" />
         <toolbarbutton id="zen-site-data-header-screenshot"
                         data-l10n-id="zen-site-data-header-screenshot"

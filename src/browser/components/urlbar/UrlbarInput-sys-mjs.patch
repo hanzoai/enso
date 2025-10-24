@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index afc7a6c6ddbf4cf5a5b27c0bd60577b833c63093..ef88cc762969f206c9b16274c4af526c738c5704 100644
+index afc7a6c6ddbf4cf5a5b27c0bd60577b833c63093..f28c9a1ac086af429a93bd01be5d355858bcf37b 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -76,6 +76,13 @@ ChromeUtils.defineLazyGetter(lazy, "logger", () =>
@@ -147,6 +147,15 @@ index afc7a6c6ddbf4cf5a5b27c0bd60577b833c63093..ef88cc762969f206c9b16274c4af526c
      this.removeAttribute("breakout-extend");
      this.#updateTextboxPosition();
    }
+@@ -2361,7 +2444,7 @@ export class UrlbarInput {
+     forceUnifiedSearchButtonAvailable = false
+   ) {
+     let prevState = this.getAttribute("pageproxystate");
+-
++    this.removeAttribute("had-proxystate");
+     this.setAttribute("pageproxystate", state);
+     this._inputContainer.setAttribute("pageproxystate", state);
+     this._identityBox?.setAttribute("pageproxystate", state);
 @@ -2595,10 +2678,12 @@ export class UrlbarInput {
        return;
      }

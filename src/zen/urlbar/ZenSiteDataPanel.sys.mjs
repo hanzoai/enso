@@ -624,13 +624,6 @@ export class nsZenSiteDataPanel {
                     callout_attachment: 'topleft',
                   },
                 },
-                {
-                  selector: '#identity-icon-box',
-                  panel_position: {
-                    anchor_attachment: 'bottomcenter',
-                    callout_attachment: 'topleft',
-                  },
-                },
               ],
               content: {
                 position: 'callout',

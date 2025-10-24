@@ -339,6 +339,11 @@ body > #confetti {
       justify-content: center;
       align-items: center;
       border-radius: 6px;
+
+      @media not (-moz-platform: macos) {
+        border-radius: 4px;
+      }
+
       transition:
         background-color 0.1s ease-in-out,
         transform 0.12s ease-in-out;
@@ -498,6 +503,10 @@ body > #confetti {
   padding: 8px;
   padding-bottom: 0;
 
+  :root[zen-single-toolbar='true']:not([zen-right-side='true']) & {
+    flex-direction: row-reverse;
+  }
+
   & toolbarbutton {
     margin: 0;
     appearance: none;
@@ -544,7 +553,7 @@ body > #confetti {
       }
 
       @media not (-moz-platform: macos) {
-        border-radius: 6px;
+        border-radius: 4px;
         background-color: color-mix(in srgb, currentcolor 6%, transparent);
       }
 

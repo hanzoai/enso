@@ -276,14 +276,17 @@ var gZenUIManager = {
 
   onUrlbarOpen() {
     setTimeout(() => {
+      const hadValid = gURLBar.getAttribute('pageproxystate') === 'valid';
       gURLBar.setPageProxyState('invalid', false);
+      gURLBar.setAttribute('had-proxystate', hadValid);
     }, 0);
   },
 
   onUrlbarClose() {
-    if (!gURLBar.valueIsTyped && gURLBar._untrimmedValue !== gURLBar.value) {
-      gURLBar.handleRevert();
+    if (gURLBar.getAttribute('had-proxystate') == 'true') {
+      gURLBar.setPageProxyState('valid', false);
     }
+    gURLBar.removeAttribute('had-proxystate');
   },
 
   onUrlbarSearchModeChanged(event) {
