@@ -740,7 +740,6 @@
 #reader-mode-button,
 #urlbar-go-button,
 #star-button-box,
-#picture-in-picture-button,
 #pageActionButton:not([open]) {
   display: none !important;
 }
