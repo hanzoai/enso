@@ -1483,6 +1483,19 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     });
   }
 
+  unpinnedTabsInWorkspace(workspaceID) {
+    return Array.from(this.allStoredTabs).filter(
+      (tab) => tab.getAttribute('zen-workspace-id') === workspaceID && tab.visible && !tab.pinned
+    );
+  }
+
+  #deleteAllUnpinnedTabsInWorkspace(tabs) {
+    gBrowser.removeTabs(tabs, {
+      animate: false,
+      closeWindowWithLastTab: false,
+    });
+  }
+
   async unloadWorkspace() {
     const workspaceId = this.#contextMenuData?.workspaceId || this.activeWorkspace;
 
@@ -2652,6 +2665,25 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     await this._organizeWorkspaceStripLocations(this.getActiveWorkspaceFromCache(), true);
     await this.updateTabsContainers();
     this.tabContainer._invalidateCachedTabs();
+  }
+
+  async closeAllUnpinnedTabs() {
+    const workspaceId = this.#contextMenuData?.workspaceId || this.activeWorkspace;
+    const unpinnedTabs = await this.unpinnedTabsInWorkspace(workspaceId);
+
+    if (!unpinnedTabs.length) return;
+
+    this.#deleteAllUnpinnedTabsInWorkspace(unpinnedTabs);
+
+    const restoreClosedTabsShortcut = gZenKeyboardShortcutsManager.getShortcutDisplayFromCommand(
+      'History:RestoreLastClosedTabOrWindowOrSession'
+    );
+
+    gZenUIManager.showToast('zen-workspaces-close-all-unpinned-tabs-toast', {
+      l10nArgs: {
+        shortcut: restoreClosedTabsShortcut,
+      },
+    });
   }
 
   async contextDeleteWorkspace() {
