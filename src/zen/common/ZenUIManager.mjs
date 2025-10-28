@@ -712,6 +712,7 @@ var gZenVerticalTabsManager = {
   toggleExpand() {
     const newVal = !Services.prefs.getBoolPref('zen.view.sidebar-expanded');
     Services.prefs.setBoolPref('zen.view.sidebar-expanded', newVal);
+    Services.prefs.setBoolPref('zen.view.use-single-toolbar', false);
   },
 
   get navigatorToolbox() {
