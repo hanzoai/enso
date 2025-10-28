@@ -245,7 +245,7 @@
           x: [xOffset, 0],
         },
         {
-          duration: 0.3,
+          duration: 0.2,
           type: 'spring',
           delay: 0.2,
           bounce: 0,
@@ -392,7 +392,7 @@
         parentSidebarContainer,
         {
           scale: [1, 0.98],
-          opacity: [1, 0.5],
+          opacity: [1, 0.4],
         },
         {
           duration: 0.3,
@@ -464,7 +464,7 @@
           opacity: [1, 0],
         },
         {
-          duration: 0.25,
+          duration: 0.1,
           easing: 'easeInOut',
         }
       );
@@ -540,7 +540,7 @@
       this.#animateParentBackground();
       gZenUIManager.motion
         .animate(this.browserWrapper, arcSequence, {
-          duration: gZenUIManager.testingEnabled ? 0 : 0.4,
+          duration: gZenUIManager.testingEnabled ? 0 : 0.3,
           ease: 'easeInOut',
         })
         .then(() => {
@@ -926,7 +926,7 @@
           browserSidebarContainer,
           {
             scale: [0.98, 1],
-            opacity: [0.5, 1],
+            opacity: [0.4, 1],
           },
           {
             duration: 0.3,
@@ -959,7 +959,7 @@
         const arcSequence = this.#createGlanceArcSequence(closingData, 'closing');
 
         gZenUIManager.motion
-          .animate(this.browserWrapper, arcSequence, { duration: 0.4, ease: 'easeOut' })
+          .animate(this.browserWrapper, arcSequence, { duration: 0.3, ease: 'easeOut' })
           .then(() => {
             // Remove element preview after closing animation
             const elementPreview = this.browserWrapper.querySelector('.zen-glance-element-preview');

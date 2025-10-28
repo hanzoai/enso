@@ -78,11 +78,6 @@
         background: var(--zen-main-browser-background-toolbar-old);
       }
     }
-
-    &::after,
-    &::before {
-      mix-blend-mode: plus-lighter;
-    }
   }
 
   :root:not([animating-background='true']) &::before {
