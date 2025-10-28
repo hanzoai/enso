@@ -1483,15 +1483,37 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     });
   }
 
-  unpinnedTabsInWorkspace(workspaceID) {
+  #unpinnedTabsInWorkspace(workspaceID) {
     return Array.from(this.allStoredTabs).filter(
       (tab) => tab.getAttribute('zen-workspace-id') === workspaceID && tab.visible && !tab.pinned
     );
   }
 
+  #getClosableTabs(tabs) {
+    const remainingTabs = tabs.filter((tab) => {
+      const attributes = ['selected', 'multiselected', 'pictureinpicture', 'soundplaying'];
+      for (const attr of attributes) {
+        if (tab.hasAttribute(attr)) {
+          return false;
+        }
+      }
+      const browser = tab.linkedBrowser;
+      if (
+        window.webrtcUI.browserHasStreams(browser) ||
+        browser?.browsingContext?.currentWindowGlobal?.hasActivePeerConnections()
+      ) {
+        return false;
+      }
+      return true;
+    });
+    if (remainingTabs.length === 0) {
+      return tabs; // If no tabs are safe to close, return all to force close
+    }
+    return remainingTabs;
+  }
+
   #deleteAllUnpinnedTabsInWorkspace(tabs) {
     gBrowser.removeTabs(tabs, {
-      animate: false,
       closeWindowWithLastTab: false,
     });
   }
@@ -2480,7 +2502,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     }
     // Only animate if it's from an event
     let animateContainer = target && target.target instanceof EventTarget;
-    if (target?.type === 'TabClose') {
+    if (target?.type === 'TabClose' || target?.type === 'TabOpened') {
       animateContainer = target.target.pinned;
     }
     await this.onPinnedTabsResize(
@@ -2503,6 +2525,15 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
     if (shouldHideSeparator) {
       pinnedContainer.setAttribute('hide-separator', 'true');
     } else {
+      const workspaceID = pinnedContainer.getAttribute('zen-workspace-id');
+      const tabs = this.#unpinnedTabsInWorkspace(workspaceID);
+      const closableTabs = this.#getClosableTabs(tabs);
+      const button = pinnedContainer.querySelector('.zen-workspace-close-unpinned-tabs-button');
+      if (tabs.length === closableTabs.length) {
+        button.setAttribute('can-close', 'true');
+      } else {
+        button.removeAttribute('can-close');
+      }
       pinnedContainer.removeAttribute('hide-separator');
     }
   }
@@ -2669,11 +2700,11 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
 
   async closeAllUnpinnedTabs() {
     const workspaceId = this.#contextMenuData?.workspaceId || this.activeWorkspace;
-    const unpinnedTabs = await this.unpinnedTabsInWorkspace(workspaceId);
+    const unpinnedTabs = this.#unpinnedTabsInWorkspace(workspaceId);
+    const closableTabs = this.#getClosableTabs(unpinnedTabs);
 
-    if (!unpinnedTabs.length) return;
-
-    this.#deleteAllUnpinnedTabsInWorkspace(unpinnedTabs);
+    if (!closableTabs.length) return;
+    this.#deleteAllUnpinnedTabsInWorkspace(closableTabs);
 
     const restoreClosedTabsShortcut = gZenKeyboardShortcutsManager.getShortcutDisplayFromCommand(
       'History:RestoreLastClosedTabOrWindowOrSession'

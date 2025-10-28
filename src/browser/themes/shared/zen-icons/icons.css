@@ -394,7 +394,11 @@
 }
 
 .zen-workspace-close-unpinned-tabs-button {
-  list-style-image: url('dart-down.svg') !important;
+  list-style-image: url('dart-down.svg');
+
+  &:not([can-close='true']) .toolbarbutton-icon {
+    display: none;
+  }
 }
 
 .zen-workspace-actions-reorder-icon,
