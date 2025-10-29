@@ -30,7 +30,7 @@
     // Arc animation configuration
     #ARC_CONFIG = Object.freeze({
       ARC_STEPS: 70, // Increased for smoother bounce
-      MAX_ARC_HEIGHT: 30,
+      MAX_ARC_HEIGHT: 25,
       ARC_HEIGHT_RATIO: 0.2, // Arc height = distance * ratio (capped at MAX_ARC_HEIGHT)
     });
 
@@ -348,6 +348,7 @@
      * @returns {Promise<Tab>} Promise that resolves to the glance tab
      */
     #animateGlanceOpening(data, browserElement) {
+      this.#prepareGlanceAnimation(data, browserElement);
       // FIXME(cheffy): We *must* have the call back async (at least,
       // until a better solution is found). If we do it inside the requestAnimationFrame,
       // we see flashing and if we do it directly, the animation does not play at all.
@@ -356,7 +357,6 @@
         // Recalculate location. When opening from pinned tabs,
         // view splitter doesn't catch if the tab is a glance tab or not.
         gZenViewSplitter.onLocationChange(browserElement);
-        this.#prepareGlanceAnimation(data, browserElement);
         if (data.width && data.height) {
           // It is guaranteed that we will animate this opacity later on
           // when we start animating the glance.
@@ -578,8 +578,8 @@
           height: tabPanelsRect.height,
         };
         endPosition = {
-          x: clientX + width / 2,
-          y: clientY + height / 2,
+          x: Math.floor(clientX + width / 2),
+          y: Math.floor(clientY + height / 2),
           width: width,
           height: height,
         };
@@ -646,7 +646,7 @@
         for (let i = 0; i < bounceSteps; i++) {
           const progress = i / bounceSteps;
           // Scale up slightly then back to normal
-          scale = 1 + 0.004 * Math.sin(progress * Math.PI);
+          scale = 1 + 0.003 * Math.sin(progress * Math.PI);
           // If we are at the last step, ensure scale is exactly 1
           if (i === bounceSteps - 1) {
             scale = 1;
