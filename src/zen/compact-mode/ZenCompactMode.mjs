@@ -715,7 +715,10 @@ var gZenCompactModeManager = {
             (document.documentElement.getAttribute('supress-primary-adjustment') === 'true' &&
               gZenVerticalTabsManager._hasSetSingleToolbar) ||
             this._hasHoveredUrlbar ||
-            this._ignoreNextHover
+            this._ignoreNextHover ||
+            (event.type === 'dragleave' &&
+              event.explicitOriginalTarget !== target &&
+              target.contains?.(event.explicitOriginalTarget))
           ) {
             return;
           }
