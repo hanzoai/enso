@@ -1,3 +1,7 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 pane-zen-looks-title = Aspetto
 category-zen-looks = 
     .tooltiptext = { pane-zen-looks-title }
@@ -300,4 +304,4 @@ zen-devtools-toggle-performance-shortcut = Attiva/disattiva Prestazioni
 zen-devtools-toggle-storage-shortcut = Attiva/Disattiva Archiviazione
 zen-devtools-toggle-dom-shortcut = Attiva/Disattiva DOM
 zen-devtools-toggle-accessibility-shortcut = Attiva/Disattiva Accessibilità
-zen-close-all-unpinned-tabs-shortcut = Close All Unpinned Tabs
+zen-close-all-unpinned-tabs-shortcut = Chiudi Tutte Le Schede Non Bloccate
