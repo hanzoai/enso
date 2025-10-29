@@ -34,6 +34,8 @@
       ARC_HEIGHT_RATIO: 0.2, // Arc height = distance * ratio (capped at MAX_ARC_HEIGHT)
     });
 
+    #GLANCE_ANIMATION_DURATION = Services.prefs.getIntPref('zen.glance.animation-duration') / 1000;
+
     init() {
       this.#setupEventListeners();
       this.#setupPreferences();
@@ -247,7 +249,7 @@
         {
           duration: 0.2,
           type: 'spring',
-          delay: 0.2,
+          delay: this.#GLANCE_ANIMATION_DURATION - 0.2,
           bounce: 0,
         }
       );
@@ -395,7 +397,7 @@
           opacity: [1, 0.4],
         },
         {
-          duration: 0.3,
+          duration: this.#GLANCE_ANIMATION_DURATION,
           type: 'spring',
           bounce: 0.2,
         }
@@ -464,7 +466,7 @@
           opacity: [1, 0],
         },
         {
-          duration: 0.1,
+          duration: this.#GLANCE_ANIMATION_DURATION / 2,
           easing: 'easeInOut',
         }
       );
@@ -491,17 +493,8 @@
      * @returns {string} The transform origin CSS value
      */
     #getTransformOrigin(data) {
-      const { clientX, clientY, width, height } = data;
-      const parentRect = window.windowUtils.getBoundsWithoutFlushing(
-        this.browserWrapper.parentElement
-      );
-      const xPercent = ((clientX + width / 2 - parentRect.left) / parentRect.width) * 100;
-      const yPercent = ((clientY + height / 2 - parentRect.top) / parentRect.height) * 100;
-
-      const xOrigin = xPercent < 33 ? 'left' : xPercent > 66 ? 'right' : 'center';
-      const yOrigin = yPercent < 33 ? 'top' : yPercent > 66 ? 'bottom' : 'center';
-
-      return `${xOrigin} ${yOrigin}`;
+      const { clientX, clientY } = data;
+      return `${clientX}px ${clientY}px`;
     }
 
     /**
@@ -528,7 +521,7 @@
             this.contentWrapper,
             { opacity: [0, 1] },
             {
-              duration: 0.1,
+              duration: this.#GLANCE_ANIMATION_DURATION / 2,
               easing: 'easeInOut',
             }
           )
@@ -540,7 +533,7 @@
       this.#animateParentBackground();
       gZenUIManager.motion
         .animate(this.browserWrapper, arcSequence, {
-          duration: gZenUIManager.testingEnabled ? 0 : 0.3,
+          duration: gZenUIManager.testingEnabled ? 0 : this.#GLANCE_ANIMATION_DURATION,
           ease: 'easeInOut',
         })
         .then(() => {
@@ -892,7 +885,7 @@
             {
               duration: 0.2,
               type: 'spring',
-              bounce: 0.2,
+              bounce: this.#GLANCE_ANIMATION_DURATION - 0.1,
             }
           )
           .then(() => {
@@ -929,7 +922,7 @@
             opacity: [0.4, 1],
           },
           {
-            duration: 0.3,
+            duration: this.#GLANCE_ANIMATION_DURATION,
             type: 'spring',
             bounce: 0,
           }
@@ -959,7 +952,10 @@
         const arcSequence = this.#createGlanceArcSequence(closingData, 'closing');
 
         gZenUIManager.motion
-          .animate(this.browserWrapper, arcSequence, { duration: 0.3, ease: 'easeOut' })
+          .animate(this.browserWrapper, arcSequence, {
+            duration: this.#GLANCE_ANIMATION_DURATION,
+            ease: 'easeOut',
+          })
           .then(() => {
             // Remove element preview after closing animation
             const elementPreview = this.browserWrapper.querySelector('.zen-glance-element-preview');
@@ -1490,7 +1486,7 @@
           height: ['100%', '100%'],
         },
         {
-          duration: 0.3,
+          duration: this.#GLANCE_ANIMATION_DURATION,
           type: 'spring',
           bounce: 0,
         }
