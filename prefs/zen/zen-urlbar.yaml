@@ -26,6 +26,9 @@
 - name: zen.urlbar.enable-overrides
   value: false
 
+- name: zen.urlbar.single-toolbar-show-copy-url
+  value: true
+
 # Mark: Zen suggestions controls
 
 - name: zen.urlbar.suggestions.quick-actions

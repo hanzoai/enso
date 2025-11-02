@@ -189,6 +189,12 @@
   }
 }
 
+@media -moz-pref('zen.urlbar.single-toolbar-show-copy-url', false) {
+  :root[zen-single-toolbar='true'] #zen-copy-url-button {
+    display: none !important;
+  }
+}
+
 .urlbar-page-action,
 #tracking-protection-icon-container {
   padding: 0 !important;

@@ -1,5 +1,5 @@
 diff --git a/browser/components/customizableui/content/panelUI.js b/browser/components/customizableui/content/panelUI.js
-index 7156397d597579f745ea20ae2b9327433a31c8ec..13b844a63e79e227c96faf153ee5908759306407 100644
+index 7156397d597579f745ea20ae2b9327433a31c8ec..23c15c60acd77150ea89bd6f2fa1685a0cfc37fd 100644
 --- a/browser/components/customizableui/content/panelUI.js
 +++ b/browser/components/customizableui/content/panelUI.js
 @@ -518,8 +518,7 @@ const PanelUI = {
@@ -30,7 +30,7 @@ index 7156397d597579f745ea20ae2b9327433a31c8ec..13b844a63e79e227c96faf153ee59087
        });
  
 -    this.notificationPanel.openPopup(anchor, "bottomright topright");
-+    this.notificationPanel.openPopup(anchor, gZenUIManager.panelUIPosition);
++    this.notificationPanel.openPopup(anchor, gZenUIManager.panelUIPosition(this.notificationPanel, anchor));
    },
  
    _clearNotificationPanel() {
