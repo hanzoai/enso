@@ -1,5 +1,5 @@
 diff --git a/browser/base/content/navigator-toolbox.js b/browser/base/content/navigator-toolbox.js
-index 413bad2a62058a1c434d6a44e927e44eb397289d..472eab5d3bca2bc665920707a71105167cbe75ec 100644
+index 413bad2a62058a1c434d6a44e927e44eb397289d..d28116ffacb0ddb6fdb421db5d6498e455356b4a 100644
 --- a/browser/base/content/navigator-toolbox.js
 +++ b/browser/base/content/navigator-toolbox.js
 @@ -8,7 +8,7 @@
@@ -11,24 +11,6 @@ index 413bad2a62058a1c434d6a44e927e44eb397289d..472eab5d3bca2bc665920707a7110516
      const widgetOverflow = document.getElementById("widget-overflow");
  
      function onPopupShowing(event) {
-@@ -110,7 +110,7 @@ document.addEventListener(
-         #pageActionButton,
-         #downloads-button,
-         #fxa-toolbar-menu-button,
--        #unified-extensions-button,
-+        #zen-site-data-icon-button,
-         #library-button
-         `);
-       if (!element) {
-@@ -138,7 +138,7 @@ document.addEventListener(
-           gSync.toggleAccountPanel(element, event);
-           break;
- 
--        case "unified-extensions-button":
-+        case "zen-site-data-icon-button":
-           gUnifiedExtensions.togglePanel(event);
-           break;
- 
 @@ -187,6 +187,7 @@ document.addEventListener(
          #reload-button ,
          #urlbar-go-button,
