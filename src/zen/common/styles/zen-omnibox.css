@@ -189,6 +189,12 @@
   }
 }
 
+@media not -moz-pref('zen.urlbar.show-pip-button') {
+  #picture-in-picture-button {
+    display: none !important;
+  }
+}
+
 .urlbar-page-action,
 #tracking-protection-icon-container {
   padding: 0 !important;

@@ -500,7 +500,7 @@ body > #confetti {
 #zen-site-data-header {
   gap: 8px;
   align-items: center;
-  padding: 8px;
+  padding: 10px 9px;
   padding-bottom: 0;
 
   :root[zen-single-toolbar='true']:not([zen-right-side='true']) & {
