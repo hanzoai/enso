@@ -926,7 +926,7 @@
             opacity: [0.4, 1],
           },
           {
-            duration: this.#GLANCE_ANIMATION_DURATION,
+            duration: this.#GLANCE_ANIMATION_DURATION / 2,
             type: 'spring',
             bounce: 0,
           }
