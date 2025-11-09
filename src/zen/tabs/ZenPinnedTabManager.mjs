@@ -778,10 +778,6 @@
         return;
       }
       const existingPin = this._pinsCache.find((p) => p.uuid === pin.uuid);
-      if (existingPin && existingPin === pin) {
-        // We want to avoid unnecessary writes
-        return;
-      }
       if (existingPin) {
         Object.assign(existingPin, pin);
       } else {
