@@ -902,7 +902,8 @@
 }
 
 .tab-reset-button,
-.tab-reset-pin-button {
+.tab-reset-pin-button,
+.tab-close-button {
   display: none;
   -moz-context-properties: fill, fill-opacity;
   border-radius: var(--tab-border-radius);
