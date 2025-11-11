@@ -179,7 +179,7 @@
     font-weight: 500;
     gap: 2px;
 
-    #navigator-toolbox[zen-has-hover='true'] & {
+    #navigator-toolbox[zen-has-implicit-hover='true'] & {
       visibility: visible;
       opacity: 0.5;
     }

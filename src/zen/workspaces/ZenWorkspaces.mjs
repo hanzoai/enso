@@ -563,7 +563,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
   }
 
   get _hoveringSidebar() {
-    return gNavToolbox.hasAttribute('zen-has-hover');
+    return gNavToolbox.hasAttribute('zen-has-implicit-hover');
   }
 
   _handleAppCommand(event) {

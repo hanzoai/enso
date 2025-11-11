@@ -55,9 +55,6 @@ export class ZenGlanceChild extends JSWindowActorChild {
   }
 
   on_click(event) {
-    if (event.button !== 0 || event.defaultPrevented) {
-      return;
-    }
     // get closest A element
     const target = event.target.closest('A');
     const elementToRecord = event.originalTarget || event.target;
@@ -67,7 +64,7 @@ export class ZenGlanceChild extends JSWindowActorChild {
     // The problem is that at that stage we don't know the rect or even what
     // element has been clicked, so we send the data here.
     this.#sendClickDataToParent(target, elementToRecord);
-    if (this.#ensureOnlyKeyModifiers(event)) {
+    if (event.button !== 0 || event.defaultPrevented || this.#ensureOnlyKeyModifiers(event)) {
       return;
     }
     const activationMethod = this.#activationMethod;
