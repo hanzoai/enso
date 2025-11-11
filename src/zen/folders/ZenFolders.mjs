@@ -1157,6 +1157,9 @@
         Services.prefs.getIntPref('zen.view.drag-and-drop.drop-inside-lower-threshold') / 100;
 
       const dropElementGroup = dropElement.group;
+      if (!dropElementGroup) {
+        return { dropElement, colorCode, dropBefore };
+      }
       const isSplitGroup = dropElement?.group?.hasAttribute('split-view-group');
       let firstGroupElem =
         dropElementGroup.querySelector('.zen-tab-group-start').nextElementSibling;

@@ -447,7 +447,7 @@
         case 'TabGroupCollapse':
         case 'TabGroupExpand':
         case 'ZenFolderChangedWorkspace':
-          this.#updateGroupInfo(event.originalTarget);
+          this.#updateGroupInfo(event.originalTarget, action);
           break;
         case 'TabGrouped':
           this.#onTabGrouped(event);
@@ -523,7 +523,7 @@
       ZenPinnedTabsStorage.removeTabFromGroup(tabPinId, /* position */ tab._pPos);
     }
 
-    async #updateGroupInfo(group) {
+    async #updateGroupInfo(group, action) {
       if (!group?.isZenFolder) {
         return;
       }
@@ -537,12 +537,20 @@
         groupPin.parentUuid = group.group?.getAttribute('zen-pin-id') || null;
         groupPin.workspaceUuid = group.getAttribute('zen-workspace-id') || null;
         await this.savePin(groupPin);
-        for (const item of group.allItems) {
-          if (gBrowser.isTabGroup(item)) {
-            await this.#updateGroupInfo(item);
-          } else {
-            await this.#onTabMove(item);
-          }
+        switch (action) {
+          case 'ZenFolderRenamed':
+          case 'ZenFolderIconChanged':
+          case 'TabGroupCollapse':
+          case 'TabGroupExpand':
+            break;
+          default:
+            for (const item of group.allItems) {
+              if (gBrowser.isTabGroup(item)) {
+                await this.#updateGroupInfo(item, action);
+              } else {
+                await this.#onTabMove(item);
+              }
+            }
         }
       }
     }

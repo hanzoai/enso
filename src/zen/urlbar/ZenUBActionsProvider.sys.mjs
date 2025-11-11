@@ -262,17 +262,18 @@ export class ZenUrlbarProviderGlobalActions extends UrlbarProvider {
         ...action.extraPayload,
       });
 
+      const shouldBePrioritized =
+        zenUrlbarResultsLearner.shouldPrioritize(action.commandId) && !isPrefixed;
       let result = new lazy.UrlbarResult({
         type: UrlbarUtils.RESULT_TYPE.DYNAMIC,
         source: UrlbarUtils.RESULT_SOURCE.ZEN_ACTIONS,
         payload,
         payloadHighlights,
+        heuristic: shouldBePrioritized,
+        suggestedIndex: !shouldBePrioritized
+          ? zenUrlbarResultsLearner.getDeprioritizeIndex(action.commandId)
+          : undefined,
       });
-      if (zenUrlbarResultsLearner.shouldPrioritize(action.commandId) && !isPrefixed) {
-        result.heuristic = true;
-      } else {
-        result.suggestedIndex = zenUrlbarResultsLearner.getDeprioritizeIndex(action.commandId);
-      }
       result.commandId = action.commandId;
       if (!(isPrefixed && query.length < 2)) {
         // We dont want to record prefixed results, as the user explicitly asked for them.
