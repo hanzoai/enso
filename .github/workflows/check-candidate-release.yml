@@ -31,4 +31,4 @@ jobs:
     secrets: inherit
     needs: [check_candidates]
     with:
-      release_candidate: 'true'
+      release_candidate: true

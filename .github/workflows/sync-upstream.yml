@@ -6,13 +6,15 @@ on:
       release_candidate:
         description: 'Set to true to sync release candidates'
         required: false
-        default: 'false'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
 
 jobs:
   check_candidates:
+    name: Sync Upstream
     runs-on: ubuntu-latest
 
     steps:
@@ -37,6 +39,17 @@ jobs:
       - name: Install dependencies
         if: steps.check-upstream-branch.outputs.branch_exists == 'false'
         run: npm ci
+
+      - name: Setup surfer CI
+        if: steps.check-upstream-branch.outputs.branch_exists == 'false'
+        run: |
+          if [ "${{ github.event.inputs.release_candidate }}" = "false" ]; then
+            npm run surfer -- ci --brand release 
+          fi
+
+      - name: Download Firefox and dependencies
+        if: steps.check-upstream-branch.outputs.branch_exists == 'false'
+        run: npm run download
 
       - name: Sync Upstream Releases
         if: steps.check-upstream-branch.outputs.branch_exists == 'false'
