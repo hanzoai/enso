@@ -40,6 +40,7 @@
       this.#setupEventListeners();
       this.#setupPreferences();
       this.#setupObservers();
+      this.#insertIntoContextMenu();
     }
 
     #setupEventListeners() {
@@ -62,6 +63,17 @@
 
     #setupObservers() {
       Services.obs.addObserver(this, 'quit-application-requested');
+    }
+
+    #insertIntoContextMenu() {
+      const menuitem = document.createXULElement('menuitem');
+      menuitem.setAttribute('id', 'context-zenOpenLinkInGlance');
+      menuitem.setAttribute('hidden', 'true');
+      menuitem.setAttribute('data-l10n-id', 'zen-open-link-in-glance');
+
+      menuitem.addEventListener('command', () => this.openGlance({ url: gContextMenu.linkURL }));
+
+      document.getElementById('context-sep-open').insertAdjacentElement('beforebegin', menuitem);
     }
 
     /**
