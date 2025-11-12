@@ -359,11 +359,47 @@
         ) {
           return;
         }
+<<<<<<< Updated upstream
         delete gZenVerticalTabsManager._hadSidebarCollapse;
         this.sidebar.style.setProperty('--zen-sidebar-width', `${sidebarWidth}px`);
       }
       return sidebarWidth;
     },
+=======
+          if (document.documentElement.hasAttribute('zen-sidebar-expanded')) {
+            sidebarWidth -= 0.5 * splitterWidth;
+            if (elementSeparation < splitterWidth) {
+              // Subtract from the splitter width to end up with the correct element separation
+              sidebarWidth += 1.5 * splitterWidth - elementSeparation;
+            }
+          } else {
+            sidebarWidth -= elementSeparation;
+          }
+        if (canHideSidebar && isCompactMode) {
+          this._setElementExpandAttribute(this.sidebar, false);
+          gZenUIManager.motion
+            .animate(
+              this.sidebar,
+              {
+                marginRight: [0, this.sidebarIsOnRight ? `-${sidebarWidth}px` : 0],
+                marginLeft: [0, this.sidebarIsOnRight ? 0 : `-${sidebarWidth}px`],
+              },
+              {
+                ease: 'easeIn',
+                type: 'spring',
+                bounce: 0,
+                duration: 0.12,
+              }
+            )
+            .then(() => {
+              this.sidebar.style.transition = 'none';
+              this.sidebar.style.pointEvents = 'none';
+              const titlebar = document.getElementById('titlebar');
+              titlebar.style.visibility = 'hidden';
+              titlebar.style.transition = 'none';
+              this.sidebar.removeAttribute('animate');
+              document.documentElement.removeAttribute('zen-compact-animating');
+>>>>>>> Stashed changes
 
     get canHideSidebar() {
       return (
