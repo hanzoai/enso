@@ -492,7 +492,7 @@ body > #confetti {
   }
 }
 
-@media (-moz-pref('zen.theme.hide-unified-extensions-button')) {
+@media -moz-pref('zen.theme.hide-unified-extensions-button') {
   #unified-extensions-button {
     display: none !important;
   }
