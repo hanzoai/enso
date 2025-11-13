@@ -420,16 +420,16 @@
             resolve();
             return;
           }
-          if (canHideSidebar && isCompactMode) {
-            if (document.documentElement.hasAttribute('zen-sidebar-expanded')) {
-              sidebarWidth -= 0.5 * splitterWidth;
-              if (elementSeparation < splitterWidth) {
-                // Subtract from the splitter width to end up with the correct element separation
-                sidebarWidth += 1.5 * splitterWidth - elementSeparation;
-              }
-            } else {
-              sidebarWidth -= elementSeparation;
+          if (document.documentElement.hasAttribute('zen-sidebar-expanded')) {
+            sidebarWidth -= 0.5 * splitterWidth;
+            if (elementSeparation < splitterWidth) {
+              // Subtract from the splitter width to end up with the correct element separation
+              sidebarWidth += 1.5 * splitterWidth - elementSeparation;
             }
+          } else {
+            sidebarWidth -= elementSeparation;
+          }
+          if (canHideSidebar && isCompactMode) {
             this._setElementExpandAttribute(this.sidebar, false);
             gZenUIManager.motion
               .animate(
