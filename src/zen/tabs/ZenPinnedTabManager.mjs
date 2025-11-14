@@ -1106,7 +1106,6 @@
       const element = window.MozXULElement.parseXULToFragment(`
             <menuitem id="context_zen-add-essential"
                       data-l10n-id="tab-context-zen-add-essential"
-                      data-l10n-args='{"num": "0", "max": "${this.maxEssentialTabs}"}'
                       hidden="true"
                       disabled="true"
                       command="cmd_contextZenAddToEssentials"/>
@@ -1119,21 +1118,24 @@
       document.getElementById('context_pinTab')?.before(element);
     }
 
-    updatePinnedTabContextMenu(contextTab) {
+    async updatePinnedTabContextMenu(contextTab) {
       if (!this.enabled) {
         document.getElementById('context_pinTab').hidden = true;
         return;
       }
       const isVisible = contextTab.pinned && !contextTab.multiselected;
+      const zenAddEssential = document.getElementById('context_zen-add-essential');
       document.getElementById('context_zen-reset-pinned-tab').hidden =
         !isVisible || !contextTab.getAttribute('zen-pin-id');
       document.getElementById('context_zen-replace-pinned-url-with-current').hidden = !isVisible;
-      document.getElementById('context_zen-add-essential').hidden =
-        contextTab.getAttribute('zen-essential') || !!contextTab.group;
-      document.l10n.setArgs(document.getElementById('context_zen-add-essential'), {
-        num: gBrowser._numZenEssentials,
-        max: this.maxEssentialTabs,
-      });
+      zenAddEssential.hidden = contextTab.getAttribute('zen-essential') || !!contextTab.group;
+      zenAddEssential.setAttribute(
+        'badge',
+        await document.l10n.formatValue('tab-context-zen-add-essential-badge', {
+          num: gBrowser._numZenEssentials,
+          max: this.maxEssentialTabs,
+        })
+      );
       document
         .getElementById('cmd_contextZenAddToEssentials')
         .setAttribute('disabled', !this.canEssentialBeAdded(contextTab));

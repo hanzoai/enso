@@ -5,7 +5,7 @@
  */
 :root:not([inDOMFullscreen='true']):not([chromehidden~='location']):not([chromehidden~='toolbar']) {
   & #tabbrowser-tabbox #tabbrowser-tabpanels .browserSidebarContainer {
-    overflow-y: clip;
+    overflow: clip;
 
     :root:not([zen-no-padding='true']) &:not(.zen-glance-overlay) {
       border-radius: var(--zen-native-inner-radius);
