@@ -42,7 +42,7 @@ let JSWINDOWACTORS = {
       esModuleURI: 'resource:///actors/ZenGlanceChild.sys.mjs',
       events: {
         DOMContentLoaded: {},
-        click: {
+        mousedown: {
           capture: true,
         },
         keydown: {

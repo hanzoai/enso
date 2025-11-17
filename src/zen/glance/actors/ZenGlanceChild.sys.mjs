@@ -35,8 +35,11 @@ export class ZenGlanceChild extends JSWindowActorChild {
   }
 
   #sendClickDataToParent(target, element) {
-    if (!element || !target) {
+    if (!element && !target) {
       return;
+    }
+    if (!target) {
+      target = element;
     }
     // Get the largest element we can get. If the `A` element
     // is a parent of the original target, use the anchor element,
@@ -54,7 +57,7 @@ export class ZenGlanceChild extends JSWindowActorChild {
     });
   }
 
-  on_click(event) {
+  on_mousedown(event) {
     // get closest A element
     const target = event.target.closest('A');
     const elementToRecord = event.originalTarget || event.target;
