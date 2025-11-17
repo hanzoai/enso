@@ -2555,6 +2555,7 @@ var gZenWorkspaces = new (class extends nsZenMultiWindowFeature {
 
   async onPinnedTabsResize(entries, forAnimation = false, animateContainer = false) {
     if (
+      document.documentElement.hasAttribute('inDOMFullscreen') ||
       !this._hasInitializedTabsStrip ||
       (this._organizingWorkspaceStrip && !forAnimation) ||
       document.documentElement.hasAttribute('zen-creating-workspace') ||
