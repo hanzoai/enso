@@ -1156,7 +1156,7 @@
       let dragDownThreshold =
         Services.prefs.getIntPref('zen.view.drag-and-drop.drop-inside-lower-threshold') / 100;
 
-      const dropElementGroup = dropElement;
+      const dropElementGroup = dropElement?.isZenFolder ? dropElement : dropElement?.group;
       const isSplitGroup = dropElement?.group?.hasAttribute('split-view-group');
       let firstGroupElem =
         dropElementGroup.querySelector('.zen-tab-group-start').nextElementSibling;
