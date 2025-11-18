@@ -669,7 +669,10 @@ var gZenUIManager = {
     if (anchor?.closest('#zen-sidebar-top-buttons')) {
       block = 'topleft';
     }
-    if (gZenVerticalTabsManager._hasSetSingleToolbar && gZenVerticalTabsManager._prefsRightSide) {
+    if (
+      (gZenVerticalTabsManager._hasSetSingleToolbar && gZenVerticalTabsManager._prefsRightSide) ||
+      (panel?.id === 'zen-unified-site-data-panel' && !gZenVerticalTabsManager._hasSetSingleToolbar)
+    ) {
       block = 'bottomright';
       inline = 'topright';
     }
