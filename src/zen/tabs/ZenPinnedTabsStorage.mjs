@@ -79,6 +79,7 @@ window.ZenPinnedTabsStorage = {
   async savePin(pin, notifyObservers = true) {
     // If we find the exact same pin in the cache, skip saving
     const existingIndex = this._saveCache.findIndex((cachedPin) => cachedPin.uuid === pin.uuid);
+    const copy = { ...pin };
     if (existingIndex !== -1) {
       const existingPin = this._saveCache[existingIndex];
       const isSame = Object.keys(pin).every((key) => pin[key] === existingPin[key]);
@@ -86,11 +87,11 @@ window.ZenPinnedTabsStorage = {
         return; // No changes, skip saving
       } else {
         // Update the cached pin
-        this._saveCache[existingIndex] = pin;
+        this._saveCache[existingIndex] = { ...copy };
       }
     } else {
       // Add to cache
-      this._saveCache.push(pin);
+      this._saveCache.push(copy);
     }
 
     const changedUUIDs = new Set();
