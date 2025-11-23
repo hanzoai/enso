@@ -83,7 +83,7 @@ export class ZenGlanceChild extends JSWindowActorChild {
       return;
     }
     this.#glanceTarget = target;
-    window.addEventListener('mousemove', this.mousemoveCallback, { once: true });
+    this.contentWindow.addEventListener('mousemove', this.mousemoveCallback, { once: true });
   }
 
   on_mouseup(event) {
@@ -92,8 +92,8 @@ export class ZenGlanceChild extends JSWindowActorChild {
       event.stopPropagation();
       this.#openGlance(this.#glanceTarget);
       this.#glanceTarget = null;
-      window.removeEventListener('mousemove', this.mousemoveCallback);
     }
+    this.contentWindow.removeEventListener('mousemove', this.mousemoveCallback);
   }
 
   mousemoveCallback() {
