@@ -3,9 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 export class ZenGlanceChild extends JSWindowActorChild {
   #activationMethod;
+  #glanceTarget = null;
 
   constructor() {
     super();
+    this.mousemoveCallback = this.mousemoveCallback.bind(this);
   }
 
   async handleEvent(event) {
@@ -80,11 +82,23 @@ export class ZenGlanceChild extends JSWindowActorChild {
     } else if (activationMethod === 'meta' && !event.metaKey) {
       return;
     }
-    if (target) {
+    this.#glanceTarget = target;
+    window.addEventListener('mousemove', this.mousemoveCallback, { once: true });
+  }
+
+  on_mouseup(event) {
+    if (this.#glanceTarget) {
       event.preventDefault();
       event.stopPropagation();
+      this.#openGlance(this.#glanceTarget);
+      this.#glanceTarget = null;
+      window.removeEventListener('mousemove', this.mousemoveCallback);
+    }
+  }
 
-      this.#openGlance(target);
+  mousemoveCallback() {
+    if (this.#glanceTarget) {
+      this.#glanceTarget = null;
     }
   }
 
