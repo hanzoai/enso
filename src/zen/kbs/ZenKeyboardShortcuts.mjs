@@ -141,7 +141,7 @@ window.VALID_SHORTCUT_GROUPS = [
   'other',
 ];
 
-class nsKeyShortcutModifiers {
+export class nsKeyShortcutModifiers {
   #control = false;
   #alt = false;
   #shift = false;
