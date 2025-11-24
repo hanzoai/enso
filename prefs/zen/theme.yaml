@@ -11,9 +11,6 @@
 - name: zen.theme.dark-mode-bias
   value: 0.3
 
-- name: zen.theme.gradient
-  value: true
-
 - name: zen.theme.gradient.show-custom-colors
   value: false
 
