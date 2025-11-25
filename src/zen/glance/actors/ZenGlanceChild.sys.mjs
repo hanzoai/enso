@@ -86,14 +86,21 @@ export class ZenGlanceChild extends JSWindowActorChild {
     this.contentWindow.addEventListener('mousemove', this.mousemoveCallback, { once: true });
   }
 
-  on_mouseup(event) {
+  on_mouseup() {
+    if (this.#glanceTarget) {
+      // Don't clear the glance target here, we need it in the click handler
+      // See issue https://github.com/zen-browser/desktop/issues/11409
+      this.#openGlance(this.#glanceTarget);
+    }
+    this.contentWindow.removeEventListener('mousemove', this.mousemoveCallback);
+  }
+
+  on_click(event) {
     if (this.#glanceTarget) {
       event.preventDefault();
       event.stopPropagation();
-      this.#openGlance(this.#glanceTarget);
       this.#glanceTarget = null;
     }
-    this.contentWindow.removeEventListener('mousemove', this.mousemoveCallback);
   }
 
   mousemoveCallback() {
