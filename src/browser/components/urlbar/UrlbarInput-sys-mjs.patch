@@ -1,5 +1,5 @@
 diff --git a/browser/components/urlbar/UrlbarInput.sys.mjs b/browser/components/urlbar/UrlbarInput.sys.mjs
-index 4b7232f3261f8589b734c2238170e6968d7ea0bf..d8c0b404724e9b0dc2b5a2d21420357586fb7f14 100644
+index 4b7232f3261f8589b734c2238170e6968d7ea0bf..6c68a2e93b7287f92ff394789c50d1c10e8a36f2 100644
 --- a/browser/components/urlbar/UrlbarInput.sys.mjs
 +++ b/browser/components/urlbar/UrlbarInput.sys.mjs
 @@ -84,6 +84,13 @@ ChromeUtils.defineLazyGetter(lazy, "logger", () =>
@@ -189,11 +189,13 @@ index 4b7232f3261f8589b734c2238170e6968d7ea0bf..d8c0b404724e9b0dc2b5a2d214203575
      if (
        event.keyCode == KeyEvent.DOM_VK_SHIFT ||
        event.keyCode == KeyEvent.DOM_VK_ALT ||
-@@ -3248,7 +3335,7 @@ export class UrlbarInput {
+@@ -3247,8 +3334,8 @@ export class UrlbarInput {
+     if (!this.isAddressbar) {
        return val;
      }
-     let trimmedValue = lazy.UrlbarPrefs.get("trimURLs")
+-    let trimmedValue = lazy.UrlbarPrefs.get("trimURLs")
 -      ? lazy.BrowserUIUtils.trimURL(val)
++    let trimmedValue = lazy.UrlbarPrefs.get("trimURLs") && this._zenTrimURL
 +      ? this._zenTrimURL(val)
        : val;
      // Only trim value if the directionality doesn't change to RTL and we're not

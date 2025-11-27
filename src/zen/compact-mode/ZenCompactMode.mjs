@@ -52,9 +52,13 @@ window.gZenCompactModeManager = {
     this._canDebugLog = Services.prefs.getBoolPref('zen.view.compact.debug', false);
 
     this.addContextMenu();
+    this._resolvePreInit();
   },
 
-  init() {
+  async init() {
+    await this._preInitPromise;
+    delete this._resolvePreInit;
+    delete this._preInitPromise;
     this.addMouseActions();
 
     const tabIsRightObserver = this._updateSidebarIsOnRight.bind(this);
@@ -227,6 +231,9 @@ window.gZenCompactModeManager = {
     const isIllegalState = this.checkIfIllegalState();
     const menuitem = document.getElementById('zen-context-menu-compact-mode-toggle');
     const menu = document.getElementById('zen-context-menu-compact-mode');
+    if (!menu) {
+      return;
+    }
     if (isSingleToolbar) {
       menu.setAttribute('hidden', 'true');
       menu.before(menuitem);
@@ -528,9 +535,11 @@ window.gZenCompactModeManager = {
   },
 
   updateContextMenu() {
-    document
-      .getElementById('zen-context-menu-compact-mode-toggle')
-      .setAttribute('checked', this.preference);
+    const toggle = document.getElementById('zen-context-menu-compact-mode-toggle');
+    if (!toggle) {
+      return;
+    }
+    toggle.setAttribute('checked', this.preference);
 
     const hideTabBar = this.canHideSidebar;
     const hideToolbar = this.canHideToolbar;
@@ -855,10 +864,13 @@ window.gZenCompactModeManager = {
   },
 };
 
-document.addEventListener(
-  'MozBeforeInitialXULLayout',
-  () => {
-    gZenCompactModeManager.preInit();
-  },
-  { once: true }
-);
+(gZenCompactModeManager._preInitPromise = new Promise((resolve) => {
+  gZenCompactModeManager._resolvePreInit = resolve;
+})),
+  document.addEventListener(
+    'MozBeforeInitialXULLayout',
+    () => {
+      gZenCompactModeManager.preInit();
+    },
+    { once: true }
+  );

@@ -164,7 +164,7 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
       if (init) {
         this._hasFinishedLoading = true;
       }
-    }, 10);
+    }, 100);
   }
 
   async #initializePinsCache() {
