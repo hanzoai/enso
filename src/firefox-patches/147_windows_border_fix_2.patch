@@ -26,7 +26,7 @@ index b357df236cfc..19f5980a106f 100644
        mCachedHitTestTime(TimeStamp::Now()),
 @@ -1028,7 +1027,6 @@ nsresult nsWindow::Create(nsIWidget* aParent, const LayoutDeviceIntRect& aRect,
        aParent ? (HWND)aParent->GetNativeData(NS_NATIVE_WINDOW) : nullptr;
-
+ 
    mIsRTL = aInitData->mRTL;
 -  mPIPWindow = aInitData->mPIPWindow;
    mOpeningAnimationSuppressed = aInitData->mIsAnimationSuppressed;
