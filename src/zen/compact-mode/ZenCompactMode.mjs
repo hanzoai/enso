@@ -52,13 +52,9 @@ window.gZenCompactModeManager = {
     this._canDebugLog = Services.prefs.getBoolPref('zen.view.compact.debug', false);
 
     this.addContextMenu();
-    this._resolvePreInit();
   },
 
-  async init() {
-    await this._preInitPromise;
-    delete this._resolvePreInit;
-    delete this._preInitPromise;
+  init() {
     this.addMouseActions();
 
     const tabIsRightObserver = this._updateSidebarIsOnRight.bind(this);
@@ -864,13 +860,10 @@ window.gZenCompactModeManager = {
   },
 };
 
-(gZenCompactModeManager._preInitPromise = new Promise((resolve) => {
-  gZenCompactModeManager._resolvePreInit = resolve;
-})),
-  document.addEventListener(
-    'MozBeforeInitialXULLayout',
-    () => {
-      gZenCompactModeManager.preInit();
-    },
-    { once: true }
-  );
+document.addEventListener(
+  'MozBeforeInitialXULLayout',
+  () => {
+    gZenCompactModeManager.preInit();
+  },
+  { once: true }
+);
