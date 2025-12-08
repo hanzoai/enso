@@ -271,9 +271,10 @@
     cursor: pointer;
     border: 3px solid #ffffff;
     animation: zen-theme-picker-dot-animation 0.5s;
-    transform: translate(-25%, -25%);
+    transform: translate(-50%, -50%);
     pointer-events: none;
-    transform-origin: center center;
+    transform-origin: left top;
+    margin: 10px 0 0 10px;
 
     &:first-of-type {
       width: 38px;
@@ -284,7 +285,7 @@
       transition: transform 0.2s;
       z-index: 999;
       &:hover {
-        transform: scale(1.05) translate(-25%, -25%);
+        transform: scale(1.05) translate(-50%, -50%);
       }
     }
 
