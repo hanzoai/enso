@@ -41,8 +41,8 @@ function parseSinePath(pathStr) {
   return points;
 }
 
-const MAX_OPACITY = 0.9;
-const MIN_OPACITY = AppConstants.platform === 'macosx' ? 0.25 : 0.35;
+const MAX_OPACITY = AppConstants.platform === 'macosx' ? 0.8 : 0.9;
+const MIN_OPACITY = AppConstants.platform === 'macosx' ? 0.15 : 0.35;
 
 const EXPLICIT_LIGHTNESS_TYPE = 'explicit-lightness';
 const EXPLICIT_BLACKWHITE_TYPE = 'explicit-black-white';

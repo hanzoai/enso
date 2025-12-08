@@ -120,11 +120,13 @@
                 </defs>
               </svg>
             </box>
-            <html:input type="range" max="0.9" value="0.4" step="0.001" id="PanelUI-zen-gradient-generator-opacity"
+            <html:input type="range" value="0.4" step="0.001" id="PanelUI-zen-gradient-generator-opacity"
 #ifdef XP_MACOSX
-              min="0.25"
+              min="0.15"
+              max="0.8"
 #else
               min="0.35"
+              max="0.9"
 #endif
               />
           </vbox>
