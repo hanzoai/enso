@@ -544,7 +544,7 @@
   }
 
   & #zen-essentials {
-    --tab-min-height: 48px;
+    --tab-min-height: 44px;
   }
 
   &[zen-right-side='true'] {
