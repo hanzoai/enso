@@ -3,7 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import json
-
+from typing import Any
 
 class JSONWithCommentsDecoder(json.JSONDecoder):
   def __init__(self, **kw):

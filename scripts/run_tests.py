@@ -6,7 +6,6 @@ import os
 import sys
 import json
 from pathlib import Path
-from typing import Any
 from json_with_comments import JSONWithCommentsDecoder
 
 IGNORE_PREFS_FILE_IN = os.path.join(
