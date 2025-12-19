@@ -1955,40 +1955,43 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
     this._data.push(data);
     this.activateSplitView(data);
     gBrowser.selectedTab = emptyTab;
-    window.addEventListener(
-      'ZenURLBarClosed',
-      (event) => {
-        const { onElementPicked, onSwitch } = event.detail;
-        const groupIndex = this._data.findIndex((group) => group.tabs.includes(emptyTab));
-        const newSelectedTab = gBrowser.selectedTab;
-        const cleanup = () => {
-          this.removeTabFromGroup(emptyTab, groupIndex, { changeTab: !onSwitch, forUnsplit: true });
-          const command = document.getElementById('cmd_zenNewEmptySplit');
-          command.removeAttribute('disabled');
-        };
-        if (onElementPicked) {
-          if (
-            newSelectedTab === emptyTab ||
-            newSelectedTab === selectedTab ||
-            selectedTab.getAttribute('zen-workspace-id') !==
-              newSelectedTab.getAttribute('zen-workspace-id')
-          ) {
-            cleanup();
-            return;
-          }
-          this.removeTabFromGroup(emptyTab, groupIndex, { forUnsplit: true });
-          gBrowser.selectedTab = selectedTab;
-          this.resetTabState(emptyTab, false);
-          this.splitTabs([selectedTab, newSelectedTab], 'grid', 1);
-        } else {
-          cleanup();
-        }
-      },
-      { once: true }
-    );
     setTimeout(() => {
+      window.addEventListener(
+        'ZenURLBarClosed',
+        (event) => {
+          const { onElementPicked, onSwitch } = event.detail;
+          const groupIndex = this._data.findIndex((group) => group.tabs.includes(emptyTab));
+          const newSelectedTab = gBrowser.selectedTab;
+          const cleanup = () => {
+            this.removeTabFromGroup(emptyTab, groupIndex, {
+              changeTab: !onSwitch,
+              forUnsplit: true,
+            });
+            const command = document.getElementById('cmd_zenNewEmptySplit');
+            command.removeAttribute('disabled');
+          };
+          if (onElementPicked) {
+            if (
+              newSelectedTab === emptyTab ||
+              newSelectedTab === selectedTab ||
+              selectedTab.getAttribute('zen-workspace-id') !==
+                newSelectedTab.getAttribute('zen-workspace-id')
+            ) {
+              cleanup();
+              return;
+            }
+            this.removeTabFromGroup(emptyTab, groupIndex, { forUnsplit: true });
+            gBrowser.selectedTab = selectedTab;
+            this.resetTabState(emptyTab, false);
+            this.splitTabs([selectedTab, newSelectedTab], 'grid', 1);
+          } else {
+            cleanup();
+          }
+        },
+        { once: true }
+      );
       gZenUIManager.handleNewTab(false, false, 'tab', true);
-    }, 0);
+    });
   }
 
   get splitViewBrowsers() {
