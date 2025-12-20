@@ -1174,6 +1174,9 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
     const oldView = this.currentView;
     const newView = this._data.findIndex((group) => group.tabs.includes(tab));
 
+    if (newView === oldView && oldView < 0) {
+      return;
+    }
     if (newView < 0 && oldView >= 0) {
       this.deactivateCurrentSplitView();
       return;
