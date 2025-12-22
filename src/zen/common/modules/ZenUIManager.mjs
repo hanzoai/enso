@@ -813,7 +813,6 @@ window.gZenVerticalTabsManager = {
       !aItem.isConnected ||
       gZenUIManager.testingEnabled ||
       !gZenStartup.isReady ||
-      !gZenPinnedTabManager.hasInitializedPins ||
       aItem.group?.hasAttribute('split-view-group')
     ) {
       return;
@@ -1311,14 +1310,6 @@ window.gZenVerticalTabsManager = {
           gZenUIManager.showToast('zen-tabs-renamed');
         } else {
           gBrowser.setTabTitle(this._tabEdited);
-        }
-        if (this._tabEdited.getAttribute('zen-pin-id')) {
-          // Update pin title in storage
-          await gZenPinnedTabManager.updatePinTitle(
-            this._tabEdited,
-            this._tabEdited.label,
-            !!newName
-          );
         }
 
         // Maybe add some confetti here?!?

@@ -20,13 +20,11 @@ export default [
   'gZenWorkspaces',
   'gZenKeyboardShortcutsManager',
   'ZenWorkspacesEngine',
-  'ZenWorkspacesStorage',
   'ZenWorkspaceBookmarksStorage',
 
   'ZEN_KEYSET_ID',
 
   'gZenPinnedTabManager',
-  'ZenPinnedTabsStorage',
 
   'gZenEmojiPicker',
   'gZenSessionStore',
