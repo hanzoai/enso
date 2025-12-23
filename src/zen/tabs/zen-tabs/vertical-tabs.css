@@ -939,7 +939,7 @@
   height: calc(100% - var(--tab-block-margin) * 2);
   margin-left: calc(-1 * var(--tab-inline-padding) + var(--tab-block-margin));
   margin-right: 8px;
-  padding: 0 calc(var(--toolbarbutton-inner-padding) - 2px) 0
+  padding: 0 var(--toolbarbutton-inner-padding) 0
     calc(var(--toolbarbutton-inner-padding) / 4 + var(--tab-inline-padding) - 2px);
   border-radius: 0;
   border-top-left-radius: var(--border-radius-medium);
