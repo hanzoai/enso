@@ -32,6 +32,7 @@ class ZenPinnedTabsObserver {
     );
     ChromeUtils.defineESModuleGetters(lazy, {
       E10SUtils: 'resource://gre/modules/E10SUtils.sys.mjs',
+      TabStateCache: 'resource:///modules/sessionstore/TabStateCache.sys.mjs',
     });
     this.#listenPinnedTabEvents();
   }
@@ -486,6 +487,9 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
           if (icon) {
             tab.setAttribute('zen-has-static-icon', 'true');
           }
+          lazy.TabStateCache.update(tab.permanentKey, {
+            image: null,
+          });
         })
         .catch((err) => {
           console.error(err);

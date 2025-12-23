@@ -1,5 +1,5 @@
 diff --git a/browser/themes/shared/tabbrowser/tabs.css b/browser/themes/shared/tabbrowser/tabs.css
-index 8a4d3860b344e2dc2128cfc2b1673de582e19c7c..fef63d687ba4e816d3d36f34d4a39adef06359c9 100644
+index 8a4d3860b344e2dc2128cfc2b1673de582e19c7c..086171783cd9a8629ccf4b2e90813e58c4793878 100644
 --- a/browser/themes/shared/tabbrowser/tabs.css
 +++ b/browser/themes/shared/tabbrowser/tabs.css
 @@ -21,7 +21,7 @@
@@ -111,7 +111,7 @@ index 8a4d3860b344e2dc2128cfc2b1673de582e19c7c..fef63d687ba4e816d3d36f34d4a39ade
  }
  
 -#tabbrowser-arrowscrollbox[orient="vertical"] > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button,
-+#tabbrowser-arrowscrollbox[orient="vertical"] #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button,
++#tabs-newtab-button,
  #vertical-tabs-newtab-button {
    appearance: none;
    min-height: var(--tab-min-height);

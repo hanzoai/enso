@@ -824,7 +824,7 @@ class nsZenWorkspaces {
       this.#activeWorkspace = this._tempWorkspace?.uuid;
       return this._workspaceCache;
     }
-    return this._workspaceCache;
+    return [...this._workspaceCache];
   }
 
   async workspaceBookmarks() {
@@ -1210,7 +1210,7 @@ class nsZenWorkspaces {
     }
     if (!this.#contextMenuData.workspaceId) {
       separator.hidden = false;
-      for (const workspace of [...this._workspaceCache].reverse()) {
+      for (const workspace of this.getWorkspaces().reverse()) {
         const item = this.generateMenuItemForWorkspace(workspace);
         item.addEventListener('command', (e) => {
           this.changeWorkspaceWithID(e.target.closest('menuitem').getAttribute('zen-workspace-id'));
@@ -1363,7 +1363,7 @@ class nsZenWorkspaces {
     if (this.privateWindowOrDisabled) {
       return;
     }
-    const workspaces = this.getWorkspaces();
+    const workspaces = this._workspaceCache;
     const workspace = workspaces.find((w) => w.uuid === id);
     if (!workspace) {
       console.warn(`Workspace with ID ${id} not found for reordering.`);
@@ -1382,8 +1382,10 @@ class nsZenWorkspaces {
       return;
     }
     workspaces.splice(newPosition, 0, workspace);
-    // Propagate the changes
-    this.#propagateWorkspaceData();
+    // Propagate the changes if the order has changed
+    if (currentIndex !== newPosition) {
+      this.#propagateWorkspaceData();
+    }
   }
 
   async openWorkspaceCreation() {
