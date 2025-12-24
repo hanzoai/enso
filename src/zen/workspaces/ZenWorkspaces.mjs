@@ -1248,7 +1248,7 @@ class nsZenWorkspaces {
     if (this.privateWindowOrDisabled) {
       return;
     }
-    const workspacesData = this.getWorkspaces();
+    const workspacesData = this._workspaceCache;
     const index = workspacesData.findIndex((ws) => ws.uuid === workspaceData.uuid);
     if (index !== -1) {
       workspacesData[index] = workspaceData;

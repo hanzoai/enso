@@ -61,10 +61,6 @@ class ZenPinnedTabsObserver {
 }
 
 class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
-  promiseInitializedPinned = new Promise((resolve) => {
-    this._resolvePinnedInitializedInternal = resolve;
-  });
-
   init() {
     if (!this.enabled) {
       return;
@@ -795,16 +791,6 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
 
   get expandedSidebarMode() {
     return document.documentElement.getAttribute('zen-sidebar-expanded') === 'true';
-  }
-
-  async updatePinTitle(tab, newTitle, isEdited = true) {
-    tab.removeAttribute('zen-has-static-label');
-    if (isEdited) {
-      gBrowser._setTabLabel(tab, newTitle);
-      tab.setAttribute('zen-has-static-label', 'true');
-    } else {
-      gBrowser.setTabTitle(tab);
-    }
   }
 
   canEssentialBeAdded(tab) {

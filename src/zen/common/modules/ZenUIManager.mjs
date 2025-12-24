@@ -1306,12 +1306,12 @@ window.gZenVerticalTabsManager = {
         // Check if name is blank, reset if so
         // Always remove, so we can always rename and if it's empty,
         // it will reset to the original name anyway
-        this._tabEdited.removeAttribute('zen-has-static-label');
         if (hasChanged) {
+          this._tabEdited.zenStaticLabel = newName;
           gBrowser._setTabLabel(this._tabEdited, newName);
-          this._tabEdited.setAttribute('zen-has-static-label', 'true');
           gZenUIManager.showToast('zen-tabs-renamed');
         } else {
+          delete this._tabEdited.zenStaticLabel;
           gBrowser.setTabTitle(this._tabEdited);
         }
 

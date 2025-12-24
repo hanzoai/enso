@@ -544,9 +544,7 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
     //   that we want it to initially be collapsed.
     setTimeout(
       (folder) => {
-        gZenPinnedTabManager.promiseInitializedPinned.then(() => {
-          folder.collapsed = !!options.collapsed;
-        });
+        folder.collapsed = !!options.collapsed;
       },
       0,
       folder
