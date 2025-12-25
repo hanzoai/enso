@@ -26,6 +26,9 @@ const SHOULD_BACKUP_FILE = Services.prefs.getBoolPref('zen.session-store.backup-
 const FILE_NAME = SHOULD_COMPRESS_FILE ? 'zen-sessions.jsonlz4' : 'zen-sessions.json';
 const MIGRATION_PREF = 'zen.ui.migration.session-manager-restore';
 
+// 'browser.startup.page' preference value to resume the previous session.
+const BROWSER_STARTUP_RESUME_SESSION = 3;
+
 /**
  * Class representing the sidebar object stored in the session file.
  * This object holds all the data related to tabs, groups, folders
@@ -168,6 +171,17 @@ export class nsZenSessionManager {
     if (!initialState.windows?.length) {
       initialState.windows = [{}];
     }
+    // When we don't have browser.startup.page set to resume session,
+    // we only want to restore the pinned tabs into the new windows.
+    if (
+      Services.prefs.getIntPref('browser.startup.page', 1) !== BROWSER_STARTUP_RESUME_SESSION &&
+      this.#sidebar?.tabs
+    ) {
+      this.log('Restoring only pinned tabs into windows');
+      const sidebar = this.#sidebar;
+      sidebar.tabs = (sidebar.tabs || []).filter((tab) => tab.pinned);
+      this.#sidebar = sidebar;
+    }
     // Restore all windows with the same sidebar object, this will
     // guarantee that all tabs, groups, folders and split view data
     // are properly synced across all windows.
@@ -283,8 +297,7 @@ export class nsZenSessionManager {
    * We do this in order to make sure all new window objects
    * have the same sidebar data.
    *
-   * @param aWindowData
-   *        The window data object to restore into.
+   * @param aWindowData The window data object to restore into.
    */
   #restoreWindowData(aWindowData) {
     const sidebar = this.#sidebar;
