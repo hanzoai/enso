@@ -284,7 +284,7 @@ class nsZenWorkspaces {
       });
     };
     this._pinnedTabsResizeObserver = new ResizeObserver(onResize);
-    if (this.privateWindowOrDisabled || this._workspaceCache.length === 0) {
+    if (this.privateWindowOrDisabled) {
       await this.restoreWorkspacesFromSessionStore({});
     }
   }

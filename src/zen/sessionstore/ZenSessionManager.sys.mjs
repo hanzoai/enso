@@ -68,6 +68,10 @@ export class nsZenSessionManager {
       compression: SHOULD_COMPRESS_FILE ? 'lz4' : undefined,
       backupFile,
     });
+
+    lazy.SessionStore.promiseAllWindowsRestored.then(() => {
+      delete this._migrationSpaceData;
+    });
   }
 
   log(...args) {
@@ -149,7 +153,6 @@ export class nsZenSessionManager {
       for (const winData of initialState?.windows || []) {
         winData.spaces = this._migrationSpaceData || [];
       }
-      delete this._migrationSpaceData;
       return;
     }
     // If there's no initial state, nothing to restore. This would
@@ -350,6 +353,19 @@ export class nsZenSessionManager {
 
     SessionStoreInternal._deferredInitialState = newState;
     SessionStoreInternal.initializeWindow(aWindow, newState);
+  }
+
+  /**
+   * Called when a new empty session is created. For example,
+   * when creating a new profile or when the user installed it for
+   * the first time.
+   * @param {*} aWindow
+   * @returns
+   */
+  onNewEmptySession(aWindow) {
+    aWindow.gZenWorkspaces.restoreWorkspacesFromSessionStore({
+      spaces: this.#sidebar.spaces || [],
+    });
   }
 
   /**
