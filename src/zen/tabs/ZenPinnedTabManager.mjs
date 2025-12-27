@@ -475,12 +475,13 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
     });
     document.getElementById('context_zen-edit-tab-icon').addEventListener('command', () => {
       const tab = TabContextMenu.contextTab;
-      delete tab.zenStaticIcon;
       gZenEmojiPicker
         .open(tab.iconImage, { emojiAsSVG: true })
         .then((icon) => {
           if (icon) {
             tab.zenStaticIcon = icon;
+          } else {
+            delete tab.zenStaticIcon;
           }
           gBrowser.setIcon(tab, icon);
           lazy.TabStateCache.update(tab.permanentKey, {
