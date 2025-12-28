@@ -326,7 +326,7 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
     // Remove everything except the entry we want to keep
     state.entries = [initialState.entry];
 
-    state.image = initialState.image;
+    state.image = tab.zenStaticIcon || initialState.image;
     state.index = 0;
 
     SessionStore.setTabState(tab, state);
