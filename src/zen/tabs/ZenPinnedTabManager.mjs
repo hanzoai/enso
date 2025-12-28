@@ -84,10 +84,14 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
 
   onTabIconChanged(tab, url = null) {
     tab.dispatchEvent(new CustomEvent('ZenTabIconChanged', { bubbles: true, detail: { tab } }));
-    const iconUrl = url ?? tab.iconImage.src;
     if (tab.hasAttribute('zen-essential')) {
-      tab.style.setProperty('--zen-essential-tab-icon', `url(${iconUrl})`);
+      this.setEssentialTabIcon(tab, url);
     }
+  }
+
+  setEssentialTabIcon(tab, url = null) {
+    const iconUrl = url ?? tab.getAttribute('image') ?? '';
+    tab.style.setProperty('--zen-essential-tab-icon', `url(${iconUrl})`);
   }
 
   _onTabResetPinButton(event, tab) {
@@ -534,15 +538,16 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
   }
 
   moveToAnotherTabContainerIfNecessary(event, movingTabs) {
+    movingTabs = [...movingTabs];
     if (!this.enabled) {
       return false;
     }
-    movingTabs = [...movingTabs];
     try {
-      const pinnedTabsTarget =
-        event.target.closest('.zen-current-workspace-indicator') || this._isGoingToPinnedTabs;
+      const pinnedTabsTarget = event.target.closest(
+        ':is(.zen-current-workspace-indicator, .zen-workspace-pinned-tabs-section)'
+      );
       const essentialTabsTarget = event.target.closest('.zen-essentials-container');
-      const tabsTarget = !this._isGoingToPinnedTabs;
+      const tabsTarget = !pinnedTabsTarget;
 
       // TODO: Solve the issue of adding a tab between two groups
       // Remove group labels from the moving tabs and replace it
@@ -685,103 +690,11 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
   }
 
   removeTabContainersDragoverClass(hideIndicator = true) {
-    if (this._dragIndicator) {
-      Services.zen.playHapticFeedback();
-    }
     this.dragIndicator.remove();
     this._dragIndicator = null;
     if (hideIndicator) {
       gZenWorkspaces.activeWorkspaceIndicator?.removeAttribute('open');
     }
-  }
-
-  onDragFinish() {
-    for (const item of this.dragShiftableItems) {
-      item.style.transform = '';
-    }
-    delete this._topToNormalTabs;
-    for (const item of gBrowser.tabContainer.ariaFocusableItems) {
-      if (gBrowser.isTab(item)) {
-        let isVisible = true;
-        let parent = item.group;
-        while (parent) {
-          if (!parent.visible) {
-            isVisible = false;
-            break;
-          }
-          parent = parent.group;
-        }
-        if (!isVisible) {
-          continue;
-        }
-      }
-      const itemToAnimate =
-        item.group?.hasAttribute('split-view-group') || gBrowser.isTabGroupLabel(item)
-          ? item.group
-          : item;
-      itemToAnimate.style.removeProperty('--zen-folder-indent');
-    }
-    this.removeTabContainersDragoverClass();
-  }
-
-  get dragShiftableItems() {
-    const separator = gZenWorkspaces.pinnedTabsContainer.querySelector(
-      '.pinned-tabs-container-separator'
-    );
-    // Make sure to always return the separator at the start of the array
-    return Services.prefs.getBoolPref('zen.view.show-newtab-button-top')
-      ? [separator, gZenWorkspaces.activeWorkspaceElement.newTabButton]
-      : [separator];
-  }
-
-  animateSeparatorMove(movingTabs, dropElement, isPinned) {
-    let draggedTab = movingTabs[0];
-    if (gBrowser.isTabGroupLabel(draggedTab) && draggedTab.group.isZenFolder) {
-      this._isGoingToPinnedTabs = true;
-      return;
-    }
-    if (draggedTab?.group?.hasAttribute('split-view-group')) {
-      draggedTab = draggedTab.group;
-    }
-    const itemsToCheck = this.dragShiftableItems;
-    let translate = movingTabs[isPinned ? movingTabs.length - 1 : 0].getBoundingClientRect().top;
-    if (isPinned) {
-      const rect = draggedTab.getBoundingClientRect();
-      translate += rect.height;
-    }
-    const draggingTabHeight = movingTabs.reduce((acc, item) => {
-      return acc + window.windowUtils.getBoundsWithoutFlushing(item).height;
-    }, 0);
-    if (typeof this._topToNormalTabs === 'undefined') {
-      const rects = itemsToCheck.map((item) => window.windowUtils.getBoundsWithoutFlushing(item));
-      this._topToNormalTabs = rects[0].top + rects.at(-1).height / (isPinned ? 2 : 4);
-    }
-    let topToNormalTabs = this._topToNormalTabs;
-    const isGoingToPinnedTabs =
-      translate < topToNormalTabs && gBrowser.pinnedTabCount - gBrowser._numZenEssentials > 0;
-    const multiplier = isGoingToPinnedTabs !== isPinned ? (isGoingToPinnedTabs ? 1 : -1) : 0;
-    this._isGoingToPinnedTabs = isGoingToPinnedTabs;
-    if (!dropElement) {
-      itemsToCheck.forEach((item) => {
-        item.style.transform = `translateY(${draggingTabHeight * multiplier}px)`;
-      });
-    }
-  }
-
-  getLastTabBound(lastBound, lastTab, isDraggingFolder = false) {
-    if (!lastTab.pinned || isDraggingFolder) {
-      return lastBound;
-    }
-    const shiftedItems = this.dragShiftableItems;
-    let totalHeight = shiftedItems.reduce((acc, item) => {
-      return acc + window.windowUtils.getBoundsWithoutFlushing(item).height;
-    }, 0);
-    if (shiftedItems.length === 1) {
-      // Means the new tab button is not at the top or not visible
-      const lastTabRect = window.windowUtils.getBoundsWithoutFlushing(lastTab);
-      totalHeight += lastTabRect.height;
-    }
-    return lastBound + totalHeight + 6;
   }
 
   get dragIndicator() {
