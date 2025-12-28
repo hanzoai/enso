@@ -1,6 +1,6 @@
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import { nsZenThemePicker } from 'chrome://browser/content/zen-components/ZenGradientGenerator.mjs';
 
@@ -465,6 +465,7 @@ class nsZenWorkspaces {
             workspaceWrapper.pinnedTabsContainer,
             tabs
           );
+          workspaceWrapper.checkPinsExistence();
           resolve();
         },
         { once: true }
@@ -827,6 +828,20 @@ class nsZenWorkspaces {
     return [...this._workspaceCache];
   }
 
+  getWorkspacesForSessionStore() {
+    const spaces = this.getWorkspaces();
+    let spacesForSS = [];
+    for (const space of spaces) {
+      let newSpace = { ...space };
+      const element = this.workspaceElement(space.uuid);
+      if (element) {
+        newSpace.hasCollapsedPinnedTabs = element.hasCollapsedPinnedTabs;
+      }
+      spacesForSS.push(newSpace);
+    }
+    return spacesForSS;
+  }
+
   async workspaceBookmarks() {
     if (this.privateWindowOrDisabled) {
       this._workspaceBookmarksCache = {
@@ -854,11 +869,22 @@ class nsZenWorkspaces {
     if (this.#hasInitialized) {
       return;
     }
-    this._workspaceCache = aWinData.spaces?.length
-      ? aWinData.spaces
+    const spacesFromStore = aWinData.spaces || [];
+    this._workspaceCache = spacesFromStore.length
+      ? [...spacesFromStore]
       : [await this.createAndSaveWorkspace('Space', undefined, true)];
+    for (const workspace of this._workspaceCache) {
+      // We don't want to depend on this by mistake
+      delete workspace.hasCollapsedPinnedTabs;
+    }
     this.activeWorkspace = aWinData.activeZenSpace || this._workspaceCache[0].uuid;
     await this.initializeWorkspaces();
+    for (const workspace of spacesFromStore) {
+      const element = this.workspaceElement(workspace.uuid);
+      if (element) {
+        element.collapsiblePins.collapsed = workspace.hasCollapsedPinnedTabs || false;
+      }
+    }
     this.#hasInitialized = true;
   }
 
@@ -1542,11 +1568,7 @@ class nsZenWorkspaces {
   }
 
   async changeWorkspace(workspace, ...args) {
-    if (
-      !this.workspaceEnabled ||
-      this.#inChangingWorkspace ||
-      gNavToolbox.hasAttribute('movingtab')
-    ) {
+    if (!this.workspaceEnabled || this.#inChangingWorkspace) {
       return;
     }
     this.#inChangingWorkspace = true;
@@ -1788,11 +1810,14 @@ class nsZenWorkspaces {
     }
     const indicatorName = workspaceIndicator.querySelector('.zen-current-workspace-indicator-name');
     const indicatorIcon = workspaceIndicator.querySelector('.zen-current-workspace-indicator-icon');
+    const iconStack = workspaceIndicator.querySelector('.zen-current-workspace-indicator-stack');
 
     if (this.workspaceHasIcon(currentWorkspace)) {
       indicatorIcon.removeAttribute('no-icon');
+      iconStack.removeAttribute('no-icon');
     } else {
       indicatorIcon.setAttribute('no-icon', 'true');
+      iconStack.setAttribute('no-icon', 'true');
     }
     const icon = this.getWorkspaceIcon(currentWorkspace);
     indicatorIcon.innerHTML = '';
@@ -2404,7 +2429,7 @@ class nsZenWorkspaces {
     return workspaceData;
   }
 
-  async updateTabsContainers(target = undefined, forAnimation = false) {
+  updateTabsContainers(target = undefined, forAnimation = false) {
     this.makeSureEmptyTabIsFirst();
     if (target && !target.target?.parentNode) {
       target = null;
@@ -2414,7 +2439,7 @@ class nsZenWorkspaces {
     if (target?.type === 'TabClose' || target?.type === 'TabOpen') {
       animateContainer = target.target.pinned;
     }
-    await this.onPinnedTabsResize(
+    this.onPinnedTabsResize(
       // This is what happens when we join a resize observer, an event listener
       // while using it as a method.
       [{ target: (target?.target ? target.target : target) ?? this.pinnedTabsContainer }],
@@ -2462,7 +2487,7 @@ class nsZenWorkspaces {
     }
   }
 
-  async onPinnedTabsResize(entries, forAnimation = false, animateContainer = false) {
+  onPinnedTabsResize(entries, forAnimation = false, animateContainer = false) {
     if (
       document.documentElement.hasAttribute('inDOMFullscreen') ||
       !this._hasInitializedTabsStrip ||
@@ -2486,9 +2511,7 @@ class nsZenWorkspaces {
         // Get all workspaces that have the same userContextId
         const activeWorkspace = this.getActiveWorkspace();
         const userContextId = activeWorkspace.containerTabId;
-        const workspaces = this._workspaceCache.filter(
-          (w) => w.containerTabId === userContextId && w.uuid !== originalWorkspaceId
-        );
+        const workspaces = this.getWorkspaces().filter((w) => w.containerTabId === userContextId);
         workspacesIds.push(...workspaces.map((w) => w.uuid));
       } else {
         workspacesIds.push(originalWorkspaceId);
@@ -2661,7 +2684,7 @@ class nsZenWorkspaces {
     return tab;
   }
 
-  async changeWorkspaceShortcut(offset = 1, whileScrolling = false) {
+  async changeWorkspaceShortcut(offset = 1, whileScrolling = false, disableWrap = false) {
     // Cycle through workspaces
     let workspaces = this.getWorkspaces();
     let activeWorkspace = this.getActiveWorkspace();
@@ -2669,7 +2692,7 @@ class nsZenWorkspaces {
 
     // note: offset can be negative
     let targetIndex = workspaceIndex + offset;
-    if (this.shouldWrapAroundNavigation) {
+    if (this.shouldWrapAroundNavigation && !disableWrap) {
       // Add length to handle negative indices and loop
       targetIndex = (targetIndex + workspaces.length) % workspaces.length;
     } else {

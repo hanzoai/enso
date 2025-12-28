@@ -33,8 +33,6 @@ function formatRelativeTime(timestamp) {
 
 class nsZenFolders extends nsZenDOMOperatedFeature {
   #ZEN_MAX_SUBFOLDERS = Services.prefs.getIntPref('zen.folders.max-subfolders', 5);
-  #ZEN_EDGE_ZONE_THRESHOLD =
-    Services.prefs.getIntPref('zen.view.drag-and-drop.edge-zone-threshold', 25) / 100;
 
   #popup = null;
   #popupTimer = null;
@@ -189,6 +187,7 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
     window.addEventListener('TabSelect', this);
     window.addEventListener('TabOpen', this);
     const onNewFolder = this.#onNewFolder.bind(this);
+    document.getElementById('zen-context-menu-new-folder').addEventListener('command', onNewFolder);
     document
       .getElementById('zen-context-menu-new-folder-toolbar')
       .addEventListener('command', onNewFolder);
@@ -803,6 +802,9 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
     if (!isTab && !groupElem?.hasAttribute('selected') && !forCollapse) {
       groupElem = null; // Don't indent if the group is not selected
     }
+    if (groupElem?.tagName.toLowerCase() === 'zen-workspace-collapsible-pins') {
+      groupElem = null; // Don't indent if it's inside the collapsible pinned tabs
+    }
     let level = groupElem?.level + 1 || 0;
     if (gBrowser.isTabGroupLabel(groupElem)) {
       // If it is a group label, we should not increase its level by one.
@@ -1036,8 +1038,7 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
             }
             default: {
               // Should insert after zen-empty-tab
-              const start =
-                parentWorkingData.node.querySelector('.zen-tab-group-start').nextElementSibling;
+              const start = parentWorkingData.node.groupStartElement.nextElementSibling;
               start.after(node);
             }
           }
@@ -1062,18 +1063,16 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
    * @param {Array<MozTabbrowserTab>|null} movingTabs The tabs being moved.
    */
   highlightGroupOnDragOver(folder, movingTabs) {
-    if (folder === this.#lastHighlightedGroup) return;
+    if (folder === this.#lastHighlightedGroup) return true;
     const tab = movingTabs ? movingTabs[0] : null;
     if (this.#lastHighlightedGroup && this.#lastHighlightedGroup !== folder) {
-      this.#lastHighlightedGroup.removeAttribute('selected');
       if (this.#lastHighlightedGroup.collapsed) {
         this.updateFolderIcon(this.#lastHighlightedGroup, 'close');
       }
       this.#lastHighlightedGroup = null;
     }
-
     if (
-      folder &&
+      folder?.isZenFolder &&
       (!folder.hasAttribute('split-view-group') || !folder.hasAttribute('selected')) &&
       folder !== tab?.group &&
       !(
@@ -1081,13 +1080,13 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
         movingTabs?.some((t) => gBrowser.isTabGroupLabel(t))
       )
     ) {
-      folder.setAttribute('selected', 'true');
-      folder.style.transform = '';
       if (folder.collapsed) {
         this.updateFolderIcon(folder, 'open');
       }
       this.#lastHighlightedGroup = folder;
+      return true;
     }
+    return false;
   }
 
   /**
@@ -1098,55 +1097,6 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
     for (const tab of tabs) {
       gBrowser.ungroupTabsUntilNoActive(tab);
     }
-  }
-
-  /**
-   * Handles the dragover logic when dragging a tab or tab group label over another tab group label.
-   * This function determines where the dragged item should be visually dropped (before/after the group, or inside it)
-   * and updates related styling and highlighting.
-   *
-   * @param {MozTabbrowserTabGroupLabel} currentDropElement The tab group label currently being dragged over.
-   * @param {MozTabbrowserTab|MozTabbrowserTabGroupLabel} draggedTab The tab or tab group label being dragged.
-   * @param {number} overlapPercent The percentage of overlap between the dragged item and the drop target.
-   * @param {Array<MozTabbrowserTab>} movingTabs An array of tabs that are currently being dragged together.
-   * @param {boolean} currentDropBefore Indicates if the current drop position is before the middle of the drop element.
-   * @param {string|undefined} currentColorCode The current color code for dragover highlighting.
-   * @returns {{dropElement: MozTabbrowserTabGroup|MozTabbrowserTab|MozTabbrowserTabGroupLabel, colorCode: string|undefined, dropBefore: boolean}}
-   *   An object containing the updated drop element, color code for highlighting, and drop position.
-   */
-  handleDragOverTabGroupLabel(
-    currentDropElement,
-    draggedTab,
-    overlapPercent,
-    movingTabs,
-    currentDropBefore,
-    currentColorCode
-  ) {
-    let dropElement = currentDropElement;
-    let dropBefore = currentDropBefore;
-    let colorCode = currentColorCode;
-
-    const dropElementGroup = dropElement?.isZenFolder ? dropElement : dropElement?.group;
-    const isSplitGroup = dropElement?.group?.hasAttribute('split-view-group');
-    let firstGroupElem =
-      dropElementGroup?.querySelector('.zen-tab-group-start')?.nextElementSibling;
-    if (gBrowser.isTabGroup(firstGroupElem)) firstGroupElem = firstGroupElem.labelElement;
-
-    const isInMiddleZone =
-      overlapPercent >= this.#ZEN_EDGE_ZONE_THRESHOLD &&
-      overlapPercent <= 1 - this.#ZEN_EDGE_ZONE_THRESHOLD;
-    const shouldDropInside = isInMiddleZone && !isSplitGroup;
-
-    if (shouldDropInside) {
-      dropElement = firstGroupElem;
-      dropBefore = true;
-      this.highlightGroupOnDragOver(dropElementGroup, movingTabs);
-    } else {
-      colorCode = undefined;
-      this.highlightGroupOnDragOver(null);
-    }
-
-    return { dropElement, colorCode, dropBefore };
   }
 
   #normalizeGroupItems(items) {
@@ -1212,6 +1162,11 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
       return heightShift;
     } else {
       heightShift += window.windowUtils.getBoundsWithoutFlushing(tabsContainer).height;
+      if (tabsContainer.separatorElement) {
+        heightShift -= window.windowUtils.getBoundsWithoutFlushing(
+          tabsContainer.separatorElement
+        ).height;
+      }
     }
     return heightShift;
   }
@@ -1225,8 +1180,8 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
     const activeFoldersIds = new Set();
     const itemsToHide = [];
 
-    const tabsContainer = group.querySelector('.tab-group-container');
-    const groupStart = group.querySelector('.zen-tab-group-start');
+    const tabsContainer = group.groupContainer;
+    const groupStart = group.groupStartElement;
 
     const groupItems = this.#collectGroupItems(group, {
       selectedTabs,
@@ -1304,11 +1259,11 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
     const animations = [];
     const itemsToHide = [];
 
-    const tabsContainer = group.querySelector('.tab-group-container');
+    const tabsContainer = group.groupContainer;
     tabsContainer.removeAttribute('hidden');
     tabsContainer.style.overflow = 'hidden';
 
-    const groupStart = group.querySelector('.zen-tab-group-start');
+    const groupStart = group.groupStartElement;
     const itemsToShow = this.#normalizeGroupItems(group.childGroupsAndTabs);
     const activeFolders = group.childActiveGroups;
 
@@ -1422,7 +1377,7 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
       folder.removeAttribute('has-active');
       folder.activeTabs = [];
       const groupItems = this.#normalizeGroupItems(folder.allItems);
-      const tabsContainer = folder.querySelector('.tab-group-container');
+      const tabsContainer = folder.groupContainer;
 
       // Set correct margin-top after animation
       const afterAnimate = () => {
@@ -1436,7 +1391,7 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
         groupStart.style.marginTop = `${-(collapsedHeight + 4)}px`;
       };
 
-      const groupStart = folder.querySelector('.zen-tab-group-start');
+      const groupStart = folder.groupStartElement;
       const collapsedHeight = this.#calculateHeightShift(tabsContainer, []);
 
       // Collect animations for this specific folder becoming inactive
@@ -1474,7 +1429,7 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
         animations.push(async () => {
           folder.removeAttribute('has-active');
           const groupItems = this.#normalizeGroupItems(folder.allItems);
-          const tabsContainer = folder.querySelector('.tab-group-container');
+          const tabsContainer = folder.groupContainer;
 
           // Set correct margin-top after animation
           const afterAnimate = () => {
@@ -1488,7 +1443,7 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
             groupStart.style.marginTop = `${-(collapsedHeight + 4)}px`;
           };
 
-          const groupStart = folder.querySelector('.zen-tab-group-start');
+          const groupStart = folder.groupStartElement;
           const collapsedHeight = this.#calculateHeightShift(tabsContainer, []);
 
           // Collect animations for this specific folder becoming inactive
@@ -1573,8 +1528,8 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
               currentGroup.activeTabs = activeTabs;
             }
 
-            const tabsContainer = currentGroup.querySelector('.tab-group-container');
-            const groupStart = currentGroup.querySelector('.zen-tab-group-start');
+            const tabsContainer = currentGroup.groupContainer;
+            const groupStart = currentGroup.groupStartElement;
             tabsContainer.style.overflow = 'clip';
 
             if (tabsContainer.hasAttribute('hidden')) tabsContainer.removeAttribute('hidden');
@@ -1673,8 +1628,8 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
 
   animateGroupMove(group, expand = false) {
     if (!group?.isZenFolder) return;
-    const groupStart = group.querySelector('.zen-tab-group-start');
-    const tabsContainer = group.querySelector('.tab-group-container');
+    const groupStart = group.groupStartElement;
+    const tabsContainer = group.groupContainer;
     const heightContainer = expand ? 0 : this.#calculateHeightShift(tabsContainer, []);
     tabsContainer.style.overflow = 'clip';
 
