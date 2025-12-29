@@ -1,5 +1,5 @@
 diff --git a/browser/themes/shared/toolbarbuttons.css b/browser/themes/shared/toolbarbuttons.css
-index e2b8a7cae70ed2bd3c80ee4214a09dbdb68a0d01..e320faa158125d73876126f9be8847d395e465e3 100644
+index e2b8a7cae70ed2bd3c80ee4214a09dbdb68a0d01..35c5493157d09398885323acfccad4217189b928 100644
 --- a/browser/themes/shared/toolbarbuttons.css
 +++ b/browser/themes/shared/toolbarbuttons.css
 @@ -44,20 +44,6 @@
@@ -33,6 +33,26 @@ index e2b8a7cae70ed2bd3c80ee4214a09dbdb68a0d01..e320faa158125d73876126f9be8847d3
  }
  
  /* Primary toolbar buttons */
+@@ -148,8 +132,8 @@ toolbar .toolbarbutton-1 {
+ 
+   > .toolbarbutton-icon {
+     /* horizontal padding + actual icon width */
+-    width: calc(2 * var(--toolbarbutton-inner-padding) + 16px);
+-    height: calc(2 * var(--toolbarbutton-inner-padding) + 16px);
++    width: calc(2 * var(--toolbarbutton-inner-padding) + 18px);
++    height: calc(2 * var(--toolbarbutton-inner-padding) + 18px);
+   }
+ 
+   > .toolbarbutton-text {
+@@ -159,7 +143,7 @@ toolbar .toolbarbutton-1 {
+      * height as the button icons and the same vertical padding, but as a minimum,
+      * because otherwise an increase in text sizes would break things.
+      */
+-    min-height: calc(16px + 2 * var(--toolbarbutton-inner-padding));
++    min-height: calc(18px + 2 * var(--toolbarbutton-inner-padding));
+ 
+     @media (-moz-platform: macos) {
+       padding-top: calc(var(--toolbarbutton-inner-padding) + 1px);
 @@ -279,7 +263,7 @@ toolbar .toolbaritem-combined-buttons {
  #nav-bar-overflow-button {
    list-style-image: url("chrome://global/skin/icons/chevron.svg");

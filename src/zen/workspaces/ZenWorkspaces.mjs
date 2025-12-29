@@ -873,10 +873,6 @@ class nsZenWorkspaces {
     this._workspaceCache = spacesFromStore.length
       ? [...spacesFromStore]
       : [await this.createAndSaveWorkspace('Space', undefined, true)];
-    for (const workspace of this._workspaceCache) {
-      // We don't want to depend on this by mistake
-      delete workspace.hasCollapsedPinnedTabs;
-    }
     this.activeWorkspace = aWinData.activeZenSpace || this._workspaceCache[0].uuid;
     await this.initializeWorkspaces();
     for (const workspace of spacesFromStore) {
@@ -884,6 +880,10 @@ class nsZenWorkspaces {
       if (element) {
         element.collapsiblePins.collapsed = workspace.hasCollapsedPinnedTabs || false;
       }
+    }
+    for (const workspace of this._workspaceCache) {
+      // We don't want to depend on this by mistake
+      delete workspace.hasCollapsedPinnedTabs;
     }
     this.#hasInitialized = true;
   }

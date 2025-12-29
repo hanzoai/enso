@@ -263,7 +263,6 @@ export class nsZenWorkspace extends MozXULElement {
 
   disconnectedCallback() {
     window.removeEventListener('ZenGradientCacheChanged', this.onGradientCacheChanged);
-    super.disconnectedCallback();
   }
 
   get active() {
@@ -356,7 +355,7 @@ export class nsZenWorkspace extends MozXULElement {
     } else {
       this.style.colorScheme = '';
     }
-    this.style.setProperty('--toolbox-textcolor', `rgba(${toolbarColor.join(',')})`);
+    this.style.setProperty('--toolbox-textcolor', `rgb(${toolbarColor.join(',')})`);
     this.style.setProperty('--zen-primary-color', primaryColor);
   }
 

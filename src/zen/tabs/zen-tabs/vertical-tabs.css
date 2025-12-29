@@ -213,6 +213,10 @@
       transform: translateY(2px);
     }
   }
+
+  :root[zen-unsynced-window='true'] & {
+    transform: translateY(-4px);
+  }
 }
 
 /* ==========================================================================

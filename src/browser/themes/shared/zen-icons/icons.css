@@ -522,6 +522,7 @@
     -moz-context-properties: fill, fill-opacity;
     pointer-events: none;
   }
+
   &:is([open], [starred]) image {
     list-style-image: url('permissions-fill.svg');
   }

@@ -180,7 +180,7 @@
     transparent 93%
   ) !important;
 
-  --toolbar-color: light-dark(rgb(21, 20, 26, 0.7), rgb(251, 251, 254, 0.7)) !important;
+  --toolbar-color: var(--toolbox-textcolor) !important;
   --toolbox-textcolor-inactive: var(--toolbox-textcolor) !important;
 
   /* Other colors */
@@ -239,6 +239,7 @@
     --zen-main-browser-background-toolbar: var(--zen-main-browser-background);
     --zen-primary-color: light-dark(rgb(100, 115, 255), rgb(80, 90, 200)) !important;
     --toolbox-textcolor: currentColor !important;
+    --zen-workspace-indicator-height: 42px;
   }
 
   --toolbar-field-background-color: var(--zen-colors-input-bg) !important;

@@ -23,15 +23,31 @@ add_header_to_file() {
   fi
 }
 
+merge_svg_paths() {
+  # Remove all lines starting with "#" so we can use a valid svg file
+  file="$1"
+  echo "Merging paths in $file"
+  grep -v '^#' "$file" > temp.svg && mv temp.svg "$file"
+  # Use inkscape to merge all paths into one
+  inkscape "$file" --actions="select-all;object-to-path;select-all;path-combine" --export-plain-svg --export-filename="temp.svg"
+  npx svgo --multipass "temp.svg" --config=../../../../../svgo.config.js
+  mv temp.svg "$file"
+  echo "# This Source Code Form is subject to the terms of the Mozilla Public" > temp
+  echo "# License, v. 2.0. If a copy of the MPL was not distributed with this" >> temp
+  echo "# file, You can obtain one at http://mozilla.org/MPL/2.0/." >> temp
+  cat "$file" >> temp
+  mv temp "$file"
+}
+
 do_icons() {
   os=$1
   preprocessed_os=$2
   echo "#ifdef XP_$preprocessed_os" >> jar.inc.mn
   for filename in $os/*.svg; do
     # remove the os/ prefix
+    merge_svg_paths $filename
     add_header_to_file $filename
     filename=$(basename $filename)
-    echo "Working on $filename"
     echo "*  skin/classic/browser/zen-icons/$filename                      (../shared/zen-icons/$os/$filename) " >> jar.inc.mn
   done
   echo "#endif" >> jar.inc.mn
@@ -40,16 +56,16 @@ do_icons() {
 do_common_icons() {
   for filename in common/*.svg; do
     # remove the os/ prefix
+    merge_svg_paths $filename
     add_header_to_file $filename
     filename=$(basename $filename)
-    echo "Working on $filename"
     echo "*  skin/classic/browser/zen-icons/$filename                      (../shared/zen-icons/common/$filename) " >> jar.inc.mn
   done
   for filename in common/selectable/*.svg; do
     # remove the os/ prefix
+    merge_svg_paths $filename
     add_header_to_file $filename
     filename=$(basename $filename)
-    echo "Working on $filename"
     echo "*  skin/classic/browser/zen-icons/selectable/$filename          (../shared/zen-icons/common/selectable/$filename) " >> jar.inc.mn
   done
 }

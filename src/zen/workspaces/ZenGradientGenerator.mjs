@@ -1310,7 +1310,7 @@ export class nsZenThemePicker extends nsZenMultiWindowFeature {
   }
 
   getToolbarColor(isDarkMode = false) {
-    return isDarkMode ? [255, 255, 255, 0.8] : [0, 0, 0, 0.8]; // Default toolbar
+    return isDarkMode ? [255, 255, 255, 0.6] : [0, 0, 0, 0.5]; // Default toolbar
   }
 
   async onWorkspaceChange(workspace, skipUpdate = false, theme = null) {
