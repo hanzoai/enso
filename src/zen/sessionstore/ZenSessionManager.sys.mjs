@@ -250,7 +250,14 @@ export class nsZenSessionManager {
     // guarantee that all tabs, groups, folders and split view data
     // are properly synced across all windows.
     this.log(`Restoring Zen session data into ${initialState.windows?.length || 0} windows`);
-    for (const winData of initialState.windows) {
+    for (let i = 0; i < initialState.windows.length; i++) {
+      let winData = initialState.windows[i];
+      if (winData.isZenUnsynced) {
+        // We don't wan't to restore any unsynced windows with the sidebar data.
+        this.log('Skipping restore of unsynced window');
+        delete initialState.windows[i];
+        continue;
+      }
       this.#restoreWindowData(winData);
     }
   }

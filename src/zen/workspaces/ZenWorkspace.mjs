@@ -35,6 +35,7 @@ class nsZenCollapsiblePins extends nsZenFolder {
       this.#spaceElement.removeAttribute('collapsedpinnedtabs');
     }
     super.collapsed = value;
+    gBrowser.tabContainer._invalidateCachedVisibleTabs();
   }
 }
 
@@ -48,7 +49,7 @@ export class nsZenWorkspace extends MozXULElement {
             <image class="zen-current-workspace-indicator-chevron" />
             <hbox class="zen-current-workspace-indicator-icon" />
           </stack>
-          <label class="zen-current-workspace-indicator-name" flex="1" />
+          <label class="zen-current-workspace-indicator-name" />
           <toolbarbutton class="toolbarbutton-1 chromeclass-toolbar-additional zen-workspaces-actions" context="zenWorkspaceMoreActions" />
         </vbox>
         <arrowscrollbox orient="vertical" class="workspace-arrowscrollbox">

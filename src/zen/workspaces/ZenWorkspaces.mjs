@@ -2384,7 +2384,9 @@ class nsZenWorkspaces {
       return;
     }
     if (!this.currentWindowIsSyncing) {
-      name = this.isPrivateWindow ? 'Private ' + name : 'Temporary';
+      containerTabId = parseInt(gBrowser.selectedTab.getAttribute('usercontextid')) || 0;
+      let label = ContextualIdentityService.getUserContextLabel(containerTabId) || 'Default';
+      name = this.isPrivateWindow ? 'Private ' + name : label;
     }
     // get extra tabs remaning (e.g. on new profiles) and just move them to the new workspace
     const extraTabs = Array.from(gBrowser.tabContainer.arrowScrollbox.children).filter(

@@ -225,16 +225,19 @@
   --toolbar-field-color: var(--toolbox-textcolor) !important;
 
   &[zen-private-window='true'] {
-    --zen-main-browser-background: linear-gradient(130deg, rgb(10, 6, 11) 0%, rgb(19, 7, 22) 100%);
+    --zen-main-browser-background: linear-gradient(130deg, 
+      color-mix(in srgb, rgb(10, 6, 11) 80%, var(--zen-themed-toolbar-bg-transparent)) 0%, 
+      color-mix(in srgb, rgb(19, 7, 22) 80%, var(--zen-themed-toolbar-bg-transparent)) 100%
+    );
     --zen-main-browser-background-toolbar: var(--zen-main-browser-background);
     --zen-primary-color: light-dark(rgb(93, 42, 107), rgb(110, 48, 125)) !important;
     --toolbox-textcolor: currentColor !important;
   }
 
   &[zen-unsynced-window='true'] {
-    --zen-main-browser-background: linear-gradient(130deg, light-dark(rgb(240, 230, 200), rgb(30, 25, 20)) 0%, light-dark(rgb(220, 200, 150), rgb(50, 45, 40)) 100%);
+    --zen-main-browser-background: color-mix(in srgb, light-dark(rgb(196, 202, 229), rgb(8, 9, 40)) 60%, var(--zen-themed-toolbar-bg-transparent));
     --zen-main-browser-background-toolbar: var(--zen-main-browser-background);
-    --zen-primary-color: light-dark(rgb(200, 100, 20), rgb(220, 120, 30)) !important;
+    --zen-primary-color: light-dark(rgb(100, 115, 255), rgb(80, 90, 200)) !important;
     --toolbox-textcolor: currentColor !important;
   }
 
