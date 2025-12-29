@@ -823,7 +823,6 @@ class nsZenWorkspaces {
     if (!this.currentWindowIsSyncing) {
       this._workspaceCache = this._tempWorkspace ? [this._tempWorkspace] : [];
       this.#activeWorkspace = this._tempWorkspace?.uuid;
-      return this._workspaceCache;
     }
     return [...this._workspaceCache];
   }

@@ -1310,7 +1310,7 @@ export class nsZenThemePicker extends nsZenMultiWindowFeature {
   }
 
   getToolbarColor(isDarkMode = false) {
-    return isDarkMode ? [255, 255, 255, 0.6] : [0, 0, 0, 0.5]; // Default toolbar
+    return isDarkMode ? [255, 255, 255, 0.6] : [0, 0, 0, 0.6]; // Default toolbar
   }
 
   async onWorkspaceChange(workspace, skipUpdate = false, theme = null) {
@@ -1635,7 +1635,6 @@ export class nsZenThemePicker extends nsZenMultiWindowFeature {
     if (!skipSave) {
       currentWorkspace.theme = gradient;
       gZenWorkspaces.saveWorkspace(currentWorkspace);
-      gZenUIManager.showToast('zen-panel-ui-gradient-generator-saved-message');
     }
 
     await this.onWorkspaceChange(currentWorkspace, skipSave, skipSave ? gradient : null);

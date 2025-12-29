@@ -112,21 +112,6 @@ export class nsZenSessionManager {
             }
           : null,
       }));
-      rows = await db.execute('SELECT * FROM zen_pins ORDER BY position ASC');
-      data.pins = rows.map((row) => ({
-        uuid: row.getResultByName('uuid'),
-        title: row.getResultByName('title'),
-        url: row.getResultByName('url'),
-        containerTabId: row.getResultByName('container_id'),
-        workspaceUuid: row.getResultByName('workspace_uuid'),
-        position: row.getResultByName('position'),
-        isEssential: Boolean(row.getResultByName('is_essential')),
-        isGroup: Boolean(row.getResultByName('is_group')),
-        parentUuid: row.getResultByName('folder_parent_uuid'),
-        editedTitle: Boolean(row.getResultByName('edited_title')),
-        folderIcon: row.getResultByName('folder_icon'),
-        isFolderCollapsed: Boolean(row.getResultByName('is_folder_collapsed')),
-      }));
       this._migrationData = data;
     } catch {
       /* ignore errors during migration */
@@ -160,71 +145,35 @@ export class nsZenSessionManager {
    *        The initial session state read from the session file.
    */
   onFileRead(initialState) {
+    // If there's no initial state, nothing to restore. This would
+    // happen if the file is empty or corrupted.
+    if (!initialState) {
+      this.log('No initial state to restore!');
+      return;
+    }
     // For the first time after migration, we restore the tabs
     // That where going to be restored by SessionStore. The sidebar
     // object will always be empty after migration because we haven't
     // gotten the opportunity to save the session yet.
     if (!Services.prefs.getBoolPref(MIGRATION_PREF, false)) {
       Services.prefs.setBoolPref(MIGRATION_PREF, true);
-      const pins = this._migrationData?.pins || [];
-      const applyTabsToObject = (obj) => {
-        // Lets add pins that don't exist yet in the sidebar object.
-        obj.tabs = obj.tabs || [];
-        obj.folders = obj.folders || [];
-        for (const pin of pins) {
-          let isGroup = pin.isGroup;
-          let object = {
-            pinned: true,
-            ...(isGroup
-              ? {
-                  workspaceId: pin.workspaceUuid,
-                  userIcon: pin.folderIcon,
-                  name: pin.title,
-                  parentId: pin.parentUuid,
-                  collapsed: pin.isFolderCollapsed,
-                  id: pin.uuid,
-                  emptyTabIds: [],
-                }
-              : {
-                  zenSyncId: pin.uuid,
-                  groupId: pin.parentUuid,
-                  entries: [{ url: pin.url, title: pin.title }],
-                  zenStaticLabel: pin.editedTitle,
-                  zenEssential: pin.isEssential,
-                  userContextId: pin.containerTabId || 0,
-                  zenWorkspace: pin.workspaceUuid,
-                  title: pin.title,
-                }),
-          };
-          let items = isGroup ? obj.folders : obj.tabs;
-          let index = items.findIndex(
-            (tab) =>
-              tab.zenSyncId === pin.uuid || tab.zenPinnedId === pin.uuid || tab.id === pin.uuid
-          );
-          if (index === -1) {
-            // Add to the start of the tabs array to keep the order
-            items.unshift(object);
-          } else {
-            // Update existing tab data
-            items[index] = { ...object, ...items[index] };
-          }
-        }
-      };
+      this.log('Restoring tabs from Places DB after migration');
       this.#sidebar = {
         ...this.#sidebar,
         spaces: this._migrationData?.spaces || [],
       };
-      applyTabsToObject(this.#sidebar);
-      for (const winData of initialState?.windows || []) {
-        winData.spaces = this._migrationData?.spaces || [];
-        applyTabsToObject(winData);
+      if (!initialState.windows?.length) {
+        let normalClosedWindow = initialState._closedWindows?.find(
+          (win) => !win.isPopup && !win.isTaskbarTab && !win.isPrivate
+        );
+        if (normalClosedWindow) {
+          initialState.windows = [normalClosedWindow];
+          this.log('Restoring tabs from last closed normal window');
+        }
       }
-      return;
-    }
-    // If there's no initial state, nothing to restore. This would
-    // happen if the file is empty or corrupted.
-    if (!initialState) {
-      this.log('No initial state to restore!');
+      for (const winData of initialState.windows || []) {
+        winData.spaces = this._migrationData?.spaces || [];
+      }
       return;
     }
     // If there are no windows, we create an empty one. By default,
@@ -233,6 +182,7 @@ export class nsZenSessionManager {
     // This would happen on first run after having a single private window
     // open when quitting the app, for example.
     if (!initialState.windows?.length) {
+      this.log('No windows found in initial state, creating an empty one');
       initialState.windows = [{}];
     }
     // When we don't have browser.startup.page set to resume session,

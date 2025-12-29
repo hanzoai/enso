@@ -108,8 +108,9 @@
         const tab = movingTabs[i];
         const tabClone = tab.cloneNode(true);
         if (tabClone.hasAttribute('zen-essential')) {
-          tabClone.style.minWidth = tab.style.maxWidth = '54px';
-          tabClone.style.minHeight = tab.style.maxHeight = '50px';
+          const rect = tab.getBoundingClientRect();
+          tabClone.style.minWidth = tabClone.style.maxWidth = `${rect.width}px`;
+          tabClone.style.minHeight = tabClone.style.maxHeight = `${rect.height}px`;
         }
         if (i > 0) {
           tabClone.style.transform = `translate(${i * 4}px, -${i * (tabRect.height - 4)}px)`;
@@ -682,7 +683,7 @@
         !draggedTab.hasAttribute('zen-essential') &&
         draggedTab.getAttribute('zen-workspace-id') != gZenWorkspaces.activeWorkspace
       ) {
-        const movingTabs = draggedTab._dragData.movingTabs;
+        const movingTabs = draggedTab._dragData?.movingTabs || [draggedTab];
         for (let tab of movingTabs) {
           tab.setAttribute('zen-workspace-id', gZenWorkspaces.activeWorkspace);
         }
@@ -959,7 +960,6 @@
         let pinnedTabs = this._tabbrowserTabs.ariaFocusableItems.slice(0, numEssentials);
         this._fakeEssentialTab = document.createXULElement('vbox');
         this._fakeEssentialTab.elementIndex = numEssentials;
-        this.#makeDragImageEssential(event);
         delete dragData.animDropElementIndex;
         if (draggedTab.hasAttribute('zen-essential')) {
           draggedTab.style.visibility = 'hidden';
@@ -968,6 +968,7 @@
           gZenWorkspaces.updateTabsContainers();
           pinnedTabs.push(this._fakeEssentialTab);
         }
+        this.#makeDragImageEssential(event);
         let tabsPerRow = 0;
         let position = RTL_UI
           ? window.windowUtils.getBoundsWithoutFlushing(this._tabbrowserTabs.pinnedTabsContainer)
@@ -1190,8 +1191,12 @@
       tab.setAttribute('zen-essential', 'true');
       tab.setAttribute('pinned', 'true');
       tab.setAttribute('selected', 'true');
-      tab.style.minWidth = tab.style.maxWidth = wrapper.style.width = '54px';
-      tab.style.minHeight = tab.style.maxHeight = wrapper.style.height = '50px';
+      const draggedTabRect = window.windowUtils.getBoundsWithoutFlushing(this._fakeEssentialTab);
+      tab.style.minWidth = tab.style.maxWidth = wrapper.style.width = draggedTabRect.width + 'px';
+      tab.style.minHeight =
+        tab.style.maxHeight =
+        wrapper.style.height =
+          draggedTabRect.height + 'px';
       const offsetY = dragData.offsetY;
       const offsetX = dragData.offsetX;
       // Apply a transform translate to the tab in order to center it within the drag image
