@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/drag-and-drop.js b/browser/components/tabbrowser/content/drag-and-drop.js
-index 97b931c3c7385a52d20204369fcf6d6999053687..6a136cf14d0bc081507a05f298f12ac7a7914601 100644
+index 97b931c3c7385a52d20204369fcf6d6999053687..4ac61b298ac64332afb6eac9918fe3eb7ba789ad 100644
 --- a/browser/components/tabbrowser/content/drag-and-drop.js
 +++ b/browser/components/tabbrowser/content/drag-and-drop.js
 @@ -32,6 +32,9 @@
@@ -221,21 +221,21 @@ index 97b931c3c7385a52d20204369fcf6d6999053687..6a136cf14d0bc081507a05f298f12ac7
        let isPinned = tab.pinned;
        let numPinned = gBrowser.pinnedTabCount;
        let allTabs = this._tabbrowserTabs.ariaFocusableItems;
-@@ -2457,7 +2489,7 @@
+@@ -2457,17 +2489,14 @@
          tab.style.left = "";
          tab.style.top = "";
          tab.style.maxWidth = "";
 -        tab.removeAttribute("dragtarget");
-+        tab.removeAttribute("zen-dragtarget");
        }
        for (let label of draggedTabDocument.getElementsByClassName(
          "tab-group-label-container"
-@@ -2467,7 +2499,7 @@
+       )) {
+         label.style.width = "";
+-        label.style.height = "";
          label.style.left = "";
          label.style.top = "";
          label.style.maxWidth = "";
 -        label.removeAttribute("dragtarget");
-+        label.removeAttribute("zen-dragtarget");
        }
        let periphery = draggedTabDocument.getElementById(
          "tabbrowser-arrowscrollbox-periphery"

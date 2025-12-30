@@ -865,7 +865,7 @@ class nsZenWorkspaces {
   }
 
   async restoreWorkspacesFromSessionStore(aWinData = {}) {
-    if (this.#hasInitialized) {
+    if (this.#hasInitialized || !this.workspaceEnabled) {
       return;
     }
     const spacesFromStore = aWinData.spaces || [];
