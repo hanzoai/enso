@@ -703,6 +703,7 @@ class nsZenWindowSync {
     if (!mostRecentWindow || !aWindow.gZenWorkspaces) {
       return;
     }
+    lazy.TabStateFlusher.flushWindow(aWindow);
     const activeTabsOnClosedWindow = aWindow.gZenWorkspaces.allStoredTabs.filter(
       (tab) => tab._zenContentsVisible
     );
@@ -889,6 +890,7 @@ class nsZenWindowSync {
       );
     });
     this.#makeSureTabSyncsPermanentKey(tab);
+    lazy.TabStateFlusher.flush(tab.linkedBrowser);
   }
 
   on_ZenTabIconChanged(aEvent) {

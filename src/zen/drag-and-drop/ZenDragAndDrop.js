@@ -638,6 +638,7 @@
       if (!isTab(draggedTab)) {
         return;
       }
+      this.#maybeClearVerticalPinnedGridDragOver(draggedTab);
       this.clearSpaceSwitchTimer();
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;

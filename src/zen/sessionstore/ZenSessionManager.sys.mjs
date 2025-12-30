@@ -187,10 +187,10 @@ export class nsZenSessionManager {
     }
     // When we don't have browser.startup.page set to resume session,
     // we only want to restore the pinned tabs into the new windows.
-    if (
-      Services.prefs.getIntPref('browser.startup.page', 1) !== BROWSER_STARTUP_RESUME_SESSION &&
-      this.#sidebar?.tabs
-    ) {
+    const shouldRestoreOnlyPinned =
+      Services.prefs.getIntPref('browser.startup.page', 1) !== BROWSER_STARTUP_RESUME_SESSION ||
+      lazy.PrivateBrowsingUtils.permanentPrivateBrowsing;
+    if (shouldRestoreOnlyPinned && this.#sidebar?.tabs) {
       this.log('Restoring only pinned tabs into windows');
       const sidebar = this.#sidebar;
       sidebar.tabs = (sidebar.tabs || []).filter((tab) => tab.pinned);
@@ -227,7 +227,7 @@ export class nsZenSessionManager {
    *        The current session state.
    */
   saveState(state) {
-    if (lazy.PrivateBrowsingUtils.permanentPrivateBrowsing || !state?.windows?.length) {
+    if (!state?.windows?.length) {
       // Don't save (or even collect) anything in permanent private
       // browsing mode. We also don't want to save if there are no windows.
       return;
@@ -340,15 +340,10 @@ export class nsZenSessionManager {
    *        The window to restore.
    * @param SessionStoreInternal
    *        The SessionStore module instance.
-   * @param resolvePromise
-   *        The promise resolver to call when done. We use a promise
-   *        here because out workspace manager always waits for SessionStore
-   *        to restore all the windows before initializing, but when opening
-   *        a new window, that promise is always resolved, meaning it may run
-   *        into a race condition if we try to restore the window synchronously
-   *        here.
+   * @param fromClosedWindow
+   *        Whether this new window is being restored from a closed window.
    */
-  restoreNewWindow(aWindow, SessionStoreInternal) {
+  restoreNewWindow(aWindow, SessionStoreInternal, fromClosedWindow = false) {
     if (aWindow.gZenWorkspaces?.privateWindowOrDisabled) {
       return;
     }
@@ -373,14 +368,16 @@ export class nsZenSessionManager {
     // windows would appear overlapping the previous one, or with
     // the same size and position, which should be decided by the
     // window manager.
-    delete newWindow.selected;
-    delete newWindow.screenX;
-    delete newWindow.screenY;
-    delete newWindow.width;
-    delete newWindow.height;
-    delete newWindow.sizemode;
-    delete newWindow.sizemodeBeforeMinimized;
-    delete newWindow.zIndex;
+    if (!fromClosedWindow) {
+      delete newWindow.selected;
+      delete newWindow.screenX;
+      delete newWindow.screenY;
+      delete newWindow.width;
+      delete newWindow.height;
+      delete newWindow.sizemode;
+      delete newWindow.sizemodeBeforeMinimized;
+      delete newWindow.zIndex;
+    }
 
     const newState = { windows: [newWindow] };
     this.log(`Cloning window with ${newWindow.tabs.length} tabs`);
