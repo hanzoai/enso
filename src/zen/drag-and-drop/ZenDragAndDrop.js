@@ -95,7 +95,9 @@
       const { offsetX, offsetY } = this.#getDragImageOffset(event, tab, draggingTabs);
       const dragImage = this.#createDragImageForTabs(draggingTabs);
       this.originalDragImageArgs = [dragImage, offsetX, offsetY];
-      dt.setDragImage(...this.originalDragImageArgs);
+      setTimeout(() => {
+        dt.setDragImage(...this.originalDragImageArgs);
+      }, 0);
     }
 
     #createDragImageForTabs(movingTabs) {
