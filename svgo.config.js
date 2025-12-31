@@ -16,12 +16,6 @@ export default {
     'reusePaths',
     'convertStyleToAttrs',
     {
-      name: 'addAttributesToSVGElement',
-      params: {
-        attributes: [{ fill: 'context-fill', 'fill-opacity': 'context-fill-opacity' }],
-      },
-    },
-    {
       name: 'removeAttrs',
       params: {
         attrs: ['version'],

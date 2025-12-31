@@ -145,12 +145,6 @@ export class nsZenSessionManager {
    *        The initial session state read from the session file.
    */
   onFileRead(initialState) {
-    // If there's no initial state, nothing to restore. This would
-    // happen if the file is empty or corrupted.
-    if (!initialState) {
-      this.log('No initial state to restore!');
-      return;
-    }
     // For the first time after migration, we restore the tabs
     // That where going to be restored by SessionStore. The sidebar
     // object will always be empty after migration because we haven't
@@ -174,6 +168,12 @@ export class nsZenSessionManager {
       for (const winData of initialState.windows || []) {
         winData.spaces = this._migrationData?.spaces || [];
       }
+      return;
+    }
+    // If there's no initial state, nothing to restore. This would
+    // happen if the file is empty or corrupted.
+    if (!initialState) {
+      this.log('No initial state to restore!');
       return;
     }
     // If there are no windows, we create an empty one. By default,

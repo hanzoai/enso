@@ -30,6 +30,13 @@ merge_svg_paths() {
   grep -v '^#' "$file" > temp.svg && mv temp.svg "$file"
   # Use inkscape to merge all paths into one
   inkscape "$file" --actions="select-all;object-to-path;select-all;path-combine" --export-plain-svg --export-filename="temp.svg"
+  # we should add fill="context-fill' and fill-opacity="context-fill-opacity" to the svg element
+  # if theres no such attributes already
+  has_fill=$(grep -o 'fill=' temp.svg)
+  if [ -z "$has_fill" ]; then
+    echo "Adding fill and fill-opacity to $file"
+    sed -i '' 's/<svg /<svg fill="context-fill" fill-opacity="context-fill-opacity" /' temp.svg
+  fi
   npx svgo --multipass "temp.svg" --config=../../../../../svgo.config.js
   mv temp.svg "$file"
   echo "# This Source Code Form is subject to the terms of the Mozilla Public" > temp
