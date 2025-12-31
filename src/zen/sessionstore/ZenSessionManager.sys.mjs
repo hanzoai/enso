@@ -377,6 +377,7 @@ export class nsZenSessionManager {
       delete newWindow.sizemode;
       delete newWindow.sizemodeBeforeMinimized;
       delete newWindow.zIndex;
+      delete newWindow.workspaceID;
     }
 
     const newState = { windows: [newWindow] };

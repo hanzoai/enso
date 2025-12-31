@@ -18,7 +18,7 @@ export default {
     {
       name: 'removeAttrs',
       params: {
-        attrs: ['version'],
+        attrs: ['version', 'y', 'x', 'id'],
       },
     },
   ],

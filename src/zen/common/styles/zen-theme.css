@@ -166,6 +166,10 @@
   }
 
   --toolbarbutton-hover-background: var(--zen-toolbar-element-bg-hover) !important;
+  --zen-toolbar-button-size: 16px;
+  @media (-moz-platform: macos) {
+    --zen-toolbar-button-size: 18px;
+  }
 
   /* Using a semitransparent background preserves the tinting from the backdrop.
     * Note that the toolbar text color from browser-colors.css should be ok,
