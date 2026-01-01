@@ -170,28 +170,23 @@ class nsZenWindowSync {
    *
    * @param {Window} aWindow - The browser window that has initialized session store.
    */
-  #onSessionStoreInitialized() {
+  async #onSessionStoreInitialized() {
     // For every tab we have in where there's no sync ID, we need to
     // assign one and sync it to other windows.
     // This should only happen really when updating from an older version
     // that didn't have this feature.
-    let previousWindowPromise = Promise.resolve();
-    this.#runOnAllWindows(null, async (aWindow) => {
-      await previousWindowPromise;
-      previousWindowPromise = new Promise((resolve) => {
-        const { gZenWorkspaces } = aWindow;
-        let allPromises = [];
-        for (let tab of gZenWorkspaces.allStoredTabs) {
-          if (!tab.id) {
-            tab.id = this.#newTabSyncId;
-            lazy.TabStateFlusher.flush(tab.linkedBrowser);
-          }
-          if (tab.pinned && !tab._zenPinnedInitialState) {
-            allPromises.push(this.setPinnedTabState(tab));
-          }
+    await this.#runOnAllWindowsAsync(null, async (aWindow) => {
+      const { gZenWorkspaces } = aWindow;
+      await gZenWorkspaces.promiseInitialized;
+      for (let tab of gZenWorkspaces.allStoredTabs) {
+        if (!tab.id) {
+          tab.id = this.#newTabSyncId;
+          lazy.TabStateFlusher.flush(tab.linkedBrowser);
         }
-        Promise.all(allPromises).then(resolve);
-      });
+        if (tab.pinned && !tab._zenPinnedInitialState) {
+          await this.setPinnedTabState(tab);
+        }
+      }
     });
   }
 
@@ -224,6 +219,21 @@ class nsZenWindowSync {
       }
     }
     return null;
+  }
+
+  /**
+   * Runs a callback function on all browser windows except the specified one.
+   * This version supports asynchronous callbacks.
+   * @see #runOnAllWindows - Make sure functionality is the same.
+   * @param {Window} aWindow - The browser window to exclude.
+   * @param {Function} aCallback - The asynchronous callback function to run on each window.
+   */
+  async #runOnAllWindowsAsync(aWindow, aCallback) {
+    for (let window of this.#browserWindows) {
+      if (window !== aWindow && !window._zenClosingWindow) {
+        await aCallback(window);
+      }
+    }
   }
 
   observe(aSubject, aTopic) {

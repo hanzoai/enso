@@ -648,7 +648,7 @@
         clientX < 0 || clientX > innerWidth || clientY < 0 || clientY > innerHeight;
       if (isOutOfWindow && !this.#isOutOfWindow) {
         this.#isOutOfWindow = true;
-        this.#maybeClearVerticalPinnedGridDragOver(draggedTab);
+        this.#maybeClearVerticalPinnedGridDragOver();
         this.clearSpaceSwitchTimer();
         this.clearDragOverVisuals();
         const dt = event.dataTransfer;
@@ -791,12 +791,11 @@
     }
 
     handle_dragend(event) {
-      let draggedTab = event.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
       this.ZenDragAndDropService.onDragEnd();
       super.handle_dragend(event);
       this.#removeDragOverBackground();
       gZenPinnedTabManager.removeTabContainersDragoverClass();
-      this.#maybeClearVerticalPinnedGridDragOver(draggedTab);
+      this.#maybeClearVerticalPinnedGridDragOver();
       this.originalDragImageArgs = [];
       window.removeEventListener('dragover', this.handle_windowDragEnter, { capture: true });
       this.#isOutOfWindow = false;
@@ -869,7 +868,7 @@
         }
       }
       dropElement = elementToMove(dropElement);
-      this.#maybeClearVerticalPinnedGridDragOver(draggedTab);
+      this.#maybeClearVerticalPinnedGridDragOver();
       if (this.#lastDropTarget !== dropElement) {
         shouldPlayHapticFeedback = this.#lastDropTarget !== null;
         this.#removeDragOverBackground();
@@ -970,9 +969,7 @@
         this._fakeEssentialTab = document.createXULElement('vbox');
         this._fakeEssentialTab.elementIndex = numEssentials;
         delete dragData.animDropElementIndex;
-        if (draggedTab.hasAttribute('zen-essential')) {
-          draggedTab.style.visibility = 'hidden';
-        } else {
+        if (!draggedTab.hasAttribute('zen-essential')) {
           event.target.closest('.zen-essentials-container').appendChild(this._fakeEssentialTab);
           gZenWorkspaces.updateTabsContainers();
           pinnedTabs.push(this._fakeEssentialTab);
@@ -1179,11 +1176,10 @@
       }
     }
 
-    #maybeClearVerticalPinnedGridDragOver(draggedTab) {
+    #maybeClearVerticalPinnedGridDragOver() {
       if (this._fakeEssentialTab) {
         this._fakeEssentialTab.remove();
         delete this._fakeEssentialTab;
-        draggedTab.style.visibility = '';
         for (let tab of this._tabbrowserTabs.visibleTabs.slice(0, gBrowser._numZenEssentials)) {
           tab.style.transform = '';
         }

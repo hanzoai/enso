@@ -1215,6 +1215,8 @@
         background-image: var(--zen-essential-tab-icon);
         z-index: -1;
         background-position: center;
+        fill: currentColor;
+        -moz-context-properties: fill, fill-opacity;
       }
 
       background: transparent;
