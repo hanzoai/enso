@@ -822,8 +822,11 @@ class nsZenWindowSync {
     return lazy.TabStateFlusher.flush(aTab.linkedBrowser).finally(() => {
       this.log(`Setting pinned initial state for tab ${aTab.id}`);
       const state = this.#getTabState(aTab);
+      let activeIndex = 'index' in state ? state.index : state.entries.length - 1;
+      activeIndex = Math.min(activeIndex, state.entries.length - 1);
+      activeIndex = Math.max(activeIndex, 0);
       const initialState = {
-        entry: state.entries[state.index - 1],
+        entry: state.entries[activeIndex],
         image: state.image,
       };
       this.#runOnAllWindows(null, (win) => {
