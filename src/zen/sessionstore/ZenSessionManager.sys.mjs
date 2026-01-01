@@ -156,24 +156,25 @@ export class nsZenSessionManager {
         ...this.#sidebar,
         spaces: this._migrationData?.spaces || [],
       };
+      // There might be cases where there are no windows in the
+      // initial state, for example if the user had 'restore previous
+      // session' disabled before migration. In that case, we try
+      // to restore the last closed normal window.
       if (!initialState.windows?.length) {
         let normalClosedWindow = initialState._closedWindows?.find(
           (win) => !win.isPopup && !win.isTaskbarTab && !win.isPrivate
         );
         if (normalClosedWindow) {
-          initialState.windows = [normalClosedWindow];
+          initialState.windows = [Cu.cloneInto(normalClosedWindow, {})];
           this.log('Restoring tabs from last closed normal window');
         }
       }
       for (const winData of initialState.windows || []) {
         winData.spaces = this._migrationData?.spaces || [];
       }
-      return;
-    }
-    // If there's no initial state, nothing to restore. This would
-    // happen if the file is empty or corrupted.
-    if (!initialState) {
-      this.log('No initial state to restore!');
+      // Save the state to the sidebar object so that it gets written
+      // to the session file.
+      this.saveState(initialState);
       return;
     }
     // If there are no windows, we create an empty one. By default,

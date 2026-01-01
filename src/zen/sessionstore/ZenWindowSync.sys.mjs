@@ -296,10 +296,12 @@ class nsZenWindowSync {
     if (!aTab.id) {
       return;
     }
+    let permanentKey = aTab.linkedBrowser.permanentKey;
     this.#runOnAllWindows(null, (win) => {
       const tab = this.#getItemFromWindow(win, aTab.id);
       if (tab) {
-        tab.permanentKey = aTab.linkedBrowser.permanentKey;
+        tab.linkedBrowser.permanentKey = permanentKey;
+        tab.permanentKey = permanentKey;
       }
     });
   }
@@ -578,7 +580,16 @@ class nsZenWindowSync {
       () => {
         this.log(`Swapping docshells between windows for tab ${aOurTab.id}`);
         aOurTab.ownerGlobal.gBrowser.swapBrowsersAndCloseOther(aOurTab, aOtherTab, false);
-        this.#makeSureTabSyncsPermanentKey(aOurTab);
+        // Sometimes, when closing a window for example, when we swap the browsers,
+        // there's a chance that the tab does not have the entries state moved over properly.
+        // To avoid losing history entries, we have to keep the permanentKey in sync.
+        this.#makeSureTabSyncsPermanentKey(aOtherTab);
+        // Since we are moving progress listeners around, there's a chance that we
+        // trigger a load while making the switch, and since we remove the previous
+        // tab's listeners, the other browser window will never get the 'finish load' event
+        // and will stay in a 'busy' state forever.
+        // To avoid this, we manually check if the other tab is still busy after the swap,
+        // and if not, we remove the busy attribute from our tab.
         if (!aOtherTab.hasAttribute('busy')) {
           aOurTab.removeAttribute('busy');
         }

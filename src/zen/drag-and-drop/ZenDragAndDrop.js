@@ -80,7 +80,9 @@
     init() {
       super.init();
       this.handle_windowDragEnter = this.handle_windowDragEnter.bind(this);
-      window.addEventListener('dragleave', this.handle_windowDragLeave.bind(this), true);
+      window.addEventListener('dragleave', this.handle_windowDragLeave.bind(this), {
+        capture: true,
+      });
     }
 
     startTabDrag(event, tab, ...args) {
@@ -640,14 +642,14 @@
       if (!isTab(draggedTab)) {
         return;
       }
-      this.#maybeClearVerticalPinnedGridDragOver(draggedTab);
-      this.clearSpaceSwitchTimer();
       const { clientX, clientY } = event;
       const { innerWidth, innerHeight } = window;
       const isOutOfWindow =
         clientX < 0 || clientX > innerWidth || clientY < 0 || clientY > innerHeight;
       if (isOutOfWindow && !this.#isOutOfWindow) {
         this.#isOutOfWindow = true;
+        this.#maybeClearVerticalPinnedGridDragOver(draggedTab);
+        this.clearSpaceSwitchTimer();
         this.clearDragOverVisuals();
         const dt = event.dataTransfer;
         let dragData = draggedTab._dragData;
@@ -717,6 +719,10 @@
           return;
         }
         this.#isAnimatingTabMove = true;
+        for (let item of this._tabbrowserTabs.ariaFocusableItems) {
+          item = elementToMove(item);
+          item.style.transform = '';
+        }
         const animateElement = (ele, translateY) => {
           ele.style.transform = `translateY(${translateY}px)`;
           setTimeout(() => {

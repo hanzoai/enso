@@ -260,6 +260,8 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
         return;
       }
       gBrowser.tabContainer.tabDragAndDrop.finishMoveTogetherSelectedTabs(draggedTab);
+    } else {
+      return;
     }
     if (
       !this._lastOpenedTab ||

@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/drag-and-drop.js b/browser/components/tabbrowser/content/drag-and-drop.js
-index 97b931c3c7385a52d20204369fcf6d6999053687..4ac61b298ac64332afb6eac9918fe3eb7ba789ad 100644
+index 97b931c3c7385a52d20204369fcf6d6999053687..bd64a97046d2a62e842cc922764ad129da99905f 100644
 --- a/browser/components/tabbrowser/content/drag-and-drop.js
 +++ b/browser/components/tabbrowser/content/drag-and-drop.js
 @@ -32,6 +32,9 @@
@@ -221,7 +221,23 @@ index 97b931c3c7385a52d20204369fcf6d6999053687..4ac61b298ac64332afb6eac9918fe3eb
        let isPinned = tab.pinned;
        let numPinned = gBrowser.pinnedTabCount;
        let allTabs = this._tabbrowserTabs.ariaFocusableItems;
-@@ -2457,17 +2489,14 @@
+@@ -1598,7 +1630,6 @@
+ 
+       for (let item of this._tabbrowserTabs.ariaFocusableItems) {
+         item = elementToMove(item);
+-        item.style.transform = "";
+         item.removeAttribute("multiselected-move-together");
+         delete item._moveTogetherSelectedTabsData;
+       }
+@@ -2426,7 +2457,6 @@
+       for (let item of this._tabbrowserTabs.ariaFocusableItems) {
+         this._resetGroupTarget(item);
+         item = elementToMove(item);
+-        item.style.transform = "";
+       }
+       this._tabbrowserTabs.removeAttribute("movingtab-group");
+       this._tabbrowserTabs.removeAttribute("movingtab-ungroup");
+@@ -2457,17 +2487,14 @@
          tab.style.left = "";
          tab.style.top = "";
          tab.style.maxWidth = "";

@@ -686,7 +686,7 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
     const position = isRightSide ? 'topleft topright' : 'topright topleft';
     return {
       position: position,
-      x: 5,
+      x: 10,
       y: -25,
     };
   }
