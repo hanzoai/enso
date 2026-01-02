@@ -160,8 +160,8 @@ export class nsZenSessionManager {
       // initial state, for example if the user had 'restore previous
       // session' disabled before migration. In that case, we try
       // to restore the last closed normal window.
-      if (!initialState.windows?.length) {
-        let normalClosedWindow = initialState._closedWindows?.find(
+      if (!initialState?.windows?.length) {
+        let normalClosedWindow = initialState?._closedWindows?.find(
           (win) => !win.isPopup && !win.isTaskbarTab && !win.isPrivate
         );
         if (normalClosedWindow) {
@@ -169,7 +169,7 @@ export class nsZenSessionManager {
           this.log('Restoring tabs from last closed normal window');
         }
       }
-      for (const winData of initialState.windows || []) {
+      for (const winData of initialState?.windows || []) {
         winData.spaces = this._migrationData?.spaces || [];
       }
       // Save the state to the sidebar object so that it gets written
@@ -224,8 +224,7 @@ export class nsZenSessionManager {
   /**
    * Saves the current session state. Collects data and writes to disk.
    *
-   * @param state
-   *        The current session state.
+   * @param state The current session state.
    */
   saveState(state) {
     if (!state?.windows?.length) {
