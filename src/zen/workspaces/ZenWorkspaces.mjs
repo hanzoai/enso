@@ -868,8 +868,15 @@ class nsZenWorkspaces {
     let promise = this.#initializeWorkspaces();
     for (const workspace of spacesFromStore) {
       const element = this.workspaceElement(workspace.uuid);
+      let wasCollapsed = workspace.hasCollapsedPinnedTabs || false;
       if (element) {
-        element.collapsiblePins.collapsed = workspace.hasCollapsedPinnedTabs || false;
+        // A bit of a hacky soltuion to ensure that the height
+        // when collapsing is calculated correctly after restoring from session store
+        setTimeout(() => {
+          setTimeout(() => {
+            element.collapsiblePins.collapsed = wasCollapsed;
+          }, 0);
+        }, 0);
       }
     }
     for (const workspace of this._workspaceCache) {
@@ -1323,6 +1330,7 @@ class nsZenWorkspaces {
     if (!this.#hasInitialized || this.privateWindowOrDisabled) {
       return;
     }
+    window.dispatchEvent(new CustomEvent('ZenWorkspaceDataChanged'), { bubbles: true });
     window.gZenWindowSync.propagateWorkspacesToAllWindows(aSpaceData ?? this._workspaceCache);
   }
 
@@ -1356,17 +1364,15 @@ class nsZenWorkspaces {
     }
     // Order the workspace elements correctly
     let previousElement = null;
+    const arrowScrollbox = document.getElementById('tabbrowser-arrowscrollbox');
     for (const workspace of aWorkspaces) {
       const workspaceElement = this.workspaceElement(workspace.uuid);
       if (workspaceElement) {
         if (previousElement === null) {
-          gZenUIManager.tabsWrapper.moveBefore(
-            workspaceElement,
-            gZenUIManager.tabsWrapper.firstChild
-          );
+          arrowScrollbox.moveBefore(workspaceElement, arrowScrollbox.firstChild);
           hasChanged = true;
         } else if (previousElement.nextSibling !== workspaceElement) {
-          gZenUIManager.tabsWrapper.moveBefore(workspaceElement, previousElement.nextSibling);
+          arrowScrollbox.moveBefore(workspaceElement, previousElement.nextSibling);
           hasChanged = true;
         }
         previousElement = workspaceElement;
