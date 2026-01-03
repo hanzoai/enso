@@ -720,7 +720,7 @@ window.gZenCompactModeManager = {
           MousePosTracker._callListener({
             onMouseEnter: () => (isHovered = true),
             onMouseLeave: () => {},
-            getMouseTargetRect: () => window.windowUtils.getBoundsWithoutFlushing(target),
+            getMouseTargetRect: () => target.getBoundingClientRect(),
           });
           // Let's double check if the mouse is still hovering over the element, see the bug above.
           if (isHovered) {

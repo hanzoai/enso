@@ -877,7 +877,7 @@ window.gZenVerticalTabsManager = {
           {
             opacity: [0, 1],
             transform: ['scale(0.95)', 'scale(1)'],
-            marginBottom: isLastItem() ? [] : [transform, '0px'],
+            marginBottom: isLastItem() ? ['0px', '0px'] : [transform, '0px'],
           },
           {
             duration: 110,
