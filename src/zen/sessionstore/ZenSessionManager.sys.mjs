@@ -200,13 +200,19 @@ export class nsZenSessionManager {
     // Restore all windows with the same sidebar object, this will
     // guarantee that all tabs, groups, folders and split view data
     // are properly synced across all windows.
+    const allowRestoreUnsynced = Services.prefs.getBoolPref(
+      'zen.session-store.restore-unsynced-windows',
+      true
+    );
     this.log(`Restoring Zen session data into ${initialState.windows?.length || 0} windows`);
     for (let i = 0; i < initialState.windows.length; i++) {
       let winData = initialState.windows[i];
       if (winData.isZenUnsynced) {
-        // We don't wan't to restore any unsynced windows with the sidebar data.
-        this.log('Skipping restore of unsynced window');
-        delete initialState.windows[i];
+        if (!allowRestoreUnsynced) {
+          // We don't wan't to restore any unsynced windows with the sidebar data.
+          this.log('Skipping restore of unsynced window');
+          delete initialState.windows[i];
+        }
         continue;
       }
       this.#restoreWindowData(winData);

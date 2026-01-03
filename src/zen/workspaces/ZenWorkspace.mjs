@@ -256,14 +256,6 @@ export class nsZenWorkspace extends MozXULElement {
         tabPinCallback();
       }
     });
-
-    this.dispatchEvent(
-      new CustomEvent('ZenWorkspaceAttached', {
-        bubbles: true,
-        composed: true,
-        detail: { workspace: this },
-      })
-    );
   }
 
   disconnectedCallback() {

@@ -593,7 +593,7 @@ export class nsZenThemePicker extends nsZenMultiWindowFeature {
     this.panel.querySelector('#PanelUI-zen-gradient-generator-custom-list').prepend(dot);
     this.customColorInput.value = '';
     document.getElementById('PanelUI-zen-gradient-generator-custom-opacity').value = 1;
-    await this.updateCurrentWorkspace();
+    this.updateCurrentWorkspace();
   }
 
   handlePanelCommand(event) {
@@ -1313,17 +1313,17 @@ export class nsZenThemePicker extends nsZenMultiWindowFeature {
     return isDarkMode ? [255, 255, 255, 0.6] : [0, 0, 0, 0.6]; // Default toolbar
   }
 
-  async onWorkspaceChange(workspace, skipUpdate = false, theme = null) {
+  onWorkspaceChange(workspace, skipUpdate = false, theme = null) {
     const uuid = workspace.uuid;
     // Use theme from workspace object or passed theme
     let workspaceTheme = theme || workspace.theme;
 
-    await this.forEachWindow(async (browser) => {
+    this.forEachWindowSync((browser) => {
       if (!browser.gZenThemePicker?.promiseInitialized) {
         return;
       }
 
-      if (browser.closing || (await browser.gZenThemePicker?.promiseInitialized)) {
+      if (browser.closing) {
         return;
       }
 
@@ -1602,7 +1602,7 @@ export class nsZenThemePicker extends nsZenMultiWindowFeature {
     }
   }
 
-  async updateCurrentWorkspace(skipSave = true) {
+  updateCurrentWorkspace(skipSave = true) {
     this.updated = skipSave;
     const dots = this.panel.querySelectorAll('.zen-theme-picker-dot');
     const colors = Array.from(dots)
@@ -1637,12 +1637,12 @@ export class nsZenThemePicker extends nsZenMultiWindowFeature {
       gZenWorkspaces.saveWorkspace(currentWorkspace);
     }
 
-    await this.onWorkspaceChange(currentWorkspace, skipSave, skipSave ? gradient : null);
+    this.onWorkspaceChange(currentWorkspace, skipSave, skipSave ? gradient : null);
   }
 
-  async handlePanelClose() {
+  handlePanelClose() {
     if (this.updated) {
-      await this.updateCurrentWorkspace(false);
+      this.updateCurrentWorkspace(false);
     }
     this.uninitThemePicker();
   }

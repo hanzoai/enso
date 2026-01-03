@@ -75,7 +75,7 @@
 
     &:hover,
     &[dragged='true']{
-      background-color: var(--toolbarbutton-hover-background);
+      background-color: var(--zen-toolbar-element-bg);
     }
 
     & label {
@@ -239,7 +239,7 @@
 
     :root[zen-unsynced-window] & {
       pointer-events: none;
-      background: color-mix(in srgb, currentColor 20%, transparent);
+      background: var(--zen-toolbar-element-bg);
       padding: 4px 8px;
       border-radius: 99px;
       font-size: 10px;

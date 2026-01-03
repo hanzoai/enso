@@ -306,7 +306,7 @@ class nsZenWorkspaces {
   }
 
   registerPinnedResizeObserver() {
-    if (!this._hasInitializedTabsStrip) {
+    if (!this._hasInitializedTabsStrip || !this._pinnedTabsResizeObserver) {
       return;
     }
     this._pinnedTabsResizeObserver.disconnect();
@@ -369,15 +369,13 @@ class nsZenWorkspaces {
     return document.getElementById(workspaceId);
   }
 
-  async #initializeTabsStripSections() {
-    await SessionStore.promiseInitialized;
-    await SessionStore.promiseAllWindowsRestored;
+  #initializeTabsStripSections() {
     const perifery = document.getElementById('tabbrowser-arrowscrollbox-periphery');
     perifery.setAttribute('hidden', 'true');
     const tabs = gBrowser.tabContainer.allTabs;
     const workspaces = this.getWorkspaces();
     for (const workspace of workspaces) {
-      await this.#createWorkspaceTabsSection(workspace, tabs);
+      this.#createWorkspaceTabsSection(workspace, tabs);
     }
     if (tabs.length) {
       const defaultSelectedContainer = this.workspaceElement(this.activeWorkspace)?.querySelector(
@@ -438,12 +436,16 @@ class nsZenWorkspaces {
     return essentialsContainer;
   }
 
-  getCurrentEssentialsContainer() {
+  getCurrentSpaceContainerId() {
     const currentWorkspace = this.getActiveWorkspaceFromCache();
-    return this.getEssentialsSection(currentWorkspace?.containerTabId);
+    return currentWorkspace?.containerTabId || 0;
   }
 
-  async #createWorkspaceTabsSection(workspace, tabs = []) {
+  getCurrentEssentialsContainer() {
+    return this.getEssentialsSection(this.getCurrentSpaceContainerId());
+  }
+
+  #createWorkspaceTabsSection(workspace, tabs = []) {
     const workspaceWrapper = document.createXULElement('zen-workspace');
     const container = document.getElementById('tabbrowser-arrowscrollbox');
     workspaceWrapper.id = workspace.uuid;
@@ -454,24 +456,14 @@ class nsZenWorkspaces {
     if (document.documentElement.hasAttribute('zen-creating-workspace')) {
       workspaceWrapper.hidden = true; // Hide workspace while creating it
     }
-
-    await new Promise((resolve) => {
-      workspaceWrapper.addEventListener(
-        'ZenWorkspaceAttached',
-        () => {
-          this.#organizeTabsToWorkspaceSections(
-            workspace,
-            workspaceWrapper.tabsContainer,
-            workspaceWrapper.pinnedTabsContainer,
-            tabs
-          );
-          workspaceWrapper.checkPinsExistence();
-          resolve();
-        },
-        { once: true }
-      );
-      container.appendChild(workspaceWrapper);
-    });
+    container.appendChild(workspaceWrapper);
+    this.#organizeTabsToWorkspaceSections(
+      workspace,
+      workspaceWrapper.tabsContainer,
+      workspaceWrapper.pinnedTabsContainer,
+      tabs
+    );
+    workspaceWrapper.checkPinsExistence();
   }
 
   #organizeTabsToWorkspaceSections(workspace, section, pinnedSection, tabs) {
@@ -864,16 +856,16 @@ class nsZenWorkspaces {
     return this._workspaceCache;
   }
 
-  async restoreWorkspacesFromSessionStore(aWinData = {}) {
+  restoreWorkspacesFromSessionStore(aWinData = {}) {
     if (this.#hasInitialized || !this.workspaceEnabled) {
       return;
     }
     const spacesFromStore = aWinData.spaces || [];
     this._workspaceCache = spacesFromStore.length
       ? [...spacesFromStore]
-      : [await this.createAndSaveWorkspace('Space', undefined, true)];
+      : [this.#createWorkspaceData('Space', undefined, true)];
     this.activeWorkspace = aWinData.activeZenSpace || this._workspaceCache[0].uuid;
-    await this.initializeWorkspaces();
+    let promise = this.#initializeWorkspaces();
     for (const workspace of spacesFromStore) {
       const element = this.workspaceElement(workspace.uuid);
       if (element) {
@@ -885,42 +877,44 @@ class nsZenWorkspaces {
       delete workspace.hasCollapsedPinnedTabs;
     }
     this.#hasInitialized = true;
+    return promise;
   }
 
-  async initializeWorkspaces() {
+  #initializeWorkspaces() {
     let activeWorkspace = this.getActiveWorkspace();
     this.activeWorkspace = activeWorkspace?.uuid;
-    await gZenSessionStore.promiseInitialized;
     try {
       if (activeWorkspace) {
         window.gZenThemePicker = new nsZenThemePicker();
-        await gZenThemePicker.onWorkspaceChange(activeWorkspace);
+        gZenThemePicker.onWorkspaceChange(activeWorkspace);
       }
     } catch (e) {
       console.error('gZenWorkspaces: Error initializing theme picker', e);
     }
-    await this.#initializeTabsStripSections();
+    this.#initializeTabsStripSections();
     this.#initializeEmptyTab();
-    await this.workspaceBookmarks();
-    await this.changeWorkspace(activeWorkspace, { onInit: true });
-    this.#fixTabPositions();
-    this.onWindowResize();
-    this._resolveInitialized();
-    this.#clearAnyZombieTabs(); // Dont call with await
-    delete this._resolveInitialized;
+    return (async () => {
+      await this.workspaceBookmarks();
+      await this.changeWorkspace(activeWorkspace, { onInit: true });
+      this.#fixTabPositions();
+      this.onWindowResize();
+      this._resolveInitialized();
+      this.#clearAnyZombieTabs(); // Dont call with await
+      delete this._resolveInitialized;
 
-    const tabUpdateListener = this.updateTabsContainers.bind(this);
-    window.addEventListener('TabOpen', tabUpdateListener);
-    window.addEventListener('TabClose', tabUpdateListener);
-    window.addEventListener('TabAddedToEssentials', tabUpdateListener);
-    window.addEventListener('TabRemovedFromEssentials', tabUpdateListener);
-    window.addEventListener('TabPinned', tabUpdateListener);
-    window.addEventListener('TabUnpinned', tabUpdateListener);
-    window.addEventListener('aftercustomization', tabUpdateListener);
-    window.addEventListener('TabSelect', this.onLocationChange.bind(this));
-    window.addEventListener('TabBrowserInserted', this.onTabBrowserInserted.bind(this));
+      const tabUpdateListener = this.updateTabsContainers.bind(this);
+      window.addEventListener('TabOpen', tabUpdateListener);
+      window.addEventListener('TabClose', tabUpdateListener);
+      window.addEventListener('TabAddedToEssentials', tabUpdateListener);
+      window.addEventListener('TabRemovedFromEssentials', tabUpdateListener);
+      window.addEventListener('TabPinned', tabUpdateListener);
+      window.addEventListener('TabUnpinned', tabUpdateListener);
+      window.addEventListener('aftercustomization', tabUpdateListener);
+      window.addEventListener('TabSelect', this.onLocationChange.bind(this));
+      window.addEventListener('TabBrowserInserted', this.onTabBrowserInserted.bind(this));
 
-    this.updateWorkspacesChangeContextMenu();
+      this.updateWorkspacesChangeContextMenu();
+    })();
   }
 
   async selectStartPage() {
@@ -1356,9 +1350,7 @@ class nsZenWorkspaces {
     // Add any new workspace elements here
     for (const workspace of aWorkspaces) {
       if (!this.workspaceElement(workspace.uuid)) {
-        this.#createWorkspaceTabsSection(workspace).catch((e) => {
-          console.error('Error creating workspace tabs section:', e);
-        });
+        this.#createWorkspaceTabsSection(workspace);
         hasChanged = true;
       }
     }
@@ -2386,7 +2378,7 @@ class nsZenWorkspaces {
     }
   }
 
-  async _createWorkspaceData(name, icon, tabs, moveTabs = true, containerTabId = 0) {
+  #createWorkspaceData(name, icon, containerTabId = 0) {
     let workspace = {
       uuid: gZenUIManager.generateUuidv4(),
       icon: icon,
@@ -2394,11 +2386,6 @@ class nsZenWorkspaces {
       theme: nsZenThemePicker.getTheme([]),
       containerTabId,
     };
-    if (moveTabs) {
-      this.#prepareNewWorkspace(workspace);
-      await this.#createWorkspaceTabsSection(workspace, tabs);
-      await this._organizeWorkspaceStripLocations(workspace);
-    }
     return workspace;
   }
 
@@ -2425,13 +2412,12 @@ class nsZenWorkspaces {
         !child.hasAttribute('zen-empty-tab') &&
         !child.hasAttribute('zen-essential')
     );
-    let workspaceData = await this._createWorkspaceData(
-      name,
-      icon,
-      extraTabs,
-      !dontChange,
-      containerTabId
-    );
+    let workspaceData = this.#createWorkspaceData(name, icon, containerTabId);
+    if (!dontChange) {
+      this.#prepareNewWorkspace(workspaceData);
+      this.#createWorkspaceTabsSection(workspaceData, extraTabs);
+      await this._organizeWorkspaceStripLocations(workspaceData);
+    }
     if (!this.currentWindowIsSyncing) {
       this._tempWorkspace = workspaceData;
     } else {

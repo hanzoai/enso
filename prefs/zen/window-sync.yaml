@@ -7,3 +7,6 @@
 
 - name: zen.window-sync.log
   value: false
+
+- name: zen.window-sync.prefer-unsynced-windows
+  value: false
