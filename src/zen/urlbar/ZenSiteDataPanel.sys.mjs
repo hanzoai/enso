@@ -63,6 +63,7 @@ export class nsZenSiteDataPanel {
 
     this.#initCopyUrlButton();
     this.#initEventListeners();
+    this.#initUnifiedExtensionsManageHook();
     this.#maybeShowFeatureCallout();
   }
 
@@ -140,6 +141,16 @@ export class nsZenSiteDataPanel {
     for (let [id, handler] of Object.entries(kCommands)) {
       this.document.getElementById(id).addEventListener('command', handler);
     }
+  }
+
+  #initUnifiedExtensionsManageHook() {
+    const manageExtensionItem = this.document.getElementById(
+      'unified-extensions-context-menu-manage-extension'
+    );
+
+    manageExtensionItem.addEventListener('command', () => {
+      this.unifiedPanel.hidePopup();
+    });
   }
 
   #initExtensionsPanel() {
@@ -584,6 +595,7 @@ export class nsZenSiteDataPanel {
       case 'zen-site-data-manage-addons': {
         const { BrowserAddonUI } = this.window;
         BrowserAddonUI.openAddonsMgr('addons://list/extension');
+        this.unifiedPanel.hidePopup();
         break;
       }
       case 'zen-site-data-settings-more': {
