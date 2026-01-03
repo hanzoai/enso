@@ -465,7 +465,7 @@ export class nsZenThemePicker extends nsZenMultiWindowFeature {
     let hue = (angle / 360) * 360; // Normalize angle to [0, 360)
     let saturation = normalizedDistance * 100; // stays high even in center
     if (type !== EXPLICIT_LIGHTNESS_TYPE) {
-      saturation = 80 + (1 - normalizedDistance) * 20;
+      saturation = 90 + (1 - normalizedDistance) * 10;
       // Set the current lightness to how far we are from the center of the circle
       // For example, moving the dot outside will have higher lightness, while moving it inside will have lower lightness
       this.#currentLightness = Math.round((1 - normalizedDistance) * 100);
@@ -1216,9 +1216,9 @@ export class nsZenThemePicker extends nsZenMultiWindowFeature {
         let color2 = this.getSingleRGBColor(themedColors[0], forToolbar);
         let color3 = this.getSingleRGBColor(themedColors[1], forToolbar);
         return [
-          `radial-gradient(circle at 0% 0%, ${color2} -10%, transparent 100%)`,
-          `linear-gradient(to top, ${color1} -50%, transparent 125%)`,
-          `radial-gradient(circle at 100% -100%, ${color3} -100%, transparent 400%)`,
+          `linear-gradient(-5deg, ${color1} 0%, transparent 90%)`,
+          `radial-gradient(circle at 95% 0%, ${color3} 0%, transparent 75%)`,
+          `radial-gradient(circle at 0% 0%, ${color2} 0%, transparent 200%)`,
         ].join(', ');
       }
     }
