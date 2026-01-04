@@ -122,7 +122,9 @@
         }
         // Apply a transform translate to the tab in order to center it within the drag image
         // based on the event coordinates.
-        tabClone.style.transform = `translate(${(tabRect.width - dragData.offsetX) / 2}px, ${(tabRect.height - dragData.offsetY) / 2}px)`;
+        if (!movingTabs.length > 1) {
+          tabClone.style.transform = `translate(${(tabRect.width - dragData.offsetX) / 2}px, ${(tabRect.height - dragData.offsetY) / 2}px)`;
+        }
         wrapper.appendChild(tabClone);
       }
       this.#maybeCreateDragImageDot(movingTabs, wrapper);

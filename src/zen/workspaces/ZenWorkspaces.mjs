@@ -438,7 +438,9 @@ class nsZenWorkspaces {
 
   getCurrentSpaceContainerId() {
     const currentWorkspace = this.getActiveWorkspaceFromCache();
-    return currentWorkspace?.containerTabId || 0;
+    return typeof currentWorkspace?.containerTabId === 'number'
+      ? currentWorkspace.containerTabId
+      : 0;
   }
 
   getCurrentEssentialsContainer() {
@@ -811,10 +813,6 @@ class nsZenWorkspaces {
         'resource:///modules/zen/ZenSessionManager.sys.mjs'
       );
       return ZenSessionStore.getClonedSpaces();
-    }
-    if (!this.currentWindowIsSyncing) {
-      this._workspaceCache = this._tempWorkspace ? [this._tempWorkspace] : [];
-      this.#activeWorkspace = this._tempWorkspace?.uuid;
     }
     return [...this._workspaceCache];
   }
@@ -1894,28 +1892,23 @@ class nsZenWorkspaces {
         previousBackgroundOpacity = 1 - previousBackgroundOpacity;
       }
       gZenThemePicker.previousBackgroundOpacity = previousBackgroundOpacity;
-      await new Promise((resolve) => {
-        requestAnimationFrame(() => {
-          document.documentElement.style.setProperty(
-            '--zen-background-opacity',
-            previousBackgroundOpacity
-          );
-          animations.push(
-            gZenUIManager.motion.animate(
-              document.documentElement,
-              {
-                '--zen-background-opacity': [previousBackgroundOpacity, 1],
-              },
-              {
-                type: 'spring',
-                bounce: 0,
-                duration: kGlobalAnimationDuration,
-              }
-            )
-          );
-          resolve();
-        });
-      });
+      document.documentElement.style.setProperty(
+        '--zen-background-opacity',
+        previousBackgroundOpacity
+      );
+      animations.push(
+        gZenUIManager.motion.animate(
+          document.documentElement,
+          {
+            '--zen-background-opacity': [previousBackgroundOpacity, 1],
+          },
+          {
+            type: 'spring',
+            bounce: 0,
+            duration: kGlobalAnimationDuration,
+          }
+        )
+      );
     }
     for (const element of document.querySelectorAll('zen-workspace')) {
       if (element.classList.contains('zen-essentials-container')) {
@@ -2385,6 +2378,11 @@ class nsZenWorkspaces {
   }
 
   #createWorkspaceData(name, icon, containerTabId = 0) {
+    if (!this.currentWindowIsSyncing) {
+      containerTabId = parseInt(gBrowser.selectedTab.getAttribute('usercontextid')) || 0;
+      let label = ContextualIdentityService.getUserContextLabel(containerTabId) || 'Default';
+      name = this.isPrivateWindow ? 'Private ' + name : label;
+    }
     let workspace = {
       uuid: gZenUIManager.generateUuidv4(),
       icon: icon,
@@ -2405,11 +2403,6 @@ class nsZenWorkspaces {
     if (!this.workspaceEnabled) {
       return;
     }
-    if (!this.currentWindowIsSyncing) {
-      containerTabId = parseInt(gBrowser.selectedTab.getAttribute('usercontextid')) || 0;
-      let label = ContextualIdentityService.getUserContextLabel(containerTabId) || 'Default';
-      name = this.isPrivateWindow ? 'Private ' + name : label;
-    }
     // get extra tabs remaning (e.g. on new profiles) and just move them to the new workspace
     const extraTabs = Array.from(gBrowser.tabContainer.arrowScrollbox.children).filter(
       (child) =>
@@ -2424,11 +2417,7 @@ class nsZenWorkspaces {
       this.#createWorkspaceTabsSection(workspaceData, extraTabs);
       await this._organizeWorkspaceStripLocations(workspaceData);
     }
-    if (!this.currentWindowIsSyncing) {
-      this._tempWorkspace = workspaceData;
-    } else {
-      this.saveWorkspace(workspaceData);
-    }
+    this.saveWorkspace(workspaceData);
     if (!dontChange) {
       if (beforeChangeCallback) {
         try {

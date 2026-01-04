@@ -1216,9 +1216,9 @@ export class nsZenThemePicker extends nsZenMultiWindowFeature {
         let color2 = this.getSingleRGBColor(themedColors[0], forToolbar);
         let color3 = this.getSingleRGBColor(themedColors[1], forToolbar);
         return [
-          `linear-gradient(-5deg, ${color1} 0%, transparent 90%)`,
+          `linear-gradient(-5deg, ${color1} 10%, transparent 80%)`,
           `radial-gradient(circle at 95% 0%, ${color3} 0%, transparent 75%)`,
-          `radial-gradient(circle at 0% 0%, ${color2} 0%, transparent 200%)`,
+          `radial-gradient(circle at 0% 0%, ${color2} 10%, transparent 70%)`,
         ].join(', ');
       }
     }
