@@ -1334,7 +1334,7 @@ class nsZenWorkspaces {
 
   propagateWorkspaces(aWorkspaces) {
     const previousWorkspaces = this._workspaceCache || [];
-    this._workspaceCache = aWorkspaces;
+    let promises = [];
     let hasChanged = false;
     // Remove any workspace elements here that no longer exist
     for (const previousWorkspace of previousWorkspaces) {
@@ -1342,14 +1342,18 @@ class nsZenWorkspaces {
         this.workspaceElement(previousWorkspace.uuid) &&
         !aWorkspaces.find((w) => w.uuid === previousWorkspace.uuid)
       ) {
+        let promise = Promise.resolve();
         if (this.isWorkspaceActive(previousWorkspace)) {
           // If the removed workspace was active, switch to another one
           const newActiveWorkspace =
             aWorkspaces.find((w) => w.uuid !== previousWorkspace.uuid) || null;
-          this.changeWorkspace(newActiveWorkspace);
+          promise = this.changeWorkspace(newActiveWorkspace);
         }
-        this.workspaceElement(previousWorkspace.uuid)?.remove();
-        delete this.lastSelectedWorkspaceTabs[previousWorkspace.uuid];
+        promise = promise.then(() => {
+          this.workspaceElement(previousWorkspace.uuid)?.remove();
+          delete this.lastSelectedWorkspaceTabs[previousWorkspace.uuid];
+        });
+        promises.push(promise);
         hasChanged = true;
       }
     }
@@ -1376,13 +1380,16 @@ class nsZenWorkspaces {
         previousElement = workspaceElement;
       }
     }
-    if (hasChanged) {
-      this.#fireSpaceUIUpdate();
-    }
-    this._organizeWorkspaceStripLocations(this.getActiveWorkspaceFromCache()).finally(() => {
-      this.updateTabsContainers();
+    return Promise.all(promises).then(() => {
+      this._workspaceCache = aWorkspaces;
+      if (hasChanged) {
+        this.#fireSpaceUIUpdate();
+      }
+      this._organizeWorkspaceStripLocations(this.getActiveWorkspaceFromCache()).finally(() => {
+        this.updateTabsContainers();
+      });
+      this.updateWorkspacesChangeContextMenu();
     });
-    this.updateWorkspacesChangeContextMenu();
   }
 
   async reorderWorkspace(id, newPosition) {

@@ -17,8 +17,8 @@
   --zen-background-opacity: 1;
 
   /* Branding */
-  --zen-branding-dark: #1d1d1d;
-  --zen-branding-paper: #ebebeb;
+  --zen-branding-dark: #101010;
+  --zen-branding-paper: #e2e2e2;
 
   --zen-branding-bg: light-dark(var(--zen-branding-paper), var(--zen-branding-dark));
   --zen-branding-bg-reverse: light-dark(var(--zen-branding-dark), var(--zen-branding-paper));
@@ -46,8 +46,8 @@
     color-mix(in srgb, var(--zen-primary-color) 80%, white 20%)
   );
   --zen-colors-border: light-dark(
-    color-mix(in srgb, var(--zen-colors-secondary) 97%, black 3%),
-    color-mix(in srgb, var(--zen-colors-secondary) 20%, rgb(79, 79, 79) 80%)
+    color-mix(in srgb, var(--zen-colors-secondary) 50%, transparent),
+    color-mix(in srgb, var(--zen-colors-secondary) 20%, rgb(79, 79, 79))
   );
   --zen-colors-border-contrast: light-dark(
     color-mix(in srgb, var(--zen-colors-secondary) 10%, rgba(181, 181, 181, 0.11) 90%),
@@ -59,7 +59,7 @@
     color-mix(in srgb, var(--zen-primary-color) 1%, var(--zen-branding-bg) 99%)
   );
 
-  --zen-dialog-background: light-dark(rgb(244, 244, 244), rgb(31, 31, 31));
+  --zen-dialog-background: light-dark(#FAFBFF, #161C31);
   --zen-urlbar-background: light-dark(
     color-mix(in srgb, var(--zen-primary-color) 3%, #f4f4f4 97%),
     color-mix(in srgb, var(--zen-primary-color) 4%, rgb(24, 24, 24) 96%)
@@ -112,6 +112,9 @@
   --button-primary-hover-bgcolor: var(--in-content-primary-button-background-hover) !important;
   --button-primary-active-bgcolor: var(--in-content-primary-button-background-active) !important;
   --button-primary-color: var(--in-content-primary-button-text-color) !important;
+
+  /* For dialogs / modals */
+  --button-background-color-primary: var(--button-primary-bgcolor) !important;
 
   --button-background-color: var(--in-content-button-background) !important;
   --button-background-color-hover: var(--in-content-button-background-hover) !important;
@@ -247,7 +250,7 @@
   }
 
   --toolbar-field-background-color: var(--zen-colors-input-bg) !important;
-  --arrowpanel-background: var(--zen-dialog-background) !important;
+  --arrowpanel-background: light-dark(rgb(244, 244, 244), rgb(31, 31, 31)) !important;
 
   --panel-separator-color: color-mix(in srgb, currentColor 15%, transparent) !important;
 

@@ -158,9 +158,9 @@ export class nsZenWorkspace extends MozXULElement {
       });
 
     this.indicator.addEventListener('click', (event) => {
-      if (this.hasPinnedTabs) {
+      if (this.hasPinnedTabs && event.button === 0) {
         event.stopPropagation();
-        this.collapsiblePins.collapsed = !this.collapsiblePins.collapsed;
+        this.collapsiblePins.toggle();
       }
     });
 
