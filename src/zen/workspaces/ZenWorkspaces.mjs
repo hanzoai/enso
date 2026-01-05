@@ -118,6 +118,11 @@ class nsZenWorkspaces {
 
     window.addEventListener('resize', this.onWindowResize.bind(this));
     this.addPopupListeners();
+
+    if (this.privateWindowOrDisabled) {
+      await this.#waitForPromises();
+      await this.restoreWorkspacesFromSessionStore({});
+    }
   }
 
   log(...args) {
@@ -133,9 +138,6 @@ class nsZenWorkspaces {
       });
     };
     this._pinnedTabsResizeObserver = new ResizeObserver(onResize);
-    if (this.privateWindowOrDisabled) {
-      await this.restoreWorkspacesFromSessionStore({});
-    }
     this.registerPinnedResizeObserver();
     this.#initializeWorkspaceTabContextMenus();
 
