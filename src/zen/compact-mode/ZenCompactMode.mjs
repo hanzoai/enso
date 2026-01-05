@@ -433,18 +433,16 @@ window.gZenCompactModeManager = {
         }
         if (canHideSidebar && isCompactMode) {
           this._setElementExpandAttribute(this.sidebar, false);
-          gZenUIManager.motion
-            .animate(
+          gZenUIManager
+            .elementAnimate(
               this.sidebar,
               {
-                marginRight: [0, this.sidebarIsOnRight ? `-${sidebarWidth}px` : 0],
-                marginLeft: [0, this.sidebarIsOnRight ? 0 : `-${sidebarWidth}px`],
+                marginRight: ['0px', this.sidebarIsOnRight ? `-${sidebarWidth}px` : '0px'],
+                marginLeft: ['0px', this.sidebarIsOnRight ? '0px' : `-${sidebarWidth}px`],
               },
               {
-                ease: 'easeIn',
-                type: 'spring',
-                bounce: 0,
-                duration: 0.12,
+                easing: 'ease-in',
+                duration: 120,
               }
             )
             .then(() => {
@@ -467,8 +465,6 @@ window.gZenCompactModeManager = {
                     });
                   }
 
-                  this.sidebar.style.removeProperty('margin-right');
-                  this.sidebar.style.removeProperty('margin-left');
                   this.sidebar.style.removeProperty('transition');
                   this.sidebar.style.removeProperty('transform');
                   this.sidebar.style.removeProperty('point-events');
@@ -716,14 +712,8 @@ window.gZenCompactModeManager = {
         // If we want the toolbars to be draggable, we need to make sure to check the hover state after a short delay.
         // This is because the mouse is left to be handled natively so firefox thinks the mouse left the window for a split second.
         setTimeout(() => {
-          let isHovered = event.target.matches(':hover');
-          MousePosTracker._callListener({
-            onMouseEnter: () => (isHovered = true),
-            onMouseLeave: () => {},
-            getMouseTargetRect: () => target.getBoundingClientRect(),
-          });
           // Let's double check if the mouse is still hovering over the element, see the bug above.
-          if (isHovered) {
+          if (event.target.matches(':hover')) {
             return;
           }
 
