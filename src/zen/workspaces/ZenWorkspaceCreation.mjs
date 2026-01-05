@@ -207,8 +207,8 @@ class nsZenWorkspaceCreation extends MozXULElement {
 
     await this.#cleanup();
 
-    await gZenWorkspaces._organizeWorkspaceStripLocations(workspace, true);
-    await gZenWorkspaces.updateTabsContainers();
+    gZenWorkspaces._organizeWorkspaceStripLocations(workspace, true);
+    gZenWorkspaces.updateTabsContainers();
 
     gBrowser.tabContainer._invalidateCachedTabs();
   }
@@ -321,8 +321,8 @@ class nsZenWorkspaceCreation extends MozXULElement {
     gZenUIManager.updateTabsToolbar();
 
     const workspace = gZenWorkspaces.getActiveWorkspace();
-    await gZenWorkspaces._organizeWorkspaceStripLocations(workspace);
-    await gZenWorkspaces.updateTabsContainers();
+    gZenWorkspaces._organizeWorkspaceStripLocations(workspace);
+    gZenWorkspaces.updateTabsContainers();
 
     await gZenUIManager.motion.animate(
       [gBrowser.tabContainer, gURLBar.textbox],
