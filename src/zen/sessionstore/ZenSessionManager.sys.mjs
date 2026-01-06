@@ -14,6 +14,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   SessionStore: 'resource:///modules/sessionstore/SessionStore.sys.mjs',
   SessionSaver: 'resource:///modules/sessionstore/SessionSaver.sys.mjs',
   setTimeout: 'resource://gre/modules/Timer.sys.mjs',
+  gWindowSyncEnabled: 'resource:///modules/zen/ZenWindowSync.sys.mjs',
 });
 
 XPCOMUtils.defineLazyPreferenceGetter(lazy, 'gShouldLog', 'zen.session-store.log', true);
@@ -125,6 +126,7 @@ export class nsZenSessionManager {
    */
   async readFile() {
     try {
+      this.log('Reading Zen session file from disk');
       let promises = [];
       promises.push(this.#file.load());
       if (!Services.prefs.getBoolPref(MIGRATION_PREF, false)) {
@@ -145,6 +147,7 @@ export class nsZenSessionManager {
    *        The initial session state read from the session file.
    */
   onFileRead(initialState) {
+    if (!lazy.gWindowSyncEnabled) return;
     // For the first time after migration, we restore the tabs
     // That where going to be restored by SessionStore. The sidebar
     // object will always be empty after migration because we haven't
@@ -233,7 +236,7 @@ export class nsZenSessionManager {
    * @param state The current session state.
    */
   saveState(state) {
-    if (!state?.windows?.length) {
+    if (!state?.windows?.length || !lazy.gWindowSyncEnabled) {
       // Don't save (or even collect) anything in permanent private
       // browsing mode. We also don't want to save if there are no windows.
       return;
@@ -350,7 +353,7 @@ export class nsZenSessionManager {
    *        Whether this new window is being restored from a closed window.
    */
   restoreNewWindow(aWindow, SessionStoreInternal, fromClosedWindow = false) {
-    if (aWindow.gZenWorkspaces?.privateWindowOrDisabled) {
+    if (aWindow.gZenWorkspaces?.privateWindowOrDisabled || !lazy.gWindowSyncEnabled) {
       return;
     }
     this.log('Restoring new window with Zen session data');
@@ -401,6 +404,7 @@ export class nsZenSessionManager {
    * @returns
    */
   onNewEmptySession(aWindow) {
+    this.log('Restoring empty session with Zen session data');
     aWindow.gZenWorkspaces.restoreWorkspacesFromSessionStore({
       spaces: this.#sidebar.spaces || [],
     });

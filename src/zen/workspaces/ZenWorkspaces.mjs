@@ -848,7 +848,7 @@ class nsZenWorkspaces {
     const spacesFromStore = aWinData.spaces || [];
     this._workspaceCache = spacesFromStore.length
       ? [...spacesFromStore]
-      : [this.#createWorkspaceData('Space', undefined, true)];
+      : [this.#createWorkspaceData('Space', undefined)];
     this.activeWorkspace = aWinData.activeZenSpace || this._workspaceCache[0].uuid;
     let promise = this.#initializeWorkspaces();
     for (const workspace of spacesFromStore) {
@@ -912,7 +912,7 @@ class nsZenWorkspaces {
   }
 
   async selectStartPage() {
-    if (!this.workspaceEnabled) {
+    if (!this.workspaceEnabled || gZenUIManager.testingEnabled) {
       return;
     }
     await this.promiseInitialized;
@@ -1615,7 +1615,9 @@ class nsZenWorkspaces {
     // Second pass: Handle tab selection
     this.tabContainer._invalidateCachedTabs();
     const tabToSelect = await this._handleTabSelection(workspace, onInit, previousWorkspace.uuid);
-    gBrowser.warmupTab(tabToSelect);
+    if (tabToSelect.linkedBrowser) {
+      gBrowser.warmupTab(tabToSelect);
+    }
 
     // Update UI and state
     const previousWorkspaceIndex = workspaces.findIndex((w) => w.uuid === previousWorkspace.uuid);

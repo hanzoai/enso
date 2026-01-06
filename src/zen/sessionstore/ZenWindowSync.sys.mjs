@@ -69,6 +69,12 @@ class nsZenWindowSync {
   };
 
   /**
+   * Map of sync handlers for different event types.
+   * Each handler is a function that takes the event as an argument.
+   */
+  #syncHandlers = new Set();
+
+  /**
    * Last focused window.
    * Used to determine which window to sync tab contents visibility from.
    */
@@ -281,6 +287,25 @@ class nsZenWindowSync {
   }
 
   /**
+   * Adds a sync handler for a specific event type.
+   * @param {Function} aHandler - The sync handler function to add.
+   */
+  addSyncHandler(aHandler) {
+    if (!aHandler || this.#syncHandlers.has(aHandler)) {
+      return;
+    }
+    this.#syncHandlers.add(aHandler);
+  }
+
+  /**
+   * Removes a sync handler for a specific event type.
+   * @param {Function} aHandler - The sync handler function to remove.
+   */
+  removeSyncHandler(aHandler) {
+    this.#syncHandlers.delete(aHandler);
+  }
+
+  /**
    * Handles the next event by calling the appropriate handler method.
    *
    * @param {Event} aEvent - The event to handle.
@@ -289,7 +314,17 @@ class nsZenWindowSync {
     const handler = `on_${aEvent.type}`;
     try {
       if (typeof this[handler] === 'function') {
-        return this[handler](aEvent) || Promise.resolve();
+        let promise = this[handler](aEvent) || Promise.resolve();
+        promise.then(() => {
+          for (let syncHandler of this.#syncHandlers) {
+            try {
+              syncHandler(aEvent);
+            } catch (e) {
+              console.error(e);
+            }
+          }
+        });
+        return promise;
       } else {
         throw new Error(`No handler for event type: ${aEvent.type}`);
       }
@@ -308,7 +343,7 @@ class nsZenWindowSync {
     }
     let permanentKey = aTab.linkedBrowser.permanentKey;
     this.#runOnAllWindows(null, (win) => {
-      const tab = this.#getItemFromWindow(win, aTab.id);
+      const tab = this.getItemFromWindow(win, aTab.id);
       if (tab) {
         tab.linkedBrowser.permanentKey = permanentKey;
         tab.permanentKey = permanentKey;
@@ -323,7 +358,7 @@ class nsZenWindowSync {
    * @param {string} aItemId - The ID of the item to retrieve.
    * @returns {MozTabbrowserTab|MozTabbrowserTabGroup|null} The item element if found, otherwise null.
    */
-  #getItemFromWindow(aWindow, aItemId) {
+  getItemFromWindow(aWindow, aItemId) {
     if (!aItemId) {
       return null;
     }
@@ -453,7 +488,7 @@ class nsZenWindowSync {
         let container;
         const parentGroup = aOriginalItem.group;
         if (parentGroup?.hasAttribute('id')) {
-          container = this.#getItemFromWindow(aWindow, parentGroup.getAttribute('id'));
+          container = this.getItemFromWindow(aWindow, parentGroup.getAttribute('id'));
           if (container) {
             if (container?.tabs?.length) {
               // First tab in folders is the empty tab placeholder.
@@ -480,7 +515,7 @@ class nsZenWindowSync {
         }
         return;
       }
-      const relativeTab = this.#getItemFromWindow(aWindow, originalSibling.id);
+      const relativeTab = this.getItemFromWindow(aWindow, originalSibling.id);
       if (relativeTab) {
         gBrowser.tabContainer.tabDragAndDrop.handle_drop_transition(
           relativeTab,
@@ -502,7 +537,7 @@ class nsZenWindowSync {
   #syncItemForAllWindows(aItem, flags = 0) {
     const window = aItem.ownerGlobal;
     this.#runOnAllWindows(window, (win) => {
-      this.#syncItemWithOriginal(aItem, this.#getItemFromWindow(win, aItem.id), win, flags);
+      this.#syncItemWithOriginal(aItem, this.getItemFromWindow(win, aItem.id), win, flags);
     });
   }
 
@@ -713,7 +748,7 @@ class nsZenWindowSync {
    */
   #getActiveTabFromOtherWindows(aWindow, aTabId, filter = (tab) => tab?._zenContentsVisible) {
     return this.#runOnAllWindows(aWindow, (win) => {
-      const tab = this.#getItemFromWindow(win, aTabId);
+      const tab = this.getItemFromWindow(win, aTabId);
       if (filter(tab)) {
         return tab;
       }
@@ -735,7 +770,7 @@ class nsZenWindowSync {
       (tab) => tab._zenContentsVisible
     );
     for (let tab of activeTabsOnClosedWindow) {
-      const targetTab = this.#getItemFromWindow(mostRecentWindow, tab.id);
+      const targetTab = this.getItemFromWindow(mostRecentWindow, tab.id);
       if (targetTab) {
         targetTab._zenContentsVisible = true;
         this.log(`Moving active tab ${tab.id} to most recent window on close`);
@@ -830,7 +865,7 @@ class nsZenWindowSync {
         image: state.image,
       };
       this.#runOnAllWindows(null, (win) => {
-        const targetTab = this.#getItemFromWindow(win, aTab.id);
+        const targetTab = this.getItemFromWindow(win, aTab.id);
         if (targetTab) {
           targetTab._zenPinnedInitialState = initialState;
         }
@@ -958,7 +993,7 @@ class nsZenWindowSync {
   on_TabUnpinned(aEvent) {
     const tab = aEvent.target;
     this.#runOnAllWindows(null, (win) => {
-      const targetTab = this.#getItemFromWindow(win, tab.id);
+      const targetTab = this.getItemFromWindow(win, tab.id);
       if (targetTab) {
         delete targetTab._zenPinnedInitialState;
       }
@@ -978,7 +1013,7 @@ class nsZenWindowSync {
     const tab = aEvent.target;
     const window = tab.ownerGlobal;
     this.#runOnAllWindows(window, (win) => {
-      const targetTab = this.#getItemFromWindow(win, tab.id);
+      const targetTab = this.getItemFromWindow(win, tab.id);
       if (targetTab) {
         win.gBrowser.removeTab(targetTab, { animate: true });
       }
@@ -1052,7 +1087,7 @@ class nsZenWindowSync {
     const tabGroup = aEvent.target;
     const window = tabGroup.ownerGlobal;
     this.#runOnAllWindows(window, (win) => {
-      const targetGroup = this.#getItemFromWindow(win, tabGroup.id);
+      const targetGroup = this.getItemFromWindow(win, tabGroup.id);
       if (targetGroup) {
         if (targetGroup.isZenFolder) {
           targetGroup.delete();
@@ -1075,7 +1110,7 @@ class nsZenWindowSync {
     const tab = aEvent.target;
     const window = tab.ownerGlobal;
     this.#runOnAllWindows(window, (win) => {
-      const targetTab = this.#getItemFromWindow(win, tab.id);
+      const targetTab = this.getItemFromWindow(win, tab.id);
       if (targetTab && win.gZenViewSplitter) {
         win.gZenViewSplitter.removeTabFromGroup(targetTab);
       }
@@ -1088,7 +1123,7 @@ class nsZenWindowSync {
     const tabs = tabGroup.tabs;
     this.#runOnAllWindows(window, (win) => {
       const otherWindowTabs = tabs
-        .map((tab) => this.#getItemFromWindow(win, tab.id))
+        .map((tab) => this.getItemFromWindow(win, tab.id))
         .filter(Boolean);
       if (otherWindowTabs.length > 0 && win.gZenViewSplitter) {
         const group = win.gZenViewSplitter.splitTabs(otherWindowTabs, 'grid', -1);
@@ -1104,4 +1139,5 @@ class nsZenWindowSync {
   }
 }
 
+export const gWindowSyncEnabled = lazy.gWindowSyncEnabled;
 export const ZenWindowSync = new nsZenWindowSync();
