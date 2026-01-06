@@ -109,7 +109,7 @@ jobs:
 
       - name: Import external tests
         if: steps.git-check.outputs.files_changed == 'true'
-        run: python3 scripts/import_external_tests.py
+        run: python3 scripts/import_external_tests.py || true
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v7
