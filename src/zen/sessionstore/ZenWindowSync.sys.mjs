@@ -99,7 +99,6 @@ class nsZenWindowSync {
         if (
           window.__SSi &&
           !window.closed &&
-          window.gZenStartup.isReady &&
           !window.gZenWorkspaces?.privateWindowOrDisabled
         ) {
           yield window;

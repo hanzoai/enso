@@ -72,10 +72,6 @@ export class nsZenSessionManager {
       compression: SHOULD_COMPRESS_FILE ? 'lz4' : undefined,
       backupFile,
     });
-
-    lazy.SessionStore.promiseAllWindowsRestored.then(() => {
-      delete this._migrationData;
-    });
   }
 
   log(...args) {
@@ -178,6 +174,7 @@ export class nsZenSessionManager {
       // Save the state to the sidebar object so that it gets written
       // to the session file.
       this.saveState(initialState);
+      delete this._migrationData;
       return;
     }
     // If there are no windows, we create an empty one. By default,
