@@ -49,9 +49,9 @@ fi
 # Keep using ld64 on PGO/LTO builds because of performance regressions when using lld.
 # Mozilla sets "MOZ_LD64_KNOWN_GOOD" to true when they do automated builds with PGO/LTO on macOS.
 # See https://searchfox.org/firefox-main/rev/e61d59b5c9a651fd7bf28043f87c0dc669833496/build/moz.configure/lto-pgo.configure#261
-export MOZ_LD64_KNOWN_GOOD=1
-ac_add_options --enable-linker=ld64
-
-if test "$ZEN_RELEASE"; then
-  mk_add_options MOZ_MAKE_FLAGS="-j4"
-fi
+# export MOZ_LD64_KNOWN_GOOD=1
+# ac_add_options --enable-linker=ld64
+# 
+# if test "$ZEN_RELEASE"; then
+#   mk_add_options MOZ_MAKE_FLAGS="-j4"
+# fi
