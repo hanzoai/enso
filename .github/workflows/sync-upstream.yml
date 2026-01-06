@@ -75,7 +75,9 @@ jobs:
 
       - name: Run formatter
         if: steps.check-upstream-branch.outputs.branch_exists == 'false'
-        run: npm run pretty
+        run: |
+          sudo apt install python3-autopep8
+          npm run pretty
 
       - name: Check if any files changed
         id: git-check
