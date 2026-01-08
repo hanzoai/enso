@@ -789,6 +789,8 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
     if (!gZenPinnedTabManager.expandedSidebarMode) {
       return;
     }
+    const isSpaceCollapsed = gZenWorkspaces.activeWorkspaceElement?.hasCollapsedPinnedTabs;
+
     let tab = tabs[0];
     let isTab = false;
     if (tab.group?.hasAttribute('split-view-group')) {
@@ -809,7 +811,7 @@ class nsZenFolders extends nsZenDOMOperatedFeature {
     if (!isTab && !groupElem?.hasAttribute('selected') && !forCollapse) {
       groupElem = null; // Don't indent if the group is not selected
     }
-    if (groupIsCollapsiblePins(groupElem)) {
+    if (groupIsCollapsiblePins(groupElem) || isSpaceCollapsed) {
       groupElem = null; // Don't indent if it's inside the collapsible pinned tabs
     }
     let level = groupElem?.level + 1 || 0;
