@@ -599,19 +599,6 @@ class nsZenWindowSync {
     if (aOurTab.linkedBrowser.isRemoteBrowser != aOtherTab.linkedBrowser.isRemoteBrowser) {
       return false;
     }
-    // Load about:blank if by any chance we loaded the previous tab's URL.
-    // TODO: We should maybe start using a singular about:blank preloaded view
-    //  to avoid loading a full blank page each time and wasting resources.
-    // We do need to do this though instead of just unloading the browser because
-    // firefox doesn't expect an unloaded + selected tab, so we need to get
-    // around this limitation somehow.
-    if (!onClose && aOurTab.linkedBrowser?.currentURI.spec !== 'about:blank') {
-      this.log(`Loading about:blank in our tab ${aOurTab.id} before swap`);
-      aOurTab.linkedBrowser.loadURI(Services.io.newURI('about:blank'), {
-        triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
-        loadFlags: Ci.nsIWebNavigation.LOAD_FLAGS_REPLACE_HISTORY,
-      });
-    }
     // Running `swapBrowsersAndCloseOther` doesn't expect us to use the tab after
     // the operation, so it doesn't really care about cleaning up the other tab.
     // We need to make a new tab progress listener for the other tab after the swap.
@@ -623,7 +610,7 @@ class nsZenWindowSync {
         // Sometimes, when closing a window for example, when we swap the browsers,
         // there's a chance that the tab does not have the entries state moved over properly.
         // To avoid losing history entries, we have to keep the permanentKey in sync.
-        this.#makeSureTabSyncsPermanentKey(aOtherTab);
+        this.#makeSureTabSyncsPermanentKey(aOurTab);
         // Since we are moving progress listeners around, there's a chance that we
         // trigger a load while making the switch, and since we remove the previous
         // tab's listeners, the other browser window will never get the 'finish load' event
@@ -632,6 +619,19 @@ class nsZenWindowSync {
         // and if not, we remove the busy attribute from our tab.
         if (!aOtherTab.hasAttribute('busy')) {
           aOurTab.removeAttribute('busy');
+        }
+        // Load about:blank if by any chance we loaded the previous tab's URL.
+        // TODO: We should maybe start using a singular about:blank preloaded view
+        //  to avoid loading a full blank page each time and wasting resources.
+        // We do need to do this though instead of just unloading the browser because
+        // firefox doesn't expect an unloaded + selected tab, so we need to get
+        // around this limitation somehow.
+        if (!onClose && aOtherTab.linkedBrowser?.currentURI.spec !== 'about:blank') {
+          this.log(`Loading about:blank in our tab ${aOtherTab.id} before swap`);
+          aOtherTab.linkedBrowser.loadURI(Services.io.newURI('about:blank'), {
+            triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
+            loadFlags: Ci.nsIWebNavigation.LOAD_FLAGS_REPLACE_HISTORY,
+          });
         }
       },
       onClose

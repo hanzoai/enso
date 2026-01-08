@@ -256,7 +256,11 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
       // tab copy or move
       draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
       // not our drop then
-      if (!gBrowser.isTab(draggedTab) || gBrowser.selectedTab.hasAttribute('zen-empty-tab')) {
+      if (
+        !gBrowser.isTab(draggedTab) ||
+        gBrowser.selectedTab.hasAttribute('zen-empty-tab') ||
+        draggedTab.ownerGlobal !== window
+      ) {
         return;
       }
       gBrowser.tabContainer.tabDragAndDrop.finishMoveTogetherSelectedTabs(draggedTab);
