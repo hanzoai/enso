@@ -122,12 +122,9 @@ jobs:
 
       - name: Bootstrap
         run: |
-          cd engine
           export SURFER_PLATFORM="darwin"
           export PATH="$(python3 -m site --user-base)/bin":$PATH
-          # Always exist with 0, even if bootstrap fails
-          ./mach --no-interactive bootstrap --application-choice browser --no-system-changes --exclude macos-sdk || true
-          cd ..
+          npm run bootstrap
 
       - name: Build language packs
         run: sh scripts/download-language-packs.sh
