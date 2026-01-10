@@ -461,7 +461,7 @@ class nsZenWindowSync {
         !originalSibling.hasAttribute('id') || originalSibling.hasAttribute('zen-empty-tab');
     }
 
-    gBrowser.zenHandleTabMove(aOriginalItem, () => {
+    gBrowser.zenHandleTabMove(aTargetItem, () => {
       if (isFirstTab) {
         let container;
         const parentGroup = aOriginalItem.group;
@@ -1062,6 +1062,15 @@ class nsZenWindowSync {
     }
     // Tab groups already have an ID upon creation.
     this.#runOnAllWindows(window, (win) => {
+      // Check if a group with this ID already exists in the target window.
+      const existingGroup = this.getItemFromWindow(win, tabGroup.id);
+      if (existingGroup) {
+        this.log(
+          `Attempted to create group ${tabGroup.id} in window ${win}, ` + `but it already exists.`
+        );
+        return; // Do not proceed with creation.
+      }
+
       const newGroup = isFolder
         ? win.gZenFolders.createFolder([], {})
         : win.gBrowser.addTabGroup([]);
