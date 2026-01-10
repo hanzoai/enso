@@ -2332,6 +2332,12 @@ class nsZenWorkspaces {
   updateWorkspacesChangeContextMenu() {
     if (gZenWorkspaces.privateWindowOrDisabled) return;
     const workspaces = this.getWorkspaces();
+    const ctxCommand = document.getElementById('cmd_zenCtxDeleteWorkspace');
+    if (workspaces.length <= 1) {
+      ctxCommand.setAttribute('disabled', 'true');
+    } else {
+      ctxCommand.removeAttribute('disabled');
+    }
 
     let menuPopupID = 'moveTabOptionsMenu';
     const menuPopup = document.getElementById(menuPopupID);
