@@ -777,12 +777,7 @@ class nsZenWorkspaces {
   }
 
   get workspaceEnabled() {
-    if (typeof this._workspaceEnabled === 'undefined') {
-      this._workspaceEnabled =
-        this.shouldHaveWorkspaces &&
-        !Services.prefs.getBoolPref('zen.testing.profiling.enabled', false);
-    }
-    return this._workspaceEnabled && !window.closed;
+    return this.shouldHaveWorkspaces && !window.closed;
   }
 
   getActiveWorkspaceFromCache() {
