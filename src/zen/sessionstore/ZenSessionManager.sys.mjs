@@ -76,6 +76,7 @@ export class nsZenSessionManager {
 
   // Called from SessionComponents.manifest on app-startup
   init() {
+    this.log('Initializing session manager');
     let profileDir = Services.dirsvc.get('ProfD', Ci.nsIFile).path;
     let backupFile = null;
     if (SHOULD_BACKUP_FILE) {
@@ -93,7 +94,7 @@ export class nsZenSessionManager {
   }
 
   uninit() {
-    this.#file = null;
+    this.log('Uninitializing session manager');
     this.#deferredBackupTask?.disarm();
     this.#deferredBackupTask = null;
   }
