@@ -93,12 +93,6 @@ export class nsZenSessionManager {
     }, REGENERATION_DEBOUNCE_RATE_MS);
   }
 
-  uninit() {
-    this.log('Uninitializing session manager');
-    this.#deferredBackupTask?.disarm();
-    this.#deferredBackupTask = null;
-  }
-
   log(...args) {
     if (lazy.gShouldLog) {
       console.info('ZenSessionManager:', ...args);
