@@ -859,6 +859,7 @@ window.gZenVerticalTabsManager = {
 
   animateItemOpen(aItem) {
     if (
+      !gZenUIManager.motion ||
       !aItem ||
       !gZenUIManager._hasLoadedDOM ||
       !aItem.isConnected ||
@@ -889,7 +890,7 @@ window.gZenVerticalTabsManager = {
           },
           {
             duration: 0.11,
-            ease: "easeOut",
+            easing: "ease-out",
           }
         )
         .then(() => {})
@@ -906,7 +907,7 @@ window.gZenVerticalTabsManager = {
           },
           {
             duration: 0.11,
-            ease: "easeOut",
+            easing: "ease-out",
           }
         )
         .then(() => {})
@@ -937,9 +938,8 @@ window.gZenVerticalTabsManager = {
             }),
       },
       {
-        duration: 0.75,
-        ease: "easeOut",
-        fill: "forwards",
+        duration: 0.075,
+        easing: "ease-out",
       }
     );
   },

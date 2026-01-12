@@ -125,7 +125,8 @@ class nsZenWindowSync {
 
   log(...args) {
     if (lazy.gShouldLog) {
-      console.warn("ZenWindowSync:", ...args);
+      // eslint-disable-next-line no-console
+      console.info("ZenWindowSync:", ...args);
     }
   }
 

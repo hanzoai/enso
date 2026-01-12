@@ -9,15 +9,7 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
-  // eslint-disable-next-line mozilla/valid-lazy
-  BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.sys.mjs",
-  // eslint-disable-next-line mozilla/valid-lazy
-  TabGroupState: "resource:///modules/sessionstore/TabGroupState.sys.mjs",
   SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
-  // eslint-disable-next-line mozilla/valid-lazy
-  SessionSaver: "resource:///modules/sessionstore/SessionSaver.sys.mjs",
-  // eslint-disable-next-line mozilla/valid-lazy
-  setTimeout: "resource://gre/modules/Timer.sys.mjs",
   gWindowSyncEnabled: "resource:///modules/zen/ZenWindowSync.sys.mjs",
   DeferredTask: "resource://gre/modules/DeferredTask.sys.mjs",
 });
@@ -43,7 +35,7 @@ const BROWSER_STARTUP_RESUME_SESSION = 3;
 
 // The amount of time (in milliseconds) to wait for our backup regeneration
 // debouncer to kick off a regeneration.
-const REGENERATION_DEBOUNCE_RATE_MS = 20 * 60 * 1000; // 20 minutes
+const REGENERATION_DEBOUNCE_RATE_MS = 5 * 60 * 1000; // 5 minutes
 
 /**
  * Class representing the sidebar object stored in the session file.
@@ -80,7 +72,6 @@ export class nsZenSessionManager {
    */
   #deferredBackupTask = null;
 
-  // Called from SessionComponents.manifest on app-startup
   init() {
     this.log("Initializing session manager");
     let profileDir = Services.dirsvc.get("ProfD", Ci.nsIFile).path;
@@ -101,7 +92,8 @@ export class nsZenSessionManager {
 
   log(...args) {
     if (lazy.gShouldLog) {
-      console.warn("ZenSessionManager:", ...args);
+      // eslint-disable-next-line no-console
+      console.log("ZenSessionManager:", ...args);
     }
   }
 
@@ -152,6 +144,7 @@ export class nsZenSessionManager {
    * @see SessionFileInternal.read
    */
   async readFile() {
+    this.init();
     try {
       this.log("Reading Zen session file from disk");
       let promises = [];
