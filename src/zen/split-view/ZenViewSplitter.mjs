@@ -1688,17 +1688,17 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
   };
 
   _maybeRemoveFakeBrowser(select = true) {
-    gBrowser.tabbox.removeAttribute('style');
-    this.tabBrowserPanel.removeAttribute('dragging-split');
-    const tabboxAnimations = document.getElementById('tabbrowser-tabbox').getAnimations();
-    if (tabboxAnimations.length > 0) {
-      tabboxAnimations.forEach((a) => a.cancel());
-    }
     if (this._dndElement) {
       this._dndElement.remove();
       delete this._dndElement;
     }
     if (this.fakeBrowser) {
+      gBrowser.tabbox.removeAttribute('style');
+      this.tabBrowserPanel.removeAttribute('dragging-split');
+      const tabboxAnimations = document.getElementById('tabbrowser-tabbox').getAnimations();
+      if (tabboxAnimations.length > 0) {
+        tabboxAnimations.forEach((a) => a.cancel());
+      }
       delete this._hasAnimated;
       this.fakeBrowser.remove();
       this.fakeBrowser = null;

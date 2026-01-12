@@ -1668,12 +1668,7 @@ class nsZenWorkspaces {
     }
   }
 
-  #updatePaddingTopOnTabs(
-    workspaceElement,
-    essentialContainer,
-    forAnimation = false,
-    animateContainer = false
-  ) {
+  #updatePaddingTopOnTabs(workspaceElement, essentialContainer, forAnimation = false) {
     if (
       workspaceElement &&
       !(this.#inChangingWorkspace && !forAnimation && !this._alwaysAnimatePaddingTop)
@@ -1681,23 +1676,9 @@ class nsZenWorkspaces {
       delete this._alwaysAnimatePaddingTop;
       const essentialsHeight =
         window.windowUtils.getBoundsWithoutFlushing(essentialContainer).height;
-      if (!forAnimation && animateContainer && gZenUIManager.motion && gZenStartup.isReady) {
-        gZenUIManager.motion.animate(
-          workspaceElement,
-          {
-            paddingTop: [workspaceElement.style.paddingTop, essentialsHeight + 'px'],
-          },
-          {
-            type: 'spring',
-            bounce: 0,
-            duration: 0.2,
-          }
-        );
-      } else {
-        requestAnimationFrame(() => {
-          workspaceElement.style.paddingTop = essentialsHeight + 'px';
-        });
-      }
+      requestAnimationFrame(() => {
+        workspaceElement.style.paddingTop = essentialsHeight + 'px';
+      });
     }
   }
 
@@ -2445,17 +2426,11 @@ class nsZenWorkspaces {
     if (target && !target.target?.parentNode) {
       target = null;
     }
-    // Only animate if it's from an event
-    let animateContainer = target && target.target instanceof EventTarget;
-    if (target?.type === 'TabClose' || target?.type === 'TabOpen') {
-      animateContainer = target.target.pinned;
-    }
     this.onPinnedTabsResize(
       // This is what happens when we join a resize observer, an event listener
       // while using it as a method.
       [{ target: (target?.target ? target.target : target) ?? this.pinnedTabsContainer }],
-      forAnimation,
-      animateContainer
+      forAnimation
     );
   }
 
@@ -2498,7 +2473,7 @@ class nsZenWorkspaces {
     }
   }
 
-  onPinnedTabsResize(entries, forAnimation = false, animateContainer = false) {
+  onPinnedTabsResize(entries, forAnimation = false) {
     if (
       document.documentElement.hasAttribute('inDOMFullscreen') ||
       !this._hasInitializedTabsStrip ||
@@ -2550,12 +2525,7 @@ class nsZenWorkspaces {
         } else {
           essentialContainer.removeAttribute('data-hack-type');
         }
-        this.#updatePaddingTopOnTabs(
-          workspaceElement,
-          essentialContainer,
-          forAnimation,
-          animateContainer
-        );
+        this.#updatePaddingTopOnTabs(workspaceElement, essentialContainer, forAnimation);
         this.updateShouldHideSeparator(arrowScrollbox, pinnedContainer);
       }
     }
@@ -2615,7 +2585,6 @@ class nsZenWorkspaces {
     }
     const workspaceID = tab.getAttribute('zen-workspace-id');
     const isEssential = tab.getAttribute('zen-essential') === 'true';
-    this.updateShouldHideSeparator(this.activeWorkspaceStrip, this.pinnedTabsContainer, true);
     if (tab.hasAttribute('zen-empty-tab')) {
       return;
     }
