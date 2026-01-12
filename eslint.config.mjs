@@ -12,7 +12,6 @@ import mozilla from "eslint-plugin-mozilla";
 import reactHooks from "eslint-plugin-react-hooks";
 import zenGlobals from "./src/zen/zen.globals.mjs";
 
-import fs from "fs";
 import globals from "globals";
 import path from "path";
 
@@ -23,13 +22,6 @@ import rollouts from "./engine/eslint-rollouts.config.mjs";
 import subdirConfigs from "./engine/eslint-subdirs.config.mjs";
 
 const testPaths = testPathsConfig.testPaths;
-
-function readFile(filePath) {
-  return fs
-    .readFileSync(filePath, { encoding: "utf-8" })
-    .split("\n")
-    .filter((p) => p && !p.startsWith("#"));
-}
 
 const httpTestingPaths = [
   `**/*mixedcontent*.{${mozilla.allFileExtensions.join(",")}}`,
@@ -91,7 +83,6 @@ function wrapPathsInConfig(configs) {
   }
   return configs;
 }
-
 let config = [
   {
     name: "import-plugin-settings",
@@ -413,11 +404,6 @@ let config = [
     ...mozilla.configs["flat/valid-jsdoc"],
   },
   {
-    name: "mozilla/require-jsdoc",
-    files: wrapPaths({ paths: ["**"] }),
-    ...mozilla.configs["flat/require-jsdoc"],
-  },
-  {
     name: "rollout-no-browser-refs-in-toolkit",
     files: ["toolkit/**"],
     ignores: ["toolkit/**/test/**", "toolkit/**/tests/**"],
@@ -439,12 +425,6 @@ let config = [
       "mozilla/no-newtab-refs-outside-newtab": "error",
     },
   },
-  {
-    name: "jsdoc/require-jsdoc",
-    ignores: wrapPaths({ paths: ["**"] }),
-    ...mozilla.configs["flat/jsdoc-require-jsdoc"],
-  },
-
   ...wrapPathsInConfig(subdirConfigs),
   ...wrapPathsInConfig(repositoryGlobals),
 

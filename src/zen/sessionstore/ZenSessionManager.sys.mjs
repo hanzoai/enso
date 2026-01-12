@@ -28,7 +28,6 @@ const SHOULD_COMPRESS_FILE = Services.prefs.getBoolPref("zen.session-store.compr
 const SHOULD_BACKUP_FILE = Services.prefs.getBoolPref("zen.session-store.backup-file", true);
 
 const FILE_NAME = SHOULD_COMPRESS_FILE ? "zen-sessions.jsonlz4" : "zen-sessions.json";
-const MIGRATION_PREF = "zen.ui.migration.session-manager-restore";
 
 // 'browser.startup.page' preference value to resume the previous session.
 const BROWSER_STARTUP_RESUME_SESSION = 3;
@@ -74,14 +73,12 @@ export class nsZenSessionManager {
 
   init() {
     this.log("Initializing session manager");
-    let profileDir = Services.dirsvc.get("ProfD", Ci.nsIFile).path;
     let backupFile = null;
     if (SHOULD_BACKUP_FILE) {
       backupFile = PathUtils.join(this.#backupFolderPath, FILE_NAME);
     }
-    let filePath = PathUtils.join(profileDir, FILE_NAME);
     this.#file = new JSONFile({
-      path: filePath,
+      path: this.#storeFilePath,
       compression: SHOULD_COMPRESS_FILE ? "lz4" : undefined,
       backupFile,
     });
@@ -95,6 +92,11 @@ export class nsZenSessionManager {
       // eslint-disable-next-line no-console
       console.log("ZenSessionManager:", ...args);
     }
+  }
+
+  get #storeFilePath() {
+    let profileDir = Services.dirsvc.get("ProfD", Ci.nsIFile).path;
+    return PathUtils.join(profileDir, FILE_NAME);
   }
 
   get #backupFolderPath() {
@@ -144,12 +146,16 @@ export class nsZenSessionManager {
    * @see SessionFileInternal.read
    */
   async readFile() {
+    let fileExists = await IOUtils.exists(this.#storeFilePath);
+    if (!fileExists) {
+      this._shouldRunMigration = true;
+    }
     this.init();
     try {
       this.log("Reading Zen session file from disk");
       let promises = [];
       promises.push(this.#file.load());
-      if (!Services.prefs.getBoolPref(MIGRATION_PREF, false)) {
+      if (this._shouldRunMigration) {
         promises.push(this.#getDataFromDBForMigration());
       }
       await Promise.all(promises);
@@ -157,6 +163,13 @@ export class nsZenSessionManager {
       console.error("ZenSessionManager: Failed to read session file", e);
     }
     this.#sidebar = this.#file.data || {};
+    if (!this.#sidebar.spaces?.length && !this._shouldRunMigration) {
+      // If we have no spaces data, we should run migration
+      // to restore them from the database. Note we also do a
+      // check if we already planned to run migration for optimization.
+      this._shouldRunMigration = true;
+      await this.#getDataFromDBForMigration();
+    }
   }
 
   /**
@@ -174,13 +187,14 @@ export class nsZenSessionManager {
     // That where going to be restored by SessionStore. The sidebar
     // object will always be empty after migration because we haven't
     // gotten the opportunity to save the session yet.
-    if (!Services.prefs.getBoolPref(MIGRATION_PREF, false)) {
-      Services.prefs.setBoolPref(MIGRATION_PREF, true);
+    if (this._shouldRunMigration) {
       this.log("Restoring tabs from Places DB after migration");
-      this.#sidebar = {
-        ...this.#sidebar,
-        spaces: this._migrationData?.spaces || [],
-      };
+      if (!this.#sidebar.spaces?.length) {
+        this.#sidebar = {
+          ...this.#sidebar,
+          spaces: this._migrationData?.spaces || [],
+        };
+      }
       // There might be cases where there are no windows in the
       // initial state, for example if the user had 'restore previous
       // session' disabled before migration. In that case, we try
@@ -201,6 +215,7 @@ export class nsZenSessionManager {
       // to the session file.
       this.saveState(initialState);
       delete this._migrationData;
+      delete this._shouldRunMigration;
       return;
     }
     // If there are no windows, we create an empty one. By default,

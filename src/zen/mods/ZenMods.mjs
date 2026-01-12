@@ -295,7 +295,7 @@ class nsZenMods extends nsZenPreloadedFeature {
     return `https://zen-browser.github.io/theme-store/themes/${modId}/theme.json`;
   }
 
-  async #downloadUrlToFile(url, path, isStyleSheet = false, maxRetries = 3, retryDelayMs = 500) {
+  async #downloadUrlToFile(url, path, maxRetries = 3, retryDelayMs = 500) {
     let attempt = 0;
 
     while (attempt < maxRetries) {
@@ -603,7 +603,7 @@ class nsZenMods extends nsZenPreloadedFeature {
       const modPath = PathUtils.join(this.modsRootPath, mod.id);
       await IOUtils.makeDirectory(modPath, { ignoreExisting: true });
 
-      await this.#downloadUrlToFile(mod.style, PathUtils.join(modPath, "chrome.css"), true);
+      await this.#downloadUrlToFile(mod.style, PathUtils.join(modPath, "chrome.css"));
       await this.#downloadUrlToFile(mod.readme, PathUtils.join(modPath, "readme.md"));
 
       if (mod.preferences) {
