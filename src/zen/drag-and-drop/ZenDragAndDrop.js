@@ -982,9 +982,6 @@
         return;
       }
       let essentialsPromoStatus = this.createZenEssentialsPromo();
-      if (essentialsPromoStatus === "shown") {
-        return;
-      }
       this.clearDragOverVisuals();
       if (
         !draggedTab.hasAttribute("zen-essential") &&
@@ -992,8 +989,11 @@
       ) {
         return;
       }
-      if (essentialsPromoStatus === "created") {
-        return;
+      let essentialsPromoStatus = this.createZenEssentialsPromo(draggedTab?.userContextId);
+      switch (essentialsPromoStatus) {
+        case "shown":
+        case "created":
+          return;
       }
 
       if (!this._fakeEssentialTab) {
