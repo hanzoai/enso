@@ -1102,6 +1102,7 @@
 
 .zen-essentials-container {
   overflow: hidden;
+  min-height: 2px;
   gap: 4px;
   transition:
     max-height 0.3s ease-out,
