@@ -1,5 +1,5 @@
 diff --git a/browser/components/sessionstore/SessionStore.sys.mjs b/browser/components/sessionstore/SessionStore.sys.mjs
-index 2a055f0c5f34f0a2667f659185120c07d38f4e41..27f85dc47d66f2f83820e964198832d82bff04c1 100644
+index 2a055f0c5f34f0a2667f659185120c07d38f4e41..c0ab92bfc89306e4e7d3a43097beb2dc5c9189be 100644
 --- a/browser/components/sessionstore/SessionStore.sys.mjs
 +++ b/browser/components/sessionstore/SessionStore.sys.mjs
 @@ -127,6 +127,9 @@ const TAB_EVENTS = [
@@ -219,8 +219,8 @@ index 2a055f0c5f34f0a2667f659185120c07d38f4e41..27f85dc47d66f2f83820e964198832d8
 +      aWindow.document.documentElement.setAttribute("zen-unsynced-window", "true");
 +    }
 +    aWindow.gZenFolders?.restoreDataFromSessionStore(winData.folders);
-+    aWindow.gZenViewSplitter?.restoreDataFromSessionStore(winData.splitViewData);
 +    aWindow.gZenWorkspaces?.restoreWorkspacesFromSessionStore(winData);
++    aWindow.gZenViewSplitter?.restoreDataFromSessionStore(winData.splitViewData);
  
      // Move the originally open tabs to the end.
      if (initialTabs) {

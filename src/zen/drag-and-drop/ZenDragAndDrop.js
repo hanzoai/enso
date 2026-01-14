@@ -864,9 +864,8 @@
         if (event.target.classList.contains("zen-workspace-empty-space")) {
           dropElement = this._tabbrowserTabs.ariaFocusableItems.at(-1);
           // Only if there are no normal tabs to drop after
-          showIndicatorUnderNewTabButton = !tabs.some(
-            (tab) => !(tab.group || tab).pinned || tab.hasAttribute("zen-essential")
-          );
+          showIndicatorUnderNewTabButton =
+            gBrowser.tabs[gBrowser.tabs.length - 1].hasAttribute("zen-empty-tab");
         } else {
           const numEssentials = gBrowser._numZenEssentials;
           const numPinned = gBrowser.pinnedTabCount - numEssentials;

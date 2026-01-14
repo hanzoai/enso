@@ -1349,4 +1349,8 @@
   left: 0;
   pointer-events: none;
   background: var(--zen-primary-color);
+
+  :root[zen-right-side="true"] & {
+    left: calc(-1 * var(--zen-toolbox-padding));
+  }
 }

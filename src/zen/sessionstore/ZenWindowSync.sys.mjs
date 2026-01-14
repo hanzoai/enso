@@ -802,7 +802,11 @@ class nsZenWindowSync {
     if (aWindow.gBrowser.selectedTab === this.#lastSelectedTab && !ignoreSameTab) {
       return;
     }
-    if (aPreviousTab?._zenContentsVisible) {
+    let activeBrowsers = aWindow.gBrowser.selectedBrowsers;
+    let activeTabs = activeBrowsers.map((browser) => aWindow.gBrowser.getTabForBrowser(browser));
+    // Ignore previous tabs that are still "active". These scenarios could happen for example,
+    // when selecting on a split view tab that was already active.
+    if (aPreviousTab?._zenContentsVisible && !activeTabs.includes(aPreviousTab)) {
       const otherTabToShow = this.#getActiveTabFromOtherWindows(
         aWindow,
         aPreviousTab.id,
@@ -815,8 +819,7 @@ class nsZenWindowSync {
       }
     }
     let promises = [];
-    for (const browserView of aWindow.gBrowser.selectedBrowsers) {
-      const selectedTab = aWindow.gBrowser.getTabForBrowser(browserView);
+    for (const selectedTab of activeTabs) {
       if (selectedTab._zenContentsVisible || selectedTab.hasAttribute("zen-empty-tab")) {
         continue;
       }
