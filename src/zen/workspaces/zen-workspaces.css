@@ -22,7 +22,7 @@
     display: none !important;
   }
 
-  border-radius: var(--zen-button-border-radius) !important;
+  border-radius: var(--button-border-radius) !important;
   background: transparent;
   appearance: unset !important;
   height: fit-content;

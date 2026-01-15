@@ -109,16 +109,15 @@
       }
       const draggingTabs = tab.multiselected ? gBrowser.selectedTabs : [tab];
       const { offsetX, offsetY } = this.#getDragImageOffset(event, tab, draggingTabs);
-      const dragImage = this.#createDragImageForTabs(tab, draggingTabs);
+      const dragImage = this.#createDragImageForTabs(draggingTabs);
       this.originalDragImageArgs = [dragImage, offsetX, offsetY];
       dt.updateDragImage(...this.originalDragImageArgs);
     }
 
-    #createDragImageForTabs(draggedTab, movingTabs) {
+    #createDragImageForTabs(movingTabs) {
       const periphery = gZenWorkspaces.activeWorkspaceElement.querySelector(
         "#tabbrowser-arrowscrollbox-periphery"
       );
-      const dragData = draggedTab._dragData;
       const tabRect = window.windowUtils.getBoundsWithoutFlushing(movingTabs[0]);
       const wrapper = document.createElement("div");
       wrapper.style.width = tabRect.width + "px";
@@ -139,11 +138,6 @@
           tabClone.style.transform = `translate(${i * 4}px, -${i * (tabRect.height - 4)}px)`;
           tabClone.style.opacity = "0.2";
           tabClone.style.zIndex = `${-i}`;
-        }
-        // Apply a transform translate to the tab in order to center it within the drag image
-        // based on the event coordinates.
-        if (!movingTabs.length > 1) {
-          tabClone.style.transform = `translate(${(tabRect.width - dragData.offsetX) / 2}px, ${(tabRect.height - dragData.offsetY) / 2}px)`;
         }
         tabClone.setAttribute("drag-image", "true");
         wrapper.appendChild(tabClone);
