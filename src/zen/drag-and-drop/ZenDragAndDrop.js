@@ -127,7 +127,6 @@
       const wrapper = document.createElement("div");
       wrapper.style.width = tabRect.width + "px";
       wrapper.style.height = tabRect.height * movingTabs.length + "px";
-      wrapper.style.overflow = "clip";
       wrapper.style.position = "fixed";
       wrapper.style.top = "-9999px";
       periphery.appendChild(wrapper);
