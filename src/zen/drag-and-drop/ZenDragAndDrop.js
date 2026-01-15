@@ -112,6 +112,11 @@
       const dragImage = this.#createDragImageForTabs(draggingTabs);
       this.originalDragImageArgs = [dragImage, offsetX, offsetY];
       dt.updateDragImage(...this.originalDragImageArgs);
+      if (tab.hasAttribute("zen-essential")) {
+        setTimeout(() => {
+          tab.style.visibility = "hidden";
+        }, 0);
+      }
     }
 
     #createDragImageForTabs(movingTabs) {
@@ -129,7 +134,7 @@
       for (let i = 0; i < movingTabs.length; i++) {
         const tab = movingTabs[i];
         const tabClone = tab.cloneNode(true);
-        if (tabClone.hasAttribute("zen-essential")) {
+        if (tab.hasAttribute("zen-essential")) {
           const rect = tab.getBoundingClientRect();
           tabClone.style.minWidth = tabClone.style.maxWidth = `${rect.width}px`;
           tabClone.style.minHeight = tabClone.style.maxHeight = `${rect.height}px`;
@@ -802,6 +807,9 @@
     }
 
     handle_dragend(event) {
+      const dt = event.dataTransfer;
+      const draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+      draggedTab.style.visibility = "";
       let currentEssenialContainer = gZenWorkspaces.getCurrentEssentialsContainer();
       if (currentEssenialContainer?.essentialsPromo) {
         currentEssenialContainer.essentialsPromo.remove();
@@ -1259,6 +1267,12 @@
     #makeDragImageNonEssential(event) {
       const dt = event.dataTransfer;
       const draggedTab = event.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
+      if (draggedTab.hasAttribute("zen-essential")) {
+        setTimeout(() => {
+          dt.updateDragImage(...this.originalDragImageArgs);
+        }, 50);
+        return;
+      }
       const wrapper = this.originalDragImageArgs[0];
       const tab = wrapper.firstElementChild;
       tab.style.setProperty("transition", "none", "important");
