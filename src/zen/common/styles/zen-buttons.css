@@ -23,7 +23,8 @@ dialog::part(dialog-button) {
   --button-background-color-active: color-mix(in srgb, var(--button-background-color) 80%, transparent);
   --button-background-color-primary: #3138fc;
   --button-background-color-primary-hover: color-mix(in srgb, var(--button-background-color-primary) 95%, transparent);
-  --in-content-primary-button-text-color: white;
+  --button-text-color-primary: white;
+  --button-text-color-primary-hover: var(--button-text-color-primary);
   border-color: light-dark(rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.2)) !important;
   border-bottom-width: 2px !important;
   position: relative;
@@ -47,13 +48,13 @@ dialog::part(dialog-button) {
     &[dlgtype="accept"]::after {
       content: "⏎";
       background: rgba(255, 255, 255, 0.1);
-      outline: 2px solid color-mix(in srgb, currentColor 50%, transparent);
+      outline: 2px solid color-mix(in srgb, currentColor 30%, transparent);
       outline-offset: -2px;
     }
 
     &[dlgtype="cancel"]::after {
       content: "ESC";
-      background: rgba(0, 0, 0, 0.1);
+      background: light-dark(rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
     }
   }
 }
