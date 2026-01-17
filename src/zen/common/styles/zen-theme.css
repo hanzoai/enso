@@ -111,13 +111,14 @@
   --button-border-color-primary: var(--in-content-primary-button-border-color) !important;
 
   --button-border-color: var(--in-content-primary-button-border-color) !important;
+  --button-font-weight: 500 !important;
 
   --button-border-radius: 6px;
   --button-text-color-primary: var(--in-content-primary-button-text-color) !important;
 
   --button-background-color: var(--in-content-button-background) !important;
-  --button-background-color-hover: color-mix(in srgb, var(--button-background-color) 95%, transparent) !important;
-  --button-background-color-active: color-mix(in srgb, var(--button-background-color) 90%, transparent) !important;
+  --button-background-color-hover: color-mix(in srgb, currentColor 5%, transparent) !important;
+  --button-background-color-active: color-mix(in srgb, currentColor 10%, transparent) !important;
 
   --color-accent-primary: var(--button-background-color-primary) !important;
   --color-accent-primary-hover: var(--button-primary-hover-bgcolor) !important;

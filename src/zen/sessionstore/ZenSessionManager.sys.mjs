@@ -266,7 +266,9 @@ export class nsZenSessionManager {
    *        The initial session state read from the session file.
    */
   #runStateMigration(initialState) {
-    this.log("Restoring tabs from Places DB after migration");
+    this.log("Restoring tabs from Places DB after migration", initialState, this._migrationData);
+    // Restore spaces into the sidebar object if we don't
+    // have any yet.
     if (!this.#sidebar.spaces?.length) {
       this.#sidebar = {
         ...this.#sidebar,
