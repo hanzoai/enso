@@ -152,7 +152,7 @@
 }
 
 :root:not([inDOMFullscreen='true'])
-  .browserSidebarContainer.deck-selected:hover
+  .browserSidebarContainer:hover
   .zen-view-splitter-header-container,
 .zen-view-splitter-header-container:hover {
   pointer-events: all;

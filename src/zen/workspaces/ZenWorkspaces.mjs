@@ -140,6 +140,9 @@ class nsZenWorkspaces {
         this._invalidateBookmarkContainers();
       };
       Services.obs.addObserver(observerFunction, "workspace-bookmarks-updated");
+      window.addEventListener("unload", () => {
+        Services.obs.removeObserver(observerFunction, "workspace-bookmarks-updated");
+      });
     }
   }
 

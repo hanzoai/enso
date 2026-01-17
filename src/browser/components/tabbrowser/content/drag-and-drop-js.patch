@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/drag-and-drop.js b/browser/components/tabbrowser/content/drag-and-drop.js
-index 57800333445ec7850742145527e04ae8d504b0bb..dcee798999a5feafa97b01dcaa473204ee750957 100644
+index 57800333445ec7850742145527e04ae8d504b0bb..bd94089592ce8912fc1a9c1bdea0caa5775ed460 100644
 --- a/browser/components/tabbrowser/content/drag-and-drop.js
 +++ b/browser/components/tabbrowser/content/drag-and-drop.js
 @@ -35,6 +35,9 @@
@@ -81,14 +81,14 @@ index 57800333445ec7850742145527e04ae8d504b0bb..dcee798999a5feafa97b01dcaa473204
            isTab(draggedTab) &&
            draggedTab.pinned &&
            this._tabbrowserTabs.arrowScrollbox.contains(event.target);
-@@ -387,6 +396,7 @@
-             (oldTranslateY && oldTranslateY != newTranslateY);
-         } else if (this._tabbrowserTabs.verticalMode) {
-           shouldTranslate &&= oldTranslateY && oldTranslateY != newTranslateY;
-+          shouldTranslate = false;
-         } else {
-           shouldTranslate &&= oldTranslateX && oldTranslateX != newTranslateX;
+@@ -432,6 +441,7 @@
+           }
          }
+ 
++        shouldTranslate = false;
+         if (shouldTranslate) {
+           let translationPromises = [];
+           for (let item of movingTabs) {
 @@ -443,7 +453,7 @@
                  item.removeAttribute("tabdrop-samewindow");
                  resolve();

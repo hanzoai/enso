@@ -675,6 +675,7 @@
 
     handle_drop(event) {
       this.clearSpaceSwitchTimer();
+      this.#maybeClearVerticalPinnedGridDragOver();
       super.handle_drop(event);
       const dt = event.dataTransfer;
       const activeWorkspace = gZenWorkspaces.activeWorkspace;
@@ -885,7 +886,8 @@
         } else {
           const numEssentials = gBrowser._numZenEssentials;
           const numPinned = gBrowser.pinnedTabCount - numEssentials;
-          const tabToUse = event.target.closest(dropZoneSelector);
+          const tabToUse =
+            event.target.closest(dropZoneSelector) || draggedTab._dragData?.dropElement;
           if (!tabToUse) {
             return null;
           }
