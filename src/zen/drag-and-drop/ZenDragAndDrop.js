@@ -1243,6 +1243,9 @@
     #makeDragImageEssential(event) {
       const dt = event.dataTransfer;
       const draggedTab = event.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
+      if (draggedTab.hasAttribute("zen-essential")) {
+        return;
+      }
       const dragData = draggedTab._dragData;
       const [wrapper] = this.originalDragImageArgs;
       const tab = wrapper.firstElementChild;
