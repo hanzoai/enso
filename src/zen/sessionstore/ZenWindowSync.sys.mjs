@@ -859,8 +859,8 @@ class nsZenWindowSync {
     if (!aTab.linkedBrowser) {
       return [];
     }
-    let cachedState = lazy.TabStateCache.get(aTab.linkedBrowser.permanentKey) || { entries: [] };
-    return cachedState.entries || [];
+    let cachedState = lazy.TabStateCache.get(aTab.linkedBrowser.permanentKey) || {};
+    return cachedState.history?.entries || [];
   }
 
   /**
@@ -1019,10 +1019,11 @@ class nsZenWindowSync {
     // There are cases where the pinned state is changed but we don't
     // wan't to override the initial state we stored when the tab was created.
     // For example, when session restore pins a tab again.
+    let tabStatePromise;
     if (!tab._zenPinnedInitialState) {
-      this.setPinnedTabState(tab);
+      tabStatePromise = this.setPinnedTabState(tab);
     }
-    return this.on_TabMove(aEvent);
+    return Promise.all([tabStatePromise, this.on_TabMove(aEvent)]);
   }
 
   on_TabUnpinned(aEvent) {

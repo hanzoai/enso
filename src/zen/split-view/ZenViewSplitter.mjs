@@ -252,6 +252,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
 
   // eslint-disable-next-line complexity
   onBrowserDragOverToSplit(event) {
+    gBrowser.tabContainer.tabDragAndDrop.clearSpaceSwitchTimer();
     if (this.fakeBrowser) {
       return;
     }
@@ -450,7 +451,6 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
     const side = this.fakeBrowser.getAttribute("side");
     this._lastOpenedTab = gBrowser.selectedTab;
     this._draggingTab = null;
-    gBrowser.tabContainer.tabDragAndDrop.clearSpaceSwitchTimer();
     event.dataTransfer.updateDragImage(
       ...gBrowser.tabContainer.tabDragAndDrop.originalDragImageArgs
     );
