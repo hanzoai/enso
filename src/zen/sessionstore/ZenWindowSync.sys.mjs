@@ -101,9 +101,9 @@ class nsZenWindowSync {
    * retrieve the correct tab entries from the cache in order to avoid losing
    * tab history.
    *
-   * @type {Map<string, object>}
+   * @type {WeakMap<object, MozTabbrowserTab>}
    */
-  #swapedTabsTabEntriesForWC = new Map();
+  #swapedTabsEntriesForWC = new WeakMap();
 
   /**
    * Iterator that yields all currently opened browser windows.
@@ -819,7 +819,7 @@ class nsZenWindowSync {
           focus: targetTab.selected,
           onClose: true,
         });
-        this.#swapedTabsTabEntriesForWC.set(tab.linkedBrowser.permanentKey, targetTab);
+        this.#swapedTabsEntriesForWC.set(tab.linkedBrowser.permanentKey, targetTab);
         // We can animate later, whats important is to always stay on the same
         // process and avoid async operations here to avoid the closed window
         // being unloaded before the swap is done.
@@ -1129,11 +1129,11 @@ class nsZenWindowSync {
   }
 
   on_WindowCloseAndBrowserFlushed(aBrowsers) {
-    if (this.#swapedTabsTabEntriesForWC.size === 0) {
+    if (this.#swapedTabsEntriesForWC.size === 0) {
       return;
     }
     for (let browser of aBrowsers) {
-      const tab = this.#swapedTabsTabEntriesForWC.get(browser.permanentKey);
+      const tab = this.#swapedTabsEntriesForWC.get(browser.permanentKey);
       if (tab) {
         let win = tab.ownerGlobal;
         this.log(`Finalizing swap for tab ${tab.id} on window close`);
@@ -1153,7 +1153,9 @@ class nsZenWindowSync {
         }
       }
     }
-    this.#swapedTabsTabEntriesForWC.clear();
+    // We don't need to keep these references anymore.
+    // and weak maps don't have a clear method, they get cleared automatically.
+    this.#swapedTabsEntriesForWC = new WeakMap();
   }
 
   on_TabGroupCreate(aEvent) {
