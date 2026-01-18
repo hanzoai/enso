@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = Cad atá nua i { -brand-short-name }
 zen-sidebar-notification-updated-tooltip = 
     .title = Féach ar Nótaí Eisiúna
 zen-sidebar-notification-restart-safe-mode-label = Bhris rud éigin?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Atosaigh i Mód Sábháilte

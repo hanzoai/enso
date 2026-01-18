@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = Co je nového v prohlížeči { -brand-
 zen-sidebar-notification-updated-tooltip = 
     .title = Zobrazit změny
 zen-sidebar-notification-restart-safe-mode-label = Něco se rozbilo?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Restartovat v Nouzovém Režimu

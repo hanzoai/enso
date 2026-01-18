@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = { -brand-short-name } újdonságai
 zen-sidebar-notification-updated-tooltip = 
     .title = Változások listájának megtekintése
 zen-sidebar-notification-restart-safe-mode-label = Valami elromlott?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Újraindítás biztonságos módban

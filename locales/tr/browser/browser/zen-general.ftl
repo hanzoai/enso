@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = { -brand-short-name }'de neler yeni
 zen-sidebar-notification-updated-tooltip = 
     .title = Sürüm Notlarını Görüntüle
 zen-sidebar-notification-restart-safe-mode-label = Bir sorun mu oluştu?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Güvenli Modda Yeniden Başlat

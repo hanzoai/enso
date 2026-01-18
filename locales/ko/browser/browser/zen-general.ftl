@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = { -brand-short-name }의 새로운 기�
 zen-sidebar-notification-updated-tooltip = 
     .title = 업데이트 기록 보기
 zen-sidebar-notification-restart-safe-mode-label = 무언가 고장났나요?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = 안전 모드로 다시 시작

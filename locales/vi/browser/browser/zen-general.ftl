@@ -105,5 +105,5 @@ zen-sidebar-notification-updated-label = Có gì mới trong { -brand-short-name
 zen-sidebar-notification-updated-tooltip = 
     .title = Xem ghi chú phát hành
 zen-sidebar-notification-restart-safe-mode-label = Có lỗi xảy ra?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Khởi động lại ở Chế độ an toàn

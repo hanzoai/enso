@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = มีอะไรใหม่ใน { 
 zen-sidebar-notification-updated-tooltip = 
     .title = View Release Notes
 zen-sidebar-notification-restart-safe-mode-label = Something broke?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Restart in Safe Mode

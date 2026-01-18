@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = Що нового в { -brand-short-nam
 zen-sidebar-notification-updated-tooltip = 
     .title = Переглянути примітки до випуску
 zen-sidebar-notification-restart-safe-mode-label = Щось зламалося?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Перезапустити в безпечному режимі

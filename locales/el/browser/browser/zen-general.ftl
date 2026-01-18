@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = Τι νέο υπάρχει στο { -br
 zen-sidebar-notification-updated-tooltip = 
     .title = Προβολή Σημειώσεων Έκδοσης
 zen-sidebar-notification-restart-safe-mode-label = Χάλασε κάτι;
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Επανεκκίνηση σε Ασφαλή Λειτουργία

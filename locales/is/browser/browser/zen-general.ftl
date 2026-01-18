@@ -105,5 +105,5 @@ zen-sidebar-notification-updated-label = Nýtt á döfinni í { -brand-short-nam
 zen-sidebar-notification-updated-tooltip = 
     .title = Skoða útgáfuupplýsingar
 zen-sidebar-notification-restart-safe-mode-label = Bilaði eitthvað?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Endurræsa í öruggum ham

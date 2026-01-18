@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = Beth sy'n newydd yn { -brand-short-name
 zen-sidebar-notification-updated-tooltip = 
     .title = Gweld Nodiadau Rhyddhau
 zen-sidebar-notification-restart-safe-mode-label = Rhywbeth wedi torri?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Ailgychwyn yn y Modd Diogel

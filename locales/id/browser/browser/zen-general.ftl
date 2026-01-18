@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = Apa yang baru di { -brand-short-name }
 zen-sidebar-notification-updated-tooltip = 
     .title = Lihat Catatan Rilis
 zen-sidebar-notification-restart-safe-mode-label = Ada yang rusak?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Mulai Ulang dalam Mode Aman

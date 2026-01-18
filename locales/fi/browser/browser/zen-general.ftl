@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = Mitä uutta { -brand-short-name }
 zen-sidebar-notification-updated-tooltip = 
     .title = Katso Julkaisutiedot
 zen-sidebar-notification-restart-safe-mode-label = Jotain rikki?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Käynnistä uudelleen vianmääritystilassa

@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = Kas naujo naršyklėje „{ -brand-shor
 zen-sidebar-notification-updated-tooltip = 
     .title = Peržiūrėti leidimo pastabas
 zen-sidebar-notification-restart-safe-mode-label = Kažkas sugedo?
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = Paleisti iš naujo saugioje režime

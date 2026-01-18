@@ -105,5 +105,5 @@ zen-sidebar-notification-updated-label = { -brand-short-name } 更新了什麼
 zen-sidebar-notification-updated-tooltip = 
     .title = 查看版本資訊
 zen-sidebar-notification-restart-safe-mode-label = 有東西壞掉了嗎？
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = 在安全模式下重新啟動

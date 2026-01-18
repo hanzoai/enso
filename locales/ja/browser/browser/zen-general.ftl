@@ -107,5 +107,5 @@ zen-sidebar-notification-updated-label = { -brand-short-name }の新機能
 zen-sidebar-notification-updated-tooltip = 
     .title = リリースノートを表示する
 zen-sidebar-notification-restart-safe-mode-label = 何か壊れましたか？
-zen-sidebar-notification-restart-safe-mode-tooltip = 
+zen-sidebar-notification-restart-safe-mode-tooltip =
     .title = セーフモードで再起動する
