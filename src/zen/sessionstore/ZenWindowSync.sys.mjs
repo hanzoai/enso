@@ -93,6 +93,19 @@ class nsZenWindowSync {
   #lastSelectedTab = null;
 
   /**
+   * A list containing all swaped tabs with their respective browser permanent
+   * keys. This is used in between SSWindowClosing and WindowCloseAndBrowserFlushed.
+   *
+   * When we close windows, there's a small chance that browsers havent't been flushed
+   * yet when we try to move active tabs to other windows. This map allows us to
+   * retrieve the correct tab entries from the cache in order to avoid losing
+   * tab history.
+   *
+   * @type {Map<string, object>}
+   */
+  #swapedTabsTabEntriesForWC = new Map();
+
+  /**
    * Iterator that yields all currently opened browser windows.
    * (Might miss the most recent one.)
    * This list is in focus order, but may include minimized windows
@@ -107,6 +120,23 @@ class nsZenWindowSync {
       }
     },
   };
+
+  /**
+   * @returns {Array<Window>} A list of all currently opened browser windows.
+   */
+  get #browserWindowsList() {
+    return Array.from(this.#browserWindows);
+  }
+
+  /**
+   * @returns {Window|null} The first opened browser window, or null if none exist.
+   */
+  get #firstSyncedWindow() {
+    for (let window of this.#browserWindows) {
+      return window;
+    }
+    return null;
+  }
 
   init() {
     if (!lazy.gWindowSyncEnabled) {
@@ -160,7 +190,7 @@ class nsZenWindowSync {
       (hasUnsyncedArg ||
         (typeof aWindow.arguments[0] === "string" &&
           aWindow.arguments.length > 1 &&
-          !![...this.#browserWindows].length))
+          !!this.#browserWindowsList.length))
     ) {
       this.log("Not syncing new window due to unsynced argument or existing synced windows");
       aWindow.document.documentElement.setAttribute("zen-unsynced-window", "true");
@@ -543,7 +573,7 @@ class nsZenWindowSync {
   async #swapBrowserDocShellsAsync(aOurTab, aOtherTab) {
     this.#maybeFlushTabState(aOtherTab);
     await this.#styleSwapedBrowsers(aOurTab, aOtherTab, () => {
-      this.#swapBrowserDocSheellsInner(aOurTab, aOtherTab);
+      this.#swapBrowserDocShellsInner(aOurTab, aOtherTab);
     });
   }
 
@@ -594,7 +624,7 @@ class nsZenWindowSync {
    * @param {boolean} options.focus - Indicates if the tab should be focused after the swap.
    * @param {boolean} options.onClose - Indicates if the swap is done during a tab close operation.
    */
-  #swapBrowserDocSheellsInner(aOurTab, aOtherTab, { focus = true, onClose = false } = {}) {
+  #swapBrowserDocShellsInner(aOurTab, aOtherTab, { focus = true, onClose = false } = {}) {
     // Can't swap between chrome and content processes.
     if (aOurTab.linkedBrowser.isRemoteBrowser != aOtherTab.linkedBrowser.isRemoteBrowser) {
       return false;
@@ -768,12 +798,11 @@ class nsZenWindowSync {
    *
    * @param {Window} aWindow - The window to move active tabs from.
    */
-  #moveAllActiveTabsToOtherWindows(aWindow) {
-    const mostRecentWindow = [...this.#browserWindows].find((win) => win !== aWindow);
+  #moveAllActiveTabsToOtherWindowsForClose(aWindow) {
+    const mostRecentWindow = this.#browserWindowsList.find((win) => win !== aWindow);
     if (!mostRecentWindow || !aWindow.gZenWorkspaces) {
       return;
     }
-    lazy.TabStateFlusher.flushWindow(aWindow);
     const activeTabsOnClosedWindow = aWindow.gZenWorkspaces.allStoredTabs.filter(
       (tab) => tab._zenContentsVisible
     );
@@ -781,11 +810,16 @@ class nsZenWindowSync {
       const targetTab = this.getItemFromWindow(mostRecentWindow, tab.id);
       if (targetTab) {
         this.log(`Moving active tab ${tab.id} to most recent window on close`);
-        this.#swapBrowserDocSheellsInner(targetTab, tab, {
+        targetTab._zenContentsVisible = true;
+        if (!tab.linkedBrowser) {
+          continue;
+        }
+        delete tab._zenContentsVisible;
+        this.#swapBrowserDocShellsInner(targetTab, tab, {
           focus: targetTab.selected,
           onClose: true,
         });
-        targetTab._zenContentsVisible = true;
+        this.#swapedTabsTabEntriesForWC.set(tab.linkedBrowser.permanentKey, targetTab);
         // We can animate later, whats important is to always stay on the same
         // process and avoid async operations here to avoid the closed window
         // being unloaded before the swap is done.
@@ -930,7 +964,7 @@ class nsZenWindowSync {
       (tab) => !tab.hasAttribute("zen-empty-tab")
     );
     const selectedTab = aWindow.gBrowser.selectedTab;
-    let win = [...this.#browserWindows][0];
+    let win = this.#firstSyncedWindow;
     const moveAllTabsToWindow = async (allowSelected = false) => {
       const { gBrowser, gZenWorkspaces } = win;
       win.focus();
@@ -1091,7 +1125,35 @@ class nsZenWindowSync {
       window.removeEventListener(eventName, this);
     }
     delete window.gZenWindowSync;
-    this.#moveAllActiveTabsToOtherWindows(window);
+    this.#moveAllActiveTabsToOtherWindowsForClose(window);
+  }
+
+  on_WindowCloseAndBrowserFlushed(aBrowsers) {
+    if (this.#swapedTabsTabEntriesForWC.size === 0) {
+      return;
+    }
+    for (let browser of aBrowsers) {
+      const tab = this.#swapedTabsTabEntriesForWC.get(browser.permanentKey);
+      if (tab) {
+        let win = tab.ownerGlobal;
+        this.log(`Finalizing swap for tab ${tab.id} on window close`);
+        lazy.TabStateCache.update(
+          tab.linkedBrowser.permanentKey,
+          lazy.TabStateCache.get(browser.permanentKey)
+        );
+        let tabData = this.#getTabEntriesFromCache(tab);
+        let activePageData = tabData.entries[tabData.index - 1] || null;
+
+        // If the page has a title, set it. When doing a swap and we still didn't
+        // flush the tab state, the title might not be correct.
+        if (activePageData) {
+          win.gBrowser.setInitialTabTitle(tab, activePageData.title, {
+            isContentTitle: activePageData.title && activePageData.title != activePageData.url,
+          });
+        }
+      }
+    }
+    this.#swapedTabsTabEntriesForWC.clear();
   }
 
   on_TabGroupCreate(aEvent) {
