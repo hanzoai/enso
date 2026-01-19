@@ -1129,6 +1129,7 @@ class nsZenWorkspaces {
         (tab.pinned && tab.hasAttribute("zen-empty-tab") && !tab.group)
       ) {
         // Remove any tabs where their workspace doesn't exist anymore
+        this.log("Removed zombie tab from non-existing workspace", tab);
         gBrowser.unpinTab(tab);
         gBrowser.removeTab(tab, {
           skipSessionStore: true,

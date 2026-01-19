@@ -56,6 +56,7 @@ const SYNC_FLAG_ICON = 1 << 1;
 const SYNC_FLAG_MOVE = 1 << 2;
 
 class nsZenWindowSync {
+  #initialized = false;
   constructor() {}
 
   /**
@@ -139,9 +140,10 @@ class nsZenWindowSync {
   }
 
   init() {
-    if (!lazy.gWindowSyncEnabled) {
+    if (!lazy.gWindowSyncEnabled || this.#initialized) {
       return;
     }
+    this.#initialized = true;
     for (let topic of OBSERVING) {
       Services.obs.addObserver(this, topic);
     }
@@ -151,6 +153,10 @@ class nsZenWindowSync {
   }
 
   uninit() {
+    if (!this.#initialized) {
+      return;
+    }
+    this.#initialized = false;
     for (let topic of OBSERVING) {
       Services.obs.removeObserver(this, topic);
     }

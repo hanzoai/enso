@@ -1,5 +1,5 @@
 diff --git a/browser/components/sessionstore/SessionSaver.sys.mjs b/browser/components/sessionstore/SessionSaver.sys.mjs
-index 9141793550f7c7ff6aa63d4c85bf571b4499e2d0..6906fd9be7ae6ca4316133e0d6552b797c54a7ec 100644
+index 9141793550f7c7ff6aa63d4c85bf571b4499e2d0..a4ce5de45f13eaa22803083eccb4e48a054fee39 100644
 --- a/browser/components/sessionstore/SessionSaver.sys.mjs
 +++ b/browser/components/sessionstore/SessionSaver.sys.mjs
 @@ -20,6 +20,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
@@ -27,3 +27,24 @@ index 9141793550f7c7ff6aa63d4c85bf571b4499e2d0..6906fd9be7ae6ca4316133e0d6552b79
      return this._writeState(state);
    },
  
+@@ -372,7 +374,19 @@ var SessionSaverInternal = {
+     // Write (atomically) to a session file, using a tmp file. Once the session
+     // file is successfully updated, save the time stamp of the last save and
+     // notify the observers.
+-    return lazy.SessionFile.write(state).then(
++    let stateToWrite = Cu.cloneInto(state, {});
++    if (Services.prefs.getBoolPref("zen.session-store.reduce-sessionstore-write-size", true)) {
++      for (let i = 0; i < stateToWrite.windows.length; i++) {
++        let win = stateToWrite.windows[i];
++        if (win.isPopup || win.isTaskbarTab || win.isZenUnsynced) {
++          continue;
++        }
++        win.tabs = [];
++        win.folders = [];
++        win.groups = [];
++      }
++    }
++    return lazy.SessionFile.write(stateToWrite).then(
+       () => {
+         this.updateLastSaveTime();
+         if (!lazy.RunState.isRunning) {

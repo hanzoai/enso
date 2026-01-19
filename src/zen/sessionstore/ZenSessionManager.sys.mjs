@@ -198,7 +198,7 @@ export class nsZenSessionManager {
    */
   onFileRead(initialState) {
     if (!lazy.gWindowSyncEnabled) {
-      return;
+      return initialState;
     }
     // For the first time after migration, we restore the tabs
     // That where going to be restored by SessionStore. The sidebar
@@ -235,19 +235,26 @@ export class nsZenSessionManager {
       "zen.session-store.restore-unsynced-windows",
       true
     );
-    this.log(`Restoring Zen session data into ${initialState.windows?.length || 0} windows`);
-    for (let i = 0; i < initialState.windows.length; i++) {
-      let winData = initialState.windows[i];
-      if (winData.isZenUnsynced) {
-        if (!allowRestoreUnsynced) {
-          // We don't wan't to restore any unsynced windows with the sidebar data.
-          this.log("Skipping restore of unsynced window");
-          delete initialState.windows[i];
+    if (!this._shouldRunMigration) {
+      this.log(`Restoring Zen session data into ${initialState.windows?.length || 0} windows`);
+      for (let i = 0; i < initialState.windows.length; i++) {
+        let winData = initialState.windows[i];
+        if (winData.isZenUnsynced) {
+          if (!allowRestoreUnsynced) {
+            // We don't wan't to restore any unsynced windows with the sidebar data.
+            this.log("Skipping restore of unsynced window");
+            delete initialState.windows[i];
+          }
+          continue;
         }
-        continue;
+        this.#restoreWindowData(winData);
       }
-      this.#restoreWindowData(winData);
+    } else {
+      this.log("Saving windata state after migration");
+      this.saveState(initialState);
     }
+    delete this._shouldRunMigration;
+    return initialState;
   }
 
   get #sidebar() {
@@ -304,9 +311,7 @@ export class nsZenSessionManager {
     }
     // Save the state to the sidebar object so that it gets written
     // to the session file.
-    this.saveState(initialState);
     delete this._migrationData;
-    delete this._shouldRunMigration;
   }
 
   /**
