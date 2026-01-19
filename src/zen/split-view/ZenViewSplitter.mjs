@@ -181,6 +181,9 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
    */
   onTabSelect(event) {
     const previousTab = event.detail.previousTab;
+    if (previousTab === gBrowser.selectedTab && this._canDrop) {
+      return;
+    }
     if (previousTab && !previousTab.hasAttribute("zen-empty-tab")) {
       this._lastOpenedTab = previousTab;
     }
@@ -1257,9 +1260,6 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
       this._data.push(splitData);
       if (!this._sessionRestoring && initialIndex >= 0) {
         window.gBrowser.selectedTab = tabs[tabIndexToUse] ?? tabs[0];
-      }
-
-      if (!this._sessionRestoring) {
         this.activateSplitView(splitData);
       }
 
@@ -1777,6 +1777,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
       delete this._dndElement;
     }
     if (this.fakeBrowser) {
+      delete this._canDrop;
       delete this._hasAnimated;
       this.fakeBrowser.remove();
       delete this.fakeBrowser;
@@ -2075,11 +2076,12 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
 
     for (const groupData of data) {
       const group = document.getElementById(groupData.groupId);
-      if (!group) {
+      if (!gBrowser.isTabGroup(group)) {
         continue;
       }
 
       // Backwards compatibility
+      group.setAttribute("split-view-group", "true");
       if (!groupData?.layoutTree) {
         this.splitTabs(group.tabs, group.gridType);
         delete this._sessionRestoring;

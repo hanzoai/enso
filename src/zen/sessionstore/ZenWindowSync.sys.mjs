@@ -571,10 +571,15 @@ class nsZenWindowSync {
    * @param {object} aOtherTab - The tab in the other window.
    */
   async #swapBrowserDocShellsAsync(aOurTab, aOtherTab) {
-    this.#maybeFlushTabState(aOtherTab);
-    await this.#styleSwapedBrowsers(aOurTab, aOtherTab, () => {
-      this.#swapBrowserDocShellsInner(aOurTab, aOtherTab);
-    });
+    let promise = this.#maybeFlushTabState(aOurTab);
+    await this.#styleSwapedBrowsers(
+      aOurTab,
+      aOtherTab,
+      () => {
+        this.#swapBrowserDocShellsInner(aOurTab, aOtherTab);
+      },
+      promise
+    );
   }
 
   /**
@@ -623,16 +628,17 @@ class nsZenWindowSync {
    * @param {object} options - Options object.
    * @param {boolean} options.focus - Indicates if the tab should be focused after the swap.
    * @param {boolean} options.onClose - Indicates if the swap is done during a tab close operation.
+   * @returns {Promise|null} A promise that resolves when the tab state is flushed, or null if the swap cannot be performed.
    */
   #swapBrowserDocShellsInner(aOurTab, aOtherTab, { focus = true, onClose = false } = {}) {
     // Can't swap between chrome and content processes.
     if (aOurTab.linkedBrowser.isRemoteBrowser != aOtherTab.linkedBrowser.isRemoteBrowser) {
-      return false;
+      return null;
     }
     // See https://github.com/zen-browser/desktop/issues/11851, swapping the browsers
     // don't seem to update the state's cache properly, leading to issues when restoring
     // the session later on.
-    let tabStateEntries = this.#getTabEntriesFromCache(aOtherTab);
+    let tabStateEntries = this.#getTabEntriesFromCache(aOurTab);
     // Running `swapBrowsersAndCloseOther` doesn't expect us to use the tab after
     // the operation, so it doesn't really care about cleaning up the other tab.
     // We need to make a new tab progress listener for the other tab after the swap.
@@ -681,13 +687,14 @@ class nsZenWindowSync {
       // inside the web content area without having to click outside and back in.
       aOurTab.linkedBrowser.blur();
       aOurTab.ownerGlobal.gBrowser._adjustFocusAfterTabSwitch(aOurTab);
+      aOurTab.linkedBrowser.docShellIsActive = true;
     }
     // Ensure the tab's state is flushed after the swap. By doing this,
     // we can re-schedule another session store delayed process to fire.
     // It's also important to note that if we don't flush the state here,
     // we would start receiving invalid history changes from the the incorrect
     // browser view that was just swapped out.
-    this.#maybeFlushTabState(aOurTab).finally(() => {
+    return this.#maybeFlushTabState(aOurTab).finally(() => {
       if (!tabStateEntries?.entries.length) {
         this.log(`Error: No tab state entries found for tab ${aOtherTab.id} during swap`);
         return;
@@ -696,7 +703,6 @@ class nsZenWindowSync {
         history: tabStateEntries,
       });
     });
-    return true;
   }
 
   /**
@@ -705,42 +711,45 @@ class nsZenWindowSync {
    * @param {object} aOurTab - The tab in the current window.
    * @param {object} aOtherTab - The tab in the other window.
    * @param {Function|undefined} callback - The callback function to execute after styling.
+   * @param {Promise|null} promiseToWait - A promise to wait for before executing the callback.
    */
-  async #styleSwapedBrowsers(aOurTab, aOtherTab, callback = undefined) {
+  #styleSwapedBrowsers(aOurTab, aOtherTab, callback = undefined, promiseToWait = null) {
     const ourBrowser = aOurTab.linkedBrowser;
     const otherBrowser = aOtherTab.linkedBrowser;
+    return new Promise((resolve) => {
+      aOurTab.ownerGlobal.requestAnimationFrame(async () => {
+        if (callback) {
+          const browserBlob = await aOtherTab.ownerGlobal.PageThumbs.captureToBlob(
+            aOtherTab.linkedBrowser,
+            {
+              fullScale: true,
+              fullViewport: true,
+            }
+          );
 
-    if (callback) {
-      const browserBlob = await aOtherTab.ownerGlobal.PageThumbs.captureToBlob(
-        aOtherTab.linkedBrowser,
-        {
-          fullScale: true,
-          fullViewport: true,
+          let mySrc = await new Promise((r, re) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(browserBlob);
+            reader.onloadend = function () {
+              // result includes identifier 'data:image/png;base64,' plus the base64 data
+              r(reader.result);
+            };
+            reader.onerror = function () {
+              re(new Error("Failed to read blob as data URL"));
+            };
+          });
+
+          this.#createPseudoImageForBrowser(otherBrowser, mySrc);
+          otherBrowser.setAttribute("zen-pseudo-hidden", "true");
+          await promiseToWait;
+          callback();
         }
-      );
 
-      let mySrc = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(browserBlob);
-        reader.onloadend = function () {
-          // result includes identifier 'data:image/png;base64,' plus the base64 data
-          resolve(reader.result);
-        };
-        reader.onerror = function () {
-          reject(new Error("Failed to read blob as data URL"));
-        };
+        this.#maybeRemovePseudoImageForBrowser(ourBrowser);
+        ourBrowser.removeAttribute("zen-pseudo-hidden");
+        resolve();
       });
-
-      const [img, loadPromise] = this.#createPseudoImageForBrowser(otherBrowser, mySrc);
-      // Run a reflow to ensure the image is rendered before hiding the browser.
-      void img.getBoundingClientRect();
-      await loadPromise;
-      otherBrowser.setAttribute("zen-pseudo-hidden", "true");
-      callback();
-    }
-
-    this.#maybeRemovePseudoImageForBrowser(ourBrowser);
-    ourBrowser.removeAttribute("zen-pseudo-hidden");
+    });
   }
 
   /**
@@ -748,18 +757,13 @@ class nsZenWindowSync {
    *
    * @param {object} aBrowser - The browser element to create the pseudo image for.
    * @param {string} aSrc - The source URL of the image.
-   * @returns {object} The created pseudo image element.
    */
   #createPseudoImageForBrowser(aBrowser, aSrc) {
     const doc = aBrowser.ownerDocument;
     const img = doc.createElement("img");
     img.className = "zen-pseudo-browser-image";
+    img.src = aSrc;
     aBrowser.after(img);
-    const loadPromise = new Promise((resolve) => {
-      img.onload = () => resolve();
-      img.src = aSrc;
-    });
-    return [img, loadPromise];
   }
 
   /**
@@ -846,15 +850,16 @@ class nsZenWindowSync {
     // Ignore previous tabs that are still "active". These scenarios could happen for example,
     // when selecting on a split view tab that was already active.
     if (aPreviousTab?._zenContentsVisible && !activeTabs.includes(aPreviousTab)) {
-      const otherTabToShow = this.#getActiveTabFromOtherWindows(
-        aWindow,
-        aPreviousTab.id,
-        (tab) => tab?.selected
-      );
-      if (otherTabToShow) {
-        otherTabToShow._zenContentsVisible = true;
-        delete aPreviousTab._zenContentsVisible;
-        await this.#swapBrowserDocShellsAsync(otherTabToShow, aPreviousTab);
+      let tabsToSwap = aPreviousTab.splitView ? aPreviousTab.group.tabs : [aPreviousTab];
+      for (const tab of tabsToSwap) {
+        const otherTabToShow = this.#getActiveTabFromOtherWindows(aWindow, tab.id, (t) =>
+          t?.splitView ? t.group.tabs.some((st) => st.selected) : t?.selected
+        );
+        if (otherTabToShow) {
+          otherTabToShow._zenContentsVisible = true;
+          delete tab._zenContentsVisible;
+          await this.#swapBrowserDocShellsAsync(otherTabToShow, tab);
+        }
       }
     }
     let promises = [];
@@ -1238,7 +1243,7 @@ class nsZenWindowSync {
         .map((tab) => this.getItemFromWindow(win, tab.id))
         .filter(Boolean);
       if (otherWindowTabs.length && win.gZenViewSplitter) {
-        const group = win.gZenViewSplitter.splitTabs(otherWindowTabs, "grid", -1);
+        const group = win.gZenViewSplitter.splitTabs(otherWindowTabs, undefined, -1);
         if (group) {
           let otherTabGroup = group.tabs[0].group;
           otherTabGroup.id = tabGroup.id;
