@@ -215,7 +215,7 @@ export class nsZenSessionManager {
     if (!initialState?.windows?.length) {
       this.log("No windows found in initial state, creating an empty one");
       initialState ||= {};
-      initialState.windows = [{}];
+      initialState.windows = this._shouldRunMigration ? [] : [{}];
     }
     // When we don't have browser.startup.page set to resume session,
     // we only want to restore the pinned tabs into the new windows.
@@ -455,7 +455,7 @@ export class nsZenSessionManager {
       // every window. We do this to avoid collecting tabs with invalid
       // state when multiple windows are open. Note that if we a tab without
       // this flag set in any other window, we just add it anyway.
-      for (const tabData of window.tabs) {
+      for (const tabData of window.tabs || []) {
         if (!tabIdRelationMap.has(tabData.zenSyncId) || tabData._zenIsActiveTab) {
           tabIdRelationMap.set(tabData.zenSyncId, tabData);
         }
