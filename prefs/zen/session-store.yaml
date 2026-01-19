@@ -10,9 +10,3 @@
 
 - name: zen.session-store.restore-unsynced-windows
   value: true
-
-- name: zen.session-store.reduce-sessionstore-write-size
-  value: true
-
-- name: zen.session-store.allow-restoring-closed-synced-windows
-  value: false

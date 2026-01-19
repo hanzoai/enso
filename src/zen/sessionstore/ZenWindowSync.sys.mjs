@@ -1012,7 +1012,7 @@ class nsZenWindowSync {
   on_TabOpen(aEvent) {
     const tab = aEvent.target;
     const window = tab.ownerGlobal;
-    const isUnsyncedWindow = window.document.documentElement.hasAttribute("zen-unsynced-window");
+    const isUnsyncedWindow = window.gZenWorkspaces.privateWindowOrDisabled;
 
     if (tab.id) {
       // This tab was opened as part of a sync operation.
