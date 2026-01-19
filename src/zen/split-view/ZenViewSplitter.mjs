@@ -1214,7 +1214,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
           return;
         }
         this.activateSplitView(group, true);
-        this.#dispatchItemEvent("ZenSplitViewTabsSplit", group);
+        this.#dispatchItemEvent("ZenSplitViewTabsSplit", group.tabs[0].group);
         // eslint-disable-next-line consistent-return
         return group;
       }
@@ -2075,6 +2075,9 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
 
     for (const groupData of data) {
       const group = document.getElementById(groupData.groupId);
+      if (!group) {
+        continue;
+      }
 
       // Backwards compatibility
       if (!groupData?.layoutTree) {
