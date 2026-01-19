@@ -13,3 +13,6 @@
 
 - name: zen.session-store.reduce-sessionstore-write-size
   value: true
+
+- name: zen.session-store.allow-restoring-closed-synced-windows
+  value: false
