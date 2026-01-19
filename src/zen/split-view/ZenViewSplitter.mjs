@@ -1177,9 +1177,11 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
    * @param {string|undefined} gridType - The type of grid layout.
    * @param {number} initialIndex - The index of the initially active tab.
    *                                use -1 to avoid selecting any tab.
+   * @param {object} options - Additional options.
+   * @param {string|null} options.groupFetchId - An optional group fetch ID.
    * @returns {object|undefined} The split view data or undefined if the split was not performed.
    */
-  splitTabs(tabs, gridType, initialIndex = 0) {
+  splitTabs(tabs, gridType, initialIndex = 0, { groupFetchId = null } = {}) {
     const tabIndexToUse = Math.max(0, initialIndex);
     return this.#withoutSplitViewTransition(() => {
       // TODO: Add support for splitting essential tabs
@@ -1207,7 +1209,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
           for (let i = 0; i < tabs.length; i++) {
             const tab = tabs[i];
             if (!group.tabs.includes(tab)) {
-              gBrowser.moveTabToExistingGroup(tab, this._getSplitViewGroup(tabs));
+              gBrowser.moveTabToExistingGroup(tab, this._getSplitViewGroup(tabs, groupFetchId));
               group.tabs.push(tab);
               this.addTabToSplit(tab, group.layoutTree);
             }
@@ -1241,7 +1243,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
       gridType ??= "grid";
 
       // Add tabs to the split view group
-      let splitGroup = this._getSplitViewGroup(tabs);
+      let splitGroup = this._getSplitViewGroup(tabs, groupFetchId);
       const groupId = splitGroup?.id;
       if (splitGroup) {
         for (const tab of tabs) {
@@ -2005,9 +2007,10 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
    * Gets or creates a tab group for split view tabs
    *
    * @param {Array} tabs Initial tabs to add to the group if creating new
+   * @param {string|null} id Optional ID for the group
    * @returns {TabGroup} The tab group for split view tabs
    */
-  _getSplitViewGroup(tabs) {
+  _getSplitViewGroup(tabs, id = null) {
     if (tabs.some((tab) => tab.hasAttribute("zen-essential"))) {
       return null;
     }
@@ -2028,6 +2031,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
     if (tabs?.length) {
       // Create a new group with the initial tabs
       group = gBrowser.addTabGroup(tabs, {
+        id,
         label: "",
         showCreateUI: false,
         insertBefore: tabs[0],

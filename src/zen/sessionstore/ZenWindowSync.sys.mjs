@@ -1247,7 +1247,9 @@ class nsZenWindowSync {
         .map((tab) => this.getItemFromWindow(win, tab.id))
         .filter(Boolean);
       if (otherWindowTabs.length && win.gZenViewSplitter) {
-        const group = win.gZenViewSplitter.splitTabs(otherWindowTabs, undefined, -1);
+        const group = win.gZenViewSplitter.splitTabs(otherWindowTabs, undefined, -1, {
+          groupFetchId: tabGroup.id,
+        });
         if (group) {
           let otherTabGroup = group.tabs[0].group;
           otherTabGroup.id = tabGroup.id;
