@@ -973,24 +973,22 @@ class nsZenWindowSync {
     const moveAllTabsToWindow = async (allowSelected = false) => {
       const { gBrowser, gZenWorkspaces } = win;
       win.focus();
-      let success = true;
+      let tabToSelect;
       for (const tab of tabsToMove) {
         if (tab !== selectedTab || allowSelected) {
           const newTab = gBrowser.adoptTab(tab, { tabIndex: Infinity });
-          if (!newTab) {
-            // The adoption failed. Restore "fadein" and don't increase the index.
-            tab.setAttribute("fadein", "true");
-            success = false;
-            continue;
-          }
           gZenWorkspaces.moveTabToWorkspace(newTab, aWorkspaceId);
+          if (!tabToSelect) {
+            tabToSelect = newTab;
+          }
         }
       }
-      if (success) {
-        aWindow.close();
-        await gZenWorkspaces.changeWorkspaceWithID(aWorkspaceId);
-        gBrowser.selectedBrowser.focus();
+      aWindow.close();
+      if (tabToSelect) {
+        gBrowser.selectedTab = tabToSelect;
       }
+      await gZenWorkspaces.changeWorkspaceWithID(aWorkspaceId);
+      gBrowser.selectedBrowser.focus();
     };
     if (!win) {
       this.log("No synced window found, creating a new one");

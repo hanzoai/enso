@@ -315,12 +315,14 @@ export class nsZenSessionManager {
    * @param {object} state The current session state.
    */
   saveState(state) {
-    if (!state?.windows?.length || !lazy.gWindowSyncEnabled) {
+    let windows = state?.windows || [];
+    windows = windows.filter((win) => !win.isPopup && !win.isTaskbarTab && !win.isZenUnsynced);
+    if (!windows.length || !lazy.gWindowSyncEnabled) {
       // Don't save (or even collect) anything in permanent private
       // browsing mode. We also don't want to save if there are no windows.
       return;
     }
-    this.#collectWindowData(state);
+    this.#collectWindowData(windows);
     // This would save the data to disk asynchronously or when
     // quitting the app.
     this.#file.data = this.#sidebar;
@@ -411,17 +413,19 @@ export class nsZenSessionManager {
   /**
    * Collects session data for a given window.
    *
-   * @param {object} state
-   *        The current session state.
+   * @param {object} aStateWindows The array of window state objects.
    */
-  #collectWindowData(state) {
+  #collectWindowData(aStateWindows) {
+    // We only want to collect the sidebar data once from
+    // a single window, as all windows share the same
+    // sidebar data.
     let sidebarData = this.#sidebar;
     if (!sidebarData) {
       sidebarData = {};
     }
 
     sidebarData.lastCollected = Date.now();
-    this.#collectTabsData(sidebarData, state);
+    this.#collectTabsData(sidebarData, aStateWindows);
     this.#sidebar = sidebarData;
   }
 
@@ -437,11 +441,11 @@ export class nsZenSessionManager {
    * Collects session data for all tabs in a given window.
    *
    * @param {object} sidebarData The sidebar data object to populate.
-   * @param {object} state The current session state.
+   * @param {object} aStateWindows The array of window state objects.
    */
-  #collectTabsData(sidebarData, state) {
+  #collectTabsData(sidebarData, aStateWindows) {
     const tabIdRelationMap = new Map();
-    for (const window of state.windows) {
+    for (const window of aStateWindows) {
       // Only accept the tabs with `_zenIsActiveTab` set to true from
       // every window. We do this to avoid collecting tabs with invalid
       // state when multiple windows are open. Note that if we a tab without
@@ -455,10 +459,11 @@ export class nsZenSessionManager {
 
     sidebarData.tabs = this.#filterUnusedTabs(Array.from(tabIdRelationMap.values()));
 
-    sidebarData.folders = state.windows[0].folders;
-    sidebarData.splitViewData = state.windows[0].splitViewData;
-    sidebarData.groups = state.windows[0].groups;
-    sidebarData.spaces = state.windows[0].spaces;
+    let firstWindow = aStateWindows[0];
+    sidebarData.folders = firstWindow.folders;
+    sidebarData.splitViewData = firstWindow.splitViewData;
+    sidebarData.groups = firstWindow.groups;
+    sidebarData.spaces = firstWindow.spaces;
   }
 
   /**
