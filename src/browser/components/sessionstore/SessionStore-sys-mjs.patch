@@ -1,5 +1,5 @@
 diff --git a/browser/components/sessionstore/SessionStore.sys.mjs b/browser/components/sessionstore/SessionStore.sys.mjs
-index 2a055f0c5f34f0a2667f659185120c07d38f4e41..5b16b12fb02799b12543294a9fccceef47067d53 100644
+index 2a055f0c5f34f0a2667f659185120c07d38f4e41..6b05f51e4731af3d1fc96b257fa0d35582182e4b 100644
 --- a/browser/components/sessionstore/SessionStore.sys.mjs
 +++ b/browser/components/sessionstore/SessionStore.sys.mjs
 @@ -127,6 +127,9 @@ const TAB_EVENTS = [
@@ -54,6 +54,15 @@ index 2a055f0c5f34f0a2667f659185120c07d38f4e41..5b16b12fb02799b12543294a9fccceef
      let tabbrowser = aWindow.gBrowser;
  
      // add tab change listeners to all already existing tabs
+@@ -2076,7 +2085,7 @@ var SessionStoreInternal = {
+     let isTaskbarTab = this._windows[aWindow.__SSi].isTaskbarTab;
+     // A regular window is not a private window, taskbar tab window, or popup window
+     let isRegularWindow =
+-      !isPrivateWindow && !isTaskbarTab && aWindow.toolbar.visible;
++      !isPrivateWindow && !isTaskbarTab && aWindow.toolbar.visible && !this._windows[aWindow.__SSi].isZenUnsynced;
+ 
+     // perform additional initialization when the first window is loading
+     if (lazy.RunState.isStopped) {
 @@ -2131,6 +2140,7 @@ var SessionStoreInternal = {
            null,
            "sessionstore-one-or-no-tab-restored"
@@ -284,7 +293,17 @@ index 2a055f0c5f34f0a2667f659185120c07d38f4e41..5b16b12fb02799b12543294a9fccceef
  
      if (tabData.pinned) {
        tabbrowser.pinTab(tab);
-@@ -7343,7 +7403,7 @@ var SessionStoreInternal = {
+@@ -6567,6 +6627,9 @@ var SessionStoreInternal = {
+         aWindow.gURLBar.readOnly = false;
+       }
+     }
++    if (aWinData.isZenUnsynced) {
++      this._windows[aWindow.__SSi].isZenUnsynced = true;
++    }
+ 
+     let promiseParts = Promise.withResolvers();
+     aWindow.setTimeout(() => {
+@@ -7343,7 +7406,7 @@ var SessionStoreInternal = {
  
        let groupsToSave = new Map();
        for (let tIndex = 0; tIndex < window.tabs.length; ) {
@@ -293,7 +312,7 @@ index 2a055f0c5f34f0a2667f659185120c07d38f4e41..5b16b12fb02799b12543294a9fccceef
            // Adjust window.selected
            if (tIndex + 1 < window.selected) {
              window.selected -= 1;
-@@ -7358,7 +7418,7 @@ var SessionStoreInternal = {
+@@ -7358,7 +7421,7 @@ var SessionStoreInternal = {
            );
            // We don't want to increment tIndex here.
            continue;
