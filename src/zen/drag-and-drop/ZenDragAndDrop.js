@@ -204,12 +204,7 @@
         ? dragData.screenY
         : dragData.screenX;
       let allTabs = this._tabbrowserTabs.ariaFocusableItems;
-      let numEssentials = gBrowser._numZenEssentials;
-      let isEssential = draggedTab.hasAttribute("zen-essential");
-      let tabs = allTabs.slice(
-        isEssential ? 0 : numEssentials,
-        isEssential ? numEssentials : undefined
-      );
+      let tabs = allTabs;
       if (!tabs.length) {
         tabs = [...movingTabs];
       }
@@ -242,7 +237,9 @@
       dragData.translateY = translateY;
 
       // Move the dragged tab based on the mouse position.
-      let periphery = document.getElementById("tabbrowser-arrowscrollbox-periphery");
+      let periphery = gZenWorkspaces.activeWorkspaceElement.querySelector(
+        "#tabbrowser-arrowscrollbox-periphery"
+      );
       let lastMovingTab = movingTabs.at(-1);
       let firstMovingTab = movingTabs[0];
       let endEdge = (ele) => ele[screenAxis] + bounds(ele)[size];
@@ -459,9 +456,7 @@
         // 4) we just started dragging and the `oldDropElementIndex` has its default
         //    valuë of `movingTabs[0].elementIndex`. In this case, the drop element
         //    shouldn't be a moving tab, so keep it `undefined`.
-        let lastPossibleDropElement = this._rtlMode
-          ? tabs.find((t) => t != draggedTab)
-          : tabs.findLast((t) => t != draggedTab);
+        let lastPossibleDropElement = this._rtlMode ? tabs.find((t) => t != draggedTab) : undefined;
         let maxElementIndexForDropElement = lastPossibleDropElement?.elementIndex;
         if (Number.isInteger(maxElementIndexForDropElement)) {
           let index = Math.min(oldDropElementIndex, maxElementIndexForDropElement);
@@ -653,7 +648,7 @@
         clientX < 0 || clientX > innerWidth || clientY < 0 || clientY > innerHeight;
       if (isOutOfWindow && !this.#isOutOfWindow) {
         this.#isOutOfWindow = true;
-        this.maybeClearVerticalPinnedGridDragOver();
+        this.#maybeClearVerticalPinnedGridDragOver();
         this.clearSpaceSwitchTimer();
         this.clearDragOverVisuals();
         const dt = event.dataTransfer;
@@ -687,6 +682,7 @@
       this.clearSpaceSwitchTimer();
       gZenFolders.highlightGroupOnDragOver(null);
       super.handle_drop(event);
+      this.#maybeClearVerticalPinnedGridDragOver();
       const dt = event.dataTransfer;
       const activeWorkspace = gZenWorkspaces.activeWorkspace;
       let draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
@@ -831,7 +827,7 @@
       super.handle_dragend(event);
       this.#removeDragOverBackground();
       gZenPinnedTabManager.removeTabContainersDragoverClass();
-      this.maybeClearVerticalPinnedGridDragOver();
+      this.#maybeClearVerticalPinnedGridDragOver();
       this.originalDragImageArgs = [];
       window.removeEventListener("dragover", this.handle_windowDragEnter, { capture: true });
       this.#isOutOfWindow = false;
@@ -884,25 +880,31 @@
     // eslint-disable-next-line complexity
     #applyDragoverIndicator(event, dropElement, movingTabs, draggedTab) {
       const separation = 4;
-      const dropZoneSelector =
-        ":is(.tabbrowser-tab, .zen-drop-target, .tab-group-label-container, tab-group[split-view-group])";
+      const dropZoneSelector = ":is(.zen-drop-target)";
       let shouldPlayHapticFeedback = false;
       let showIndicatorUnderNewTabButton = false;
       let dropBefore = false;
       let dropElementFromEvent = event.target.closest(dropZoneSelector);
+      dropElement = dropElementFromEvent || dropElement;
       if (!dropElementFromEvent) {
-        if (event.target.classList.contains("zen-workspace-empty-space")) {
-          dropElement = this._tabbrowserTabs.ariaFocusableItems.at(-1);
+        if (
+          event.target.classList.contains("zen-workspace-empty-space") ||
+          event.target.closest("#tabbrowser-arrowscrollbox-periphery")
+        ) {
+          let lastTab = gBrowser.tabs.at(-1);
+          dropElement = this._tabbrowserTabs.ariaFocusableItems.at(-1) || lastTab;
           // Only if there are no normal tabs to drop after
-          showIndicatorUnderNewTabButton =
-            gBrowser.tabs[gBrowser.tabs.length - 1].hasAttribute("zen-empty-tab");
+          showIndicatorUnderNewTabButton = lastTab.hasAttribute("zen-empty-tab");
         }
       }
       dropElement = elementToMove(dropElement);
-      this.maybeClearVerticalPinnedGridDragOver();
+      this.#maybeClearVerticalPinnedGridDragOver();
       if (this.#lastDropTarget !== dropElement) {
         shouldPlayHapticFeedback = this.#lastDropTarget !== null;
         this.#removeDragOverBackground();
+      }
+      if (!dropElement) {
+        return null;
       }
       let possibleFolderElement = dropElement.parentElement;
       let isZenFolder = possibleFolderElement?.isZenFolder;
@@ -1234,7 +1236,7 @@
       }
     }
 
-    maybeClearVerticalPinnedGridDragOver() {
+    #maybeClearVerticalPinnedGridDragOver() {
       if (this._fakeEssentialTab) {
         this._fakeEssentialTab.remove();
         delete this._fakeEssentialTab;

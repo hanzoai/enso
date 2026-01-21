@@ -560,7 +560,10 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
       );
       const essentialTabsTarget = event.target.closest(".zen-essentials-container");
       const tabsTarget = !pinnedTabsTarget;
-      gBrowser.tabContainer.tabDragAndDrop.maybeClearVerticalPinnedGridDragOver();
+      let currentEssenialContainer = gZenWorkspaces.getCurrentEssentialsContainer();
+      if (currentEssenialContainer?.essentialsPromo) {
+        currentEssenialContainer.essentialsPromo.remove();
+      }
 
       // TODO: Solve the issue of adding a tab between two groups
       // Remove group labels from the moving tabs and replace it
