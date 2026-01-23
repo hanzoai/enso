@@ -627,6 +627,11 @@
             gZenWorkspaces
               .changeWorkspaceShortcut(isNearLeftEdge ? -1 : 1, false, /* Disable wrapping */ true)
               .then((spaceChanged) => {
+                if (AppConstants.platform !== "macosx") {
+                  // See the hack in #createDragImageForTabs for more details which
+                  // explains why we need to do this on non-macOS platforms.
+                  return;
+                }
                 let tabs = this.originalDragImageArgs[0].children;
                 const { isDarkMode, isExplicitMode } =
                   gZenThemePicker.getGradientForWorkspace(spaceChanged);

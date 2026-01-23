@@ -155,8 +155,8 @@
 
 /* Mark workspaces indicator */
 .zen-current-workspace-indicator {
-  --indicator-gap: var(--toolbarbutton-inner-padding);
-  padding: calc(3px + var(--tab-inline-padding) + var(--zen-toolbox-padding));
+  --indicator-gap: calc(var(--toolbarbutton-inner-padding) - 1px);
+  padding: calc(2px + var(--tab-inline-padding) + var(--zen-toolbox-padding));
   font-weight: 500;
   position: relative;
   max-height: var(--zen-workspace-indicator-height);
@@ -231,7 +231,7 @@
 
     @media (-moz-platform: windows) {
       & img {
-        margin-bottom: -4px;
+        margin-bottom: -2px;
       }
     }
   }

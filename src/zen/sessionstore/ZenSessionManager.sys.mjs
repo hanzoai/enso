@@ -205,7 +205,7 @@ export class nsZenSessionManager {
     // object will always be empty after migration because we haven't
     // gotten the opportunity to save the session yet.
     if (this._shouldRunMigration) {
-      this.#runStateMigration(initialState);
+      initialState = this.#runStateMigration(initialState);
     }
     // If there are no windows, we create an empty one. By default,
     // firefox would create simply a new empty window, but we want
@@ -215,7 +215,11 @@ export class nsZenSessionManager {
     if (!initialState?.windows?.length) {
       this.log("No windows found in initial state, creating an empty one");
       initialState ||= {};
-      initialState.windows = this._shouldRunMigration ? [] : [{}];
+      initialState.windows = [
+        {
+          tabs: [],
+        },
+      ];
     }
     // When we don't have browser.startup.page set to resume session,
     // we only want to restore the pinned tabs into the new windows.
@@ -295,6 +299,14 @@ export class nsZenSessionManager {
         this.log("Restoring tabs from last closed normal window");
       }
     }
+    if (!initialState?.windows?.length) {
+      initialState ||= {};
+      initialState.windows = [
+        {
+          tabs: [],
+        },
+      ];
+    }
     for (const winData of initialState?.windows || []) {
       winData.spaces = this._migrationData?.spaces || [];
       if (winData.tabs) {
@@ -312,6 +324,7 @@ export class nsZenSessionManager {
     // Save the state to the sidebar object so that it gets written
     // to the session file.
     delete this._migrationData;
+    return initialState;
   }
 
   /**
