@@ -10,7 +10,6 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.sys.mjs",
-  SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
   TabStateFlusher: "resource:///modules/sessionstore/TabStateFlusher.sys.mjs",
   // eslint-disable-next-line mozilla/valid-lazy
   ZenSessionStore: "resource:///modules/zen/ZenSessionManager.sys.mjs",
@@ -21,7 +20,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
 XPCOMUtils.defineLazyPreferenceGetter(lazy, "gWindowSyncEnabled", "zen.window-sync.enabled");
 XPCOMUtils.defineLazyPreferenceGetter(lazy, "gShouldLog", "zen.window-sync.log", true);
 
-const OBSERVING = ["browser-window-before-show"];
+const OBSERVING = ["browser-window-before-show", "sessionstore-windows-restored"];
 const INSTANT_EVENTS = ["SSWindowClosing"];
 const UNSYNCED_WINDOW_EVENTS = ["TabOpen"];
 const EVENTS = [
@@ -148,9 +147,6 @@ class nsZenWindowSync {
     for (let topic of OBSERVING) {
       Services.obs.addObserver(this, topic);
     }
-    lazy.SessionStore.promiseAllWindowsRestored.then(() => {
-      this.#onSessionStoreInitialized();
-    });
   }
 
   uninit() {
@@ -295,6 +291,10 @@ class nsZenWindowSync {
     switch (aTopic) {
       case "browser-window-before-show": {
         this.#onWindowBeforeShow(aSubject);
+        break;
+      }
+      case "sessionstore-windows-restored": {
+        this.#onSessionStoreInitialized();
         break;
       }
     }
