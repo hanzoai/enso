@@ -2739,6 +2739,7 @@ class nsZenWorkspaces {
 
     let nextWorkspace = workspaces[targetIndex];
     await this.changeWorkspace(nextWorkspace, { whileScrolling });
+    return nextWorkspace;
   }
 
   #initializeWorkspaceTabContextMenus() {

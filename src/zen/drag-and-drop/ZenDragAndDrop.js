@@ -144,6 +144,11 @@
           if (tabClone.hasAttribute("visuallyselected")) {
             tabClone.style.transform = "translate(-50%, -50%)";
           }
+        } else if (AppConstants.platform !== "macosx") {
+          // On windows and linux, we still don't add some extra opaqueness
+          // for the tab to be more visible. This is a hacky workaround.
+          // TODO: Make windows and linux DnD use nsZenDragAndDrop::mDragImageOpacity
+          tabClone.style.colorScheme = "light";
         }
         if (i > 0) {
           tabClone.style.transform = `translate(${i * 4}px, -${i * (tabRect.height - 4)}px)`;
@@ -157,6 +162,13 @@
           const label = tabClone.textLabel;
           const tabLabelParentWidth = label.parentElement.getBoundingClientRect().width;
           label.textContent = label.textContent.slice(0, Math.floor(tabLabelParentWidth / 6));
+        } else if (gBrowser.isTabGroup(tabClone) && tabClone.hasAttribute("split-view-group")) {
+          let tabs = tab.tabs;
+          for (let j = 0; j < tabs.length; j++) {
+            const tabInGroup = tabs[j];
+            const tabInGroupClone = tabInGroup.cloneNode(true);
+            tabClone.appendChild(tabInGroupClone);
+          }
         }
       }
       this.#maybeCreateDragImageDot(movingTabs, wrapper);
@@ -610,12 +622,25 @@
         if (!this.#changeSpaceTimer) {
           this.#changeSpaceTimer = setTimeout(() => {
             this.clearDragOverVisuals();
-            dt.updateDragImage(...this.originalDragImageArgs);
-            gZenWorkspaces.changeWorkspaceShortcut(
-              isNearLeftEdge ? -1 : 1,
-              false,
-              /* Disable wrapping */ true
-            );
+            gZenWorkspaces
+              .changeWorkspaceShortcut(isNearLeftEdge ? -1 : 1, false, /* Disable wrapping */ true)
+              .then((spaceChanged) => {
+                let tabs = this.originalDragImageArgs[0].children;
+                const { isDarkMode, isExplicitMode } =
+                  gZenThemePicker.getGradientForWorkspace(spaceChanged);
+                for (let tab of tabs) {
+                  if (isExplicitMode) {
+                    tab.style.colorScheme = isDarkMode ? "dark" : "light";
+                  } else {
+                    tab.style.colorScheme = "";
+                  }
+                }
+                requestAnimationFrame(() => {
+                  requestAnimationFrame(() => {
+                    dt.updateDragImage(...this.originalDragImageArgs);
+                  });
+                });
+              });
             this.#changeSpaceTimer = null;
           }, this._dndSwitchSpaceDelay);
         }
@@ -708,7 +733,10 @@
       if (isTabGroupLabel(dropElement)) {
         dropElement = dropElement.group;
       }
-      if (isTabGroupLabel(draggedTab)) {
+      if (
+        isTabGroupLabel(draggedTab) ||
+        (isTab(draggedTab) && draggedTab.group?.hasAttribute("split-view-group"))
+      ) {
         draggedTab = draggedTab.group;
       }
       for (let item of this._tabbrowserTabs.ariaFocusableItems) {

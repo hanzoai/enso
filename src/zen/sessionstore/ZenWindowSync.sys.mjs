@@ -15,6 +15,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   // eslint-disable-next-line mozilla/valid-lazy
   ZenSessionStore: "resource:///modules/zen/ZenSessionManager.sys.mjs",
   TabStateCache: "resource:///modules/sessionstore/TabStateCache.sys.mjs",
+  setTimeout: "resource://gre/modules/Timer.sys.mjs",
 });
 
 XPCOMUtils.defineLazyPreferenceGetter(lazy, "gWindowSyncEnabled", "zen.window-sync.enabled");
@@ -28,7 +29,6 @@ const EVENTS = [
 
   "ZenTabIconChanged",
   "ZenTabLabelChanged",
-  "TabAttrModified",
 
   "TabMove",
   "TabPinned",
@@ -177,6 +177,13 @@ class nsZenWindowSync {
    * @param {Window} aWindow - The browser window that is about to be shown.
    */
   #onWindowBeforeShow(aWindow) {
+    if (
+      aWindow.gZenWindowSync ||
+      aWindow.document.documentElement.hasAttribute("zen-unsynced-window")
+    ) {
+      return;
+    }
+    this.log("Setting up window sync for window", aWindow);
     // There are 2 possibilities to know if we are trying to open
     // a new *unsynced* window:
     // 1. We are passing `zen-unsynced` in the window arguments.
@@ -222,6 +229,7 @@ class nsZenWindowSync {
     // that didn't have this feature.
     await this.#runOnAllWindowsAsync(null, async (aWindow) => {
       const { gZenWorkspaces } = aWindow;
+      this.#onWindowBeforeShow(aWindow);
       await gZenWorkspaces.promiseInitialized;
       for (let tab of gZenWorkspaces.allStoredTabs) {
         if (!tab.id) {
@@ -578,6 +586,16 @@ class nsZenWindowSync {
    * @param {object} aOtherTab - The tab in the other window.
    */
   async #swapBrowserDocShellsAsync(aOurTab, aOtherTab) {
+    if (!this.#canSwapBrowsers(aOurTab, aOtherTab)) {
+      this.log(
+        `Cannot swap browsers between tabs ${aOurTab.id} and ${aOtherTab.id} due to process mismatch`
+      );
+      return;
+    }
+    if (aOtherTab.closing) {
+      this.log(`Cannot swap browsers, other tab ${aOtherTab.id} is closing`);
+      return;
+    }
     let promise = this.#maybeFlushTabState(aOtherTab);
     await this.#styleSwapedBrowsers(
       aOurTab,
@@ -628,6 +646,27 @@ class nsZenWindowSync {
   }
 
   /**
+   * Checks if two tabs can have their browsers swapped.
+   *
+   * @param {object} aOurTab - The tab in the current window.
+   * @param {object} aOtherTab - The tab in the other window.
+   * @returns {boolean} True if the tabs can be swapped, false otherwise.
+   */
+  #canSwapBrowsers(aOurTab, aOtherTab) {
+    // In this case, the other tab is most likely discarded or pending.
+    // We *shouldn't* care about this scenario since the remoteness should be
+    // the same anyways.
+    if (!aOurTab.linkedBrowser || !aOtherTab.linkedBrowser) {
+      return true;
+    }
+    // Can't swap between chrome and content processes.
+    if (aOurTab.linkedBrowser.isRemoteBrowser != aOtherTab.linkedBrowser.isRemoteBrowser) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * Swaps the browser docshells between two tabs.
    *
    * @param {object} aOurTab - The tab in the current window.
@@ -639,7 +678,10 @@ class nsZenWindowSync {
    */
   #swapBrowserDocShellsInner(aOurTab, aOtherTab, { focus = true, onClose = false } = {}) {
     // Can't swap between chrome and content processes.
-    if (aOurTab.linkedBrowser.isRemoteBrowser != aOtherTab.linkedBrowser.isRemoteBrowser) {
+    if (!this.#canSwapBrowsers(aOurTab, aOtherTab)) {
+      this.log(
+        `Cannot swap browsers between tabs ${aOurTab.id} and ${aOtherTab.id} due to process mismatch`
+      );
       return null;
     }
     // See https://github.com/zen-browser/desktop/issues/11851, swapping the browsers
@@ -1012,13 +1054,30 @@ class nsZenWindowSync {
     moveAllTabsToWindow(true);
   }
 
+  /**
+   * Updates the initial pinned tab image for all windows if not already set.
+   *
+   * @param {object} aTab - The tab to update the image for.
+   */
+  #maybeEditAllTabsEntryImage(aTab) {
+    if (!aTab?._zenPinnedInitialState || aTab._zenPinnedInitialState.image) {
+      return;
+    }
+    let image = aTab.getAttribute("image") || aTab.ownerGlobal.gBrowser.getIcon(aTab);
+    this.#runOnAllWindows(null, (win) => {
+      const targetTab = this.getItemFromWindow(win, aTab.id);
+      if (targetTab) {
+        targetTab._zenPinnedInitialState.image = image;
+      }
+    });
+  }
+
   /* Mark: Event Handlers */
 
   on_TabOpen(aEvent) {
     const tab = aEvent.target;
     const window = tab.ownerGlobal;
     const isUnsyncedWindow = window.gZenWorkspaces.privateWindowOrDisabled;
-
     if (tab.id) {
       // This tab was opened as part of a sync operation.
       return;
@@ -1045,32 +1104,12 @@ class nsZenWindowSync {
     this.#maybeFlushTabState(tab);
   }
 
-  on_TabAttrModified(aEvent) {
-    if (!aEvent.detail.changed.includes("image")) {
-      return;
-    }
-    const tab = aEvent.target;
-    if (
-      !tab?._zenContentsVisible ||
-      !tab?._zenPinnedInitialState ||
-      tab._zenPinnedInitialState.image
-    ) {
-      return;
-    }
-    let image = tab.getAttribute("image") || tab.ownerGlobal.gBrowser.getIcon(tab);
-    this.#runOnAllWindows(null, (win) => {
-      const targetTab = this.getItemFromWindow(win, tab.id);
-      if (targetTab) {
-        targetTab._zenPinnedInitialState.image = image;
-      }
-    });
-  }
-
   on_ZenTabIconChanged(aEvent) {
     if (!aEvent.target?._zenContentsVisible) {
       // No need to sync icon changes for tabs that aren't active in this window.
       return;
     }
+    this.#maybeEditAllTabsEntryImage(aEvent.target);
     return this.#delegateGenericSyncEvent(aEvent, SYNC_FLAG_ICON);
   }
 
@@ -1284,7 +1323,11 @@ class nsZenWindowSync {
       }
     });
 
-    return this.#onTabSwitchOrWindowFocus(window, null, /* ignoreSameTab = */ true);
+    return new Promise((resolve) => {
+      lazy.setTimeout(() => {
+        this.#onTabSwitchOrWindowFocus(window, null, /* ignoreSameTab = */ true).finally(resolve);
+      }, 0);
+    });
   }
 }
 
