@@ -129,12 +129,13 @@
       );
       const tabRect = window.windowUtils.getBoundsWithoutFlushing(movingTabs[0]);
       const wrapper = document.createElement("div");
+      let movingTabsCount = Math.min(movingTabs.length, 3);
       wrapper.style.width = tabRect.width + "px";
-      wrapper.style.height = tabRect.height * movingTabs.length + "px";
+      wrapper.style.height = tabRect.height * movingTabsCount + "px";
       wrapper.style.position = "fixed";
       wrapper.style.top = "-9999px";
       periphery.appendChild(wrapper);
-      for (let i = 0; i < movingTabs.length; i++) {
+      for (let i = 0; i < movingTabsCount; i++) {
         const tab = movingTabs[i];
         const tabClone = tab.cloneNode(true);
         if (tab.hasAttribute("zen-essential")) {
@@ -149,6 +150,7 @@
           // for the tab to be more visible. This is a hacky workaround.
           // TODO: Make windows and linux DnD use nsZenDragAndDrop::mDragImageOpacity
           tabClone.style.colorScheme = "light";
+          tabClone.style.color = "black";
         }
         if (i > 0) {
           tabClone.style.transform = `translate(${i * 4}px, -${i * (tabRect.height - 4)}px)`;
