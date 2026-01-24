@@ -973,13 +973,15 @@
             (possibleFolderElement.collapsed ||
               possibleFolderElement.childGroupsAndTabs.length < 2)));
       if (
-        isTabGroupLabel(draggedTab) &&
-        draggedTab.group?.isZenFolder &&
-        (isTab(dropElement) || dropElement.hasAttribute("split-view-group")) &&
-        (!dropElement.pinned || dropElement.hasAttribute("zen-essential"))
+        (isTabGroupLabel(draggedTab) &&
+          draggedTab.group?.isZenFolder &&
+          (isTab(dropElement) || dropElement.hasAttribute("split-view-group")) &&
+          (!dropElement.pinned || dropElement.hasAttribute("zen-essential"))) ||
+        showIndicatorUnderNewTabButton
       ) {
+        dropElement = null;
         this.clearDragOverVisuals();
-        return null;
+        return [dropElement, dropBefore];
       }
       if (
         isTab(dropElement) ||
@@ -994,7 +996,7 @@
         let top = 0;
         threshold =
           Services.prefs.getIntPref("browser.tabs.dragDrop.moveOverThresholdPercent") / 100;
-        if (overlapPercent > threshold) {
+        if (overlapPercent > threshold || showIndicatorUnderNewTabButton) {
           top = Math.round(rect.top + rect.height) + "px";
           dropBefore = false;
         } else {

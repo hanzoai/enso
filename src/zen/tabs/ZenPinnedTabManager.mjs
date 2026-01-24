@@ -565,6 +565,12 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
         currentEssenialContainer.essentialsPromo.remove();
       }
 
+      movingTabs = movingTabs.filter((tab) =>
+        gBrowser.isTabGroupLabel(tab)
+          ? tab.group?.isZenFolder && !tabsTarget && !essentialTabsTarget
+          : true
+      );
+
       // TODO: Solve the issue of adding a tab between two groups
       // Remove group labels from the moving tabs and replace it
       // with the sub tabs
