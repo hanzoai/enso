@@ -1116,9 +1116,7 @@ class nsZenKeyboardShortcutsVersioner {
           "N",
           "",
           ZEN_OTHER_SHORTCUTS_GROUP,
-          AppConstants.platform === "win"
-            ? nsKeyShortcutModifiers.fromObject({ alt: true })
-            : nsKeyShortcutModifiers.fromObject({ accel: true, alt: true }),
+          nsKeyShortcutModifiers.fromObject({ accel: true, shift: true }),
           "cmd_zenNewNavigatorUnsynced",
           "zen-new-unsynced-window-shortcut"
         )
