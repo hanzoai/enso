@@ -1109,7 +1109,7 @@ class nsZenKeyboardShortcutsVersioner {
 
     if (version < 15) {
       // Migrate from version 13 to 14
-      // Add shortcut to open a new unsynced window: Default accelt+option+N (Ctrl+Alt+N on non-macOS)
+      // Add shortcut to open a new unsynced window: Default accelt+shift+N
       data.push(
         new KeyShortcut(
           "zen-new-unsynced-window",

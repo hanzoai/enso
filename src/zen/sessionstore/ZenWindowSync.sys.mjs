@@ -17,7 +17,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   setTimeout: "resource://gre/modules/Timer.sys.mjs",
 });
 
-XPCOMUtils.defineLazyPreferenceGetter(lazy, "gWindowSyncEnabled", "zen.window-sync.enabled");
+XPCOMUtils.defineLazyPreferenceGetter(lazy, "gWindowSyncEnabled", "zen.window-sync.enabled", true);
 XPCOMUtils.defineLazyPreferenceGetter(lazy, "gShouldLog", "zen.window-sync.log", true);
 
 const OBSERVING = ["browser-window-before-show", "sessionstore-windows-restored"];
