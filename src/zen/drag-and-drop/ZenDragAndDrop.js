@@ -105,7 +105,7 @@
 
     startTabDrag(event, tab, ...args) {
       this.ZenDragAndDropService.onDragStart(1);
-
+      gZenCompactModeManager._isTabBeingDragged = true;
       super.startTabDrag(event, tab, ...args);
       const dt = event.dataTransfer;
       if (isTabGroupLabel(tab)) {
@@ -873,6 +873,10 @@
       if (this._tempDragImageParent) {
         this._tempDragImageParent.remove();
         delete this._tempDragImageParent;
+      }
+      delete gZenCompactModeManager._isTabBeingDragged;
+      if (dt.dropEffect !== "move") {
+        gZenCompactModeManager._clearAllHoverStates();
       }
     }
 
