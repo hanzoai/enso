@@ -1171,6 +1171,9 @@ class nsZenWindowSync {
   }
 
   on_focus(aEvent) {
+    if (typeof aEvent.target !== "object") {
+      return;
+    }
     const { ownerGlobal: window } = aEvent.target;
     if (
       !window?.gBrowser ||
