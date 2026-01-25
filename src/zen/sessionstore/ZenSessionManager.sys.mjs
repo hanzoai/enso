@@ -301,11 +301,14 @@ export class nsZenSessionManager {
     }
     if (!initialState?.windows?.length) {
       initialState ||= {};
-      initialState.windows = [
-        {
-          tabs: [],
-        },
-      ];
+      let lastSessionState = initialState.lastSessionState || {};
+      initialState.windows = lastSessionState.windows?.length
+        ? [...lastSessionState.windows]
+        : [
+            {
+              tabs: [],
+            },
+          ];
     }
     for (const winData of initialState?.windows || []) {
       winData.spaces = this._migrationData?.spaces || [];
