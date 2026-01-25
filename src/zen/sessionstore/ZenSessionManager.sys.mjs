@@ -286,6 +286,9 @@ export class nsZenSessionManager {
         spaces: this._migrationData?.spaces || [],
       };
     }
+    if (!initialState?.windows?.length && initialState?.lastSessionState) {
+      initialState = { ...initialState.lastSessionState };
+    }
     // There might be cases where there are no windows in the
     // initial state, for example if the user had 'restore previous
     // session' disabled before migration. In that case, we try
@@ -301,14 +304,11 @@ export class nsZenSessionManager {
     }
     if (!initialState?.windows?.length) {
       initialState ||= {};
-      let lastSessionState = initialState.lastSessionState || {};
-      initialState.windows = lastSessionState.windows?.length
-        ? [...lastSessionState.windows]
-        : [
-            {
-              tabs: [],
-            },
-          ];
+      initialState.windows = [
+        {
+          tabs: [],
+        },
+      ];
     }
     for (const winData of initialState?.windows || []) {
       winData.spaces = this._migrationData?.spaces || [];
