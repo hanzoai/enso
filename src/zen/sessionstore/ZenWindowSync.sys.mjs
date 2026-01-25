@@ -1087,7 +1087,7 @@ class nsZenWindowSync {
     }
     tab._zenContentsVisible = true;
     tab.id = this.#newTabSyncId;
-    if (isUnsyncedWindow) {
+    if (isUnsyncedWindow || !lazy.gWindowSyncEnabled) {
       return;
     }
     this.#runOnAllWindows(window, (win) => {

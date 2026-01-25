@@ -543,6 +543,10 @@ export class nsZenSessionManager {
       this.#restoreWindowData(newWindow);
     }
     newWindow.tabs = this.#filterUnusedTabs(newWindow.tabs || []);
+    if (!lazy.gWindowSyncEnabled) {
+      // Don't bring over any unpinned tabs if window sync is disabled.
+      newWindow.tabs = newWindow.tabs.filter((tab) => tab.pinned);
+    }
 
     // These are window-specific from the previous window state that
     // we don't want to restore into the new window. Otherwise, new
