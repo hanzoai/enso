@@ -117,9 +117,7 @@
       this.originalDragImageArgs = [dragImage, offsetX, offsetY];
       dt.setDragImage(...this.originalDragImageArgs);
       if (tab.hasAttribute("zen-essential")) {
-        setTimeout(() => {
-          tab.style.visibility = "hidden";
-        }, 0);
+        tab.style.visibility = "hidden";
       }
     }
 
