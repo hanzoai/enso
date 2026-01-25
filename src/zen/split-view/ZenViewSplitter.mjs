@@ -2132,7 +2132,7 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
       const layout = deserializeNode(groupData.layoutTree);
       const splitData = this.splitTabs(group.tabs, groupData.gridType, -1);
       if (splitData) {
-        splitData.layoutTree = layout;        
+        splitData.layoutTree = layout;
       }
     }
 
