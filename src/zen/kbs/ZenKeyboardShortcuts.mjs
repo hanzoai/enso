@@ -800,6 +800,10 @@ class nsZenKeyboardShortcutsLoader {
         continue;
       }
       let parsed = KeyShortcut.parseFromXHTML(key, { group: "devTools" });
+      // Move "inspector" shortcut to use "L" key instead of "I"
+      if (parsed.getID() == "key_inspector" || parsed.getID() == "key_inspectorMac") {
+        parsed.setNewBinding("L");
+      }
       newShortcutList.push(parsed);
     }
 
