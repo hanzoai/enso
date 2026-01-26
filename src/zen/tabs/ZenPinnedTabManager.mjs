@@ -76,6 +76,17 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
     this._zenClickEventListener = this._onTabClick.bind(this);
 
     gZenWorkspaces._resolvePinnedInitialized();
+    if (lazy.zenPinnedTabRestorePinnedTabsToPinnedUrl) {
+      gZenWorkspaces.promiseInitialized.then(() => {
+        for (const tab of gZenWorkspaces.allStoredTabs) {
+          try {
+            this.resetPinnedTab(tab);
+          } catch (ex) {
+            console.error("Error restoring pinned tab:", ex);
+          }
+        }
+      });
+    }
   }
 
   log(message) {
