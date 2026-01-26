@@ -975,11 +975,11 @@
             (possibleFolderElement.collapsed ||
               possibleFolderElement.childGroupsAndTabs.length < 2)));
       if (
-        (isTabGroupLabel(draggedTab) &&
-          draggedTab.group?.isZenFolder &&
-          (isTab(dropElement) || dropElement.hasAttribute("split-view-group")) &&
+        isTabGroupLabel(draggedTab) &&
+        draggedTab.group?.isZenFolder &&
+        (((isTab(dropElement) || dropElement.hasAttribute("split-view-group")) &&
           (!dropElement.pinned || dropElement.hasAttribute("zen-essential"))) ||
-        showIndicatorUnderNewTabButton
+          showIndicatorUnderNewTabButton)
       ) {
         dropElement = null;
         this.clearDragOverVisuals();

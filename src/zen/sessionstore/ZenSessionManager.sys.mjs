@@ -165,6 +165,7 @@ export class nsZenSessionManager {
   async readFile() {
     let fileExists = await IOUtils.exists(this.#storeFilePath);
     if (!fileExists) {
+      this.log("Session file does not exist, running migration", this.#storeFilePath);
       this._shouldRunMigration = true;
     }
     this.init();
@@ -181,6 +182,7 @@ export class nsZenSessionManager {
     }
     this.#sidebar = this.#file.data || {};
     if (!this.#sidebar.spaces?.length && !this._shouldRunMigration) {
+      this.log("No spaces data found in session file, running migration", this.#sidebar);
       // If we have no spaces data, we should run migration
       // to restore them from the database. Note we also do a
       // check if we already planned to run migration for optimization.

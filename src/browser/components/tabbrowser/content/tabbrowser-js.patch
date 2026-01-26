@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..ab301a3a8e83727e5316c3af9eb43cdfc028a122 100644
+index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..2ab8633d0378e5a25cf75c50b29d4689b5f65e94 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -398,6 +398,7 @@
@@ -948,7 +948,7 @@ index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..ab301a3a8e83727e5316c3af9eb43cdf
       *    The new tab in the current window, null if the tab couldn't be adopted.
       */
      adoptTab(aTab, { elementIndex, tabIndex, selectTab = false } = {}) {
-+      if (window.gZenWorkspaces.currentWindowIsSyncing === aTab.ownerGlobal.gZenWorkspaces.currentWindowIsSyncing) {
++      if (window.gZenWorkspaces.currentWindowIsSyncing && aTab.ownerGlobal.gZenWorkspaces?.currentWindowIsSyncing) {
 +        const tabId = aTab.id;
 +        const thisTab = window.gZenWindowSync.getItemFromWindow(window, tabId);
 +        if (thisTab) {
