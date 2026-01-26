@@ -84,6 +84,7 @@ export class nsZenSessionManager {
       compression: "lz4",
       backupFile,
     });
+    this.log("Session file path:", this.#file.path);
     this.#deferredBackupTask = new lazy.DeferredTask(async () => {
       await this.#createBackupsIfNeeded();
     }, REGENERATION_DEBOUNCE_RATE_MS);
@@ -206,6 +207,13 @@ export class nsZenSessionManager {
    *        The initial session state read from the session file.
    */
   onFileRead(initialState) {
+    // For the first time after migration, we restore the tabs
+    // That where going to be restored by SessionStore. The sidebar
+    // object will always be empty after migration because we haven't
+    // gotten the opportunity to save the session yet.
+    if (this._shouldRunMigration) {
+      initialState = this.#runStateMigration(initialState);
+    }
     if (!lazy.gWindowSyncEnabled) {
       if (initialState?.windows?.length && this.#shouldRestoreOnlyPinned) {
         this.log("Window sync disabled, restoring only pinned tabs");
@@ -215,13 +223,6 @@ export class nsZenSessionManager {
         }
       }
       return initialState;
-    }
-    // For the first time after migration, we restore the tabs
-    // That where going to be restored by SessionStore. The sidebar
-    // object will always be empty after migration because we haven't
-    // gotten the opportunity to save the session yet.
-    if (this._shouldRunMigration) {
-      initialState = this.#runStateMigration(initialState);
     }
     // If there are no windows, we create an empty one. By default,
     // firefox would create simply a new empty window, but we want
@@ -266,9 +267,9 @@ export class nsZenSessionManager {
         }
         this.#restoreWindowData(winData);
       }
-    } else {
+    } else if (initialState) {
       this.log("Saving windata state after migration");
-      this.saveState(initialState);
+      this.saveState(Cu.cloneInto(initialState, {}));
     }
     delete this._shouldRunMigration;
     return initialState;
@@ -289,6 +290,7 @@ export class nsZenSessionManager {
    * @param {object} initialState
    *        The initial session state read from the session file.
    */
+  // eslint-disable-next-line complexity
   #runStateMigration(initialState) {
     this.log(
       "Restoring tabs from Places DB after migration",
@@ -304,8 +306,11 @@ export class nsZenSessionManager {
         spaces: this._migrationData?.spaces || [],
       };
     }
-    if (!initialState?.windows?.length && initialState?.lastSessionState) {
-      initialState = { ...initialState.lastSessionState };
+    if (
+      !initialState?.windows?.length &&
+      (initialState?.lastSessionState || initialState?.deferredInitialState)
+    ) {
+      initialState = { ...(initialState.lastSessionState || initialState.deferredInitialState) };
     }
     // There might be cases where there are no windows in the
     // initial state, for example if the user had 'restore previous
@@ -342,9 +347,6 @@ export class nsZenSessionManager {
         }
       }
     }
-    // Save the state to the sidebar object so that it gets written
-    // to the session file.
-    delete this._migrationData;
     return initialState;
   }
 

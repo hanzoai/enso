@@ -162,7 +162,7 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
     this._resetTabToStoredState(tab);
   }
 
-  async replacePinnedUrlWithCurrent(tab = undefined) {
+  replacePinnedUrlWithCurrent(tab = undefined) {
     tab ??= TabContextMenu.contextTab;
     if (!tab || !tab.pinned) {
       return;

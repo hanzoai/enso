@@ -6,6 +6,12 @@
 
 import { nsZenThemePicker } from "chrome://browser/content/zen-components/ZenGradientGenerator.mjs";
 
+const lazy = {};
+
+ChromeUtils.defineESModuleGetters(lazy, {
+  ZenSessionStore: "resource:///modules/zen/ZenSessionManager.sys.mjs",
+});
+
 /**
  * Zen Spaces manager. This class is mainly responsible for the UI
  * and user interactions but it also contains some logic to manage
@@ -888,6 +894,13 @@ class nsZenWorkspaces {
       return Promise.resolve();
     }
     const spacesFromStore = aWinData.spaces || [];
+    if (
+      !this.privateWindowOrDisabled &&
+      spacesFromStore.length === 0 &&
+      lazy.ZenSessionStore._migrationData
+    ) {
+      spacesFromStore.push(...lazy.ZenSessionStore._migrationData.spaces);
+    }
     this._workspaceCache = spacesFromStore.length
       ? [...spacesFromStore]
       : [this.#createWorkspaceData("Space", undefined)];
