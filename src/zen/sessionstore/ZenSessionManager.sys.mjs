@@ -191,6 +191,13 @@ export class nsZenSessionManager {
     }
   }
 
+  get #shouldRestoreOnlyPinned() {
+    return (
+      Services.prefs.getIntPref("browser.startup.page", 1) !== BROWSER_STARTUP_RESUME_SESSION ||
+      lazy.PrivateBrowsingUtils.permanentPrivateBrowsing
+    );
+  }
+
   /**
    * Called when the session file is read. Restores the sidebar data
    * into all windows.
@@ -200,6 +207,13 @@ export class nsZenSessionManager {
    */
   onFileRead(initialState) {
     if (!lazy.gWindowSyncEnabled) {
+      if (initialState?.windows?.length && this.#shouldRestoreOnlyPinned) {
+        this.log("Window sync disabled, restoring only pinned tabs");
+        for (let i = 0; i < initialState.windows.length; i++) {
+          let winData = initialState.windows[i];
+          winData.tabs = (winData.tabs || []).filter((tab) => tab.pinned);
+        }
+      }
       return initialState;
     }
     // For the first time after migration, we restore the tabs
@@ -225,10 +239,7 @@ export class nsZenSessionManager {
     }
     // When we don't have browser.startup.page set to resume session,
     // we only want to restore the pinned tabs into the new windows.
-    const shouldRestoreOnlyPinned =
-      Services.prefs.getIntPref("browser.startup.page", 1) !== BROWSER_STARTUP_RESUME_SESSION ||
-      lazy.PrivateBrowsingUtils.permanentPrivateBrowsing;
-    if (shouldRestoreOnlyPinned && this.#sidebar?.tabs) {
+    if (this.#shouldRestoreOnlyPinned && this.#sidebar?.tabs) {
       this.log("Restoring only pinned tabs into windows");
       const sidebar = this.#sidebar;
       sidebar.tabs = (sidebar.tabs || []).filter((tab) => tab.pinned);
