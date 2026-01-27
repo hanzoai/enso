@@ -517,7 +517,11 @@ class nsZenWindowSync {
    */
   #moveItemToMatchOriginal(aOriginalItem, aTargetItem, aWindow, { isEssential, isPinned }) {
     const { gBrowser, gZenWorkspaces } = aWindow;
-    const originalSibling = aOriginalItem.previousElementSibling;
+    let originalSibling = aOriginalItem.previousElementSibling;
+    if (originalSibling?.classList.contains("space-fake-collapsible-start")) {
+      // Skip space fake elements.
+      originalSibling = originalSibling.previousElementSibling;
+    }
     let isFirstTab = true;
     if (gBrowser.isTabGroup(originalSibling) || gBrowser.isTab(originalSibling)) {
       isFirstTab =

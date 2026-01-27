@@ -2133,6 +2133,8 @@ class nsZenViewSplitter extends nsZenDOMOperatedFeature {
       const splitData = this.splitTabs(group.tabs, groupData.gridType, -1);
       if (splitData) {
         splitData.layoutTree = layout;
+      } else {
+        gBrowser.removeTabGroup(group);
       }
     }
 

@@ -577,8 +577,8 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
       }
 
       movingTabs = movingTabs.filter((tab) =>
-        gBrowser.isTabGroupLabel(tab)
-          ? tab.group?.isZenFolder && !tabsTarget && !essentialTabsTarget
+        gBrowser.isTabGroupLabel(tab) && tab.group?.isZenFolder
+          ? !tabsTarget && !essentialTabsTarget
           : true
       );
 
