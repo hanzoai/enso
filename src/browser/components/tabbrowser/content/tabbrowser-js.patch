@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..2ab8633d0378e5a25cf75c50b29d4689b5f65e94 100644
+index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..632f78baf6a27ca90a0415c182476835d40793f4 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -398,6 +398,7 @@
@@ -467,10 +467,10 @@ index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..2ab8633d0378e5a25cf75c50b29d4689
 +            gZenWorkspaces._initialTab._shouldRemove = true;
 +          }
 +        }
-       }
++      }
 +      else {
 +        gZenWorkspaces._tabToRemoveForEmpty = this.selectedTab;
-+      }
+       }
 +      this._hasAlreadyInitializedZenSessionStore = true;
  
        if (tabs.length > 1 || !tabs[0].selected) {
@@ -944,7 +944,7 @@ index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..2ab8633d0378e5a25cf75c50b29d4689
        // Clear tabs cache after moving nodes because the order of tabs may have
        // changed.
        this.tabContainer._invalidateCachedTabs();
-@@ -6869,6 +7087,19 @@
+@@ -6869,6 +7087,18 @@
       *    The new tab in the current window, null if the tab couldn't be adopted.
       */
      adoptTab(aTab, { elementIndex, tabIndex, selectTab = false } = {}) {
@@ -959,12 +959,11 @@ index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..2ab8633d0378e5a25cf75c50b29d4689
 +          }
 +          return thisTab;
 +        }
-+        return;
 +      }
        // Swap the dropped tab with a new one we create and then close
        // it in the other window (making it seem to have moved between
        // windows). We also ensure that the tab we create to swap into has
-@@ -6910,6 +7141,8 @@
+@@ -6910,6 +7140,8 @@
          params.userContextId = aTab.getAttribute("usercontextid");
        }
        let newTab = this.addWebTab("about:blank", params);
@@ -973,7 +972,7 @@ index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..2ab8633d0378e5a25cf75c50b29d4689
        let newBrowser = this.getBrowserForTab(newTab);
  
        aTab.container.tabDragAndDrop.finishAnimateTabMove();
-@@ -7718,7 +7951,7 @@
+@@ -7718,7 +7950,7 @@
              // preventDefault(). It will still raise the window if appropriate.
              break;
            }
@@ -982,7 +981,7 @@ index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..2ab8633d0378e5a25cf75c50b29d4689
            window.focus();
            aEvent.preventDefault();
            break;
-@@ -7735,7 +7968,6 @@
+@@ -7735,7 +7967,6 @@
          }
          case "TabGroupCollapse":
            aEvent.target.tabs.forEach(tab => {
@@ -990,7 +989,7 @@ index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..2ab8633d0378e5a25cf75c50b29d4689
            });
            break;
          case "TabGroupCreateByUser":
-@@ -7895,7 +8127,9 @@
+@@ -7895,7 +8126,9 @@
  
          let filter = this._tabFilters.get(tab);
          if (filter) {
@@ -1000,7 +999,7 @@ index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..2ab8633d0378e5a25cf75c50b29d4689
  
            let listener = this._tabListeners.get(tab);
            if (listener) {
-@@ -8698,6 +8932,7 @@
+@@ -8698,6 +8931,7 @@
              aWebProgress.isTopLevel
            ) {
              this.mTab.setAttribute("busy", "true");
@@ -1008,7 +1007,7 @@ index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..2ab8633d0378e5a25cf75c50b29d4689
              gBrowser._tabAttrModified(this.mTab, ["busy"]);
              this.mTab._notselectedsinceload = !this.mTab.selected;
            }
-@@ -8778,6 +9013,7 @@
+@@ -8778,6 +9012,7 @@
          // known defaults. Note we use the original URL since about:newtab
          // redirects to a prerendered page.
          const shouldRemoveFavicon =
@@ -1016,7 +1015,7 @@ index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..2ab8633d0378e5a25cf75c50b29d4689
            !this.mBrowser.mIconURL &&
            !ignoreBlank &&
            !(originalLocation.spec in FAVICON_DEFAULTS);
-@@ -9803,7 +10039,7 @@ var TabContextMenu = {
+@@ -9803,7 +10038,7 @@ var TabContextMenu = {
      );
      contextUnpinSelectedTabs.hidden =
        !this.contextTab.pinned || !this.multiselected;
