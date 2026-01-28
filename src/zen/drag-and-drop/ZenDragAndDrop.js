@@ -678,6 +678,7 @@
         clientX < 0 || clientX > innerWidth || clientY < 0 || clientY > innerHeight;
       if (isOutOfWindow && !this.#isOutOfWindow) {
         this.#isOutOfWindow = true;
+        gZenViewSplitter.onBrowserDragEndToSplit(event, true);
         this.#maybeClearVerticalPinnedGridDragOver();
         this.clearSpaceSwitchTimer();
         this.clearDragOverVisuals();
@@ -716,20 +717,22 @@
       const dt = event.dataTransfer;
       const activeWorkspace = gZenWorkspaces.activeWorkspace;
       let draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
-      if (
-        isTab(draggedTab) &&
-        !draggedTab.hasAttribute("zen-essential") &&
-        draggedTab.getAttribute("zen-workspace-id") != activeWorkspace
-      ) {
-        const movingTabs = draggedTab._dragData?.movingTabs || [draggedTab];
-        for (let tab of movingTabs) {
-          tab.setAttribute("zen-workspace-id", activeWorkspace);
+      if (draggedTab.ownerGlobal === window) {
+        if (
+          isTab(draggedTab) &&
+          !draggedTab.hasAttribute("zen-essential") &&
+          draggedTab.getAttribute("zen-workspace-id") != activeWorkspace
+        ) {
+          const movingTabs = draggedTab._dragData?.movingTabs || [draggedTab];
+          for (let tab of movingTabs) {
+            tab.setAttribute("zen-workspace-id", activeWorkspace);
+          }
+          gBrowser.selectedTab = draggedTab;
         }
-        gBrowser.selectedTab = draggedTab;
-      }
-      if (isTabGroupLabel(draggedTab)) {
-        draggedTab = draggedTab.group;
-        gZenFolders.changeFolderToSpace(draggedTab, activeWorkspace, { hasDndSwitch: true });
+        if (isTabGroupLabel(draggedTab)) {
+          draggedTab = draggedTab.group;
+          gZenFolders.changeFolderToSpace(draggedTab, activeWorkspace, { hasDndSwitch: true });
+        }
       }
       gZenWorkspaces.updateTabsContainers();
     }
