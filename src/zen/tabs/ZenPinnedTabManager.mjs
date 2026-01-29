@@ -603,7 +603,10 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
         let isRegularTabs = false;
         // Check for essentials container
         if (essentialTabsTarget) {
-          if (!draggedTab.hasAttribute("zen-essential") && !draggedTab?.group) {
+          if (
+            !draggedTab.hasAttribute("zen-essential") &&
+            !draggedTab?.group?.hasAttribute("split-view-group")
+          ) {
             moved = true;
             isVertical = false;
             hasActuallyMoved = this.addToEssentials(draggedTab);

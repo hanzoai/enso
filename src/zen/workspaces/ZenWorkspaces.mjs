@@ -807,7 +807,7 @@ class nsZenWorkspaces {
         chromeFlags & Ci.nsIWebBrowserChrome.CHROME_MENUBAR;
       return this._shouldHaveWorkspaces;
     }
-    return this._shouldHaveWorkspaces;
+    return this._shouldHaveWorkspaces && !document.documentElement.hasAttribute("taskbartab");
   }
 
   get isPrivateWindow() {
