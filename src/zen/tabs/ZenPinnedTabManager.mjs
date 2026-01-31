@@ -141,6 +141,7 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
           tab.removeEventListener("click", tab._zenClickEventListener);
           delete tab._zenClickEventListener;
         }
+        this.resetPinChangedUrl(tab);
         break;
       default:
         console.warn("ZenPinnedTabManager: Unhandled tab event", action);
