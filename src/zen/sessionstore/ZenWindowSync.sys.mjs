@@ -236,6 +236,9 @@ class nsZenWindowSync {
         if (tab.pinned && !tab._zenPinnedInitialState) {
           await this.setPinnedTabState(tab);
         }
+        if (!lazy.gWindowSyncEnabled) {
+          tab._zenContentsVisible = true;
+        }
       }
     });
   }
