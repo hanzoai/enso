@@ -672,10 +672,16 @@
       if (!isTab(draggedTab)) {
         return;
       }
-      const { clientX, clientY } = event;
-      const { innerWidth, innerHeight } = window;
+      const { screenX, screenY } = event;
+      if (!screenX && !screenY) {
+        return;
+      }
+      const { innerWidth, innerHeight, screenX: windowScreenX, screenY: windowScreenY } = window;
       const isOutOfWindow =
-        clientX < 0 || clientX > innerWidth || clientY < 0 || clientY > innerHeight;
+        screenX < windowScreenX ||
+        screenX > windowScreenX + innerWidth ||
+        screenY < windowScreenY ||
+        screenY > windowScreenY + innerHeight;
       if (isOutOfWindow && !this.#isOutOfWindow) {
         this.#isOutOfWindow = true;
         gZenViewSplitter.onBrowserDragEndToSplit(event, true);
