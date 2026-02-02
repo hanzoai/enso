@@ -709,12 +709,10 @@
           this.originalDragImageArgs[1],
           this.originalDragImageArgs[2]
         );
-        window.addEventListener("dragover", this.handle_windowDragEnter, {
+        window.addEventListener("dragenter", this.handle_windowDragEnter, {
           once: true,
           capture: true,
         });
-      } else {
-        this.#isOutOfWindow = false;
       }
     }
 
@@ -876,7 +874,7 @@
       ownerGlobal.gZenPinnedTabManager.removeTabContainersDragoverClass();
       this.#maybeClearVerticalPinnedGridDragOver();
       this.originalDragImageArgs = [];
-      window.removeEventListener("dragover", this.handle_windowDragEnter, { capture: true });
+      window.removeEventListener("dragenter", this.handle_windowDragEnter, { capture: true });
       this.#isOutOfWindow = false;
       if (this._browserDragImageWrapper) {
         this._browserDragImageWrapper.remove();
