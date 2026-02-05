@@ -570,13 +570,21 @@ export class nsZenSessionManager {
       let pinnedTabs = (sidebar.tabs || []).filter((tab) => tab.pinned);
       let unpinedWindowTabs = (aWindowData.tabs || []).filter((tab) => !tab.pinned);
       aWindowData.tabs = [...pinnedTabs, ...unpinedWindowTabs];
+
+      // We restore ALL the split view data in the sidebar, if the group doesn't exist in the window,
+      // it should be a no-op anyways.
+      aWindowData.splitViewData = [...sidebar.splitViewData, ...aWindowData.splitViewData];
+      // Same thing with groups, we restore all the groups from the sidebar, if they don't have any
+      // existing tabs in the window, they should be a no-op.
+      aWindowData.groups = [...sidebar.groups, ...aWindowData.groups];
     } else {
       aWindowData.tabs = sidebar.tabs || [];
+      aWindowData.splitViewData = sidebar.splitViewData;
+      aWindowData.groups = sidebar.groups;
     }
 
-    aWindowData.splitViewData = sidebar.splitViewData;
+    // Folders are always pinned, so we dont need to check for the pinned state here.
     aWindowData.folders = sidebar.folders;
-    aWindowData.groups = sidebar.groups;
     aWindowData.spaces = sidebar.spaces;
   }
 
@@ -613,6 +621,7 @@ export class nsZenSessionManager {
     if (!lazy.gWindowSyncEnabled || lazy.gSyncOnlyPinnedTabs) {
       // Don't bring over any unpinned tabs if window sync is disabled or if syncing only pinned tabs.
       newWindow.tabs = newWindow.tabs.filter((tab) => tab.pinned);
+      newWindow.groups = newWindow.groups?.filter((group) => group.pinned);
     }
 
     // These are window-specific from the previous window state that
