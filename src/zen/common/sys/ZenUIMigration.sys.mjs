@@ -12,7 +12,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
 
 class nsZenUIMigration {
   PREF_NAME = "zen.ui.migration.version";
-  MIGRATION_VERSION = 7;
+  MIGRATION_VERSION = 6;
 
   init(isNewProfile) {
     if (!isNewProfile) {
@@ -126,10 +126,6 @@ class nsZenUIMigration {
         }
       }, 1000);
     });
-  }
-
-  _migrateV7() {
-    Services.prefs.setBoolPref("zen.window-sync.sync-only-pinned-tabs", true);
   }
 }
 
