@@ -746,7 +746,10 @@ var gZenWorkspacesSettings = {
       Services.prefs.removeObserver("zen.glance.enabled", tabsUnloaderPrefListener);
       Services.prefs.removeObserver("zen.glance.activation-method", tabsUnloaderPrefListener);
       Services.prefs.removeObserver("zen.workspaces.separate-essentials", tabsUnloaderPrefListener);
-      Services.prefs.removeObserver("zen.window-sync.sync-only-pinned-tabs", tabsUnloaderPrefListener);
+      Services.prefs.removeObserver(
+        "zen.window-sync.sync-only-pinned-tabs",
+        tabsUnloaderPrefListener
+      );
       Services.prefs.removeObserver(
         "zen.tabs.ctrl-tab.ignore-essential-tabs",
         toggleZenCycleByAttrWarning
@@ -1199,6 +1202,11 @@ Preferences.addAll([
     id: "zen.tabs.select-recently-used-on-close",
     type: "bool",
     default: true,
+  },
+  {
+    id: "zen.window-sync.sync-only-pinned-tabs",
+    type: "bool",
+    default: false,
   },
 ]);
 
