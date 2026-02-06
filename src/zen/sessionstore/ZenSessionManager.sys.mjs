@@ -566,7 +566,6 @@ export class nsZenSessionManager {
     // If we should only sync the pinned tabs, we should only edit the unpinned
     // tabs in the window data and keep the pinned tabs from the window data,
     // as they should be the same as the ones in the sidebar.
-    sidebar.splitViewData = null;
     if (lazy.gSyncOnlyPinnedTabs) {
       let pinnedTabs = (sidebar.tabs || []).filter((tab) => tab.pinned);
       let unpinedWindowTabs = (aWindowData.tabs || []).filter((tab) => !tab.pinned);
