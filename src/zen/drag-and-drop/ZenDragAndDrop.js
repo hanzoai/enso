@@ -936,7 +936,9 @@
       let dropElementFromEvent = event.target.closest(dropZoneSelector);
       dropElement = dropElementFromEvent || dropElement;
       if (!dropElementFromEvent) {
-        let hoveringPeriphery = !!event.target.closest("#tabbrowser-arrowscrollbox-periphery");
+        let hoveringPeriphery = !!event.target.closest(
+          ":is(#tabbrowser-arrowscrollbox-periphery, .pinned-tabs-container-separator)"
+        );
         if (event.target.classList.contains("zen-workspace-empty-space") || hoveringPeriphery) {
           let lastTab = gBrowser.tabs.at(-1);
           dropElement =
