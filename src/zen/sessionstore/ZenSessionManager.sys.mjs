@@ -566,6 +566,7 @@ export class nsZenSessionManager {
     // If we should only sync the pinned tabs, we should only edit the unpinned
     // tabs in the window data and keep the pinned tabs from the window data,
     // as they should be the same as the ones in the sidebar.
+    sidebar.splitViewData = null;
     if (lazy.gSyncOnlyPinnedTabs) {
       let pinnedTabs = (sidebar.tabs || []).filter((tab) => tab.pinned);
       let unpinedWindowTabs = (aWindowData.tabs || []).filter((tab) => !tab.pinned);
@@ -573,10 +574,13 @@ export class nsZenSessionManager {
 
       // We restore ALL the split view data in the sidebar, if the group doesn't exist in the window,
       // it should be a no-op anyways.
-      aWindowData.splitViewData = [...sidebar.splitViewData, ...aWindowData.splitViewData];
+      aWindowData.splitViewData = [
+        ...(sidebar.splitViewData || []),
+        ...(aWindowData.splitViewData || []),
+      ];
       // Same thing with groups, we restore all the groups from the sidebar, if they don't have any
       // existing tabs in the window, they should be a no-op.
-      aWindowData.groups = [...sidebar.groups, ...aWindowData.groups];
+      aWindowData.groups = [...(sidebar.groups || []), ...(aWindowData.groups || [])];
     } else {
       aWindowData.tabs = sidebar.tabs || [];
       aWindowData.splitViewData = sidebar.splitViewData;
