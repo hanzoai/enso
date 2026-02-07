@@ -21,7 +21,7 @@ export class nsZenFolder extends MozTabbrowserTabGroup {
 
   static rawIcon = new DOMParser().parseFromString(
     `
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="29" height="29" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient gradientUnits="userSpaceOnUse" x1="14" y1="5.625" x2="14" y2="22.375" id="gradient-0">
             <stop offset="0" style="stop-color: rgb(255, 255, 255)"/>

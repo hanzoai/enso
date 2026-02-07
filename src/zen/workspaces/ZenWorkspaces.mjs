@@ -1130,7 +1130,7 @@ class nsZenWorkspaces {
     return (
       !window.toolbar.visible ||
       Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") ||
-      this.privateWindowOrDisabled
+      (this.privateWindowOrDisabled && !this.isPrivateWindow)
     );
   }
 
@@ -2436,7 +2436,8 @@ class nsZenWorkspaces {
     if (!this.currentWindowIsSyncing) {
       containerTabId = parseInt(gBrowser.selectedTab.getAttribute("usercontextid")) || 0;
       let label = ContextualIdentityService.getUserContextLabel(containerTabId) || "Default";
-      name = this.isPrivateWindow ? "Private " + name : label;
+      name = this.isPrivateWindow ? "Incognito" : label;
+      icon = gZenEmojiPicker.getSVGURL("eye.svg");
     }
     let workspace = {
       uuid: gZenUIManager.generateUuidv4(),

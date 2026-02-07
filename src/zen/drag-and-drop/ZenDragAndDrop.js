@@ -962,7 +962,8 @@
         dropElement = dragData.dropElement;
         dropBefore = dragData.dropBefore;
       }
-      if (!dropElement) {
+      // Essentials should be properly handled by ::animateVerticalPinnedGridDragOver
+      if (!dropElement || dropElement.hasAttribute("zen-essential")) {
         this.clearDragOverVisuals();
         return null;
       }

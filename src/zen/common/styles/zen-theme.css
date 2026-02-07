@@ -228,10 +228,7 @@
   --toolbar-field-color: var(--toolbox-textcolor) !important;
 
   &[zen-private-window='true'] {
-    --zen-main-browser-background: linear-gradient(130deg,
-      color-mix(in srgb, rgb(10, 6, 11) 80%, var(--zen-themed-toolbar-bg-transparent)) 0%,
-      color-mix(in srgb, rgb(19, 7, 22) 80%, var(--zen-themed-toolbar-bg-transparent)) 100%
-    );
+    --zen-main-browser-background: color-mix(in srgb, rgb(11, 10, 11) 90%, var(--zen-themed-toolbar-bg-transparent));
     --zen-main-browser-background-toolbar: var(--zen-main-browser-background);
     --zen-primary-color: light-dark(rgb(93, 42, 107), rgb(110, 48, 125)) !important;
     --toolbox-textcolor: color-mix(in srgb, currentColor 95%, transparent) !important;
