@@ -5,10 +5,10 @@
  */
 
 #zen-overflow-extensions-list:not(:empty) {
-  --uei-icon-size: 16px;
+  --uei-icon-size: 14px;
   display: flex;
   gap: 8px;
-  padding: 8px calc(var(--zen-toolbox-padding) - 4px);
+  padding: 8px 2px;
   padding-bottom: 0px;
 
   & .unified-extensions-item {
@@ -18,11 +18,15 @@
 
   & .toolbarbutton-badge-stack {
     margin: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
   }
 
   & .unified-extensions-item-action-button {
     background-color: var(--zen-toolbar-element-bg);
-    height: 32px;
+    height: 30px;
     margin: 0;
     justify-content: center;
     align-items: center;

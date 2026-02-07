@@ -924,7 +924,9 @@ class nsZenWindowSync {
     // Ignore previous tabs that are still "active". These scenarios could happen for example,
     // when selecting on a split view tab that was already active.
     if (aPreviousTab?._zenContentsVisible && !activeTabs.includes(aPreviousTab)) {
-      let tabsToSwap = aPreviousTab.splitView ? aPreviousTab.group.tabs : [aPreviousTab];
+      let tabsToSwap = aPreviousTab.group?.hasAttribute("split-view-group")
+        ? aPreviousTab.group.tabs
+        : [aPreviousTab];
       for (const tab of tabsToSwap) {
         const otherTabToShow = this.#getActiveTabFromOtherWindows(aWindow, tab.id, (t) =>
           t?.splitView ? t.group.tabs.some((st) => st.selected) : t?.selected
