@@ -219,7 +219,7 @@
   --input-border-color: var(--zen-input-border-color) !important;
   --zen-themed-toolbar-bg-transparent: light-dark(var(--zen-branding-bg), #171717);
 
-  --zen-workspace-indicator-height: 46px;
+  --zen-workspace-indicator-height: 44px;
 
   &:not([zen-sidebar-expanded='true']) {
     --zen-workspace-indicator-height: 38px;

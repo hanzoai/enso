@@ -231,7 +231,7 @@ class nsZenWorkspaces {
     }
   }
 
-  async selectEmptyTab(newTabTarget = null, selectURLBar = true) {
+  async selectEmptyTab(newTabTarget = null) {
     // Validate browser state first
     if (!this._validateBrowserState()) {
       console.warn("Browser state invalid for empty tab selection");
@@ -251,30 +251,6 @@ class nsZenWorkspaces {
         !this._emptyTab.ownerGlobal.closed &&
         gZenVerticalTabsManager._canReplaceNewTab
       ) {
-        // Only set up URL bar selection if we're switching to a different tab
-        if (gBrowser.selectedTab !== this._emptyTab && selectURLBar) {
-          const tabSelectListener = () => {
-            // Remove the event listener first to prevent any chance of multiple executions
-            window.removeEventListener("TabSelect", tabSelectListener);
-
-            // Use requestAnimationFrame to ensure DOM is updated
-            requestAnimationFrame(() => {
-              // Then use setTimeout to ensure browser has time to process tab switch
-              setTimeout(() => {
-                if (gURLBar) {
-                  try {
-                    gURLBar.select();
-                  } catch (e) {
-                    console.warn("Error selecting URL bar:", e);
-                  }
-                }
-              }, 50);
-            });
-          };
-
-          window.addEventListener("TabSelect", tabSelectListener, { once: true });
-        }
-
         // Safely switch to the empty tab using our debounced method
         const success = await this._safelySelectTab(this._emptyTab);
         if (!success) {

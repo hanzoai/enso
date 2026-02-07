@@ -327,7 +327,7 @@ class nsZenWindowSync {
       return;
     }
     if (INSTANT_EVENTS.includes(aEvent.type)) {
-      this.#handleNextEvent(aEvent);
+      this.#handleNextEventInternal(aEvent);
       return;
     }
     if (this.#eventHandlingContext.window && this.#eventHandlingContext.window !== window) {
@@ -374,30 +374,31 @@ class nsZenWindowSync {
     this.#syncHandlers.delete(aHandler);
   }
 
+  #handleNextEventInternal(aEvent) {
+    const handler = `on_${aEvent.type}`;
+    if (typeof this[handler] !== "function") {
+      throw new Error(`No handler for event type: ${aEvent.type}`);
+    }
+    return this[handler](aEvent);
+  }
+
   /**
    * Handles the next event by calling the appropriate handler method.
    *
    * @param {Event} aEvent - The event to handle.
    */
-  #handleNextEvent(aEvent) {
-    const handler = `on_${aEvent.type}`;
+  async #handleNextEvent(aEvent) {
     try {
-      if (typeof this[handler] === "function") {
-        let promise = this[handler](aEvent) || Promise.resolve();
-        promise.then(() => {
-          for (let syncHandler of this.#syncHandlers) {
-            try {
-              syncHandler(aEvent);
-            } catch (e) {
-              console.error(e);
-            }
-          }
-        });
-        return promise;
-      }
-      throw new Error(`No handler for event type: ${aEvent.type}`);
+      await this.#handleNextEventInternal(aEvent);
     } catch (e) {
-      return Promise.reject(e);
+      console.error(e);
+    }
+    for (let syncHandler of this.#syncHandlers) {
+      try {
+        syncHandler(aEvent);
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 
@@ -790,39 +791,38 @@ class nsZenWindowSync {
   #styleSwapedBrowsers(aOurTab, aOtherTab, callback = undefined, promiseToWait = null) {
     const ourBrowser = aOurTab.linkedBrowser;
     const otherBrowser = aOtherTab.linkedBrowser;
-    return new Promise((resolve) => {
-      aOurTab.ownerGlobal.requestAnimationFrame(async () => {
-        if (callback) {
-          const browserBlob = await aOtherTab.ownerGlobal.PageThumbs.captureToBlob(
-            aOtherTab.linkedBrowser,
-            {
-              fullScale: true,
-              fullViewport: true,
-            }
-          );
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async (resolve) => {
+      if (callback) {
+        const browserBlob = await aOtherTab.ownerGlobal.PageThumbs.captureToBlob(
+          aOtherTab.linkedBrowser,
+          {
+            fullScale: true,
+            fullViewport: true,
+          }
+        );
 
-          let mySrc = await new Promise((r, re) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(browserBlob);
-            reader.onloadend = function () {
-              // result includes identifier 'data:image/png;base64,' plus the base64 data
-              r(reader.result);
-            };
-            reader.onerror = function () {
-              re(new Error("Failed to read blob as data URL"));
-            };
-          });
+        let mySrc = await new Promise((r, re) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(browserBlob);
+          reader.onloadend = function () {
+            // result includes identifier 'data:image/png;base64,' plus the base64 data
+            r(reader.result);
+          };
+          reader.onerror = function () {
+            re(new Error("Failed to read blob as data URL"));
+          };
+        });
 
-          this.#createPseudoImageForBrowser(otherBrowser, mySrc);
-          otherBrowser.setAttribute("zen-pseudo-hidden", "true");
-          await promiseToWait;
-          callback();
-        }
-
+        await promiseToWait;
+        this.#createPseudoImageForBrowser(otherBrowser, mySrc);
         this.#maybeRemovePseudoImageForBrowser(ourBrowser);
         ourBrowser.removeAttribute("zen-pseudo-hidden");
-        resolve();
-      });
+        otherBrowser.setAttribute("zen-pseudo-hidden", "true");
+        callback();
+      }
+
+      resolve();
     });
   }
 
