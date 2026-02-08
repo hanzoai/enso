@@ -9,7 +9,7 @@
  */
 
 :host(:is(.anonymous-content-host, notification-message)),
-:root {
+:root:not([windowtype^="Browser:"]) {
   /* Default values */
   --zen-border-radius: 7px;
   --zen-primary-color: AccentColor;
