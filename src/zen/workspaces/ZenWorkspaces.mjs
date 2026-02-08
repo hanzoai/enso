@@ -2413,7 +2413,9 @@ class nsZenWorkspaces {
       containerTabId = parseInt(gBrowser.selectedTab.getAttribute("usercontextid")) || 0;
       let label = ContextualIdentityService.getUserContextLabel(containerTabId) || "Default";
       name = this.isPrivateWindow ? "Incognito" : label;
-      icon = gZenEmojiPicker.getSVGURL("eye.svg");
+      if (this.isPrivateWindow) {
+        icon = gZenEmojiPicker.getSVGURL("eye.svg");
+      }
     }
     let workspace = {
       uuid: gZenUIManager.generateUuidv4(),
