@@ -820,6 +820,9 @@ class nsZenWindowSync {
         ourBrowser.removeAttribute("zen-pseudo-hidden");
         otherBrowser.setAttribute("zen-pseudo-hidden", "true");
         callback();
+      } else {
+        this.#maybeRemovePseudoImageForBrowser(ourBrowser);
+        ourBrowser.removeAttribute("zen-pseudo-hidden");
       }
 
       resolve();

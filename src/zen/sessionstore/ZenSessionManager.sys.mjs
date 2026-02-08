@@ -52,6 +52,9 @@ class nsZenSidebarObject {
   }
 
   set data(data) {
+    if (typeof data !== "object") {
+      throw new Error("Sidebar data must be an object");
+    }
     this.#sidebar = data;
   }
 }
@@ -410,10 +413,11 @@ export class nsZenSessionManager {
     this.#collectWindowData(windows);
     // This would save the data to disk asynchronously or when
     // quitting the app.
-    this.#file.data = this.#sidebar;
+    let sidebar = this.#sidebar;
+    this.#file.data = sidebar;
     this.#file.saveSoon();
     this.#debounceRegeneration();
-    this.log(`Saving Zen session data with ${this.#sidebar.tabs?.length || 0} tabs`);
+    this.log(`Saving Zen session data with ${sidebar.tabs?.length || 0} tabs`);
   }
 
   /**
@@ -514,6 +518,13 @@ export class nsZenSessionManager {
     this.#sidebar = sidebarData;
   }
 
+  /**
+   * Filters out tabs that are not useful to restore, such as empty tabs with no group association.
+   * If removeUnpinnedTabs is true, it also filters out unpinned tabs.
+   *
+   * @param {Array} tabs - The array of tab data objects to filter.
+   * @returns {Array} The filtered array of tab data objects.
+   */
   #filterUnusedTabs(tabs) {
     return tabs.filter((tab) => {
       // We need to ignore empty tabs with no group association
