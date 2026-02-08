@@ -568,7 +568,10 @@ export class nsZenSessionManager {
     // as they should be the same as the ones in the sidebar.
     if (lazy.gSyncOnlyPinnedTabs) {
       let pinnedTabs = (sidebar.tabs || []).filter((tab) => tab.pinned);
-      let unpinedWindowTabs = (aWindowData.tabs || []).filter((tab) => !tab.pinned);
+      let unpinedWindowTabs = [];
+      if (!this.#shouldRestoreOnlyPinned) {
+        unpinedWindowTabs = (aWindowData.tabs || []).filter((tab) => !tab.pinned);
+      }
       aWindowData.tabs = [...pinnedTabs, ...unpinedWindowTabs];
 
       // We restore ALL the split view data in the sidebar, if the group doesn't exist in the window,

@@ -532,7 +532,9 @@ class nsZenPinnedTabManager extends nsZenDOMOperatedFeature {
     const isEssential = contextTab.getAttribute("zen-essential");
     const zenAddEssential = document.getElementById("context_zen-add-essential");
     const zenResetPinnedTab = document.getElementById("context_zen-reset-pinned-tab");
-    const zenReplacePinnedUrl = document.getElementById("context_zen-replace-pinned-url-with-current");
+    const zenReplacePinnedUrl = document.getElementById(
+      "context_zen-replace-pinned-url-with-current"
+    );
     [zenResetPinnedTab, zenReplacePinnedUrl].forEach((element) => {
       if (element) {
         element.hidden = !isVisible;
