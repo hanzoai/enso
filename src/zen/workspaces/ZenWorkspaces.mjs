@@ -1020,6 +1020,8 @@ class nsZenWorkspaces {
       delete this._initialTab;
     }
 
+    showed &&= Services.prefs.getBoolPref("zen.urlbar.open-on-startup", true);
+
     // Wait for the next event loop to ensure that the startup focus logic by
     // firefox has finished doing it's thing.
     setTimeout(() => {
