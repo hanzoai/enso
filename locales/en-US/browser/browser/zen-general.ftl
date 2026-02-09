@@ -145,3 +145,7 @@ zen-window-sync-migration-dialog-title = Keep Your Windows in Sync
 zen-window-sync-migration-dialog-message = Zen now syncs windows on the same device, so changes in one window are reflected across the others instantly.
 zen-window-sync-migration-dialog-learn-more = Learn More
 zen-window-sync-migration-dialog-accept = Got It
+
+zen-appmenu-new-blank-window =
+    .label = New blank window
+
