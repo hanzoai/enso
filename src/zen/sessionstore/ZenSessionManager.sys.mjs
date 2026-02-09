@@ -10,6 +10,7 @@ const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
   SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
+  SessionStartup: "resource:///modules/sessionstore/SessionStartup.sys.mjs",
   gWindowSyncEnabled: "resource:///modules/zen/ZenWindowSync.sys.mjs",
   gSyncOnlyPinnedTabs: "resource:///modules/zen/ZenWindowSync.sys.mjs",
   DeferredTask: "resource://gre/modules/DeferredTask.sys.mjs",
@@ -231,6 +232,13 @@ export class nsZenSessionManager {
     );
   }
 
+  get #shouldRestoreFromCrash() {
+    return (
+      lazy.SessionStartup.previousSessionCrashed &&
+      Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash")
+    );
+  }
+
   /**
    * Called when the session file is read. Restores the sidebar data
    * into all windows.
@@ -270,9 +278,22 @@ export class nsZenSessionManager {
         },
       ];
     }
+    return initialState;
+  }
+
+  /**
+   * Called after @onFileRead, when session startup has crash checkpoint information available.
+   * Restores the sidebar data into all windows, and runs any crash checkpoint related logic,
+   * such as restoring only pinned tabs if the previous session was not crashed and the user
+   * preference is set to do so.
+   *
+   * @param {object} initialState
+   *        The initial session state read from the session file, possibly modified by onFileRead.
+   */
+  onCrashCheckpoints(initialState) {
     // When we don't have browser.startup.page set to resume session,
     // we only want to restore the pinned tabs into the new windows.
-    if (this.#shouldRestoreOnlyPinned && this.#sidebar?.tabs) {
+    if (this.#shouldRestoreOnlyPinned && !this.#shouldRestoreFromCrash && this.#sidebar?.tabs) {
       this.log("Restoring only pinned tabs into windows");
       const sidebar = this.#sidebar;
       sidebar.tabs = (sidebar.tabs || []).filter((tab) => tab.pinned);
@@ -304,7 +325,6 @@ export class nsZenSessionManager {
       this.saveState(Cu.cloneInto(initialState, {}));
     }
     delete this._shouldRunMigration;
-    return initialState;
   }
 
   get #sidebar() {
