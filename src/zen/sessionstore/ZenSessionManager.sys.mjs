@@ -387,6 +387,25 @@ export class nsZenSessionManager {
     return initialState;
   }
 
+  onRestoringClosedWindow(aWinData) {
+    // We only want to save all pinned tabs if the user preference allows it.
+    // See https://github.com/zen-browser/desktop/issues/12307
+    if (this.#shouldRestoreOnlyPinned && aWinData?.tabs?.length) {
+      this.log("Restoring only pinned tabs for closed window");
+      this.#filterUnpinnedTabs(aWinData);
+    }
+  }
+
+  /**
+   * Filters out all unpinned tabs and groups from the given window data object.
+   *
+   * @param {object} aWindow - The window data object to filter.
+   */
+  #filterUnpinnedTabs(aWindow) {
+    aWindow.tabs = aWindow.tabs.filter((tab) => tab.pinned);
+    aWindow.groups = aWindow.groups?.filter((group) => group.pinned);
+  }
+
   /**
    * Determines if a given window data object is saveable.
    *
@@ -627,18 +646,19 @@ export class nsZenSessionManager {
     );
     let windowToClone = windows[0] || {};
     let newWindow = Cu.cloneInto(windowToClone, {});
+    let shouldRestoreOnlyPinned = !lazy.gWindowSyncEnabled || lazy.gSyncOnlyPinnedTabs;
     if (windows.length < 2) {
       // We only want to restore the sidebar object if we found
       // only one normal window to clone from (which is the one
       // we are opening).
       this.log("Restoring sidebar data into new window");
       this.#restoreWindowData(newWindow);
+      shouldRestoreOnlyPinned ||= this.#shouldRestoreOnlyPinned;
     }
     newWindow.tabs = this.#filterUnusedTabs(newWindow.tabs || []);
-    if (!lazy.gWindowSyncEnabled || lazy.gSyncOnlyPinnedTabs) {
+    if (shouldRestoreOnlyPinned) {
       // Don't bring over any unpinned tabs if window sync is disabled or if syncing only pinned tabs.
-      newWindow.tabs = newWindow.tabs.filter((tab) => tab.pinned);
-      newWindow.groups = newWindow.groups?.filter((group) => group.pinned);
+      this.#filterUnpinnedTabs(newWindow);
     }
 
     // These are window-specific from the previous window state that
