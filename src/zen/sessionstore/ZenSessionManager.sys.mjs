@@ -279,14 +279,16 @@ export class nsZenSessionManager {
     // to make sure that the sidebar object is properly initialized.
     // This would happen on first run after having a single private window
     // open when quitting the app, for example.
-    if (!initialState?.windows?.length) {
+    let normalWindowsExist = initialState?.windows?.some(
+      (win) => !win.isPrivate && !win.isPopup && !win.isTaskbarTab && !win.isZenUnsynced
+    );
+    if (!initialState?.windows?.length || !normalWindowsExist) {
       this.log("No windows found in initial state, creating an empty one");
       initialState ||= {};
-      initialState.windows = [
-        {
-          tabs: [],
-        },
-      ];
+      initialState.windows ||= [];
+      initialState.windows.push({
+        tabs: [],
+      });
     }
     return initialState;
   }
@@ -316,7 +318,7 @@ export class nsZenSessionManager {
       this.log(`Restoring Zen session data into ${initialState.windows?.length || 0} windows`);
       for (let i = 0; i < initialState.windows.length; i++) {
         let winData = initialState.windows[i];
-        if (winData.isZenUnsynced) {
+        if (winData.isZenUnsynced || winData.isPrivate || winData.isPopup || winData.isTaskbarTab) {
           continue;
         }
         this.#restoreWindowData(winData);
