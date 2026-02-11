@@ -11,7 +11,7 @@ npm run import
 IGNORE_FILES=(
   "shared.nsh"
   "ignorePrefs.json"
-  "toolkit/moz.configure"
+  "moz.configure"
 )
 
 # Recursively find all .patch files in the current directory and its subdirectories
