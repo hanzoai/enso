@@ -84,14 +84,14 @@ export class nsZenSessionManager {
 
   init() {
     this.log("Initializing session manager");
-    let backupFile = null;
+    let backupTo = null;
     if (SHOULD_BACKUP_FILE) {
-      backupFile = PathUtils.join(this.#backupFolderPath, FILE_NAME);
+      backupTo = PathUtils.join(this.#backupFolderPath, "recovery.baklz4");
     }
     this.#file = new JSONFile({
       path: this.#storeFilePath,
       compression: "lz4",
-      backupFile,
+      backupTo,
     });
     this.log("Session file path:", this.#file.path);
     this.#deferredBackupTask = new lazy.DeferredTask(async () => {
@@ -526,12 +526,12 @@ export class nsZenSessionManager {
       // Now we need to check if we have exceeded the maximum
       // number of backups allowed, and delete the oldest ones
       // if needed.
+      let prefix = PathUtils.join(backupFolder, "zen-sessions-");
       let files = await IOUtils.getChildren(backupFolder);
-      files = files.filter((file) => file.startsWith("zen-sessions-")).sort();
+      files = files.filter((file) => file.startsWith(prefix)).sort();
       for (let i = 0; i < files.length - lazy.gMaxSessionBackups; i++) {
-        const fileToDelete = PathUtils.join(backupFolder, files[i].name);
-        this.log(`Deleting old backup file ${files[i].name}`);
-        await IOUtils.remove(fileToDelete);
+        this.log(`Deleting old backup file ${files[i]}`);
+        await IOUtils.remove(files[i]);
       }
     } catch (e) {
       console.error("ZenSessionManager: Failed to create session file backups", e);
