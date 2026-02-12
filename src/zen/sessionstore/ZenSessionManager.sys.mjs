@@ -30,6 +30,10 @@ XPCOMUtils.defineLazyPreferenceGetter(
   3
 );
 
+const SHOULD_LOG_TAB_ENTRIES = Services.prefs.getBoolPref(
+  "zen.session-store.log-tab-entries",
+  false
+);
 const SHOULD_BACKUP_FILE = Services.prefs.getBoolPref("zen.session-store.backup-file", true);
 const FILE_NAME = "zen-sessions.jsonlz4";
 
@@ -220,6 +224,11 @@ export class nsZenSessionManager {
       // check if we already planned to run migration for optimization.
       this._shouldRunMigration = true;
       await this.#getDataFromDBForMigration();
+    }
+    if (SHOULD_LOG_TAB_ENTRIES) {
+      for (const tab of this.#sidebar.tabs || []) {
+        this.log("Tab entry in session file:", tab);
+      }
     }
   }
 

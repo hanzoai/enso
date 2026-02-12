@@ -1,5 +1,5 @@
 diff --git a/browser/components/tabbrowser/content/tabbrowser.js b/browser/components/tabbrowser/content/tabbrowser.js
-index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..c7c7e6dd8cacf5d2d13c48ad9bed8195d677420f 100644
+index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..db1c57c8eb4b3d614b5e5aa820871d66b00ec9a4 100644
 --- a/browser/components/tabbrowser/content/tabbrowser.js
 +++ b/browser/components/tabbrowser/content/tabbrowser.js
 @@ -398,6 +398,7 @@
@@ -186,11 +186,13 @@ index 0eaca7a58e0026237b71b2ad515efe84d9e8c779..c7c7e6dd8cacf5d2d13c48ad9bed8195
        // If focus is on the old tab, move it to the new tab.
        if (activeEl == oldTab) {
          newTab.focus();
-@@ -1959,6 +2039,11 @@
+@@ -1958,7 +2038,12 @@
+       return this._setTabLabel(aTab, aLabel);
      }
  
-     _setTabLabel(aTab, aLabel, { beforeTabOpen, isContentTitle, isURL } = {}) {
-+      if (!aTab._zenContentsVisible && !aTab._zenChangeLabelFlag && !aTab._labelIsInitialTitle && !gZenWorkspaces.privateWindowOrDisabled) {
+-    _setTabLabel(aTab, aLabel, { beforeTabOpen, isContentTitle, isURL } = {}) {
++    _setTabLabel(aTab, aLabel, { beforeTabOpen, isContentTitle, isURL, _zenChangeLabelFlag } = {}) {
++      if (!aTab._zenContentsVisible && !aTab._zenChangeLabelFlag && !aTab._labelIsInitialTitle && !gZenWorkspaces.privateWindowOrDisabled && !_zenChangeLabelFlag) {
 +        return false;
 +      }
 +      aLabel = (typeof aTab.zenStaticLabel === "string" && aTab.zenStaticLabel) ? aTab.zenStaticLabel : aLabel;
