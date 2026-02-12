@@ -178,7 +178,7 @@
   --tab-border-radius: 6px;
   --toolbarbutton-border-radius: var(--tab-border-radius);
   --toolbarbutton-inner-padding: 6px;
-  --toolbarbutton-outer-padding: 2px;
+  --toolbarbutton-outer-padding: 1px;
   color: color-mix(in srgb, currentColor 60%, transparent);
 
   transition:
@@ -192,10 +192,6 @@
   &:not([open="true"]):active:hover {
     transform: scale(0.95);
   }
-}
-
-#zen-sidebar-top-buttons toolbarbutton {
-  padding: 0;
 }
 
 .zen-interactive-button {

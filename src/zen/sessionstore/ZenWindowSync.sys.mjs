@@ -1279,21 +1279,26 @@ class nsZenWindowSync {
     for (let browser of aBrowsers) {
       const tab = this.#swapedTabsEntriesForWC.get(browser.permanentKey);
       if (tab) {
-        let win = tab.ownerGlobal;
-        this.log(`Finalizing swap for tab ${tab.id} on window close`);
-        lazy.TabStateCache.update(
-          tab.linkedBrowser.permanentKey,
-          lazy.TabStateCache.get(browser.permanentKey)
-        );
-        let tabData = this.#getTabEntriesFromCache(tab);
-        let activePageData = tabData.entries[tabData.index - 1] || null;
+        try {
+          let win = tab.ownerGlobal;
+          this.log(`Finalizing swap for tab ${tab.id} on window close`);
+          lazy.TabStateCache.update(
+            tab.linkedBrowser.permanentKey,
+            lazy.TabStateCache.get(browser.permanentKey)
+          );
+          let tabData = this.#getTabEntriesFromCache(tab);
+          let activePageData = tabData.entries[tabData.index - 1] || null;
 
-        // If the page has a title, set it. When doing a swap and we still didn't
-        // flush the tab state, the title might not be correct.
-        if (activePageData && win.gBrowser) {
-          win.gBrowser.setInitialTabTitle(tab, activePageData.title, {
-            isContentTitle: activePageData.title && activePageData.title != activePageData.url,
-          });
+          // If the page has a title, set it. When doing a swap and we still didn't
+          // flush the tab state, the title might not be correct.
+          if (activePageData && win?.gBrowser) {
+            win.gBrowser.setInitialTabTitle(tab, activePageData.title, {
+              isContentTitle: activePageData.title && activePageData.title != activePageData.url,
+            });
+          }
+        } catch (e) {
+          // We might have already closed the window at this point, so just ignore any error.
+          console.error(e);
         }
       }
     }
