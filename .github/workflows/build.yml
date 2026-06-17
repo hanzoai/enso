@@ -52,7 +52,7 @@ on:
 jobs:
   buildid:
     name: Generate build ID
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     outputs:
       buildids: ${{ steps.get.outputs.bid }}
     steps:
@@ -99,7 +99,7 @@ jobs:
           fi
 
   start-self-host:
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     steps:
       - name: Download aws-cli
         if: ${{ inputs.create_release && inputs.update_branch == 'release' }}
@@ -190,7 +190,7 @@ jobs:
     name: Lint
 
   check-release:
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     needs: [build-data, lint]
     steps:
       - name: Checkout repository
@@ -231,7 +231,7 @@ jobs:
   source:
     permissions:
       contents: write
-    runs-on: ubuntu-latest
+    runs-on: hanzo-build-linux-amd64
     needs: [build-data, check-release]
 
     steps:
