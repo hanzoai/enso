@@ -3,9 +3,12 @@
 Enso is served by the zen-svc engine (`hanzoai/zen`) with `ZEN_FAMILY=enso`: the SAME
 binary, this family as data. This repo is the family's source of truth:
 
-- `catalog.yaml` — providers + the two SKUs. `enso` = ladder (opus-class 200K rung →
-  deepseek-v4-pro 1M overflow). `enso-ultra` = fan-out (same request to every arm
-  concurrently → one synthesizer folds the best answer). All arms via the DO gateway.
+- `catalog.yaml` — providers + the three SKUs. `enso` = ladder (opus-class 200K rung →
+  deepseek-v4-pro 1M overflow). `enso-flash` = cheap/fast single-arm ladder (2→6 $/MTok,
+  262K rung → 1M overflow). `enso-ultra` = ADAPTIVE fan-out — it PROBES on one
+  task-appropriate arm (`escalate.rank[task][0]`) and escalates to the top-`panel` arms
+  + verify-then-select ONLY when the probe is low-confidence, so a confident request
+  bills ONE arm, not six. All arms/rungs via the DO gateway.
 - `prompts/` — identity (never reveals upstreams; a closed family).
 
 Build: `Dockerfile` is a COPY-only overlay on the prod `ghcr.io/hanzoai/zen` image
