@@ -1,0 +1,50 @@
+name: Build
+
+# Builds and pushes the ghcr.io/hanzoai/enso image — a COPY-only overlay on the
+# public prod zen image (see Dockerfile). No Go build, no private module, so no
+# GH_PAT: the base pulls anonymously (zen is public) and the push uses the repo's
+# own GITHUB_TOKEN (packages: write). Deployment is managed by hanzoai/universe
+# (infra/k8s/enso) — this workflow only produces the image.
+#
+# NOTE: push-triggered runs on the self-hosted pool sometimes do not fire; after a
+# push, kick it with `gh workflow run build.yml -R hanzoai/enso` (workflow_dispatch).
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  docker:
+    name: Docker Release
+    runs-on: hanzo-build-linux-amd64
+    # amd64-only: enso runs on the amd64 DOKS cluster (same as zen/cloud).
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/hanzoai/enso
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,format=short
+            type=ref,event=tag
+      - name: Build and push (linux/amd64)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
