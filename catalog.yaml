@@ -52,15 +52,28 @@ models:
       - { provider: do, upstream: anthropic-claude-opus-4.8, ctx: 200000,  cost: { in: "6.00", out: "18.00" }, retail: { in: "20.00", out: "60.00" } }
       - { provider: do, upstream: deepseek-v4-pro,           ctx: 1000000, cost: { in: "1.25", out: "5.00"  }, retail: { in: "12.00", out: "36.00" } }  # 1M overflow
 
-  # ── enso-ultra (fan-out → verify-then-select over the best accessible arms) ──
+  # ── enso-flash (fast / economical tier) ──────────────────────────────────────
+  # The cheap, low-latency member: a single-arm ladder (fast base rung, 1M overflow)
+  # for high-volume and everyday work. Headline retail 2.00 → 6.00 $/MTok, margin-
+  # positive over cost on both rungs (base 0.112/0.224 → 18×/27×; overflow 1.25/5.00 →
+  # 1.6×/1.2×). Same closed-family voice (prompts/enso-flash.md) and gating as the rest.
+  enso-flash:
+    gated: true   # limited preview — LISTED for discovery, callable only with an access grant (ai enforces)
+    route:
+      - { provider: do, upstream: deepseek-4-flash, ctx: 262144,  cost: { in: "0.112", out: "0.224" }, retail: { in: "2.00", out: "6.00" } }
+      - { provider: do, upstream: deepseek-v4-pro,  ctx: 1000000, cost: { in: "1.25",  out: "5.00"  }, retail: { in: "2.00", out: "6.00" } }  # 1M overflow
+
+  # ── enso-ultra (adaptive fan-out → verify-then-select over the best accessible arms) ──
   # route[0] is the SKU's public billing rate + advertised context (retail ~2× enso).
-  # It is the METER, not the path: serving fans the request to every `arm` concurrently
-  # (a mix of the top proprietary + OSS models we can reach through DO), then SELECTS the
-  # correct answer (select.go) — a pure self-consistency fast path when a supermajority of
-  # the arms agree (the `synth` call is SKIPPED), else `synth` acts as a judge that selects
-  # the correct candidate. Billing sums every arm token — plus the judge's ONLY when the
-  # judge ran — at route[0]'s retail; cost is the real sum of each upstream. All arms are
-  # DO slugs; identity injection still hides them — the caller only ever sees "Enso Ultra".
+  # It is the METER, not the path. serving is ADAPTIVE (escalate: below): the request is
+  # PROBED on one task-appropriate arm first (rank[task][0]); only when that probe is
+  # low-confidence does it ESCALATE — fan out the top-`panel` task-ranked arms and SELECT
+  # the correct answer (select.go: self-consistency fast path when the arms agree, else a
+  # `synth` judge). A confident probe bills ONE arm — the fixed 6-arm floor is gone.
+  # Billing sums exactly the arms that ran (probe-only: 1; escalated: the panel) plus the
+  # judge ONLY when it ran, at route[0]'s retail; cost is the real sum of each upstream.
+  # All arms are DO slugs; identity injection still hides them — the caller only ever
+  # sees "Enso Ultra".
   enso-ultra:
     gated: true   # limited preview — LISTED for discovery, callable only with an access grant (ai enforces)
     route:
@@ -74,6 +87,18 @@ models:
       - { provider: do, upstream: nemotron-3-ultra-550b,     ctx: 131072,  cost: { in: "0.60", out: "2.00"  } }  # top OSS
     synth:
       { provider: do, upstream: anthropic-claude-opus-4.8, ctx: 200000, cost: { in: "6.00", out: "18.00" } }
+    # Adaptive escalation. `panel` = arms in the escalated fan-out (probe included), so a
+    # non-probe-only request spends 3 arms, not 6. `rank` is the task→arm order, best
+    # first, and the ONE source of both probe (rank[task][0]) and panel (rank[task][:3]):
+    # `default` favours the strongest all-round reasoners; `code` promotes the coder-
+    # strong arms. Every name is one of the arms above (validated at load).
+    escalate:
+      mode: adaptive
+      panel: 3
+      rank:
+        default: [anthropic-claude-opus-4.8, deepseek-v4-pro, anthropic-claude-fable-5, openai-gpt-5.6-sol, qwen3.5-397b-a17b, nemotron-3-ultra-550b]
+        code:    [openai-gpt-5.6-sol, anthropic-claude-opus-4.8, deepseek-v4-pro, qwen3.5-397b-a17b, anthropic-claude-fable-5, nemotron-3-ultra-550b]
 
-# Enso is a two-SKU family: the flagship `enso` and the fan-out `enso-ultra`. No
-# aliases, no per-tier SKUs — one SKU per capability, forwards-only.
+# Enso is a three-SKU family: the flagship `enso`, the cheap `enso-flash`, and the
+# adaptive fan-out `enso-ultra`. No aliases, no per-tier SKUs — one SKU per capability,
+# forwards-only.
