@@ -1,0 +1,77 @@
+# Enso catalog — the single source of truth for how the Enso model family is served.
+# Hanzo AI Inc. Enso is Hanzo's PROPRIETARY frontier family (closed, unlike the open
+# Zen family). The SAME binary serves this catalog when ZEN_FAMILY=enso; hanzoai/ai
+# discovers it at runtime from GET /v1/models exactly as it does zen. Edit the family
+# here, nowhere else. See hip-00NN for the design.
+#
+# EVERY rung/arm/synth is served through the DigitalOcean GenAI gateway (provider
+# `do`, one DO_AI_API_KEY) — the only upstream that actually serves under our keys, and
+# the same gateway zen's catalog uses. Direct anthropic/openai providers are NOT used
+# (their standalone keys are dead), so this family carries a single `do` provider. The
+# `do` model slugs below are the real, verified-live gateway ids; identity injection
+# still hides them — a caller only ever sees "Enso".
+#
+# Design (one way to do everything — identical to catalog.yaml):
+#   providers  — upstream endpoint + credential env, keyed by short name.
+#   models     — an enso SKU. `route` is an ascending-context ladder of rungs; the
+#                engine picks the SMALLEST rung whose context holds the prompt and
+#                advertises the LARGEST as the SKU's context_window (the 1M overflow).
+#   arms/synth — a FAN-OUT SKU (enso-ultra): the request is served to EVERY arm
+#                concurrently, then one synthesizer folds the candidate answers into a
+#                single best final answer. `route[0]` is the SKU's public billing rate
+#                (retail + advertised context); arms/synth are where the fan-out goes.
+#   cost       — the upstream's $/MTok (input/output) on each rung — our cost basis —
+#                as an EXACT decimal string. Retail (what a caller pays) is DERIVED =
+#                cost × margin, or a fixed `retail:` override (used here to price the
+#                family at its headline). A request bills at the rung that SERVED it.
+#   identity   — prompts/<id>.md, prepended as the system turn so the model speaks as
+#                Enso. Enso never reveals its upstreams (a closed family).
+
+providers:
+  do: { base: "https://inference.do-ai.run/v1", key_env: DO_AI_API_KEY, kind: openai }
+  # google via the OpenAI-compatible endpoint. Enabled only once a GEMINI_API_KEY is
+  # provisioned in KMS (project hanzo-enso / hanzo-zen). Until verified, this stanza is
+  # commented so the family ships without a dangling provider; the gemini-3.1-pro arm
+  # is likewise held out.
+  # TODO(enso): provision GEMINI_API_KEY in KMS hanzo-enso, then uncomment.
+  # google:  { base: "https://generativelanguage.googleapis.com/v1beta/openai", key_env: GEMINI_API_KEY, kind: openai }
+
+# margin is the resale multiple (retail = cost × margin) applied where a SKU does not
+# set a fixed retail override. Enso prices at fixed headline numbers (below), so margin
+# is the floor for any derived rung — every tier still bills strictly above cost.
+margin: "3.0"
+
+models:
+  # ── enso (flagship) ──────────────────────────────────────────────────────────
+  # Opus-quality by default (200K rung); a prompt past 200K overflows to the 1M
+  # long-context rung. Headline retail 20.00 → 60.00 $/MTok (the base rung). The
+  # overflow rung bills at ITS retail (never underbill on overflow).
+  enso:
+    gated: true   # limited preview — LISTED for discovery, callable only with an access grant (ai enforces)
+    route:
+      - { provider: do, upstream: anthropic-claude-opus-4.8, ctx: 200000,  cost: { in: "6.00", out: "18.00" }, retail: { in: "20.00", out: "60.00" } }
+      - { provider: do, upstream: deepseek-v4-pro,           ctx: 1000000, cost: { in: "1.25", out: "5.00"  }, retail: { in: "12.00", out: "36.00" } }  # 1M overflow
+
+  # ── enso-ultra (naive fan-out over the best accessible arms) ─────────────────
+  # route[0] is the SKU's public billing rate + advertised context (retail ~2× enso).
+  # It is the METER, not the path: serving fans the request to every `arm` concurrently
+  # (a naive mix of the top proprietary + OSS models we can reach through DO) and folds
+  # the candidates with `synth`. Billing sums every arm + synth token and charges at
+  # route[0]'s retail; cost is the real sum of each upstream. All arms are DO slugs;
+  # identity injection still hides them — the caller only ever sees "Enso Ultra".
+  enso-ultra:
+    gated: true   # limited preview — LISTED for discovery, callable only with an access grant (ai enforces)
+    route:
+      - { provider: do, upstream: anthropic-claude-opus-4.8, ctx: 200000, cost: { in: "6.00", out: "18.00" }, retail: { in: "40.00", out: "120.00" } }
+    arms:
+      - { provider: do, upstream: anthropic-claude-opus-4.8, ctx: 200000,  cost: { in: "6.00", out: "18.00" } }  # top proprietary
+      - { provider: do, upstream: anthropic-claude-fable-5,  ctx: 200000,  cost: { in: "5.00", out: "15.00" } }  # proprietary
+      - { provider: do, upstream: openai-gpt-5.6-sol,        ctx: 200000,  cost: { in: "5.00", out: "15.00" } }  # proprietary
+      - { provider: do, upstream: deepseek-v4-pro,           ctx: 1000000, cost: { in: "1.25", out: "5.00"  } }  # 1M-ctx OSS
+      - { provider: do, upstream: qwen3.5-397b-a17b,         ctx: 262144,  cost: { in: "0.60", out: "2.00"  } }  # top OSS MoE
+      - { provider: do, upstream: nemotron-3-ultra-550b,     ctx: 131072,  cost: { in: "0.60", out: "2.00"  } }  # top OSS
+    synth:
+      { provider: do, upstream: anthropic-claude-opus-4.8, ctx: 200000, cost: { in: "6.00", out: "18.00" } }
+
+# Enso is a two-SKU family: the flagship `enso` and the fan-out `enso-ultra`. No
+# aliases, no per-tier SKUs — one SKU per capability, forwards-only.
