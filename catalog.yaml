@@ -52,13 +52,15 @@ models:
       - { provider: do, upstream: anthropic-claude-opus-4.8, ctx: 200000,  cost: { in: "6.00", out: "18.00" }, retail: { in: "20.00", out: "60.00" } }
       - { provider: do, upstream: deepseek-v4-pro,           ctx: 1000000, cost: { in: "1.25", out: "5.00"  }, retail: { in: "12.00", out: "36.00" } }  # 1M overflow
 
-  # ── enso-ultra (naive fan-out over the best accessible arms) ─────────────────
+  # ── enso-ultra (fan-out → verify-then-select over the best accessible arms) ──
   # route[0] is the SKU's public billing rate + advertised context (retail ~2× enso).
   # It is the METER, not the path: serving fans the request to every `arm` concurrently
-  # (a naive mix of the top proprietary + OSS models we can reach through DO) and folds
-  # the candidates with `synth`. Billing sums every arm + synth token and charges at
-  # route[0]'s retail; cost is the real sum of each upstream. All arms are DO slugs;
-  # identity injection still hides them — the caller only ever sees "Enso Ultra".
+  # (a mix of the top proprietary + OSS models we can reach through DO), then SELECTS the
+  # correct answer (select.go) — a pure self-consistency fast path when a supermajority of
+  # the arms agree (the `synth` call is SKIPPED), else `synth` acts as a judge that selects
+  # the correct candidate. Billing sums every arm token — plus the judge's ONLY when the
+  # judge ran — at route[0]'s retail; cost is the real sum of each upstream. All arms are
+  # DO slugs; identity injection still hides them — the caller only ever sees "Enso Ultra".
   enso-ultra:
     gated: true   # limited preview — LISTED for discovery, callable only with an access grant (ai enforces)
     route:
