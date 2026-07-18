@@ -47,7 +47,7 @@ models:
   # long-context rung. Headline retail 20.00 → 60.00 $/MTok (the base rung). The
   # overflow rung bills at ITS retail (never underbill on overflow).
   enso:
-    gated: true   # limited preview — LISTED for discovery, callable only with an access grant (ai enforces)
+    gated: false  # OPEN — generally available: listed for discovery AND callable by anyone (no access grant)
     route:
       - { provider: do, upstream: anthropic-claude-opus-4.8, ctx: 200000,  cost: { in: "6.00", out: "18.00" }, retail: { in: "20.00", out: "60.00" } }
       - { provider: do, upstream: deepseek-v4-pro,           ctx: 1000000, cost: { in: "1.25", out: "5.00"  }, retail: { in: "12.00", out: "36.00" } }  # 1M overflow
@@ -58,7 +58,7 @@ models:
   # positive over cost on both rungs (base 0.112/0.224 → 18×/27×; overflow 1.25/5.00 →
   # 1.6×/1.2×). Same closed-family voice (prompts/enso-flash.md) and gating as the rest.
   enso-flash:
-    gated: true   # limited preview — LISTED for discovery, callable only with an access grant (ai enforces)
+    gated: false  # OPEN — generally available: listed for discovery AND callable by anyone (no access grant)
     route:
       - { provider: do, upstream: deepseek-4-flash, ctx: 262144,  cost: { in: "0.112", out: "0.224" }, retail: { in: "2.00", out: "6.00" } }
       - { provider: do, upstream: deepseek-v4-pro,  ctx: 1000000, cost: { in: "1.25",  out: "5.00"  }, retail: { in: "2.00", out: "6.00" } }  # 1M overflow
@@ -75,7 +75,7 @@ models:
   # All arms are DO slugs; identity injection still hides them — the caller only ever
   # sees "Enso Ultra".
   enso-ultra:
-    gated: true   # limited preview — LISTED for discovery, callable only with an access grant (ai enforces)
+    gated: false  # OPEN — generally available: listed for discovery AND callable by anyone (no access grant)
     route:
       - { provider: do, upstream: anthropic-claude-opus-4.8, ctx: 200000, cost: { in: "6.00", out: "18.00" }, retail: { in: "40.00", out: "120.00" } }
     arms:
