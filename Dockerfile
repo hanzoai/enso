@@ -12,7 +12,7 @@
 # both are inherited unchanged (distroless has no shell — do not add RUN steps).
 # COPYed files land root:root 0644 / dirs 0755 — world-readable, so the nonroot
 # (65532) runtime user reads them.
-FROM ghcr.io/hanzoai/zen@sha256:4bf95c57a92e2bf6cffc4adeee20734f6b4fa75d84e1a938d8f8030f3645ce02
+FROM ghcr.io/hanzoai/zen@sha256:588ccc24f0c19c8a8b1f4a4e21e5e4e292276bc22852a979a6de64fb4148a9ba
 
 # The Enso family as data: this repo is the deploy source of truth (zen-svc's
 # embedded catalog-enso.yaml + prompts/enso*.md are only the fallback default).
