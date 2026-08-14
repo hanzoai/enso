@@ -24,12 +24,26 @@ namespace pulls it with the cluster `ghcr-secret` (hanzo-dev). ai discovers via
 GET $ENSO_URL/v1/models and gates access (ModelAccess waitlist; granted preview is
 COMPED — bypasses the balance gates, still metered).
 
-Deploy source of truth: THIS repo is now the deploy source — the image loads this
-`catalog.yaml` + `prompts/` at runtime (`ZEN_CATALOG`/`ZEN_PROMPTS`). zen-svc's embedded
-`catalog-enso.yaml` + `prompts/enso*.md` are only the FALLBACK default (what a bare zen
-image serves with `ZEN_FAMILY=enso` and no path overrides); keep them in sync as the
-fallback, but ship changes by rebuilding this image. One mechanism, N families — see
-zen-svc CLAUDE.md.
+Deploy source of truth: **NOT this repo — editing `catalog.yaml` here deploys nothing.**
+What serves is a ConfigMap, `enso-catalog` in namespace `enso`, whose body is inline in
+universe at `charts/app/values/enso/enso.yaml`. The Deployment mounts it at
+`/etc/enso-catalog/` and sets `ZEN_CATALOG=/etc/enso-catalog/catalog.yaml`, OVERRIDING the
+`/etc/enso/catalog.yaml` the Dockerfile bakes — so this repo's copy is still built into
+the image and is never the one read. Change the catalog in universe. Measured, not
+inferred:
+
+    kubectl -n enso get deploy enso -o jsonpath='{.spec.template.spec.containers[0].env[*]}'
+    kubectl -n enso get cm enso-catalog -o jsonpath='{.data.catalog\.yaml}'
+
+This paragraph claimed the opposite, and the drift is what that cost: `catalog.yaml` here
+was edited into a different design — a `funding` axis separating grant-funded from prepaid
+providers, plus a Moonshot arm — that never reached a pod, while the catalog that actually
+serves moved on independently in universe. Two files diverging, one of them inert, neither
+aware of the other. When they disagree, the ConfigMap answers the request.
+
+zen-svc's embedded `catalog-enso.yaml` + `prompts/enso*.md` remain the FALLBACK default
+(what a bare zen image serves with `ZEN_FAMILY=enso` and no path overrides). One mechanism,
+N families — see zen-svc CLAUDE.md.
 
 Bench + paper: `hanzoai/enso-bench` (measured GPQA: enso 87.9, enso-ultra 89.9),
 `papers/enso` (LaTeX), blog PR "Introducing Enso".
