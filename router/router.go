@@ -29,6 +29,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"strings"
 )
 
@@ -81,7 +82,7 @@ type Decision struct {
 	Source       Source   `json:"source"`
 	Model        string   `json:"selected_model"`
 	Fallbacks    []string `json:"fallbacks"`
-	Wall         bool     `json:"wall"`         // matched item that no servable model solved
+	Wall         bool     `json:"wall"` // matched item that no servable model solved
 	ItemID       string   `json:"item_id,omitempty"`
 	RouteVersion string   `json:"route_version"`
 }
@@ -94,8 +95,15 @@ type Router struct {
 }
 
 // New loads and indexes every embedded *.routes.json into an immutable Router.
-func New() (*Router, error) {
-	entries, err := tablesFS.ReadDir(".")
+func New() (*Router, error) { return load(tablesFS) }
+
+// load is New with the table source as an argument rather than a package global.
+// Splitting it that way keeps WHERE the tables come from apart from HOW they are
+// indexed: the embed is one source, and a test can supply another. Every refusal
+// below is otherwise unreachable — a valid embed cannot fail to read or parse —
+// so without this seam the error paths ship unexercised.
+func load(fsys fs.FS) (*Router, error) {
+	entries, err := fs.ReadDir(fsys, ".")
 	if err != nil {
 		return nil, fmt.Errorf("router: read embedded tables: %w", err)
 	}
@@ -105,7 +113,7 @@ func New() (*Router, error) {
 		if !strings.HasSuffix(name, ".routes.json") {
 			continue
 		}
-		raw, err := tablesFS.ReadFile(name)
+		raw, err := fs.ReadFile(fsys, name)
 		if err != nil {
 			return nil, fmt.Errorf("router: read %s: %w", name, err)
 		}
