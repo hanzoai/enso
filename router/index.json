@@ -1,0 +1,43 @@
+{
+ "_README": {
+  "oracle_pct": "Share of items where SOME arm in the pool answered correctly — a CEILING on any selector, not a score anything achieved. `wall` is its complement: items no arm got.",
+  "held_out_pct": "The router scored on questions absent from its own route table (5-fold refit of the fingerprint index, router/heldout_test.go) — what a new question actually gets.",
+  "best_single_pct": "The strongest single arm, over the same items."
+ },
+ "charxiv": {
+  "n": 200,
+  "oracle_pct": 92.0,
+  "held_out_pct": 85.5,
+  "best_single": "gpt-5.5",
+  "best_single_pct": 85.5,
+  "wall": 16,
+  "econ_mean_cost": 8.73
+ },
+ "gpqa_diamond": {
+  "n": 198,
+  "oracle_pct": 98.0,
+  "held_out_pct": 92.9,
+  "best_single": "grok-4.5",
+  "best_single_pct": 92.9,
+  "wall": 4,
+  "econ_mean_cost": 1.07
+ },
+ "hle": {
+  "n": 500,
+  "oracle_pct": 52.2,
+  "held_out_pct": 38.2,
+  "best_single": "fable-5",
+  "best_single_pct": 38.2,
+  "wall": 239,
+  "econ_mean_cost": 7.13
+ },
+ "livecodebench": {
+  "n": 175,
+  "oracle_pct": 92.0,
+  "held_out_pct": 91.4,
+  "best_single": "gpt-5.5",
+  "best_single_pct": 91.4,
+  "wall": 14,
+  "econ_mean_cost": 2.66
+ }
+}

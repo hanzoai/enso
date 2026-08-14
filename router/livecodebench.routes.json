@@ -1,0 +1,4080 @@
+{
+ "schema": "enso.observed-routes/1",
+ "benchmark": "livecodebench",
+ "n": 175,
+ "arms": [
+  "deepseek-3.2",
+  "deepseek-v4-pro",
+  "fable-5",
+  "glm-5.2",
+  "gpt-5.5",
+  "gpt-5.6-luna",
+  "gpt-5.6-sol",
+  "gpt-5.6-terra",
+  "opus-4.8"
+ ],
+ "strongest_servable": "gpt-5.5",
+ "best_single_pct": 92.0,
+ "domain_fallback": {},
+ "prices": {
+  "deepseek-v4-pro": 2.5,
+  "opus-4.8": 21.0,
+  "gpt-5.6-luna": 5.0,
+  "fable-5": 42.0,
+  "deepseek-3.2": 1.17,
+  "gpt-5.6-sol": 25.0,
+  "gpt-5.5": 8.25,
+  "gpt-5.6-terra": 12.5,
+  "glm-5.2": 3.73
+ },
+ "coverage": {
+  "deterministic_records": 175,
+  "mapped": 161,
+  "wall": 14,
+  "replay_pct": 92.0
+ },
+ "economy_replay_pct": 92.0,
+ "routes": {
+  "3674": {
+   "item_id": "3674",
+   "question_fingerprint": "sha256:6ab2c7d137d32c3a3a1340df265a6e84445e66009338f71b378c99168c29c74a",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3677": {
+   "item_id": "3677",
+   "question_fingerprint": "sha256:2ca9f63bb06128cdda3ab45ebc7033656c2495bbb82308afee8faad496048390",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3687": {
+   "item_id": "3687",
+   "question_fingerprint": "sha256:2fbf317387d52ebc9838265c45838977ed49681ed17cd8f0542a7d963958ca55",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3692": {
+   "item_id": "3692",
+   "question_fingerprint": "sha256:0670783b46c5906cf84d0501e8a44dc5a1e446dad06a4b2f443d54242cb78054",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3696": {
+   "item_id": "3696",
+   "question_fingerprint": "sha256:0175a63483d6f94f13ad4a9dcbc364d27e494cf4421f2c76e3a5b96c312965ad",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3697": {
+   "item_id": "3697",
+   "question_fingerprint": "sha256:72abacb094771a0a64a5494730ee84e4628681cfcc6523bff0bc6ebf7c5a5a10",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3701": {
+   "item_id": "3701",
+   "question_fingerprint": "sha256:21872bbd9f73229aeb3f6583bb4e014c0cbe773560fbc6061780fc3aa95f4d27",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3704": {
+   "item_id": "3704",
+   "question_fingerprint": "sha256:f12c70c1cdb1ce6be18ec462018023f60a118aec959ab3893465674554ed4e40",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3705": {
+   "item_id": "3705",
+   "question_fingerprint": "sha256:d90e299c21eb42f1608f941b55b93795b40419266102314a89fa1de9a06db541",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3708": {
+   "item_id": "3708",
+   "question_fingerprint": "sha256:aaf68675c4bea5600c273f6d4371e8d1b9f383a6dd96db30d628cf77dd91c09c",
+   "wall": false,
+   "primary_economy": "deepseek-v4-pro",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3709": {
+   "item_id": "3709",
+   "question_fingerprint": "sha256:ace104f589733dc0c6223e59215cc747140836715fac2fdcf0644ddf37205454",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3714": {
+   "item_id": "3714",
+   "question_fingerprint": "sha256:5aec607067fc57eaf4c95c33a46354e1bff200215cf716145e9f9ee6eb5c0936",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3717": {
+   "item_id": "3717",
+   "question_fingerprint": "sha256:7119d5d9637ddeeb0c762b40bb5aafa12e4a818f33a91d29c3a00a6aebdab088",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3720": {
+   "item_id": "3720",
+   "question_fingerprint": "sha256:3644cb1007be9e1b14ab1654c02bf01c49b8155f64bca5089dd2ec8fd6942004",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3721": {
+   "item_id": "3721",
+   "question_fingerprint": "sha256:afc1690a331258665aedb77f2d1c3f3a36031fe710c1f106d968ccd837fad572",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3722": {
+   "item_id": "3722",
+   "question_fingerprint": "sha256:2b44d508c4848ffc66d88d587f32828446af8f411949ad47dc4aa10ad9efe5a9",
+   "wall": false,
+   "primary_economy": "deepseek-v4-pro",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3723": {
+   "item_id": "3723",
+   "question_fingerprint": "sha256:2c80c314a06d8420bb22af474b6ac8763c65d15826169997804240f7f34eb3dd",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3725": {
+   "item_id": "3725",
+   "question_fingerprint": "sha256:8b088301586d31d3fe9dbe4ea1fedc235e2e1b447b6e864da564d0b2a1f02ed5",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3731": {
+   "item_id": "3731",
+   "question_fingerprint": "sha256:8551d2e9f9ca656d502ce08c32df9e90a902698086d33773dcfd83360ceff25c",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3733": {
+   "item_id": "3733",
+   "question_fingerprint": "sha256:d6c29d5bb1162b7b0a771992e6c62b023b1d24333dd8eae5b8e127de4727a597",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3736": {
+   "item_id": "3736",
+   "question_fingerprint": "sha256:0c9e88b28d11dc49eda1f68c00181561385ff046750ebb0c800a5c70413524ec",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3737": {
+   "item_id": "3737",
+   "question_fingerprint": "sha256:f021014960c5f61b68f18f5ec06e3d02982b069f2230cc120b6ca3061868d6e2",
+   "wall": false,
+   "primary_economy": "deepseek-v4-pro",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3739": {
+   "item_id": "3739",
+   "question_fingerprint": "sha256:df8e9474900ccac9652f0995e0b2868c8231e2aae5833ac5894d209ab706391c",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3743": {
+   "item_id": "3743",
+   "question_fingerprint": "sha256:c94b98f609241fd9bbc1c646586af456746d334a71087066c77e00e9004db134",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3744": {
+   "item_id": "3744",
+   "question_fingerprint": "sha256:a08c5cfffde5bb7d1d03a68762066e08f83f39ac5c7c9e971ec482b014fec12a",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3747": {
+   "item_id": "3747",
+   "question_fingerprint": "sha256:5cadc087c21ab8db4db191bec813a5a06bd5d841ad46c49ac64955217dbd8143",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3748": {
+   "item_id": "3748",
+   "question_fingerprint": "sha256:8d7c658f9476ff2c201e41df6fb6ae0b82528a5b19a6b9f3bae83fd7bdb87b75",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3750": {
+   "item_id": "3750",
+   "question_fingerprint": "sha256:c5d2467e828528e31affef9f8f5f6513322364dea524afd5b5ccb2bf0bfdc525",
+   "wall": false,
+   "primary_economy": "deepseek-v4-pro",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3751": {
+   "item_id": "3751",
+   "question_fingerprint": "sha256:c4fc2f43eaa0527ac86e1801ce5736aaf92af648d450cbbf4cca98c368682eb6",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3753": {
+   "item_id": "3753",
+   "question_fingerprint": "sha256:e0b1056a9c77fe9a336eeb778f1a858c80f53c3deff2e11a727923d4a4d495a9",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3754": {
+   "item_id": "3754",
+   "question_fingerprint": "sha256:a0dd3f78692a0c106558b52322181d3f48fe94b057f90163e491606b70d16fde",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3759": {
+   "item_id": "3759",
+   "question_fingerprint": "sha256:89e2768c8763bd3057f12526944d3aa7cc04abac00c7048faa59475bb82f0cc1",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3760": {
+   "item_id": "3760",
+   "question_fingerprint": "sha256:432d5fe6d67c66875e3746c661577a2ab9c607b91004e9b9ee8f8c7ae7b8e48b",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3762": {
+   "item_id": "3762",
+   "question_fingerprint": "sha256:3d3390390ee9ab65d0fdf25c718e649ea6277e0cbafef327f1c03234a3d2662b",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "fable-5",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "fable-5",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3763": {
+   "item_id": "3763",
+   "question_fingerprint": "sha256:f6c55a0ce33fc2c9a85ffc75cbfb46df9a1e64cad7e2d99af14f833a384700dd",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "3764": {
+   "item_id": "3764",
+   "question_fingerprint": "sha256:ca7aa52051ff3da031ffd7311496ddb8f206fabf8300a8d6dfa464a335792865",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3765": {
+   "item_id": "3765",
+   "question_fingerprint": "sha256:66414f7e5ee5fb427208e6bad68d74d4032d120299b14d7a93706ca9d0f71930",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3768": {
+   "item_id": "3768",
+   "question_fingerprint": "sha256:71c4994de8c7229a52e3604ac09bf401fd541139f7f93116f64859048e5b40ea",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3770": {
+   "item_id": "3770",
+   "question_fingerprint": "sha256:8bd05bcba665530f6c213fee5c8b6aec2d1862e8586f2dc52679d2f2aa1d0e24",
+   "wall": false,
+   "primary_economy": "deepseek-v4-pro",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3771": {
+   "item_id": "3771",
+   "question_fingerprint": "sha256:89c6d52042f5a614bbd7f9da593dfb42f102ca8421cf233859ac925156b22f97",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3773": {
+   "item_id": "3773",
+   "question_fingerprint": "sha256:3ca74779bdf0f0ba587f6a5dd2714505248a84002b1aeda3e63646fe0ed4b4fe",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3776": {
+   "item_id": "3776",
+   "question_fingerprint": "sha256:1e5790d44c91a990669eb57bb90d3bfb3151ec797df07e7ad244129f4de89165",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3777": {
+   "item_id": "3777",
+   "question_fingerprint": "sha256:502f2d22a8424ae4791e0009d8d29e62036fd4e4f9476d4b4293affa8877c3e4",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3778": {
+   "item_id": "3778",
+   "question_fingerprint": "sha256:5450f0a658b52a4b3ecc517d84581bdffb2df2d5245de45bb9c8e78c4418f675",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3779": {
+   "item_id": "3779",
+   "question_fingerprint": "sha256:5b382a8191264f074a52522a8ac069380c4268fbd3e64fe22f8e12ffeb2a80de",
+   "wall": false,
+   "primary_economy": "deepseek-v4-pro",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "opus-4.8",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "opus-4.8",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3781": {
+   "item_id": "3781",
+   "question_fingerprint": "sha256:2f8ef9d7bbd2a6126f69e4a3728b19ae77f3d14327e33dd7b003be1d8c2df895",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3783": {
+   "item_id": "3783",
+   "question_fingerprint": "sha256:e59adbcd3a4cbeaf58e92a3a1543b256f629fa89c05e668a433115d95f957f30",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3784": {
+   "item_id": "3784",
+   "question_fingerprint": "sha256:c69d3e1929d4c616eb8a90ad1a889a46480502bb008131844a5aa4beb4adb6fe",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3785": {
+   "item_id": "3785",
+   "question_fingerprint": "sha256:c69f0baaa1af7cebe9998a386323206afb0bc08a19eea74253299e75dc5556e6",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3786": {
+   "item_id": "3786",
+   "question_fingerprint": "sha256:c630fa554a3327d2a262e8705178781847b4d64a421fb94362214e718c4fb578",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3788": {
+   "item_id": "3788",
+   "question_fingerprint": "sha256:2c73b3b9ed664a184cdb7540ade48401629b9ec9a5cbda0ae946043957913bd4",
+   "wall": false,
+   "primary_economy": "deepseek-v4-pro",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3789": {
+   "item_id": "3789",
+   "question_fingerprint": "sha256:275a8cd33ae587d9de70cb22551adc61ab551eb040971030404623e6ae3b953f",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3791": {
+   "item_id": "3791",
+   "question_fingerprint": "sha256:6219b932485fb6275fcf5f657b9148dc67b9e1137bb7b6e9d9d2461dc4b50863",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3793": {
+   "item_id": "3793",
+   "question_fingerprint": "sha256:528b0f3da89facc67ed8e768c09172db38862e5133ec94197299ff4b8471f241",
+   "wall": false,
+   "primary_economy": "deepseek-v4-pro",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3794": {
+   "item_id": "3794",
+   "question_fingerprint": "sha256:b0c71dc912263c36812f2ae847ce911bd0a2df1c68c33e85851cf6cc15b351e0",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3795": {
+   "item_id": "3795",
+   "question_fingerprint": "sha256:91969e505d012cfef2edf56b4920ac7f55dcc41282d4b3c4bd96a5e2ec110c1b",
+   "wall": false,
+   "primary_economy": "deepseek-v4-pro",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3799": {
+   "item_id": "3799",
+   "question_fingerprint": "sha256:515429533e455c34fb18f1a9f48fedaa53c79bad6f4e427ef1a1c3e8fbab001f",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3801": {
+   "item_id": "3801",
+   "question_fingerprint": "sha256:a17802b02abd0aa1e317f45fd98e9a2cb5dd880988c24c29c20f09eb616988b2",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3805": {
+   "item_id": "3805",
+   "question_fingerprint": "sha256:a5b06020eb2ea3afd80df8d51f01884e9fce9d1af9b5c6b36afe84c8f560d136",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3809": {
+   "item_id": "3809",
+   "question_fingerprint": "sha256:6f9a9c5aa19fd6b8df701efada561641087ded4367b881926edb16cdd8f2ed7a",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3811": {
+   "item_id": "3811",
+   "question_fingerprint": "sha256:52c5a260883bb90127eec9cdbac2f9e726dc8ad2a6543d20685eec4ebf7f76bc",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3817": {
+   "item_id": "3817",
+   "question_fingerprint": "sha256:879b3d231a662e8d14869352ef82cb660c48c44e7aebe5730a626be4aa23d681",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "3832": {
+   "item_id": "3832",
+   "question_fingerprint": "sha256:ca4812488ca6357f8d687e2cb7083980d03d25648e75b12593899d04231512ee",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc387_a": {
+   "item_id": "abc387_a",
+   "question_fingerprint": "sha256:872e2e09406d40f4b0f084e241f8e2b8bfb5ce9e2f0deecace5815ad7e6dc2d8",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc387_b": {
+   "item_id": "abc387_b",
+   "question_fingerprint": "sha256:0be3583f24c6a81b0df41b3aede26f83782984315abcfb995605a127821f9318",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc387_c": {
+   "item_id": "abc387_c",
+   "question_fingerprint": "sha256:f00090d7882d4cc6734124ff7ff5e8c9ef37c95dbe28985517b30059eb29b7a7",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc387_f": {
+   "item_id": "abc387_f",
+   "question_fingerprint": "sha256:6817480c3e4324d429143a4934a129f2f97fb9aca26d5df34cb7e4bd18d1e09d",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc388_a": {
+   "item_id": "abc388_a",
+   "question_fingerprint": "sha256:e21e198d8f3cf67660c2ea626686bb9d261fe25e11aefc71373f9a3b09c434f2",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc388_b": {
+   "item_id": "abc388_b",
+   "question_fingerprint": "sha256:25fa516f39b94a0a208d452b8dcee3505775ed764da2f5c46669d01b8beffbfa",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc388_c": {
+   "item_id": "abc388_c",
+   "question_fingerprint": "sha256:0f4a87efe4326e0d0fc5d1db2f4fc78b673704bfb5d632b87f3c0829a64235d9",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc388_d": {
+   "item_id": "abc388_d",
+   "question_fingerprint": "sha256:cdfac63c44bf033c89722f592293ba6d513b73df4b6541f6d70e475ae89b1bd9",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc388_e": {
+   "item_id": "abc388_e",
+   "question_fingerprint": "sha256:d3c60c9fb265abbfc36114192d373642416d208a0968db40554fa12e7f292186",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc388_f": {
+   "item_id": "abc388_f",
+   "question_fingerprint": "sha256:22b3ce46d3624371b71b6d0821015964e13e1678a1132aadc708f5a69e0d7e17",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc388_g": {
+   "item_id": "abc388_g",
+   "question_fingerprint": "sha256:f15f1c34150b7db2723e6c2f768f45e4a3ef13baaca795596d8f987f930bddeb",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc389_a": {
+   "item_id": "abc389_a",
+   "question_fingerprint": "sha256:3a731ca1897fb61368054d1246c2ee4856e2febda6239ef21bd9c6fe8f81eeba",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc389_b": {
+   "item_id": "abc389_b",
+   "question_fingerprint": "sha256:2aadf6ec2eeb4341f96f894b07e701ca2e07b7fdd1ba354c9e3430c292fca527",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc389_d": {
+   "item_id": "abc389_d",
+   "question_fingerprint": "sha256:a963076e2f92ee56ba9490106ebae49215b686ac49279aa76b22427d47c7a684",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc389_e": {
+   "item_id": "abc389_e",
+   "question_fingerprint": "sha256:9ef56286d5a0f206128b44662ddff044daf1caab43324812f1a85870f37921b3",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc389_f": {
+   "item_id": "abc389_f",
+   "question_fingerprint": "sha256:d079641ac8d31313e02b018c1db30e74bc2bc3678b4c4bae719d22ad9d39ed17",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc389_g": {
+   "item_id": "abc389_g",
+   "question_fingerprint": "sha256:b36101d8cf5a61edf84190831d31b98773fd8e8ed02ceb22ebc0069651b7faa3",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [
+    "gpt-5.5"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc390_a": {
+   "item_id": "abc390_a",
+   "question_fingerprint": "sha256:535d1f784d97870336e3b6ca3ab5198c052d15c8ed414e9f7104735f0ab219b0",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.6-sol",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc390_b": {
+   "item_id": "abc390_b",
+   "question_fingerprint": "sha256:c7e5959945b96e8ab52bc74d6ff002c33955cafed2d32f6c7f4a1a0b8c53e6e6",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc390_c": {
+   "item_id": "abc390_c",
+   "question_fingerprint": "sha256:b2a0d04392df9d340c2bd3f9c956188ee244d6300385722f5a0f46fc1ebd63ea",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc390_d": {
+   "item_id": "abc390_d",
+   "question_fingerprint": "sha256:71a5b9aebebaee243ae7e5a14c23cbe0d95ab9285a872411a6555ebaf4f3b578",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc390_e": {
+   "item_id": "abc390_e",
+   "question_fingerprint": "sha256:d3a44a4189eecac91da2ac5ee84f48c337c7c86ea5da4286a374dbdf7b869dc0",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc390_f": {
+   "item_id": "abc390_f",
+   "question_fingerprint": "sha256:f53f82525d26cce6a0a640462343bdb7acdbedecb09238574e8dd097644bad67",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc390_g": {
+   "item_id": "abc390_g",
+   "question_fingerprint": "sha256:a6e2e21d042dd7e5b2bad73b05c4d01c6ef3398bc89f20d351e7b5d74d843b2d",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc391_a": {
+   "item_id": "abc391_a",
+   "question_fingerprint": "sha256:fa9dd9ad8167ce317576549a3bd20bba5d92a0a5f69cc680eeabf2192d802513",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc391_b": {
+   "item_id": "abc391_b",
+   "question_fingerprint": "sha256:8156cdc1132c569665b3e2b26d6a4947f0a9a414ec427ea874193c81bff628e1",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc391_d": {
+   "item_id": "abc391_d",
+   "question_fingerprint": "sha256:af3e9ee3256410a1e9a45034910f8b5dd6ffbf1eb176034432c71e46692995b7",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc391_e": {
+   "item_id": "abc391_e",
+   "question_fingerprint": "sha256:9271319c6e60da6a9c072559c7cde58cc8f7ae4cdaccf97f7f3e181adc0302e3",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc391_f": {
+   "item_id": "abc391_f",
+   "question_fingerprint": "sha256:009bb73fc41415009d9fdf2a2b2210e958eb878338902731104736ece6d0c9b0",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc391_g": {
+   "item_id": "abc391_g",
+   "question_fingerprint": "sha256:bb958c19ee2e450bc545ef6f6df2bda2878271d67c8b68de9e7f3dcc7ed8e34c",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc392_a": {
+   "item_id": "abc392_a",
+   "question_fingerprint": "sha256:71496c86db310533600d79fa620a92420d62d1f42adf720167dedfbb1ecdeee5",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc392_b": {
+   "item_id": "abc392_b",
+   "question_fingerprint": "sha256:2c0d2bb791daeaae50f6f4fbca5bd79dfa006e0f3b0a0c4e5865d0819ed275f2",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc392_c": {
+   "item_id": "abc392_c",
+   "question_fingerprint": "sha256:89bfd3703b744b870e8db8d4d339cceb27f8a6d15185da381bf15c192e378038",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc392_d": {
+   "item_id": "abc392_d",
+   "question_fingerprint": "sha256:fb9cd718913fe2af59c621cc55199d9520fef00b47197568020340b61004f477",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "abc392_f": {
+   "item_id": "abc392_f",
+   "question_fingerprint": "sha256:07b8b94068db589a68843ee0336731da4d91d2da138681056ba6009719193922",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "abc392_g": {
+   "item_id": "abc392_g",
+   "question_fingerprint": "sha256:bfb6f96ef79416ae5e67ce980b8cff1174f14c4c1181720d4a9851a9b290f4e5",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "abc393_a": {
+   "item_id": "abc393_a",
+   "question_fingerprint": "sha256:05719de5fdeb5e1298ce54c02dcb7394c98423b70396383eaa835fa9bad909be",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc393_b": {
+   "item_id": "abc393_b",
+   "question_fingerprint": "sha256:a93bc097739ebdc89f0a8167cc2d03360c2b680acd38e09da7b4dd199756e3e8",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc393_d": {
+   "item_id": "abc393_d",
+   "question_fingerprint": "sha256:6de62d3401e9cf37b13cf04dc1ab7f3f64989ba13b0bf2d20ca3657e36fc0879",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc393_e": {
+   "item_id": "abc393_e",
+   "question_fingerprint": "sha256:adc05e713acb3a6e0566dfdb9b9025d69c5270e0b9614458e68ceb7e6f2e33af",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc393_f": {
+   "item_id": "abc393_f",
+   "question_fingerprint": "sha256:3b9b842eaa851dbc0d48ddeb54b7c261438dfed69d2ff4bf51509f9763e2794c",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc394_a": {
+   "item_id": "abc394_a",
+   "question_fingerprint": "sha256:7e073d89a481a184f6a46a537e70c8008c4ebce3313dc6b7fbf36d88c984368d",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc394_b": {
+   "item_id": "abc394_b",
+   "question_fingerprint": "sha256:7c46f6ada999354b9a9889cf1052d5546b9e287b44af31d97914d5c22fbc3b8a",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc394_c": {
+   "item_id": "abc394_c",
+   "question_fingerprint": "sha256:f54313d6c60f8a86b8bbdfd8825cb741da97f320a7574a6ddeedc420342d0e52",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc394_d": {
+   "item_id": "abc394_d",
+   "question_fingerprint": "sha256:1221dc3c7111b7e4984aa52cd0f3bdd23423963e9788a07abbbfefb45f5110d3",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc394_e": {
+   "item_id": "abc394_e",
+   "question_fingerprint": "sha256:5262b73ab5b4d61504cdd1ac7f33e8fdb5e837c550cc67f1bfac49a16142a454",
+   "wall": false,
+   "primary_economy": "deepseek-v4-pro",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc394_f": {
+   "item_id": "abc394_f",
+   "question_fingerprint": "sha256:f32c9ec9ac0aeced144db0762ac3e8f112364253b790b06eb4dd8af56c273680",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc394_g": {
+   "item_id": "abc394_g",
+   "question_fingerprint": "sha256:a801da83f289bbe7a0e381a87d014ebdcdf7ff173f6ca363f5d952994d574bab",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc395_a": {
+   "item_id": "abc395_a",
+   "question_fingerprint": "sha256:32483bcd65304cb1e69e7d50191a6c4c3cd294db0386ef32fedf6afb311aa0c7",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc395_b": {
+   "item_id": "abc395_b",
+   "question_fingerprint": "sha256:feb18c619d2ed970afae92d3ae5e12f7837aa13d4b851896b72c6070b5a8aa48",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc395_c": {
+   "item_id": "abc395_c",
+   "question_fingerprint": "sha256:9aedde9347b1d46ace41c52c4b3392757fc7859e939e62b26c06aba2ee9f36bd",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc395_e": {
+   "item_id": "abc395_e",
+   "question_fingerprint": "sha256:a32ee00a3db59050869e6610cd3aa0bbb7f2018c0803bdc5dd95264191f7aa5d",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc395_f": {
+   "item_id": "abc395_f",
+   "question_fingerprint": "sha256:88d200bca369c45db7ac5d95daa264ced3b5a0782bbf934ecfae1504cb061d93",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc396_a": {
+   "item_id": "abc396_a",
+   "question_fingerprint": "sha256:a89f17cddc7c9fff6e348d8692a999c76ad37a84c096c07770f2ddacdf800a03",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc396_b": {
+   "item_id": "abc396_b",
+   "question_fingerprint": "sha256:2a0bb7d8941f09c40b6d398583b9b8dd34e80ab569e5f76e97d371152a6e2160",
+   "wall": false,
+   "primary_economy": "deepseek-v4-pro",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc396_c": {
+   "item_id": "abc396_c",
+   "question_fingerprint": "sha256:ac988570a5ef7e750a981224d80d39dddd9fc4771e1ddda747bd556aad072f21",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc396_d": {
+   "item_id": "abc396_d",
+   "question_fingerprint": "sha256:2b32bdfdd66c13b9b0893b56a7f6f4160289995c91172c2ad2d6ff8e4b88bcb4",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc396_e": {
+   "item_id": "abc396_e",
+   "question_fingerprint": "sha256:0bf0ae830a9e9adabf82f75a68dd6ec108f2670abe434ab7253f064b4ed7dfaa",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "abc396_f": {
+   "item_id": "abc396_f",
+   "question_fingerprint": "sha256:942e7191c2e79efadef880a654947851522c88182575179948f28ff9a6b7bf6e",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc396_g": {
+   "item_id": "abc396_g",
+   "question_fingerprint": "sha256:b2ee51172ad75a191b603dcfbff1f71cac2d7d1cc7c79ce90b98a0703f4e0e08",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc397_a": {
+   "item_id": "abc397_a",
+   "question_fingerprint": "sha256:c89632d369df3c15b7e9a15f4822c529f564c3f024255f77daa7f4daabf2d295",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc397_b": {
+   "item_id": "abc397_b",
+   "question_fingerprint": "sha256:59fa993b09a3512948dfd43c9ccd8c3609e114faee74e56cb627d3aba3820502",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc397_c": {
+   "item_id": "abc397_c",
+   "question_fingerprint": "sha256:8d34c7c0f06994383a42fb5c5f820b912c5fa29869d469463c767480d0789949",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc397_d": {
+   "item_id": "abc397_d",
+   "question_fingerprint": "sha256:4275afc60a6a05604f047470f15c7149b148791906f95fd48bbf1b1faeb1f364",
+   "wall": false,
+   "primary_economy": "deepseek-v4-pro",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc397_e": {
+   "item_id": "abc397_e",
+   "question_fingerprint": "sha256:6a9ad37065e75a1fbacba5dbe2f400df95e49a7c1d576fbf6eab0f4441c2558d",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc397_f": {
+   "item_id": "abc397_f",
+   "question_fingerprint": "sha256:7a5ec663e2cb3873c7484a179639c6825b79ee7b09377e30a2071d7624bbc632",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc397_g": {
+   "item_id": "abc397_g",
+   "question_fingerprint": "sha256:8056e8b0df0b58d8446de1d1b5f0b507128017b1ef72562235fabe74406e574d",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc398_a": {
+   "item_id": "abc398_a",
+   "question_fingerprint": "sha256:ee1b6a31859f103a5d6e5a443cab6c920c37785a7c670aa708f7e9bee9af8e89",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc398_b": {
+   "item_id": "abc398_b",
+   "question_fingerprint": "sha256:f49bc5749224205f3e509b88d2522ea7b1532614786afd8e9e320c389f05c4ff",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc398_c": {
+   "item_id": "abc398_c",
+   "question_fingerprint": "sha256:34c40059b8bafa60401b4a5fbb6edce472699b03018958f56e6a87b5c40a79c5",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc398_d": {
+   "item_id": "abc398_d",
+   "question_fingerprint": "sha256:e3662c39db75957f3966e04cdb0ae9f99364b3030ac190f6a936e8becb38d11c",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc398_f": {
+   "item_id": "abc398_f",
+   "question_fingerprint": "sha256:e40244184230eb803fbe29dda7f086c9c9926645dc053f8eb61dde8e3881f684",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc398_g": {
+   "item_id": "abc398_g",
+   "question_fingerprint": "sha256:43460a3e266c3ed72f4471397bbc8d23080d28bcacc67687cd30fd3020c50973",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "abc399_a": {
+   "item_id": "abc399_a",
+   "question_fingerprint": "sha256:10af904a843479d2c3ed604fa7880e548bd4147dc71c22fcde8d48d89cdcb518",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc399_b": {
+   "item_id": "abc399_b",
+   "question_fingerprint": "sha256:b9d292033e8be08f6a022702d19a283d22243396b6d5f3193ac511f90d2987f5",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc399_c": {
+   "item_id": "abc399_c",
+   "question_fingerprint": "sha256:973a2f3ff28d345e2985d3dc7cd5b434d28fc4d0c020de30bfec812a93859f72",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc399_d": {
+   "item_id": "abc399_d",
+   "question_fingerprint": "sha256:d4cd009ae0636eab3c4caed268d8fbc21847b4d8649bcfd2b927c0abc4eedb59",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc399_e": {
+   "item_id": "abc399_e",
+   "question_fingerprint": "sha256:6a2013db3fe5ea8d0f5b58282b59225b3b4b2a175a28479ec1eb2c9661291b1e",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc399_f": {
+   "item_id": "abc399_f",
+   "question_fingerprint": "sha256:9334fcee9c777f93c2125976c57012bfac00873694a3c6cb19fc7f576dadde2f",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc400_a": {
+   "item_id": "abc400_a",
+   "question_fingerprint": "sha256:5efb1d8fb4accfaf995fbb5fdfbef972509e21ae93501918b959a4391a0af321",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro",
+    "glm-5.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc400_b": {
+   "item_id": "abc400_b",
+   "question_fingerprint": "sha256:79fdb0685d84ef044451a74dcde5518f55b1fe67444f34b410b511af7bcb49b4",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc400_c": {
+   "item_id": "abc400_c",
+   "question_fingerprint": "sha256:fb3539db81129fc2765a267295b7f2dca533d09512c442dae494d28c41030a9d",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc400_d": {
+   "item_id": "abc400_d",
+   "question_fingerprint": "sha256:0abba35037645e99b33cd5bc284e2935af32d74cd1f6a3ab55840a5f93370d2e",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc400_e": {
+   "item_id": "abc400_e",
+   "question_fingerprint": "sha256:54f70124d49e91e6b997049fef90347b67edb4ceaf87dbc0f83110204a7f8d60",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "abc400_g": {
+   "item_id": "abc400_g",
+   "question_fingerprint": "sha256:8fd8374423b750b49e54faa5cb834e66fb9ccb2e790e60d1243406833c2f5ff4",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [
+    "gpt-5.5"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc190_a": {
+   "item_id": "arc190_a",
+   "question_fingerprint": "sha256:239bba3be0f844c5c777507cc1503c09c65b8c7448c5f89149eaae1e369321a8",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "arc190_c": {
+   "item_id": "arc190_c",
+   "question_fingerprint": "sha256:7c9420d07e511b282715426226b90a8a0286b51ba475a6476869e6153cd33efb",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "arc190_d": {
+   "item_id": "arc190_d",
+   "question_fingerprint": "sha256:0737b8d92f97f428e0a5de0fa66cf283fc1410a3e63cb61efb9c834f5068d484",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc191_a": {
+   "item_id": "arc191_a",
+   "question_fingerprint": "sha256:9bcf79b356f869dcecce9a4c8dae72fced26c244e2d6e7e7e4f803b2cc3f9ba2",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "fable-5"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "fable-5"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc191_c": {
+   "item_id": "arc191_c",
+   "question_fingerprint": "sha256:1ab8f0df83aced24f0384031d610e4ea70beceddbe2e00dd18365ab59a130680",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "arc191_d": {
+   "item_id": "arc191_d",
+   "question_fingerprint": "sha256:0efbd60076d94993cb11471cc9c6b65fe4be1cb1d6a7357f0e430d04d860fd23",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "arc192_a": {
+   "item_id": "arc192_a",
+   "question_fingerprint": "sha256:9053b12c788212a4b48025ae53de7941f86172828fd8ce250558d8298a00b383",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc192_b": {
+   "item_id": "arc192_b",
+   "question_fingerprint": "sha256:af5cff88c810e87083abf594d467067f79a9a2403c305c1e41f690021a8acb5c",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "arc192_d": {
+   "item_id": "arc192_d",
+   "question_fingerprint": "sha256:77c2a87f043a7c6dd585bab577248ec604004a53b83134b34e99839c802b03a6",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc192_e": {
+   "item_id": "arc192_e",
+   "question_fingerprint": "sha256:6197c38f46d885f7c23b1ab69484a70b77f78aa93ceb0b3aeab242d766b6fc7b",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "fable-5"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "fable-5"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc193_a": {
+   "item_id": "arc193_a",
+   "question_fingerprint": "sha256:b93bceae7e7655eb62fea8f18615a3e28f7f4cdd9e6e0ca994b20fe6418ecbf9",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "fable-5",
+    "opus-4.8"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "fable-5",
+    "opus-4.8"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc193_b": {
+   "item_id": "arc193_b",
+   "question_fingerprint": "sha256:069ad6fa5205f2a06ee82104db4d32628a4282c347c1ce7bf248f38f4067cf90",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [
+    "gpt-5.5"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc193_d": {
+   "item_id": "arc193_d",
+   "question_fingerprint": "sha256:b3b140c9981cfb16fbe1e8b9a55141d7ff5e2adae735825ff63a2c493713464b",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "arc194_a": {
+   "item_id": "arc194_a",
+   "question_fingerprint": "sha256:50e021b969098e25205b5e0a5673b40f8665c8b162e5cf225121c258fe8c5f97",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc194_b": {
+   "item_id": "arc194_b",
+   "question_fingerprint": "sha256:113072f1eef747fc0015e85405c536efbde8e89738cb14b3e5015b086de29e5d",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc194_c": {
+   "item_id": "arc194_c",
+   "question_fingerprint": "sha256:b47e68f3bfcebd28402418e20a50314b53728f2d6284bc1418b5eced2387f9db",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [
+    "gpt-5.5"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc194_d": {
+   "item_id": "arc194_d",
+   "question_fingerprint": "sha256:98a271da3459880c5d6c28e121b15a607a32ffd2b9e5815f956c178a566b1fe1",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc194_e": {
+   "item_id": "arc194_e",
+   "question_fingerprint": "sha256:110706879e8bc894ab64fd5fa4ac4b79f9ac2075124881712d355ebfe0ec7ee2",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "fable-5"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "fable-5"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc195_a": {
+   "item_id": "arc195_a",
+   "question_fingerprint": "sha256:eab468291f31f119ffa4d7ed02500aa115745f06acfe7acc755604f490679f5b",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "opus-4.8",
+    "deepseek-3.2",
+    "deepseek-v4-pro"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc195_b": {
+   "item_id": "arc195_b",
+   "question_fingerprint": "sha256:5c5c1e2588f5e9075d4768574b0dbfe7aeef342266a0dc90258a36039c1aa0df",
+   "wall": false,
+   "primary_economy": "gpt-5.6-luna",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "fable-5",
+    "gpt-5.6-luna"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc195_c": {
+   "item_id": "arc195_c",
+   "question_fingerprint": "sha256:39194c55bc9f425c1ff9b9ff8714e5284b4fe9621888ac6e0b8df5441d0532fd",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "arc195_d": {
+   "item_id": "arc195_d",
+   "question_fingerprint": "sha256:81bdea572aeae98ae46a96a2cdb1879f6474653ee70080c3d79bd3d3b488657e",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [
+    "gpt-5.5"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc195_e": {
+   "item_id": "arc195_e",
+   "question_fingerprint": "sha256:ada7c9184cdc8de5d3e5687126a0e85f76f907e5fa239cb9108ba83c118a2e1f",
+   "wall": false,
+   "primary_economy": "deepseek-3.2",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "deepseek-3.2"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-terra",
+    "fable-5",
+    "gpt-5.6-luna",
+    "deepseek-3.2"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc196_a": {
+   "item_id": "arc196_a",
+   "question_fingerprint": "sha256:2a360970420b9f44842efe35e55850758f8c2f5157e15c7be9ef745207bbf501",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc196_b": {
+   "item_id": "arc196_b",
+   "question_fingerprint": "sha256:53eaaa7db8420bc56aaf69c290470b6ed2bd04a1053328a4ceb160e78c3e2106",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [
+    "gpt-5.6-sol",
+    "gpt-5.6-terra"
+   ],
+   "observed_correct": [
+    "gpt-5.5",
+    "gpt-5.6-sol",
+    "gpt-5.6-terra"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  },
+  "arc196_c": {
+   "item_id": "arc196_c",
+   "question_fingerprint": "sha256:e185987ce225054bb70badb874d4a34fd82d6c11ad068c84b0fcf7d49c85f638",
+   "wall": true,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [],
+   "policy": "wall"
+  },
+  "arc196_d": {
+   "item_id": "arc196_d",
+   "question_fingerprint": "sha256:14a2876ef82e483bb2a7f8efa8eee26fed23a3573dab70044cac388538bdaa85",
+   "wall": false,
+   "primary_economy": "gpt-5.5",
+   "primary_quality": "gpt-5.5",
+   "fallbacks": [],
+   "observed_correct": [
+    "gpt-5.5"
+   ],
+   "policy": "lowest_cost_observed_correct"
+  }
+ }
+}
