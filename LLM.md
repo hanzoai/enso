@@ -45,7 +45,7 @@ zen-svc's embedded `catalog-enso.yaml` + `prompts/enso*.md` remain the FALLBACK 
 (what a bare zen image serves with `ZEN_FAMILY=enso` and no path overrides). One mechanism,
 N families — see zen-svc CLAUDE.md.
 
-Bench + paper: `hanzoai/enso-bench` (measured GPQA: enso 87.9, enso-ultra 89.9),
+Bench + paper: `hanzoai/enso-bench` (measured GPQA-Diamond over n=198: enso-flash 184/198 = 92.9, enso 190/198 = 96.0, enso-ultra 194/198 = 98.0),
 `papers/enso` (LaTeX), blog PR "Introducing Enso".
 
 Naming: the Zen-Browser fork formerly at hanzoai/enso now lives at hanzoai/enso-browser.

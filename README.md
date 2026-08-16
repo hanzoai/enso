@@ -78,11 +78,22 @@ We replicate Sakana's Fugu methodology in [`enso-bench`](https://github.com/hanz
 every number is executed against live model APIs, nothing is copied from a provider
 card. Headline measured results:
 
-- **LiveCodeBench:** `enso` **91.4%** — matching the best single arm (GPT-5.5) at
-  **~1/7.5 the cost of routing everything to Opus**. That is the value story: best-arm
-  quality at best-arm cost, because the router picked correctly.
-- **GPQA-Diamond:** `enso` **87.9%**, `enso-ultra` **89.9%** — within noise of the
-  best frontier arm, at a transparent per-request cost.
+- **LiveCodeBench v6:** `enso` **92.0%** — matching the best single arm at a
+  fraction of the cost of routing everything to the priciest model. That is the
+  value story: best-arm quality at best-arm cost, because the router picked
+  correctly.
+- **GPQA-Diamond:** one set of 198 questions, three routing pools, so the tiers
+  differ by what the router may spend rather than by the test:
+
+  | tier | pool | correct | score |
+  |---|---|---:|---:|
+  | `enso-ultra` | full pool | 194/198 | **98.0%** |
+  | `enso` | mid pool, ≤$8/MTok | 190/198 | **96.0%** |
+  | `enso-flash` | cheap pool, ≤$5/MTok | 184/198 | **92.9%** |
+
+  Every score is an integer count over n=198. A percentage that cannot be
+  written as one did not come from a run — that test is what rejected a proposed
+  96.3% (190.67 correct) and kept the real 96.0%.
 
 The full suite (GPQA, LiveCodeBench, HLE, plus the agentic SWE-Bench Pro trials)
 and the cost-per-1,000-tasks column are in the paper. The router itself is the
