@@ -12,7 +12,7 @@
 # both are inherited unchanged (distroless has no shell — do not add RUN steps).
 # COPYed files land root:root 0644 / dirs 0755 — world-readable, so the nonroot
 # (65532) runtime user reads them.
-FROM ghcr.io/hanzoai/zen@sha256:588ccc24f0c19c8a8b1f4a4e21e5e4e292276bc22852a979a6de64fb4148a9ba
+FROM ghcr.io/hanzoai/zen@sha256:3a0bd39167103c164f8b6682600fd04948e9b81a29c471dbf27f2436e6a4dc67
 
 # The Enso family as data. `prompts/` is what serves — the deployment sets no
 # ZEN_PROMPTS, so the ENV below stands. `catalog.yaml` is BAKED BUT NOT READ: the
