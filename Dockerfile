@@ -12,10 +12,13 @@
 # both are inherited unchanged (distroless has no shell — do not add RUN steps).
 # COPYed files land root:root 0644 / dirs 0755 — world-readable, so the nonroot
 # (65532) runtime user reads them.
-FROM ghcr.io/hanzoai/zen@sha256:588ccc24f0c19c8a8b1f4a4e21e5e4e292276bc22852a979a6de64fb4148a9ba
+FROM ghcr.io/hanzoai/zen@sha256:648bcabd46c09c7b7f653d5bd51759a36788b87e347a1a76a8ab0d1ff217d59f
 
-# The Enso family as data: this repo is the deploy source of truth (zen-svc's
-# embedded catalog-enso.yaml + prompts/enso*.md are only the fallback default).
+# The Enso family as data. `prompts/` is what serves — the deployment sets no
+# ZEN_PROMPTS, so the ENV below stands. `catalog.yaml` is BAKED BUT NOT READ: the
+# deployment points ZEN_CATALOG at a ConfigMap declared in universe
+# (charts/app/values/enso/enso.yaml), which wins over this path. Ship a catalog
+# change there. zen-svc's embedded copies are the fallback under both.
 COPY catalog.yaml /etc/enso/catalog.yaml
 COPY prompts/ /etc/enso/prompts/
 
