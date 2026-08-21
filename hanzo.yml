@@ -1,0 +1,42 @@
+# Canonical CI/CD config for hanzoai/enso — read by platform.hanzo.ai at the
+# pushed sha, and by the hanzoai/ci reusable that .hanzo/workflows/cicd.yml calls.
+#
+# This repo went without a lane. The GitHub workflow was retired on the grounds
+# that Actions is off here and a dead pipeline reads as coverage nobody has; the
+# native replacement was described in that commit message but never committed, so
+# the retirement removed the only builder. A second copy of the repo went on
+# publishing this tag meanwhile, from a tree that lacked router/.
+#
+# source: forge — the forge is where this repo is written. github.com/hanzoai/enso
+# is a redirect to a repo in another org, so the builder's default context resolves
+# somewhere this tree does not control.
+source: forge
+
+# One image, and it is a COPY-only overlay: catalog.yaml + prompts/ onto the prod
+# zen base pinned by digest in the Dockerfile. No Go build, and the base is public,
+# so no credentials beyond the GHCR push.
+#
+# router/ is NOT in this image and never has been — the Dockerfile copies only the
+# two data paths. It is a separate Go module (github.com/hanzoai/enso/router)
+# consumed from source. What the second copy was missing was router/ in its TREE,
+# not in its image; what its images actually carried that this tree lacked was a
+# newer zen base, which is now merged here.
+images:
+  - name: enso
+    repo: ghcr.io/hanzoai/enso
+    context: .
+    dockerfile: ./Dockerfile
+
+# router/ ships no bytes but decides which arm answers a request, and its tables
+# are checked in. Until now nothing ran these: they were written, they pass, and
+# no lane executed them — so a table edit that broke routing would have been found
+# by a customer. heldout_test.go scores the table on questions it has not
+# memorised, which is the only version of this test worth having.
+test:
+  - name: router
+    run: |
+      set -euo pipefail
+      cd router
+      go build ./...
+      go vet ./...
+      go test -cover ./...

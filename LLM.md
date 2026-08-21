@@ -17,13 +17,16 @@ Build: `Dockerfile` is a COPY-only overlay on the prod `ghcr.io/hanzoai/zen` ima
 → `/etc/enso/catalog.yaml` + `prompts/` → `/etc/enso/prompts/` and pointing the binary
 at them (`ZEN_FAMILY=enso ZEN_CATALOG=… ZEN_PROMPTS=…`).
 
-**Nothing builds this image right now.** `.github/workflows/build.yml` was retired
-here, and the replacement under `.hanzo/workflows/` was described in a commit message
-but never committed. A second copy of the repo went on carrying the old workflow and
-pushing the same tag from a lineage that lacked `router/`; that copy is archived, so
-the last build of `ghcr.io/hanzoai/enso` remains the one from the old lane. The base
-bumps below are committed but unbuilt — the tag serving today is behind this tree.
-Restoring a lane is an open decision, not an oversight to paper over.
+Build lane: `/hanzo.yml` + `.hanzo/workflows/cicd.yml`, the canonical pair. The
+GitHub workflow was retired here and its native replacement, though described in
+the retiring commit, was never committed — so for a stretch the only thing building
+`ghcr.io/hanzoai/enso` was a second copy of this repo whose tree lacked `router/`.
+That copy is archived and its base bumps are merged here.
+
+The image is COPY-only: `catalog.yaml` + `prompts/` over the pinned zen base.
+`router/` is NOT in it — the Dockerfile copies the two data paths and nothing else.
+`router/` is a separate module (`github.com/hanzoai/enso/router`) used from source,
+and the lane runs its tests, which nothing did before.
 
 Serving: `universe/infra/k8s/enso/deployment.yaml` pins `ghcr.io/hanzoai/enso@<digest>`
 (namespace `enso`, Service `:8080`, `enso-secrets`). The image is PRIVATE, so the enso
