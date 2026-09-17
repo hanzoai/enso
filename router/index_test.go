@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"math"
 	"os"
+	"slices"
 	"testing"
 )
 
@@ -32,11 +33,8 @@ import (
 func bestSingleOf(t *table) float64 {
 	hit := 0
 	for _, rec := range t.Routes {
-		for _, m := range rec.Correct {
-			if m == t.Strongest {
-				hit++
-				break
-			}
+		if slices.Contains(rec.Correct, t.Strongest) {
+			hit++
 		}
 	}
 	return float64(hit) / float64(len(t.Routes)) * 100

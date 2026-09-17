@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 	"testing"
 )
@@ -62,7 +63,7 @@ func scoreHeldOut(t *table, preset Preset, k int) (rate float64, sources map[Sou
 	defer func() { t.byFP = saved }()
 
 	r := &Router{tables: map[string]*table{t.Benchmark: t}, version: "heldout"}
-	for fold := 0; fold < k; fold++ {
+	for fold := range k {
 		t.byFP = foldIndex(t, ids, fold, k)
 		for i, id := range ids {
 			if i%k != fold {
@@ -72,11 +73,8 @@ func scoreHeldOut(t *table, preset Preset, k int) (rate float64, sources map[Sou
 			d := r.RouteByFingerprint(t.Benchmark, rec.Fingerprint, domainOf(rec), preset)
 			sources[d.Source]++
 			scored++
-			for _, m := range rec.Correct {
-				if m == d.Model {
-					hit++
-					break
-				}
+			if slices.Contains(rec.Correct, d.Model) {
+				hit++
 			}
 		}
 	}
@@ -168,11 +166,8 @@ func TestInSampleIsTheOracleByConstruction(t *testing.T) {
 				t.Errorf("%s/%s: in-sample source = %s, want observed_exact", bench, rec.ItemID, d.Source)
 			}
 			scored++
-			for _, m := range rec.Correct {
-				if m == d.Model {
-					hit++
-					break
-				}
+			if slices.Contains(rec.Correct, d.Model) {
+				hit++
 			}
 		}
 		if scored > 0 && hit != scored {
