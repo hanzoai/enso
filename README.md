@@ -28,3 +28,29 @@ curl https://api.hanzo.ai/v1/chat/completions \
 
 The API speaks the OpenAI wire format, so any OpenAI SDK works with
 `base_url="https://api.hanzo.ai/v1"`.
+
+## Examples
+
+Runnable client examples in this repository:
+
+- **Python**: [`examples/python/client.py`](examples/python/client.py)
+  ```bash
+  pip install -r examples/python/requirements.txt
+  export HANZO_API_KEY="your-api-key"
+  python examples/python/client.py
+  ```
+
+- **TypeScript**: [`examples/typescript/client.ts`](examples/typescript/client.ts)
+  ```bash
+  cd examples/typescript
+  npm install
+  export HANZO_API_KEY="your-api-key"
+  npm start
+  ```
+
+- **cURL**: [`examples/curl/chat.sh`](examples/curl/chat.sh)
+  ```bash
+  export HANZO_API_KEY="your-api-key"
+  ./examples/curl/chat.sh
+  ```
+

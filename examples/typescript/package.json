@@ -1,0 +1,16 @@
+{
+  "name": "enso-typescript-example",
+  "version": "1.0.0",
+  "description": "Example using Enso models with OpenAI TypeScript SDK",
+  "main": "client.ts",
+  "scripts": {
+    "start": "tsx client.ts"
+  },
+  "dependencies": {
+    "openai": "^4.50.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.16.0",
+    "typescript": "^5.4.0"
+  }
+}
