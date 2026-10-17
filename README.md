@@ -14,6 +14,7 @@ it. Three tiers keep their order on quality and price as the models under them c
 Enso is a Hanzo AI original: proprietary and closed source. There is no code or weights here;
 it is served only through the Hanzo API.
 
+- **Model Card:** [Architecture, Benchmarks & Economics](MODEL_CARD.md) · [Hugging Face Hub](https://huggingface.co/hanzoai/enso-auto)
 - Benchmarks, measured on one harness: [hanzo.ai/models/enso](https://hanzo.ai/models/enso)
 - Docs: [docs.hanzo.ai/docs/models/enso](https://docs.hanzo.ai/docs/models/enso)
 
