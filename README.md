@@ -48,9 +48,27 @@ Runnable client examples in this repository:
   npm start
   ```
 
+- **Go**: [`examples/go/main.go`](examples/go/main.go)
+  ```bash
+  export HANZO_API_KEY="your-api-key"
+  go run examples/go/main.go
+  ```
+
+- **Rust**: [`examples/rust/`](examples/rust/)
+  ```bash
+  export HANZO_API_KEY="your-api-key"
+  cargo run --manifest-path examples/rust/Cargo.toml
+  ```
+
 - **cURL**: [`examples/curl/chat.sh`](examples/curl/chat.sh)
   ```bash
   export HANZO_API_KEY="your-api-key"
   ./examples/curl/chat.sh
   ```
+
+## Production Rust Recipes
+
+[`recipes/`](recipes/): Modular, typed Rust patterns for model routing:
+- **`ModelSuitabilityRecipe`**: Single-shot classification predicting optimal model capability tier given prompt tokens, domain, and latency/cost bounds.
+- **`ConfidenceGate`**: Evaluates Kai decision margins ($\Delta = P_{(1)} - P_{(2)}$) against threshold $\tau$ for low-latency fast decisions vs. LLM escalation.
 
